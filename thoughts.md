@@ -1,3 +1,28 @@
+# numbers
+
+Forget about performance on numbers. Ruby has never had it even in the C implementation.
+So:
+
+    Float.$pls = function (other)
+    {
+        if (typeof other._num !== 'number')
+            throw new Error(other.klass.name + ' can't be coerced into ' + this.klass.name)
+    
+        return new Float(this._num + other._num)
+    }
+
+and:
+
+    puts 3.14 + 2 + 1
+
+translates to:
+
+    var $3_14 = new Float(3.14), $2 = new Float(2), $1 = new Float(1)
+    
+    self.puts( $3_14.$pls($2).$pls($1) )
+
+Strictly typed language in the browser, yay!!!
+
 
 # fast_method_missing
 
@@ -36,6 +61,7 @@ translates to:
     point.x = 5   =>   point.x$set(5) // setter
     Hash.new      =>   Hash.new$()
     ary.each {}   =>   ary.each$blk(function(){})
+    3.+(7)        =>  (3).$pls(7) // $mns, $div, $mul, $pow, $mod, etc
 
 
 # require
