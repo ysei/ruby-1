@@ -1,4 +1,4 @@
-#!env ruby
+#!env rspec
 # encoding: utf-8
 
 
@@ -92,41 +92,33 @@ end
 
 
 
+describe "blocks" do
+  it "juggles with blocks as hell" do
+    def one_two_three n
+      [
+        yield(n),
+        yield(n+1),
+        yield(n+2)
+      ]
+    end
 
+    def proxy n, &block
+      puts 'proxy begin'
+      ret = one_two_three n, &block
+      puts 'proxy end'
+      ret
+    end
 
-# def one_two_three
-#   [
-#     yield(1),
-#     yield(2),
-#     yield(3)
-#   ]
-# end
-# 
-# def proxy &block
-#   puts 'proxy begin'
-#   ret = one_two_three &block
-#   puts 'proxy end'
-#   ret
-# end
-# 
-# def dump_proxy
-#   one_two_three
-# end
-# 
-# p proxy { |i| next "next(#{i})"   }.eql?(["next(1)", "next(2)", "next(3)"])
-# p proxy { |i| break "break(#{i})" }.eql?("break(1)")
-# begin
-#   proxy.eql?("break(1)")
-# rescue Exception => e
-#   p e.message
-# end
-# begin
-#   dump_proxy {}
-# rescue Exception => e
-#   p e.message
-# end
+    def dump_proxy n
+      one_two_three n
+    end
 
-
+    p proxy(1) { |i| next "next(#{i})"   }.should == ["next(1)", "next(2)", "next(3)"]
+    p proxy(1) { |i| break "break(#{i})" }.should == "break(1)"
+    expect { proxy(1) }.to raise_error("no block given (yield)")
+    expect { dump_proxy(1) {} }.to raise_error("no block given (yield)")
+  end
+end
 
 
 
