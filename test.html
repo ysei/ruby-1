@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>js side</title>
+<body>
+<script>
+
+;(function(){
+"use strict"
+
+// binding function (code) { return eval(code) }
+
+
+
+function BaseObject () {}
+
+function noBlockGiven () { throw new Error('no block given (yield)') }
+var $ = noBlockGiven
+
+function bakeBlockStub (method_name)
+{
+    return function blockStub ($theBlock)
+    {
+        try
+        {
+            return self[method_name].apply(self, arguments)
+        }
+        catch (e)
+        {
+            if (e === $theBlock)
+                return $theBlock.breakVal
+            
+            throw e
+        }
+    }
+}
+
+var nil = {}
+
+var $breaker =
+{
+    _v: nil,
+    push: function (v) { this._v = v; return this; },
+    pop: function (v) { var v = this._v; this._v = nil; return v }
+}
+
+var self = new BaseObject()
+
+self.one_two_three = function ($yield, n)
+{
+    return [
+        $yield(n),
+        $yield(n+1),
+        $yield(n+2)
+    ]
+}
+
+self.proxy = function ()
+{
+    // one_two_three &block
+}
+
+self.dump_proxy = function ()
+{
+    // one_two_three # without the block
+}
+
+
+
+BaseObject.prototype.one_two_three$blk = bakeBlockStub('one_two_three')
+
+
+console.log(self.one_two_three$blk(function (i) {
+    return "next("+i+")"
+}, 1))
+
+console.log(self.one_two_three$blk(function $theBlock (i) {
+    throw ($theBlock.breakVal = ("break("+i+")"), $theBlock)
+}, 1))
+
+try
+{
+    self.one_two_three($, 1)
+}
+catch (e)
+{
+    console.log(e.message)
+}
+
+
+
+
+
+
+
+
+
+
+// console.log(((3 / 2)>>0))
+
+
+
+
+// function Prototyper () {}
+// 
+// var a = new Prototyper()
+// a.a = 1
+// 
+// Prototyper.prototype = a
+// var b = new Prototyper()
+// b.b = 2
+// 
+// Prototyper.prototype = b
+// var c = new Prototyper()
+// c.c = 2
+// 
+// console.log(c)
+
+
+
+
+// function N (n)
+// {
+// 	this.n = n
+// }
+// 
+// N.prototype.plus = function (other) { return new N(this.n + other) }
+// 
+// var a = new N(3)
+// 
+// console.log(a.plus(2))
+
+
+
+// // fail :(
+// function Proxy () {}
+// Proxy.prototype = Number.prototype
+// var proxy = new Proxy()
+// proxy.aaa = 123
+// Number.prototype = proxy
+// 
+// console.log(new Number(5).aaa)
+
+
+
+// var tests = 1000000;
+
+// var a =
+// {
+// 	m: function () {},
+// 	send: function (name)
+// 	{
+// 		this[name]()
+// 	}
+// }
+// 
+// // warmup
+// for (var i = 0, il = tests; i < il; i++)
+// {
+// 	a.m()
+// }
+// console.time('dir')
+// for (var i = 0, il = tests; i < il; i++)
+// {
+// 		a.m()
+// }
+// console.timeEnd('dir')
+// console.time('try')
+// for (var i = 0, il = tests; i < il; i++)
+// {
+// 	try
+// 	{
+// 		a.m()
+// 	}
+// 	catch (e) {}
+// }
+// console.timeEnd('try')
+// console.time('con')
+// for (var i = 0, il = tests; i < il; i++)
+// {
+// 	try
+// 	{
+// 		a.m ? a.m() : 123
+// 	}
+// 	catch (e) {}
+// }
+// console.timeEnd('con')
+// console.time('send')
+// for (var i = 0, il = tests; i < il; i++)
+// {
+// 	try
+// 	{
+// 		a.send('m')
+// 	}
+// 	catch (e) {}
+// }
+// console.timeEnd('send')
+
+// "no mm" // "use mm"
+
+
+
+// var a = {m:function(e){return this}}
+// var b = {m:function(e){return this}}
+// 
+// console.log((true && a.m)())
+
+// function block ($block)
+// {
+// 	console.log('before')
+// 	$block()
+// 	console.log('after')
+// }
+// 
+// function proxy (p)
+// {
+// 	block(p)
+// }
+// 
+// 
+// function a (e)
+// {
+// try{var returned
+// 
+// 	var p = function ()
+// 	{
+// 		returned = true; throw 123
+// 	}
+// 	proxy(p)
+// 
+// }catch(e){if (returned) return e; throw e}
+// }
+// 
+// console.log(a())
+
+// console.time('return')
+// for (var i = 0, il = 1000; i < il; i++)
+// 	a()
+// console.timeEnd('return')
+// 
+// 
+// function send ()
+// {
+// 	
+// },
+// 
+// console.time('return')
+// for (var i = 0, il = 1000; i < il; i++)
+// 	send(a, 'method')
+// console.timeEnd('return')
+
+
+
+
+
+// var $break = {}
+// 
+// try {
+// 	;(function(){
+// 	throw $break
+// 	})();
+// 	
+// } catch (e) { if (e !== $break) throw e }
+
+})();
+
+</script>
