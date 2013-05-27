@@ -37,13 +37,6 @@ function bakeBlockStub (method_name)
 
 var nil = {}
 
-var $breaker =
-{
-    _v: nil,
-    push: function (v) { this._v = v; return this; },
-    pop: function (v) { var v = this._v; this._v = nil; return v }
-}
-
 var self = new BaseObject()
 
 self.one_two_three = function ($yield, n)
@@ -55,32 +48,42 @@ self.one_two_three = function ($yield, n)
     ]
 }
 
-self.proxy = function ()
+self.proxy = function ($yield)
 {
-    // one_two_three &block
+    BaseObject.prototype.one_two_three$blk = bakeBlockStub('one_two_three')
+    return self.one_two_three$blk($yield)
 }
 
 self.dump_proxy = function ()
 {
-    // one_two_three # without the block
+    return self.one_two_three($)
 }
 
 
 
-BaseObject.prototype.one_two_three$blk = bakeBlockStub('one_two_three')
 
-
-console.log(self.one_two_three$blk(function (i) {
+BaseObject.prototype.proxy$blk = bakeBlockStub('one_two_three')
+console.log(self.proxy$blk(function (i) {
     return "next("+i+")"
 }, 1))
 
-console.log(self.one_two_three$blk(function $theBlock (i) {
+console.log(self.proxy$blk(function $theBlock (i) {
     throw ($theBlock.breakVal = ("break("+i+")"), $theBlock)
 }, 1))
 
 try
 {
-    self.one_two_three($, 1)
+    self.proxy($, 1)
+}
+catch (e)
+{
+    console.log(e.message)
+}
+
+try
+{
+    BaseObject.prototype.dump_proxy$blk = bakeBlockStub('dump_proxy')
+    self.dump_proxy(function () {}, 1)
 }
 catch (e)
 {

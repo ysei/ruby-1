@@ -1,17 +1,34 @@
 #!env rspec
 # encoding: utf-8
 
+$c = 0
 
-
-
-begin
-
-  raise {}
-
-rescue => e
-  p 'rescue'
-  p e
+def a
+  yield
 end
+
+a { redo if ($c += 1) > 5 }
+
+
+describe "loops" do
+  it "recalculates loop end on every iteration" do
+    a = [1,2,3,4,5]
+    a.map do |v|
+      a.pop
+    end.should == [5,4,3]
+  end
+end
+
+
+
+# begin
+# 
+#   raise {}
+# 
+# rescue => e
+#   p 'rescue'
+#   p e
+# end
 
 
 
@@ -103,9 +120,9 @@ describe "blocks" do
     end
 
     def proxy n, &block
-      puts 'proxy begin'
+      # puts 'proxy begin'
       ret = one_two_three n, &block
-      puts 'proxy end'
+      # puts 'proxy end'
       ret
     end
 
@@ -113,8 +130,8 @@ describe "blocks" do
       one_two_three n
     end
 
-    p proxy(1) { |i| next "next(#{i})"   }.should == ["next(1)", "next(2)", "next(3)"]
-    p proxy(1) { |i| break "break(#{i})" }.should == "break(1)"
+    proxy(1) { |i| next "next(#{i})"   }.should == ["next(1)", "next(2)", "next(3)"]
+    proxy(1) { |i| break "break(#{i})" }.should == "break(1)"
     expect { proxy(1) }.to raise_error("no block given (yield)")
     expect { dump_proxy(1) {} }.to raise_error("no block given (yield)")
   end

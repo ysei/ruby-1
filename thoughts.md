@@ -1,3 +1,15 @@
+# Cool abilities
+
+JSRuby: Calling user defined Ruby method from Javascript
+
+# Parser
+
+Port JRuby Java Parser.
+
+# DOM methods
+
+Collect methods names and cache it in the `localeStorage`. Purge on the bowser version change or time pass.
+
 # numbers
 
 Forget about performance on numbers. Ruby has never had it even in the C implementation.
@@ -57,7 +69,7 @@ translates to:
 # Name conversion
 
     nil?          =>   nil$q() // question mark
-    exit!         =>   exit$excl() // exclamation mark
+    exit!         =>   exit$x() // exclamation mark
     point.x = 5   =>   point.x$set(5) // setter
     Hash.new      =>   Hash.new$()
     ary.each {}   =>   ary.each$blk(function(){})
