@@ -225,7 +225,7 @@ var TOKENS = {
     if (n > 0)
       return new Location(rhs.locationAt(n-1).begin, rhs.locationAt(0).end);
     else
-      return new Location(rhs.locationAt(0).end, rhs.locationAt (0).end);
+      return new Location(rhs.locationAt(0).end, rhs.locationAt(0).end);
   }
 
   /**
