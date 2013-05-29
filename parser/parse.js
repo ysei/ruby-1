@@ -222,7 +222,7 @@ var TOKENS = {
 
 
   
-  private Location yylloc (YYStack rhs, int n)
+  function yylloc (/*YYStack*/ rhs, /*int*/ n)
   {
     if (n > 0)
       return new Location(rhs.locationAt(n-1).begin, rhs.locationAt(0).end);
