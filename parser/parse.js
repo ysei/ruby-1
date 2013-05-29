@@ -30,8 +30,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+
 /* First part of user declarations.  */
-/* Line 31 of lalr1.js  */
+/* Line 32 of lalr1.js  */
 /* Line 1 of "parse.y"  */
 
 	alert(123)
@@ -66,6 +67,7 @@ Location.prototype.toString = function () {
 
 
 
+
 function YYParser ()
 {
     /** Version number for the Bison executable that generated this parser.  */
@@ -81,7 +83,7 @@ function YYParser ()
   /** Token returned by the scanner to signal the end of its input.  */
   var EOF = 0;
 
-/* Tokens.  */
+  /* Tokens.  */
 /** Token numbers, to be returned by the scanner.  */
 var TOKENS = {
   'END_OF_INPUT': 0,
