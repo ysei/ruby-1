@@ -274,7 +274,7 @@ var TOKENS = {
   'tUMINUS_NUM': 385,
   'tLAST_TOKEN': 386,
 
-  ' ': 0 /* comma terminator, needs to be avoided */
+  'terminator': 0 /* comma terminator, needs to be avoided */
 };
 
 
@@ -338,8 +338,9 @@ var TOKENS = {
   var YYERRLAB1 = 7;
   var YYRETURN = 8;
 
+  var yyntokens_ = 159;
+  
   var yyerrstatus_ = 0;
-
   /**
    * Return whether error recovery is being done.  In this state, the parser
    * reads token until it reaches a known state, and then restarts normal
@@ -348,29 +349,11 @@ var TOKENS = {
   {
     return yyerrstatus_ == 0;
   }
-
-  function yyaction (yyn, yystack, yylen) // int yyn, YYStack yystack, int yylen
+  
+  var actionsTable =
   {
-    var yyloc = yystack.locationFromNthItemToCurrent(yylen);
-
-    /* If YYLEN is nonzero, implement the default value of the action:
-       `$$ = $1'.  Otherwise, use the top of the stack.
-
-       Otherwise, the following line sets YYVAL to garbage.
-       This behavior is undocumented and Bison
-       users should not rely upon it.  */
-    var yyval;
-    if (yylen > 0)
-      yyval = yystack.valueAt(yylen - 1);
-    else
-      yyval = yystack.valueAt(0);
-
-    yy_reduce_print (yyn, yystack);
-
-    switch (yyn)
-      {
-	  2: function ()
-    /* Line 229 of lalr1.js  */
+      '2': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 114 of "parse.y"  */
     {
 			lex_state = EXPR_BEG;
@@ -382,8 +365,8 @@ var TOKENS = {
 		    },
 
 
-  3: function ()
-    /* Line 229 of lalr1.js  */
+  '3': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 123 of "parse.y"  */
     {
 		    /*%%%*/
@@ -407,8 +390,8 @@ var TOKENS = {
 		    },
 
 
-  4: function ()
-    /* Line 229 of lalr1.js  */
+  '4': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 146 of "parse.y"  */
     {
 		    /*%%%*/
@@ -420,8 +403,8 @@ var TOKENS = {
 		    },
 
 
-  5: function ()
-    /* Line 229 of lalr1.js  */
+  '5': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 157 of "parse.y"  */
     {
 		    /*%%%*/
@@ -433,8 +416,8 @@ var TOKENS = {
 		    },
 
 
-  6: function ()
-    /* Line 229 of lalr1.js  */
+  '6': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 166 of "parse.y"  */
     {
 		    /*%%%*/
@@ -445,8 +428,8 @@ var TOKENS = {
 		    },
 
 
-  7: function ()
-    /* Line 229 of lalr1.js  */
+  '7': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 174 of "parse.y"  */
     {
 		    /*%%%*/
@@ -457,16 +440,16 @@ var TOKENS = {
 		    },
 
 
-  8: function ()
-    /* Line 229 of lalr1.js  */
+  '8': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 182 of "parse.y"  */
     {
 			yyval = remove_begin(((node)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  10: function ()
-    /* Line 229 of lalr1.js  */
+  '10': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 189 of "parse.y"  */
     {
 		    /*%%%*/
@@ -476,8 +459,8 @@ var TOKENS = {
 		    },
 
 
-  11: function ()
-    /* Line 229 of lalr1.js  */
+  '11': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 196 of "parse.y"  */
     {
 		    /*%%%*/
@@ -492,8 +475,8 @@ var TOKENS = {
 		    },
 
 
-  12: function ()
-    /* Line 229 of lalr1.js  */
+  '12': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 213 of "parse.y"  */
     {
 		    /*%%%*/
@@ -524,8 +507,8 @@ var TOKENS = {
 		    },
 
 
-  13: function ()
-    /* Line 229 of lalr1.js  */
+  '13': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 243 of "parse.y"  */
     {
 		    /*%%%*/
@@ -537,8 +520,8 @@ var TOKENS = {
 		    },
 
 
-  14: function ()
-    /* Line 229 of lalr1.js  */
+  '14': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 254 of "parse.y"  */
     {
 		    /*%%%*/
@@ -550,8 +533,8 @@ var TOKENS = {
 		    },
 
 
-  15: function ()
-    /* Line 229 of lalr1.js  */
+  '15': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 263 of "parse.y"  */
     {
 		    /*%%%*/
@@ -562,8 +545,8 @@ var TOKENS = {
 		    },
 
 
-  16: function ()
-    /* Line 229 of lalr1.js  */
+  '16': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 271 of "parse.y"  */
     {
 		    /*%%%*/
@@ -574,24 +557,24 @@ var TOKENS = {
 		    },
 
 
-  17: function ()
-    /* Line 229 of lalr1.js  */
+  '17': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 279 of "parse.y"  */
     {
 			yyval = remove_begin(((node)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  18: function ()
-    /* Line 229 of lalr1.js  */
+  '18': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 285 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (1-(1))));
 		    },
 
 
-  19: function ()
-    /* Line 229 of lalr1.js  */
+  '19': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 289 of "parse.y"  */
     {
 			yyerror("BEGIN is permitted only at toplevel");
@@ -602,8 +585,8 @@ var TOKENS = {
 		    },
 
 
-  20: function ()
-    /* Line 229 of lalr1.js  */
+  '20': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 297 of "parse.y"  */
     {
 		    /*%%%*/
@@ -618,14 +601,14 @@ var TOKENS = {
 		    },
 
 
-  21: function ()
-    /* Line 229 of lalr1.js  */
+  '21': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 309 of "parse.y"  */
     {lex_state = EXPR_FNAME;},
 
 
-  22: function ()
-    /* Line 229 of lalr1.js  */
+  '22': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 310 of "parse.y"  */
     {
 		    /*%%%*/
@@ -636,8 +619,8 @@ var TOKENS = {
 		    },
 
 
-  23: function ()
-    /* Line 229 of lalr1.js  */
+  '23': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 318 of "parse.y"  */
     {
 		    /*%%%*/
@@ -648,8 +631,8 @@ var TOKENS = {
 		    },
 
 
-  24: function ()
-    /* Line 229 of lalr1.js  */
+  '24': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 326 of "parse.y"  */
     {
 		    /*%%%*/
@@ -663,8 +646,8 @@ var TOKENS = {
 		    },
 
 
-  25: function ()
-    /* Line 229 of lalr1.js  */
+  '25': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 337 of "parse.y"  */
     {
 		    /*%%%*/
@@ -677,8 +660,8 @@ var TOKENS = {
 		    },
 
 
-  26: function ()
-    /* Line 229 of lalr1.js  */
+  '26': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 347 of "parse.y"  */
     {
 		    /*%%%*/
@@ -689,8 +672,8 @@ var TOKENS = {
 		    },
 
 
-  27: function ()
-    /* Line 229 of lalr1.js  */
+  '27': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 355 of "parse.y"  */
     {
 		    /*%%%*/
@@ -702,8 +685,8 @@ var TOKENS = {
 		    },
 
 
-  28: function ()
-    /* Line 229 of lalr1.js  */
+  '28': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 364 of "parse.y"  */
     {
 		    /*%%%*/
@@ -715,8 +698,8 @@ var TOKENS = {
 		    },
 
 
-  29: function ()
-    /* Line 229 of lalr1.js  */
+  '29': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 373 of "parse.y"  */
     {
 		    /*%%%*/
@@ -732,8 +715,8 @@ var TOKENS = {
 		    },
 
 
-  30: function ()
-    /* Line 229 of lalr1.js  */
+  '30': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 386 of "parse.y"  */
     {
 		    /*%%%*/
@@ -749,8 +732,8 @@ var TOKENS = {
 		    },
 
 
-  31: function ()
-    /* Line 229 of lalr1.js  */
+  '31': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 399 of "parse.y"  */
     {
 		    /*%%%*/
@@ -762,8 +745,8 @@ var TOKENS = {
 		    },
 
 
-  32: function ()
-    /* Line 229 of lalr1.js  */
+  '32': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 408 of "parse.y"  */
     {
 			if (in_def || in_single) {
@@ -778,8 +761,8 @@ var TOKENS = {
 		    },
 
 
-  34: function ()
-    /* Line 229 of lalr1.js  */
+  '34': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 421 of "parse.y"  */
     {
 		    /*%%%*/
@@ -792,8 +775,8 @@ var TOKENS = {
 		    },
 
 
-  35: function ()
-    /* Line 229 of lalr1.js  */
+  '35': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 431 of "parse.y"  */
     {
 			value_expr(((node)(yystack.valueAt (3-(3)))));
@@ -801,8 +784,8 @@ var TOKENS = {
 		    },
 
 
-  36: function ()
-    /* Line 229 of lalr1.js  */
+  '36': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 436 of "parse.y"  */
     {
 		    /*%%%*/
@@ -826,8 +809,8 @@ var TOKENS = {
 		    },
 
 
-  37: function ()
-    /* Line 229 of lalr1.js  */
+  '37': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 457 of "parse.y"  */
     {
 			value_expr(((node)(yystack.valueAt (5-(5)))));
@@ -835,8 +818,8 @@ var TOKENS = {
 		    },
 
 
-  38: function ()
-    /* Line 229 of lalr1.js  */
+  '38': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 462 of "parse.y"  */
     {
 			value_expr(((node)(yystack.valueAt (5-(5)))));
@@ -844,8 +827,8 @@ var TOKENS = {
 		    },
 
 
-  39: function ()
-    /* Line 229 of lalr1.js  */
+  '39': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 467 of "parse.y"  */
     {
 		    /*%%%*/
@@ -858,8 +841,8 @@ var TOKENS = {
 		    },
 
 
-  40: function ()
-    /* Line 229 of lalr1.js  */
+  '40': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 477 of "parse.y"  */
     {
 			value_expr(((node)(yystack.valueAt (5-(5)))));
@@ -867,8 +850,8 @@ var TOKENS = {
 		    },
 
 
-  41: function ()
-    /* Line 229 of lalr1.js  */
+  '41': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 482 of "parse.y"  */
     {
 		    /*%%%*/
@@ -881,8 +864,8 @@ var TOKENS = {
 		    },
 
 
-  42: function ()
-    /* Line 229 of lalr1.js  */
+  '42': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 492 of "parse.y"  */
     {
 		    /*%%%*/
@@ -894,8 +877,8 @@ var TOKENS = {
 		    },
 
 
-  43: function ()
-    /* Line 229 of lalr1.js  */
+  '43': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 501 of "parse.y"  */
     {
 		    /*%%%*/
@@ -907,8 +890,8 @@ var TOKENS = {
 		    },
 
 
-  44: function ()
-    /* Line 229 of lalr1.js  */
+  '44': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 510 of "parse.y"  */
     {
 		    /*%%%*/
@@ -920,8 +903,8 @@ var TOKENS = {
 		    },
 
 
-  46: function ()
-    /* Line 229 of lalr1.js  */
+  '46': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 522 of "parse.y"  */
     {
 		    /*%%%*/
@@ -933,8 +916,8 @@ var TOKENS = {
 		    },
 
 
-  47: function ()
-    /* Line 229 of lalr1.js  */
+  '47': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 531 of "parse.y"  */
     {
 		    /*%%%*/
@@ -946,8 +929,8 @@ var TOKENS = {
 		    },
 
 
-  49: function ()
-    /* Line 229 of lalr1.js  */
+  '49': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 544 of "parse.y"  */
     {
 		    /*%%%*/
@@ -958,8 +941,8 @@ var TOKENS = {
 		    },
 
 
-  50: function ()
-    /* Line 229 of lalr1.js  */
+  '50': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 552 of "parse.y"  */
     {
 		    /*%%%*/
@@ -970,8 +953,8 @@ var TOKENS = {
 		    },
 
 
-  51: function ()
-    /* Line 229 of lalr1.js  */
+  '51': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 560 of "parse.y"  */
     {
 		    /*%%%*/
@@ -982,8 +965,8 @@ var TOKENS = {
 		    },
 
 
-  52: function ()
-    /* Line 229 of lalr1.js  */
+  '52': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 568 of "parse.y"  */
     {
 		    /*%%%*/
@@ -994,8 +977,8 @@ var TOKENS = {
 		    },
 
 
-  54: function ()
-    /* Line 229 of lalr1.js  */
+  '54': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 579 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1008,8 +991,8 @@ var TOKENS = {
 		    },
 
 
-  58: function ()
-    /* Line 229 of lalr1.js  */
+  '58': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 596 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1021,8 +1004,8 @@ var TOKENS = {
 		    },
 
 
-  59: function ()
-    /* Line 229 of lalr1.js  */
+  '59': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 607 of "parse.y"  */
     {
 			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
@@ -1033,8 +1016,8 @@ var TOKENS = {
 		    },
 
 
-  60: function ()
-    /* Line 229 of lalr1.js  */
+  '60': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 617 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1047,8 +1030,8 @@ var TOKENS = {
 		    },
 
 
-  61: function ()
-    /* Line 229 of lalr1.js  */
+  '61': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 629 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1059,8 +1042,8 @@ var TOKENS = {
 		    },
 
 
-  62: function ()
-    /* Line 229 of lalr1.js  */
+  '62': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 639 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1072,8 +1055,8 @@ var TOKENS = {
 		    },
 
 
-  63: function ()
-    /* Line 229 of lalr1.js  */
+  '63': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 648 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1089,8 +1072,8 @@ var TOKENS = {
 		    },
 
 
-  64: function ()
-    /* Line 229 of lalr1.js  */
+  '64': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 661 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1102,8 +1085,8 @@ var TOKENS = {
 		    },
 
 
-  65: function ()
-    /* Line 229 of lalr1.js  */
+  '65': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 670 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1118,8 +1101,8 @@ var TOKENS = {
 		   },
 
 
-  66: function ()
-    /* Line 229 of lalr1.js  */
+  '66': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 682 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1131,8 +1114,8 @@ var TOKENS = {
 		    },
 
 
-  67: function ()
-    /* Line 229 of lalr1.js  */
+  '67': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 691 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1147,8 +1130,8 @@ var TOKENS = {
 		   },
 
 
-  68: function ()
-    /* Line 229 of lalr1.js  */
+  '68': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 703 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1160,8 +1143,8 @@ var TOKENS = {
 		    },
 
 
-  69: function ()
-    /* Line 229 of lalr1.js  */
+  '69': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 712 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1173,8 +1156,8 @@ var TOKENS = {
 		    },
 
 
-  70: function ()
-    /* Line 229 of lalr1.js  */
+  '70': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 721 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1185,8 +1168,8 @@ var TOKENS = {
 		    },
 
 
-  71: function ()
-    /* Line 229 of lalr1.js  */
+  '71': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 729 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1197,8 +1180,8 @@ var TOKENS = {
 		    },
 
 
-  72: function ()
-    /* Line 229 of lalr1.js  */
+  '72': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 737 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1209,8 +1192,8 @@ var TOKENS = {
 		    },
 
 
-  74: function ()
-    /* Line 229 of lalr1.js  */
+  '74': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 748 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1221,8 +1204,8 @@ var TOKENS = {
 		    },
 
 
-  76: function ()
-    /* Line 229 of lalr1.js  */
+  '76': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 759 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1233,8 +1216,8 @@ var TOKENS = {
 		    },
 
 
-  77: function ()
-    /* Line 229 of lalr1.js  */
+  '77': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 769 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1245,8 +1228,8 @@ var TOKENS = {
 		    },
 
 
-  78: function ()
-    /* Line 229 of lalr1.js  */
+  '78': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 777 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1257,8 +1240,8 @@ var TOKENS = {
 		    },
 
 
-  79: function ()
-    /* Line 229 of lalr1.js  */
+  '79': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 785 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1269,8 +1252,8 @@ var TOKENS = {
 		    },
 
 
-  80: function ()
-    /* Line 229 of lalr1.js  */
+  '80': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 793 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1282,8 +1265,8 @@ var TOKENS = {
 		    },
 
 
-  81: function ()
-    /* Line 229 of lalr1.js  */
+  '81': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 802 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1294,8 +1277,8 @@ var TOKENS = {
 		    },
 
 
-  82: function ()
-    /* Line 229 of lalr1.js  */
+  '82': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 810 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1307,8 +1290,8 @@ var TOKENS = {
 		    },
 
 
-  83: function ()
-    /* Line 229 of lalr1.js  */
+  '83': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 819 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1319,8 +1302,8 @@ var TOKENS = {
 		    },
 
 
-  84: function ()
-    /* Line 229 of lalr1.js  */
+  '84': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 827 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1332,8 +1315,8 @@ var TOKENS = {
 		    },
 
 
-  85: function ()
-    /* Line 229 of lalr1.js  */
+  '85': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 836 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1344,8 +1327,8 @@ var TOKENS = {
 		    },
 
 
-  86: function ()
-    /* Line 229 of lalr1.js  */
+  '86': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 844 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1357,8 +1340,8 @@ var TOKENS = {
 		    },
 
 
-  88: function ()
-    /* Line 229 of lalr1.js  */
+  '88': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 856 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1369,8 +1352,8 @@ var TOKENS = {
 		    },
 
 
-  89: function ()
-    /* Line 229 of lalr1.js  */
+  '89': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 866 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1381,8 +1364,8 @@ var TOKENS = {
 		    },
 
 
-  90: function ()
-    /* Line 229 of lalr1.js  */
+  '90': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 874 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1393,8 +1376,8 @@ var TOKENS = {
 		    },
 
 
-  91: function ()
-    /* Line 229 of lalr1.js  */
+  '91': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 884 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1405,8 +1388,8 @@ var TOKENS = {
 		    },
 
 
-  92: function ()
-    /* Line 229 of lalr1.js  */
+  '92': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 892 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1417,24 +1400,24 @@ var TOKENS = {
 		    },
 
 
-  93: function ()
-    /* Line 229 of lalr1.js  */
+  '93': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 902 of "parse.y"  */
     {
 			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
 		    },
 
 
-  94: function ()
-    /* Line 229 of lalr1.js  */
+  '94': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 906 of "parse.y"  */
     {
 		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
 		    },
 
 
-  95: function ()
-    /* Line 229 of lalr1.js  */
+  '95': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 910 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1445,8 +1428,8 @@ var TOKENS = {
 		    },
 
 
-  96: function ()
-    /* Line 229 of lalr1.js  */
+  '96': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 918 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1457,8 +1440,8 @@ var TOKENS = {
 		    },
 
 
-  97: function ()
-    /* Line 229 of lalr1.js  */
+  '97': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 926 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1469,8 +1452,8 @@ var TOKENS = {
 		    },
 
 
-  98: function ()
-    /* Line 229 of lalr1.js  */
+  '98': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 934 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1481,8 +1464,8 @@ var TOKENS = {
 		    },
 
 
-  99: function ()
-    /* Line 229 of lalr1.js  */
+  '99': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 942 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1497,8 +1480,8 @@ var TOKENS = {
 		    },
 
 
-  100: function ()
-    /* Line 229 of lalr1.js  */
+  '100': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 954 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1511,8 +1494,8 @@ var TOKENS = {
 		    },
 
 
-  101: function ()
-    /* Line 229 of lalr1.js  */
+  '101': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 964 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1525,8 +1508,8 @@ var TOKENS = {
 		    },
 
 
-  102: function ()
-    /* Line 229 of lalr1.js  */
+  '102': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 976 of "parse.y"  */
     {
 			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
@@ -1538,8 +1521,8 @@ var TOKENS = {
 		    },
 
 
-  103: function ()
-    /* Line 229 of lalr1.js  */
+  '103': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 985 of "parse.y"  */
     {
 		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
@@ -1551,8 +1534,8 @@ var TOKENS = {
 		    },
 
 
-  104: function ()
-    /* Line 229 of lalr1.js  */
+  '104': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 994 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1563,8 +1546,8 @@ var TOKENS = {
 		    },
 
 
-  105: function ()
-    /* Line 229 of lalr1.js  */
+  '105': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1002 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1575,8 +1558,8 @@ var TOKENS = {
 		    },
 
 
-  106: function ()
-    /* Line 229 of lalr1.js  */
+  '106': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1010 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1587,8 +1570,8 @@ var TOKENS = {
 		    },
 
 
-  107: function ()
-    /* Line 229 of lalr1.js  */
+  '107': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1018 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1599,8 +1582,8 @@ var TOKENS = {
 		    },
 
 
-  108: function ()
-    /* Line 229 of lalr1.js  */
+  '108': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1026 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1616,8 +1599,8 @@ var TOKENS = {
 		    },
 
 
-  109: function ()
-    /* Line 229 of lalr1.js  */
+  '109': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1039 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1633,8 +1616,8 @@ var TOKENS = {
 		    },
 
 
-  110: function ()
-    /* Line 229 of lalr1.js  */
+  '110': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1052 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1646,8 +1629,8 @@ var TOKENS = {
 		    },
 
 
-  111: function ()
-    /* Line 229 of lalr1.js  */
+  '111': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1063 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1658,8 +1641,8 @@ var TOKENS = {
 		    },
 
 
-  113: function ()
-    /* Line 229 of lalr1.js  */
+  '113': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1074 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1670,8 +1653,8 @@ var TOKENS = {
 		    },
 
 
-  114: function ()
-    /* Line 229 of lalr1.js  */
+  '114': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1082 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1682,8 +1665,8 @@ var TOKENS = {
 		    },
 
 
-  115: function ()
-    /* Line 229 of lalr1.js  */
+  '115': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1090 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1694,8 +1677,8 @@ var TOKENS = {
 		    },
 
 
-  119: function ()
-    /* Line 229 of lalr1.js  */
+  '119': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1103 of "parse.y"  */
     {
 			lex_state = EXPR_ENDFN;
@@ -1703,8 +1686,8 @@ var TOKENS = {
 		    },
 
 
-  120: function ()
-    /* Line 229 of lalr1.js  */
+  '120': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1108 of "parse.y"  */
     {
 			lex_state = EXPR_ENDFN;
@@ -1716,8 +1699,8 @@ var TOKENS = {
 		    },
 
 
-  123: function ()
-    /* Line 229 of lalr1.js  */
+  '123': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1123 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1728,8 +1711,8 @@ var TOKENS = {
 		    },
 
 
-  125: function ()
-    /* Line 229 of lalr1.js  */
+  '125': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1134 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1740,14 +1723,14 @@ var TOKENS = {
 		    },
 
 
-  126: function ()
-    /* Line 229 of lalr1.js  */
+  '126': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1141 of "parse.y"  */
     {lex_state = EXPR_FNAME;},
 
 
-  127: function ()
-    /* Line 229 of lalr1.js  */
+  '127': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1142 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1758,188 +1741,188 @@ var TOKENS = {
 		    },
 
 
-  128: function ()
-    /* Line 229 of lalr1.js  */
+  '128': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1151 of "parse.y"  */
     { ifndef_ripper(yyval = '|'); },
 
 
-  129: function ()
-    /* Line 229 of lalr1.js  */
+  '129': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1152 of "parse.y"  */
     { ifndef_ripper(yyval = '^'); },
 
 
-  130: function ()
-    /* Line 229 of lalr1.js  */
+  '130': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1153 of "parse.y"  */
     { ifndef_ripper(yyval = '&'); },
 
 
-  131: function ()
-    /* Line 229 of lalr1.js  */
+  '131': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1154 of "parse.y"  */
     { ifndef_ripper(yyval = tCMP); },
 
 
-  132: function ()
-    /* Line 229 of lalr1.js  */
+  '132': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1155 of "parse.y"  */
     { ifndef_ripper(yyval = tEQ); },
 
 
-  133: function ()
-    /* Line 229 of lalr1.js  */
+  '133': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1156 of "parse.y"  */
     { ifndef_ripper(yyval = tEQQ); },
 
 
-  134: function ()
-    /* Line 229 of lalr1.js  */
+  '134': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1157 of "parse.y"  */
     { ifndef_ripper(yyval = tMATCH); },
 
 
-  135: function ()
-    /* Line 229 of lalr1.js  */
+  '135': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1158 of "parse.y"  */
     { ifndef_ripper(yyval = tNMATCH); },
 
 
-  136: function ()
-    /* Line 229 of lalr1.js  */
+  '136': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1159 of "parse.y"  */
     { ifndef_ripper(yyval = '>'); },
 
 
-  137: function ()
-    /* Line 229 of lalr1.js  */
+  '137': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1160 of "parse.y"  */
     { ifndef_ripper(yyval = tGEQ); },
 
 
-  138: function ()
-    /* Line 229 of lalr1.js  */
+  '138': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1161 of "parse.y"  */
     { ifndef_ripper(yyval = '<'); },
 
 
-  139: function ()
-    /* Line 229 of lalr1.js  */
+  '139': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1162 of "parse.y"  */
     { ifndef_ripper(yyval = tLEQ); },
 
 
-  140: function ()
-    /* Line 229 of lalr1.js  */
+  '140': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1163 of "parse.y"  */
     { ifndef_ripper(yyval = tNEQ); },
 
 
-  141: function ()
-    /* Line 229 of lalr1.js  */
+  '141': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1164 of "parse.y"  */
     { ifndef_ripper(yyval = tLSHFT); },
 
 
-  142: function ()
-    /* Line 229 of lalr1.js  */
+  '142': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1165 of "parse.y"  */
     { ifndef_ripper(yyval = tRSHFT); },
 
 
-  143: function ()
-    /* Line 229 of lalr1.js  */
+  '143': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1166 of "parse.y"  */
     { ifndef_ripper(yyval = '+'); },
 
 
-  144: function ()
-    /* Line 229 of lalr1.js  */
+  '144': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1167 of "parse.y"  */
     { ifndef_ripper(yyval = '-'); },
 
 
-  145: function ()
-    /* Line 229 of lalr1.js  */
+  '145': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1168 of "parse.y"  */
     { ifndef_ripper(yyval = '*'); },
 
 
-  146: function ()
-    /* Line 229 of lalr1.js  */
+  '146': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1169 of "parse.y"  */
     { ifndef_ripper(yyval = '*'); },
 
 
-  147: function ()
-    /* Line 229 of lalr1.js  */
+  '147': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1170 of "parse.y"  */
     { ifndef_ripper(yyval = '/'); },
 
 
-  148: function ()
-    /* Line 229 of lalr1.js  */
+  '148': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1171 of "parse.y"  */
     { ifndef_ripper(yyval = '%'); },
 
 
-  149: function ()
-    /* Line 229 of lalr1.js  */
+  '149': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1172 of "parse.y"  */
     { ifndef_ripper(yyval = tPOW); },
 
 
-  150: function ()
-    /* Line 229 of lalr1.js  */
+  '150': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1173 of "parse.y"  */
     { ifndef_ripper(yyval = tDSTAR); },
 
 
-  151: function ()
-    /* Line 229 of lalr1.js  */
+  '151': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1174 of "parse.y"  */
     { ifndef_ripper(yyval = '!'); },
 
 
-  152: function ()
-    /* Line 229 of lalr1.js  */
+  '152': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1175 of "parse.y"  */
     { ifndef_ripper(yyval = '~'); },
 
 
-  153: function ()
-    /* Line 229 of lalr1.js  */
+  '153': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1176 of "parse.y"  */
     { ifndef_ripper(yyval = tUPLUS); },
 
 
-  154: function ()
-    /* Line 229 of lalr1.js  */
+  '154': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1177 of "parse.y"  */
     { ifndef_ripper(yyval = tUMINUS); },
 
 
-  155: function ()
-    /* Line 229 of lalr1.js  */
+  '155': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1178 of "parse.y"  */
     { ifndef_ripper(yyval = tAREF); },
 
 
-  156: function ()
-    /* Line 229 of lalr1.js  */
+  '156': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1179 of "parse.y"  */
     { ifndef_ripper(yyval = tASET); },
 
 
-  157: function ()
-    /* Line 229 of lalr1.js  */
+  '157': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1180 of "parse.y"  */
     { ifndef_ripper(yyval = '`'); },
 
 
-  199: function ()
-    /* Line 229 of lalr1.js  */
+  '199': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1198 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1951,8 +1934,8 @@ var TOKENS = {
 		    },
 
 
-  200: function ()
-    /* Line 229 of lalr1.js  */
+  '200': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1207 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1965,8 +1948,8 @@ var TOKENS = {
 		    },
 
 
-  201: function ()
-    /* Line 229 of lalr1.js  */
+  '201': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1217 of "parse.y"  */
     {
 			value_expr(((node)(yystack.valueAt (3-(3)))));
@@ -1974,8 +1957,8 @@ var TOKENS = {
 		    },
 
 
-  202: function ()
-    /* Line 229 of lalr1.js  */
+  '202': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1222 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1988,8 +1971,8 @@ var TOKENS = {
 		    },
 
 
-  203: function ()
-    /* Line 229 of lalr1.js  */
+  '203': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1232 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2018,8 +2001,8 @@ var TOKENS = {
 		    },
 
 
-  204: function ()
-    /* Line 229 of lalr1.js  */
+  '204': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1258 of "parse.y"  */
     {
 			value_expr(((node)(yystack.valueAt (5-(5)))));
@@ -2027,8 +2010,8 @@ var TOKENS = {
 		    },
 
 
-  205: function ()
-    /* Line 229 of lalr1.js  */
+  '205': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1263 of "parse.y"  */
     {
 			value_expr(((node)(yystack.valueAt (5-(5)))));
@@ -2036,8 +2019,8 @@ var TOKENS = {
 		    },
 
 
-  206: function ()
-    /* Line 229 of lalr1.js  */
+  '206': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1268 of "parse.y"  */
     {
 			value_expr(((node)(yystack.valueAt (5-(5)))));
@@ -2045,8 +2028,8 @@ var TOKENS = {
 		    },
 
 
-  207: function ()
-    /* Line 229 of lalr1.js  */
+  '207': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1273 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2059,8 +2042,8 @@ var TOKENS = {
 		    },
 
 
-  208: function ()
-    /* Line 229 of lalr1.js  */
+  '208': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1283 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2073,8 +2056,8 @@ var TOKENS = {
 		    },
 
 
-  209: function ()
-    /* Line 229 of lalr1.js  */
+  '209': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1293 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2088,8 +2071,8 @@ var TOKENS = {
 		    },
 
 
-  210: function ()
-    /* Line 229 of lalr1.js  */
+  '210': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1304 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2106,8 +2089,8 @@ var TOKENS = {
 		    },
 
 
-  211: function ()
-    /* Line 229 of lalr1.js  */
+  '211': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1318 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2124,8 +2107,8 @@ var TOKENS = {
 		    },
 
 
-  212: function ()
-    /* Line 229 of lalr1.js  */
+  '212': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1332 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2136,8 +2119,8 @@ var TOKENS = {
 		    },
 
 
-  213: function ()
-    /* Line 229 of lalr1.js  */
+  '213': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1340 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2148,8 +2131,8 @@ var TOKENS = {
 		    },
 
 
-  214: function ()
-    /* Line 229 of lalr1.js  */
+  '214': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1348 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2160,8 +2143,8 @@ var TOKENS = {
 		    },
 
 
-  215: function ()
-    /* Line 229 of lalr1.js  */
+  '215': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1356 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2172,8 +2155,8 @@ var TOKENS = {
 		    },
 
 
-  216: function ()
-    /* Line 229 of lalr1.js  */
+  '216': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1364 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2184,8 +2167,8 @@ var TOKENS = {
 		    },
 
 
-  217: function ()
-    /* Line 229 of lalr1.js  */
+  '217': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1372 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2196,8 +2179,8 @@ var TOKENS = {
 		    },
 
 
-  218: function ()
-    /* Line 229 of lalr1.js  */
+  '218': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1380 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2209,8 +2192,8 @@ var TOKENS = {
 		    },
 
 
-  219: function ()
-    /* Line 229 of lalr1.js  */
+  '219': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1389 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2222,8 +2205,8 @@ var TOKENS = {
 		    },
 
 
-  220: function ()
-    /* Line 229 of lalr1.js  */
+  '220': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1398 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2234,8 +2217,8 @@ var TOKENS = {
 		    },
 
 
-  221: function ()
-    /* Line 229 of lalr1.js  */
+  '221': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1406 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2246,8 +2229,8 @@ var TOKENS = {
 		    },
 
 
-  222: function ()
-    /* Line 229 of lalr1.js  */
+  '222': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1414 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2258,8 +2241,8 @@ var TOKENS = {
 		    },
 
 
-  223: function ()
-    /* Line 229 of lalr1.js  */
+  '223': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1422 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2270,8 +2253,8 @@ var TOKENS = {
 		    },
 
 
-  224: function ()
-    /* Line 229 of lalr1.js  */
+  '224': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1430 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2282,8 +2265,8 @@ var TOKENS = {
 		    },
 
 
-  225: function ()
-    /* Line 229 of lalr1.js  */
+  '225': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1438 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2294,8 +2277,8 @@ var TOKENS = {
 		    },
 
 
-  226: function ()
-    /* Line 229 of lalr1.js  */
+  '226': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1446 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2306,8 +2289,8 @@ var TOKENS = {
 		    },
 
 
-  227: function ()
-    /* Line 229 of lalr1.js  */
+  '227': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1454 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2318,8 +2301,8 @@ var TOKENS = {
 		    },
 
 
-  228: function ()
-    /* Line 229 of lalr1.js  */
+  '228': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1462 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2330,8 +2313,8 @@ var TOKENS = {
 		    },
 
 
-  229: function ()
-    /* Line 229 of lalr1.js  */
+  '229': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1470 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2342,8 +2325,8 @@ var TOKENS = {
 		    },
 
 
-  230: function ()
-    /* Line 229 of lalr1.js  */
+  '230': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1478 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2354,8 +2337,8 @@ var TOKENS = {
 		    },
 
 
-  231: function ()
-    /* Line 229 of lalr1.js  */
+  '231': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1486 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2366,8 +2349,8 @@ var TOKENS = {
 		    },
 
 
-  232: function ()
-    /* Line 229 of lalr1.js  */
+  '232': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1494 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2378,8 +2361,8 @@ var TOKENS = {
 		    },
 
 
-  233: function ()
-    /* Line 229 of lalr1.js  */
+  '233': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1502 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2393,8 +2376,8 @@ var TOKENS = {
 		    },
 
 
-  234: function ()
-    /* Line 229 of lalr1.js  */
+  '234': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1513 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2405,8 +2388,8 @@ var TOKENS = {
 		    },
 
 
-  235: function ()
-    /* Line 229 of lalr1.js  */
+  '235': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1521 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2417,8 +2400,8 @@ var TOKENS = {
 		    },
 
 
-  236: function ()
-    /* Line 229 of lalr1.js  */
+  '236': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1529 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2429,8 +2412,8 @@ var TOKENS = {
 		    },
 
 
-  237: function ()
-    /* Line 229 of lalr1.js  */
+  '237': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1537 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2441,8 +2424,8 @@ var TOKENS = {
 		    },
 
 
-  238: function ()
-    /* Line 229 of lalr1.js  */
+  '238': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1545 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2453,8 +2436,8 @@ var TOKENS = {
 		    },
 
 
-  239: function ()
-    /* Line 229 of lalr1.js  */
+  '239': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1553 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2465,8 +2448,8 @@ var TOKENS = {
 		    },
 
 
-  240: function ()
-    /* Line 229 of lalr1.js  */
+  '240': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1561 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2477,14 +2460,14 @@ var TOKENS = {
 		    },
 
 
-  241: function ()
-    /* Line 229 of lalr1.js  */
+  '241': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1568 of "parse.y"  */
     {in_defined = 1;},
 
 
-  242: function ()
-    /* Line 229 of lalr1.js  */
+  '242': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1569 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2497,8 +2480,8 @@ var TOKENS = {
 		    },
 
 
-  243: function ()
-    /* Line 229 of lalr1.js  */
+  '243': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1579 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2511,16 +2494,16 @@ var TOKENS = {
 		    },
 
 
-  244: function ()
-    /* Line 229 of lalr1.js  */
+  '244': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1589 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (1-(1))));
 		    },
 
 
-  245: function ()
-    /* Line 229 of lalr1.js  */
+  '245': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1595 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2533,16 +2516,16 @@ var TOKENS = {
 		    },
 
 
-  247: function ()
-    /* Line 229 of lalr1.js  */
+  '247': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1608 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (2-(1))));
 		    },
 
 
-  248: function ()
-    /* Line 229 of lalr1.js  */
+  '248': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1612 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2553,8 +2536,8 @@ var TOKENS = {
 		    },
 
 
-  249: function ()
-    /* Line 229 of lalr1.js  */
+  '249': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1620 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2565,8 +2548,8 @@ var TOKENS = {
 		    },
 
 
-  250: function ()
-    /* Line 229 of lalr1.js  */
+  '250': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1630 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2577,16 +2560,16 @@ var TOKENS = {
 		    },
 
 
-  255: function ()
-    /* Line 229 of lalr1.js  */
+  '255': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1646 of "parse.y"  */
     {
 		      yyval = ((node)(yystack.valueAt (2-(1))));
 		    },
 
 
-  256: function ()
-    /* Line 229 of lalr1.js  */
+  '256': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1650 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2597,8 +2580,8 @@ var TOKENS = {
 		    },
 
 
-  257: function ()
-    /* Line 229 of lalr1.js  */
+  '257': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1658 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2609,8 +2592,8 @@ var TOKENS = {
 		    },
 
 
-  258: function ()
-    /* Line 229 of lalr1.js  */
+  '258': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1668 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2622,8 +2605,8 @@ var TOKENS = {
 		    },
 
 
-  259: function ()
-    /* Line 229 of lalr1.js  */
+  '259': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1677 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2634,8 +2617,8 @@ var TOKENS = {
 		    },
 
 
-  260: function ()
-    /* Line 229 of lalr1.js  */
+  '260': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1685 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2648,8 +2631,8 @@ var TOKENS = {
 		    },
 
 
-  261: function ()
-    /* Line 229 of lalr1.js  */
+  '261': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1695 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2661,8 +2644,8 @@ var TOKENS = {
 		    },
 
 
-  263: function ()
-    /* Line 229 of lalr1.js  */
+  '263': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1712 of "parse.y"  */
     {
 			yyval = cmdarg_stack;
@@ -2670,8 +2653,8 @@ var TOKENS = {
 		    },
 
 
-  264: function ()
-    /* Line 229 of lalr1.js  */
+  '264': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1717 of "parse.y"  */
     {
 			/* CMDARG_POP() */
@@ -2680,8 +2663,8 @@ var TOKENS = {
 		    },
 
 
-  265: function ()
-    /* Line 229 of lalr1.js  */
+  '265': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1725 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2692,24 +2675,24 @@ var TOKENS = {
 		    },
 
 
-  266: function ()
-    /* Line 229 of lalr1.js  */
+  '266': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1735 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (2-(2))));
 		    },
 
 
-  267: function ()
-    /* Line 229 of lalr1.js  */
+  '267': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1739 of "parse.y"  */
     {
 			yyval = 0;
 		    },
 
 
-  268: function ()
-    /* Line 229 of lalr1.js  */
+  '268': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1745 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2720,8 +2703,8 @@ var TOKENS = {
 		    },
 
 
-  269: function ()
-    /* Line 229 of lalr1.js  */
+  '269': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1753 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2732,8 +2715,8 @@ var TOKENS = {
 		    },
 
 
-  270: function ()
-    /* Line 229 of lalr1.js  */
+  '270': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1761 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2750,8 +2733,8 @@ var TOKENS = {
 		    },
 
 
-  271: function ()
-    /* Line 229 of lalr1.js  */
+  '271': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1775 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2768,8 +2751,8 @@ var TOKENS = {
 		    },
 
 
-  272: function ()
-    /* Line 229 of lalr1.js  */
+  '272': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1791 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2786,8 +2769,8 @@ var TOKENS = {
 		    },
 
 
-  273: function ()
-    /* Line 229 of lalr1.js  */
+  '273': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1805 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2805,8 +2788,8 @@ var TOKENS = {
 		    },
 
 
-  274: function ()
-    /* Line 229 of lalr1.js  */
+  '274': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1820 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2817,8 +2800,8 @@ var TOKENS = {
 		    },
 
 
-  285: function ()
-    /* Line 229 of lalr1.js  */
+  '285': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1840 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2829,8 +2812,8 @@ var TOKENS = {
 		    },
 
 
-  286: function ()
-    /* Line 229 of lalr1.js  */
+  '286': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1848 of "parse.y"  */
     {
 			((val)(yystack.valueAt (1-(1)))) = cmdarg_stack;
@@ -2842,8 +2825,8 @@ var TOKENS = {
 		    },
 
 
-  287: function ()
-    /* Line 229 of lalr1.js  */
+  '287': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1858 of "parse.y"  */
     {
 			cmdarg_stack = ((val)(yystack.valueAt (4-(1))));
@@ -2864,14 +2847,14 @@ var TOKENS = {
 		    },
 
 
-  288: function ()
-    /* Line 229 of lalr1.js  */
+  '288': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1875 of "parse.y"  */
     {lex_state = EXPR_ENDARG;},
 
 
-  289: function ()
-    /* Line 229 of lalr1.js  */
+  '289': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1876 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2882,14 +2865,14 @@ var TOKENS = {
 		    },
 
 
-  290: function ()
-    /* Line 229 of lalr1.js  */
+  '290': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1883 of "parse.y"  */
     {lex_state = EXPR_ENDARG;},
 
 
-  291: function ()
-    /* Line 229 of lalr1.js  */
+  '291': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1884 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2900,8 +2883,8 @@ var TOKENS = {
 		    },
 
 
-  292: function ()
-    /* Line 229 of lalr1.js  */
+  '292': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1892 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2912,8 +2895,8 @@ var TOKENS = {
 		    },
 
 
-  293: function ()
-    /* Line 229 of lalr1.js  */
+  '293': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1900 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2924,8 +2907,8 @@ var TOKENS = {
 		    },
 
 
-  294: function ()
-    /* Line 229 of lalr1.js  */
+  '294': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1908 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2936,8 +2919,8 @@ var TOKENS = {
 		    },
 
 
-  295: function ()
-    /* Line 229 of lalr1.js  */
+  '295': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1916 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2953,8 +2936,8 @@ var TOKENS = {
 		    },
 
 
-  296: function ()
-    /* Line 229 of lalr1.js  */
+  '296': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1929 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2965,8 +2948,8 @@ var TOKENS = {
 		    },
 
 
-  297: function ()
-    /* Line 229 of lalr1.js  */
+  '297': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1937 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2977,8 +2960,8 @@ var TOKENS = {
 		    },
 
 
-  298: function ()
-    /* Line 229 of lalr1.js  */
+  '298': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1945 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2989,8 +2972,8 @@ var TOKENS = {
 		    },
 
 
-  299: function ()
-    /* Line 229 of lalr1.js  */
+  '299': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1953 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3001,8 +2984,8 @@ var TOKENS = {
 		    },
 
 
-  300: function ()
-    /* Line 229 of lalr1.js  */
+  '300': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1961 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3013,14 +2996,14 @@ var TOKENS = {
 		    },
 
 
-  301: function ()
-    /* Line 229 of lalr1.js  */
+  '301': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1968 of "parse.y"  */
     {in_defined = 1;},
 
 
-  302: function ()
-    /* Line 229 of lalr1.js  */
+  '302': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1969 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3033,8 +3016,8 @@ var TOKENS = {
 		    },
 
 
-  303: function ()
-    /* Line 229 of lalr1.js  */
+  '303': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1979 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3045,8 +3028,8 @@ var TOKENS = {
 		    },
 
 
-  304: function ()
-    /* Line 229 of lalr1.js  */
+  '304': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1987 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3057,8 +3040,8 @@ var TOKENS = {
 		    },
 
 
-  305: function ()
-    /* Line 229 of lalr1.js  */
+  '305': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 1995 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3071,8 +3054,8 @@ var TOKENS = {
 		    },
 
 
-  307: function ()
-    /* Line 229 of lalr1.js  */
+  '307': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2006 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3085,16 +3068,16 @@ var TOKENS = {
 		    },
 
 
-  308: function ()
-    /* Line 229 of lalr1.js  */
+  '308': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2016 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (2-(2))));
 		    },
 
 
-  309: function ()
-    /* Line 229 of lalr1.js  */
+  '309': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2023 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3106,8 +3089,8 @@ var TOKENS = {
 		    },
 
 
-  310: function ()
-    /* Line 229 of lalr1.js  */
+  '310': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2035 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3119,20 +3102,20 @@ var TOKENS = {
 		    },
 
 
-  311: function ()
-    /* Line 229 of lalr1.js  */
+  '311': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2043 of "parse.y"  */
     {COND_PUSH(1);},
 
 
-  312: function ()
-    /* Line 229 of lalr1.js  */
+  '312': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2043 of "parse.y"  */
     {COND_POP();},
 
 
-  313: function ()
-    /* Line 229 of lalr1.js  */
+  '313': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2046 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3144,20 +3127,20 @@ var TOKENS = {
 		    },
 
 
-  314: function ()
-    /* Line 229 of lalr1.js  */
+  '314': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2054 of "parse.y"  */
     {COND_PUSH(1);},
 
 
-  315: function ()
-    /* Line 229 of lalr1.js  */
+  '315': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2054 of "parse.y"  */
     {COND_POP();},
 
 
-  316: function ()
-    /* Line 229 of lalr1.js  */
+  '316': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2057 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3169,8 +3152,8 @@ var TOKENS = {
 		    },
 
 
-  317: function ()
-    /* Line 229 of lalr1.js  */
+  '317': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2068 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3182,8 +3165,8 @@ var TOKENS = {
 		    },
 
 
-  318: function ()
-    /* Line 229 of lalr1.js  */
+  '318': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2077 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3194,20 +3177,20 @@ var TOKENS = {
 		    },
 
 
-  319: function ()
-    /* Line 229 of lalr1.js  */
+  '319': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2085 of "parse.y"  */
     {COND_PUSH(1);},
 
 
-  320: function ()
-    /* Line 229 of lalr1.js  */
+  '320': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2087 of "parse.y"  */
     {COND_POP();},
 
 
-  321: function ()
-    /* Line 229 of lalr1.js  */
+  '321': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2090 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3271,8 +3254,8 @@ var TOKENS = {
 		    },
 
 
-  322: function ()
-    /* Line 229 of lalr1.js  */
+  '322': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2151 of "parse.y"  */
     {
 			if (in_def || in_single)
@@ -3285,8 +3268,8 @@ var TOKENS = {
 		    },
 
 
-  323: function ()
-    /* Line 229 of lalr1.js  */
+  '323': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2162 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3299,8 +3282,8 @@ var TOKENS = {
 		    },
 
 
-  324: function ()
-    /* Line 229 of lalr1.js  */
+  '324': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2172 of "parse.y"  */
     {
 			yyval = in_def;
@@ -3308,8 +3291,8 @@ var TOKENS = {
 		    },
 
 
-  325: function ()
-    /* Line 229 of lalr1.js  */
+  '325': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2177 of "parse.y"  */
     {
 			yyval = in_single;
@@ -3318,8 +3301,8 @@ var TOKENS = {
 		    },
 
 
-  326: function ()
-    /* Line 229 of lalr1.js  */
+  '326': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2184 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3334,8 +3317,8 @@ var TOKENS = {
 		    },
 
 
-  327: function ()
-    /* Line 229 of lalr1.js  */
+  '327': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2196 of "parse.y"  */
     {
 			if (in_def || in_single)
@@ -3348,8 +3331,8 @@ var TOKENS = {
 		    },
 
 
-  328: function ()
-    /* Line 229 of lalr1.js  */
+  '328': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2207 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3362,8 +3345,8 @@ var TOKENS = {
 		    },
 
 
-  329: function ()
-    /* Line 229 of lalr1.js  */
+  '329': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2217 of "parse.y"  */
     {
 			yyval = cur_mid;
@@ -3373,8 +3356,8 @@ var TOKENS = {
 		    },
 
 
-  330: function ()
-    /* Line 229 of lalr1.js  */
+  '330': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2226 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3391,14 +3374,14 @@ var TOKENS = {
 		    },
 
 
-  331: function ()
-    /* Line 229 of lalr1.js  */
+  '331': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2239 of "parse.y"  */
     {lex_state = EXPR_FNAME;},
 
 
-  332: function ()
-    /* Line 229 of lalr1.js  */
+  '332': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2240 of "parse.y"  */
     {
 			in_single++;
@@ -3407,8 +3390,8 @@ var TOKENS = {
 		    },
 
 
-  333: function ()
-    /* Line 229 of lalr1.js  */
+  '333': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2248 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3424,8 +3407,8 @@ var TOKENS = {
 		    },
 
 
-  334: function ()
-    /* Line 229 of lalr1.js  */
+  '334': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2261 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3436,8 +3419,8 @@ var TOKENS = {
 		    },
 
 
-  335: function ()
-    /* Line 229 of lalr1.js  */
+  '335': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2269 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3448,8 +3431,8 @@ var TOKENS = {
 		    },
 
 
-  336: function ()
-    /* Line 229 of lalr1.js  */
+  '336': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2277 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3460,8 +3443,8 @@ var TOKENS = {
 		    },
 
 
-  337: function ()
-    /* Line 229 of lalr1.js  */
+  '337': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2285 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3472,8 +3455,8 @@ var TOKENS = {
 		    },
 
 
-  338: function ()
-    /* Line 229 of lalr1.js  */
+  '338': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2295 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3486,80 +3469,80 @@ var TOKENS = {
 		    },
 
 
-  339: function ()
-    /* Line 229 of lalr1.js  */
+  '339': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2307 of "parse.y"  */
     {
 			token_info_push("begin");
 		    },
 
 
-  340: function ()
-    /* Line 229 of lalr1.js  */
+  '340': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2313 of "parse.y"  */
     {
 			token_info_push("if");
 		    },
 
 
-  341: function ()
-    /* Line 229 of lalr1.js  */
+  '341': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2319 of "parse.y"  */
     {
 			token_info_push("unless");
 		    },
 
 
-  342: function ()
-    /* Line 229 of lalr1.js  */
+  '342': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2325 of "parse.y"  */
     {
 			token_info_push("while");
 		    },
 
 
-  343: function ()
-    /* Line 229 of lalr1.js  */
+  '343': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2331 of "parse.y"  */
     {
 			token_info_push("until");
 		    },
 
 
-  344: function ()
-    /* Line 229 of lalr1.js  */
+  '344': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2337 of "parse.y"  */
     {
 			token_info_push("case");
 		    },
 
 
-  345: function ()
-    /* Line 229 of lalr1.js  */
+  '345': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2343 of "parse.y"  */
     {
 			token_info_push("for");
 		    },
 
 
-  346: function ()
-    /* Line 229 of lalr1.js  */
+  '346': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2349 of "parse.y"  */
     {
 			token_info_push("class");
 		    },
 
 
-  347: function ()
-    /* Line 229 of lalr1.js  */
+  '347': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2355 of "parse.y"  */
     {
 			token_info_push("module");
 		    },
 
 
-  348: function ()
-    /* Line 229 of lalr1.js  */
+  '348': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2361 of "parse.y"  */
     {
 			token_info_push("def");
@@ -3570,16 +3553,16 @@ var TOKENS = {
 		    },
 
 
-  349: function ()
-    /* Line 229 of lalr1.js  */
+  '349': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2371 of "parse.y"  */
     {
 			token_info_pop("end");
 		    },
 
 
-  356: function ()
-    /* Line 229 of lalr1.js  */
+  '356': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2401 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3591,8 +3574,8 @@ var TOKENS = {
 		    },
 
 
-  358: function ()
-    /* Line 229 of lalr1.js  */
+  '358': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2413 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3603,8 +3586,8 @@ var TOKENS = {
 		    },
 
 
-  361: function ()
-    /* Line 229 of lalr1.js  */
+  '361': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2427 of "parse.y"  */
     {
 			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
@@ -3615,8 +3598,8 @@ var TOKENS = {
 		    },
 
 
-  362: function ()
-    /* Line 229 of lalr1.js  */
+  '362': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2435 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3627,8 +3610,8 @@ var TOKENS = {
 		    },
 
 
-  363: function ()
-    /* Line 229 of lalr1.js  */
+  '363': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2445 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3639,8 +3622,8 @@ var TOKENS = {
 		    },
 
 
-  364: function ()
-    /* Line 229 of lalr1.js  */
+  '364': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2453 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3651,8 +3634,8 @@ var TOKENS = {
 		    },
 
 
-  365: function ()
-    /* Line 229 of lalr1.js  */
+  '365': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2463 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3663,8 +3646,8 @@ var TOKENS = {
 		    },
 
 
-  366: function ()
-    /* Line 229 of lalr1.js  */
+  '366': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2471 of "parse.y"  */
     {
 			yyval = assignable(((id)(yystack.valueAt (4-(4)))), 0);
@@ -3676,8 +3659,8 @@ var TOKENS = {
 		    },
 
 
-  367: function ()
-    /* Line 229 of lalr1.js  */
+  '367': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2480 of "parse.y"  */
     {
 			yyval = assignable(((id)(yystack.valueAt (6-(4)))), 0);
@@ -3689,8 +3672,8 @@ var TOKENS = {
 		    },
 
 
-  368: function ()
-    /* Line 229 of lalr1.js  */
+  '368': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2489 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3701,8 +3684,8 @@ var TOKENS = {
 		    },
 
 
-  369: function ()
-    /* Line 229 of lalr1.js  */
+  '369': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2497 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3713,8 +3696,8 @@ var TOKENS = {
 		    },
 
 
-  370: function ()
-    /* Line 229 of lalr1.js  */
+  '370': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2505 of "parse.y"  */
     {
 			yyval = assignable(((id)(yystack.valueAt (2-(2)))), 0);
@@ -3726,8 +3709,8 @@ var TOKENS = {
 		    },
 
 
-  371: function ()
-    /* Line 229 of lalr1.js  */
+  '371': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2514 of "parse.y"  */
     {
 			yyval = assignable(((id)(yystack.valueAt (4-(2)))), 0);
@@ -3742,8 +3725,8 @@ var TOKENS = {
 		    },
 
 
-  372: function ()
-    /* Line 229 of lalr1.js  */
+  '372': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2526 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3754,8 +3737,8 @@ var TOKENS = {
 		    },
 
 
-  373: function ()
-    /* Line 229 of lalr1.js  */
+  '373': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2534 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3766,96 +3749,96 @@ var TOKENS = {
 		    },
 
 
-  374: function ()
-    /* Line 229 of lalr1.js  */
+  '374': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2545 of "parse.y"  */
     {
 			yyval = new_args_tail(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((id)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  375: function ()
-    /* Line 229 of lalr1.js  */
+  '375': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2549 of "parse.y"  */
     {
 			yyval = new_args_tail(((node)(yystack.valueAt (2-(1)))), Qnone, ((id)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  376: function ()
-    /* Line 229 of lalr1.js  */
+  '376': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2553 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, ((id)(yystack.valueAt (2-(1)))), ((id)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  377: function ()
-    /* Line 229 of lalr1.js  */
+  '377': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2557 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, ((id)(yystack.valueAt (1-(1)))));
 		    },
 
 
-  378: function ()
-    /* Line 229 of lalr1.js  */
+  '378': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2563 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (2-(2))));
 		    },
 
 
-  379: function ()
-    /* Line 229 of lalr1.js  */
+  '379': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2567 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
 		    },
 
 
-  380: function ()
-    /* Line 229 of lalr1.js  */
+  '380': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2573 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), ((id)(yystack.valueAt (6-(5)))), Qnone, ((node)(yystack.valueAt (6-(6)))));
 		    },
 
 
-  381: function ()
-    /* Line 229 of lalr1.js  */
+  '381': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2577 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (8-(1)))), ((node)(yystack.valueAt (8-(3)))), ((id)(yystack.valueAt (8-(5)))), ((node)(yystack.valueAt (8-(7)))), ((node)(yystack.valueAt (8-(8)))));
 		    },
 
 
-  382: function ()
-    /* Line 229 of lalr1.js  */
+  '382': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2581 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), Qnone, Qnone, ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  383: function ()
-    /* Line 229 of lalr1.js  */
+  '383': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2585 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), Qnone, ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
 		    },
 
 
-  384: function ()
-    /* Line 229 of lalr1.js  */
+  '384': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2589 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (4-(1)))), Qnone, ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  385: function ()
-    /* Line 229 of lalr1.js  */
+  '385': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2593 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, 1, Qnone, new_args_tail(Qnone, Qnone, Qnone));
@@ -3866,88 +3849,88 @@ var TOKENS = {
 		    },
 
 
-  386: function ()
-    /* Line 229 of lalr1.js  */
+  '386': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2601 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (6-(1)))), Qnone, ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
 		    },
 
 
-  387: function ()
-    /* Line 229 of lalr1.js  */
+  '387': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2605 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  388: function ()
-    /* Line 229 of lalr1.js  */
+  '388': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2609 of "parse.y"  */
     {
 			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  389: function ()
-    /* Line 229 of lalr1.js  */
+  '389': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2613 of "parse.y"  */
     {
 			yyval = new_args(Qnone, ((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
 		    },
 
 
-  390: function ()
-    /* Line 229 of lalr1.js  */
+  '390': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2617 of "parse.y"  */
     {
 			yyval = new_args(Qnone, ((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  391: function ()
-    /* Line 229 of lalr1.js  */
+  '391': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2621 of "parse.y"  */
     {
 			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), Qnone, ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  392: function ()
-    /* Line 229 of lalr1.js  */
+  '392': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2625 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (2-(1)))), Qnone, ((node)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  393: function ()
-    /* Line 229 of lalr1.js  */
+  '393': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2629 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  394: function ()
-    /* Line 229 of lalr1.js  */
+  '394': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2633 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, Qnone, Qnone, ((node)(yystack.valueAt (1-(1)))));
 		    },
 
 
-  396: function ()
-    /* Line 229 of lalr1.js  */
+  '396': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2640 of "parse.y"  */
     {
 			command_start = TRUE;
 		    },
 
 
-  397: function ()
-    /* Line 229 of lalr1.js  */
+  '397': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2646 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3959,8 +3942,8 @@ var TOKENS = {
 		    },
 
 
-  398: function ()
-    /* Line 229 of lalr1.js  */
+  '398': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2655 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3972,8 +3955,8 @@ var TOKENS = {
 		    },
 
 
-  399: function ()
-    /* Line 229 of lalr1.js  */
+  '399': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2664 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3984,16 +3967,16 @@ var TOKENS = {
 		    },
 
 
-  400: function ()
-    /* Line 229 of lalr1.js  */
+  '400': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2675 of "parse.y"  */
     {
 		      yyval = 0;
 		    },
 
 
-  401: function ()
-    /* Line 229 of lalr1.js  */
+  '401': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2679 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4004,8 +3987,8 @@ var TOKENS = {
 		    },
 
 
-  404: function ()
-    /* Line 229 of lalr1.js  */
+  '404': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2705 of "parse.y"  */
     {
 			new_bv(get_id(((id)(yystack.valueAt (1-(1))))));
@@ -4016,24 +3999,24 @@ var TOKENS = {
 		    },
 
 
-  405: function ()
-    /* Line 229 of lalr1.js  */
+  '405': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2713 of "parse.y"  */
     {
 			yyval = 0;
 		    },
 
 
-  406: function ()
-    /* Line 229 of lalr1.js  */
+  '406': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2718 of "parse.y"  */
     {
 			yyval = dyna_push();
 		    },
 
 
-  407: function ()
-    /* Line 229 of lalr1.js  */
+  '407': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2721 of "parse.y"  */
     {
 			yyval = lpar_beg;
@@ -4041,8 +4024,8 @@ var TOKENS = {
 		    },
 
 
-  408: function ()
-    /* Line 229 of lalr1.js  */
+  '408': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2727 of "parse.y"  */
     {
 			lpar_beg = ((num)(yystack.valueAt (4-(2))));
@@ -4055,8 +4038,8 @@ var TOKENS = {
 		    },
 
 
-  409: function ()
-    /* Line 229 of lalr1.js  */
+  '409': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2739 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4067,8 +4050,8 @@ var TOKENS = {
 		    },
 
 
-  410: function ()
-    /* Line 229 of lalr1.js  */
+  '410': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2747 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4079,24 +4062,24 @@ var TOKENS = {
 		    },
 
 
-  411: function ()
-    /* Line 229 of lalr1.js  */
+  '411': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2757 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (3-(2))));
 		    },
 
 
-  412: function ()
-    /* Line 229 of lalr1.js  */
+  '412': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2761 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (3-(2))));
 		    },
 
 
-  413: function ()
-    /* Line 229 of lalr1.js  */
+  '413': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2767 of "parse.y"  */
     {
 			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
@@ -4106,8 +4089,8 @@ var TOKENS = {
 		    },
 
 
-  414: function ()
-    /* Line 229 of lalr1.js  */
+  '414': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2776 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4120,8 +4103,8 @@ var TOKENS = {
 		    },
 
 
-  415: function ()
-    /* Line 229 of lalr1.js  */
+  '415': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2788 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4140,8 +4123,8 @@ var TOKENS = {
 		    },
 
 
-  416: function ()
-    /* Line 229 of lalr1.js  */
+  '416': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2804 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4153,8 +4136,8 @@ var TOKENS = {
 		    },
 
 
-  417: function ()
-    /* Line 229 of lalr1.js  */
+  '417': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2813 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4169,8 +4152,8 @@ var TOKENS = {
 		    },
 
 
-  418: function ()
-    /* Line 229 of lalr1.js  */
+  '418': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2825 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4185,8 +4168,8 @@ var TOKENS = {
 		    },
 
 
-  419: function ()
-    /* Line 229 of lalr1.js  */
+  '419': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2839 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4198,8 +4181,8 @@ var TOKENS = {
 		    },
 
 
-  420: function ()
-    /* Line 229 of lalr1.js  */
+  '420': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2848 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4208,8 +4191,8 @@ var TOKENS = {
 		    },
 
 
-  421: function ()
-    /* Line 229 of lalr1.js  */
+  '421': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2854 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4222,8 +4205,8 @@ var TOKENS = {
 		    },
 
 
-  422: function ()
-    /* Line 229 of lalr1.js  */
+  '422': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2864 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4232,8 +4215,8 @@ var TOKENS = {
 		    },
 
 
-  423: function ()
-    /* Line 229 of lalr1.js  */
+  '423': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2870 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4246,8 +4229,8 @@ var TOKENS = {
 		    },
 
 
-  424: function ()
-    /* Line 229 of lalr1.js  */
+  '424': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2880 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4258,8 +4241,8 @@ var TOKENS = {
 		    },
 
 
-  425: function ()
-    /* Line 229 of lalr1.js  */
+  '425': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2888 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4268,8 +4251,8 @@ var TOKENS = {
 		    },
 
 
-  426: function ()
-    /* Line 229 of lalr1.js  */
+  '426': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2894 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4283,8 +4266,8 @@ var TOKENS = {
 		    },
 
 
-  427: function ()
-    /* Line 229 of lalr1.js  */
+  '427': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2905 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4293,8 +4276,8 @@ var TOKENS = {
 		    },
 
 
-  428: function ()
-    /* Line 229 of lalr1.js  */
+  '428': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2911 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4308,8 +4291,8 @@ var TOKENS = {
 		    },
 
 
-  429: function ()
-    /* Line 229 of lalr1.js  */
+  '429': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2922 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4320,8 +4303,8 @@ var TOKENS = {
 		    },
 
 
-  430: function ()
-    /* Line 229 of lalr1.js  */
+  '430': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2930 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4332,8 +4315,8 @@ var TOKENS = {
 		    },
 
 
-  431: function ()
-    /* Line 229 of lalr1.js  */
+  '431': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2938 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4348,8 +4331,8 @@ var TOKENS = {
 		    },
 
 
-  432: function ()
-    /* Line 229 of lalr1.js  */
+  '432': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2952 of "parse.y"  */
     {
 			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
@@ -4360,8 +4343,8 @@ var TOKENS = {
 		    },
 
 
-  433: function ()
-    /* Line 229 of lalr1.js  */
+  '433': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2961 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4374,8 +4357,8 @@ var TOKENS = {
 		    },
 
 
-  434: function ()
-    /* Line 229 of lalr1.js  */
+  '434': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2971 of "parse.y"  */
     {
 			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
@@ -4386,8 +4369,8 @@ var TOKENS = {
 		    },
 
 
-  435: function ()
-    /* Line 229 of lalr1.js  */
+  '435': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2980 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4400,8 +4383,8 @@ var TOKENS = {
 		    },
 
 
-  436: function ()
-    /* Line 229 of lalr1.js  */
+  '436': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 2994 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4412,8 +4395,8 @@ var TOKENS = {
 		    },
 
 
-  439: function ()
-    /* Line 229 of lalr1.js  */
+  '439': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3010 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4433,8 +4416,8 @@ var TOKENS = {
 		    },
 
 
-  441: function ()
-    /* Line 229 of lalr1.js  */
+  '441': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3030 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4445,8 +4428,8 @@ var TOKENS = {
 		    },
 
 
-  442: function ()
-    /* Line 229 of lalr1.js  */
+  '442': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3038 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4457,16 +4440,16 @@ var TOKENS = {
 		    },
 
 
-  444: function ()
-    /* Line 229 of lalr1.js  */
+  '444': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3049 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (2-(2))));
 		    },
 
 
-  446: function ()
-    /* Line 229 of lalr1.js  */
+  '446': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3056 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4477,8 +4460,8 @@ var TOKENS = {
 		    },
 
 
-  449: function ()
-    /* Line 229 of lalr1.js  */
+  '449': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3068 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4489,8 +4472,8 @@ var TOKENS = {
 		    },
 
 
-  451: function ()
-    /* Line 229 of lalr1.js  */
+  '451': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3079 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4508,8 +4491,8 @@ var TOKENS = {
 		    },
 
 
-  454: function ()
-    /* Line 229 of lalr1.js  */
+  '454': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3098 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4520,8 +4503,8 @@ var TOKENS = {
 		    },
 
 
-  455: function ()
-    /* Line 229 of lalr1.js  */
+  '455': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3108 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4532,8 +4515,8 @@ var TOKENS = {
 		    },
 
 
-  456: function ()
-    /* Line 229 of lalr1.js  */
+  '456': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3118 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4561,8 +4544,8 @@ var TOKENS = {
 		    },
 
 
-  457: function ()
-    /* Line 229 of lalr1.js  */
+  '457': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3145 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4628,8 +4611,8 @@ var TOKENS = {
 		    },
 
 
-  458: function ()
-    /* Line 229 of lalr1.js  */
+  '458': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3210 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4641,8 +4624,8 @@ var TOKENS = {
 		    },
 
 
-  459: function ()
-    /* Line 229 of lalr1.js  */
+  '459': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3219 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4653,8 +4636,8 @@ var TOKENS = {
 		    },
 
 
-  460: function ()
-    /* Line 229 of lalr1.js  */
+  '460': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3229 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4665,8 +4648,8 @@ var TOKENS = {
 		    },
 
 
-  461: function ()
-    /* Line 229 of lalr1.js  */
+  '461': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3237 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4677,8 +4660,8 @@ var TOKENS = {
 		    },
 
 
-  463: function ()
-    /* Line 229 of lalr1.js  */
+  '463': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3255 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4689,8 +4672,8 @@ var TOKENS = {
 		    },
 
 
-  464: function ()
-    /* Line 229 of lalr1.js  */
+  '464': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3265 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4702,8 +4685,8 @@ var TOKENS = {
 		    },
 
 
-  465: function ()
-    /* Line 229 of lalr1.js  */
+  '465': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3274 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4714,8 +4697,8 @@ var TOKENS = {
 		    },
 
 
-  466: function ()
-    /* Line 229 of lalr1.js  */
+  '466': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3284 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4726,8 +4709,8 @@ var TOKENS = {
 		    },
 
 
-  467: function ()
-    /* Line 229 of lalr1.js  */
+  '467': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3292 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4740,8 +4723,8 @@ var TOKENS = {
 		    },
 
 
-  468: function ()
-    /* Line 229 of lalr1.js  */
+  '468': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3304 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4753,8 +4736,8 @@ var TOKENS = {
 		    },
 
 
-  469: function ()
-    /* Line 229 of lalr1.js  */
+  '469': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3313 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4765,8 +4748,8 @@ var TOKENS = {
 		    },
 
 
-  470: function ()
-    /* Line 229 of lalr1.js  */
+  '470': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3323 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4778,8 +4761,8 @@ var TOKENS = {
 		    },
 
 
-  471: function ()
-    /* Line 229 of lalr1.js  */
+  '471': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3332 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4790,8 +4773,8 @@ var TOKENS = {
 		    },
 
 
-  472: function ()
-    /* Line 229 of lalr1.js  */
+  '472': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3342 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4802,8 +4785,8 @@ var TOKENS = {
 		    },
 
 
-  473: function ()
-    /* Line 229 of lalr1.js  */
+  '473': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3350 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4814,8 +4797,8 @@ var TOKENS = {
 		    },
 
 
-  474: function ()
-    /* Line 229 of lalr1.js  */
+  '474': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3360 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4826,8 +4809,8 @@ var TOKENS = {
 		    },
 
 
-  475: function ()
-    /* Line 229 of lalr1.js  */
+  '475': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3368 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4842,8 +4825,8 @@ var TOKENS = {
 		    },
 
 
-  476: function ()
-    /* Line 229 of lalr1.js  */
+  '476': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3382 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4854,8 +4837,8 @@ var TOKENS = {
 		    },
 
 
-  477: function ()
-    /* Line 229 of lalr1.js  */
+  '477': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3390 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4866,8 +4849,8 @@ var TOKENS = {
 		    },
 
 
-  478: function ()
-    /* Line 229 of lalr1.js  */
+  '478': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3400 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4878,8 +4861,8 @@ var TOKENS = {
 		    },
 
 
-  479: function ()
-    /* Line 229 of lalr1.js  */
+  '479': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3408 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4890,8 +4873,8 @@ var TOKENS = {
 		    },
 
 
-  480: function ()
-    /* Line 229 of lalr1.js  */
+  '480': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3418 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4902,8 +4885,8 @@ var TOKENS = {
 		    },
 
 
-  481: function ()
-    /* Line 229 of lalr1.js  */
+  '481': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3426 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4933,8 +4916,8 @@ var TOKENS = {
 		    },
 
 
-  483: function ()
-    /* Line 229 of lalr1.js  */
+  '483': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3456 of "parse.y"  */
     {
 			yyval = lex_strterm;
@@ -4943,8 +4926,8 @@ var TOKENS = {
 		    },
 
 
-  484: function ()
-    /* Line 229 of lalr1.js  */
+  '484': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3462 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4957,8 +4940,8 @@ var TOKENS = {
 		    },
 
 
-  485: function ()
-    /* Line 229 of lalr1.js  */
+  '485': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3472 of "parse.y"  */
     {
 			((val)(yystack.valueAt (1-(1)))) = cond_stack;
@@ -4968,8 +4951,8 @@ var TOKENS = {
 		    },
 
 
-  486: function ()
-    /* Line 229 of lalr1.js  */
+  '486': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3478 of "parse.y"  */
     {
 			yyval = lex_strterm;
@@ -4978,8 +4961,8 @@ var TOKENS = {
 		    },
 
 
-  487: function ()
-    /* Line 229 of lalr1.js  */
+  '487': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3483 of "parse.y"  */
     {
 			yyval = brace_nest;
@@ -4987,8 +4970,8 @@ var TOKENS = {
 		    },
 
 
-  488: function ()
-    /* Line 229 of lalr1.js  */
+  '488': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3488 of "parse.y"  */
     {
 			cond_stack = ((val)(yystack.valueAt (6-(1))));
@@ -5004,8 +4987,8 @@ var TOKENS = {
 		    },
 
 
-  489: function ()
-    /* Line 229 of lalr1.js  */
+  '489': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3503 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5016,8 +4999,8 @@ var TOKENS = {
 		    },
 
 
-  490: function ()
-    /* Line 229 of lalr1.js  */
+  '490': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3511 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5028,8 +5011,8 @@ var TOKENS = {
 		    },
 
 
-  491: function ()
-    /* Line 229 of lalr1.js  */
+  '491': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3519 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5040,8 +5023,8 @@ var TOKENS = {
 		    },
 
 
-  493: function ()
-    /* Line 229 of lalr1.js  */
+  '493': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3530 of "parse.y"  */
     {
 			lex_state = EXPR_END;
@@ -5053,8 +5036,8 @@ var TOKENS = {
 		    },
 
 
-  498: function ()
-    /* Line 229 of lalr1.js  */
+  '498': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3547 of "parse.y"  */
     {
 			lex_state = EXPR_END;
@@ -5066,8 +5049,8 @@ var TOKENS = {
 		    },
 
 
-  501: function ()
-    /* Line 229 of lalr1.js  */
+  '501': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3560 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5078,8 +5061,8 @@ var TOKENS = {
 		    },
 
 
-  502: function ()
-    /* Line 229 of lalr1.js  */
+  '502': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3568 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5090,50 +5073,50 @@ var TOKENS = {
 		    },
 
 
-  508: function ()
-    /* Line 229 of lalr1.js  */
+  '508': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3584 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_nil);},
 
 
-  509: function ()
-    /* Line 229 of lalr1.js  */
+  '509': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3585 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_self);},
 
 
-  510: function ()
-    /* Line 229 of lalr1.js  */
+  '510': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3586 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_true);},
 
 
-  511: function ()
-    /* Line 229 of lalr1.js  */
+  '511': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3587 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_false);},
 
 
-  512: function ()
-    /* Line 229 of lalr1.js  */
+  '512': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3588 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__FILE__);},
 
 
-  513: function ()
-    /* Line 229 of lalr1.js  */
+  '513': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3589 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__LINE__);},
 
 
-  514: function ()
-    /* Line 229 of lalr1.js  */
+  '514': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3590 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__ENCODING__);},
 
 
-  515: function ()
-    /* Line 229 of lalr1.js  */
+  '515': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3594 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5149,8 +5132,8 @@ var TOKENS = {
 		    },
 
 
-  516: function ()
-    /* Line 229 of lalr1.js  */
+  '516': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3607 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5161,8 +5144,8 @@ var TOKENS = {
 		    },
 
 
-  517: function ()
-    /* Line 229 of lalr1.js  */
+  '517': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3617 of "parse.y"  */
     {
 			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
@@ -5173,8 +5156,8 @@ var TOKENS = {
 		    },
 
 
-  518: function ()
-    /* Line 229 of lalr1.js  */
+  '518': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3625 of "parse.y"  */
     {
 		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
@@ -5185,8 +5168,8 @@ var TOKENS = {
 		    },
 
 
-  521: function ()
-    /* Line 229 of lalr1.js  */
+  '521': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3639 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5197,8 +5180,8 @@ var TOKENS = {
 		    },
 
 
-  522: function ()
-    /* Line 229 of lalr1.js  */
+  '522': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3647 of "parse.y"  */
     {
 			lex_state = EXPR_BEG;
@@ -5206,16 +5189,16 @@ var TOKENS = {
 		    },
 
 
-  523: function ()
-    /* Line 229 of lalr1.js  */
+  '523': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3652 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (4-(3))));
 		    },
 
 
-  524: function ()
-    /* Line 229 of lalr1.js  */
+  '524': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3656 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5228,8 +5211,8 @@ var TOKENS = {
 		    },
 
 
-  525: function ()
-    /* Line 229 of lalr1.js  */
+  '525': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3668 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5242,8 +5225,8 @@ var TOKENS = {
 		    },
 
 
-  526: function ()
-    /* Line 229 of lalr1.js  */
+  '526': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3678 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (2-(1))));
@@ -5252,168 +5235,168 @@ var TOKENS = {
 		    },
 
 
-  527: function ()
-    /* Line 229 of lalr1.js  */
+  '527': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3686 of "parse.y"  */
     {
 			yyval = new_args_tail(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((id)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  528: function ()
-    /* Line 229 of lalr1.js  */
+  '528': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3690 of "parse.y"  */
     {
 			yyval = new_args_tail(((node)(yystack.valueAt (2-(1)))), Qnone, ((id)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  529: function ()
-    /* Line 229 of lalr1.js  */
+  '529': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3694 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, ((id)(yystack.valueAt (2-(1)))), ((id)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  530: function ()
-    /* Line 229 of lalr1.js  */
+  '530': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3698 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, ((id)(yystack.valueAt (1-(1)))));
 		    },
 
 
-  531: function ()
-    /* Line 229 of lalr1.js  */
+  '531': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3704 of "parse.y"  */
     {
 			yyval = ((node)(yystack.valueAt (2-(2))));
 		    },
 
 
-  532: function ()
-    /* Line 229 of lalr1.js  */
+  '532': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3708 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
 		    },
 
 
-  533: function ()
-    /* Line 229 of lalr1.js  */
+  '533': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3714 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), ((id)(yystack.valueAt (6-(5)))), Qnone, ((node)(yystack.valueAt (6-(6)))));
 		    },
 
 
-  534: function ()
-    /* Line 229 of lalr1.js  */
+  '534': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3718 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (8-(1)))), ((node)(yystack.valueAt (8-(3)))), ((id)(yystack.valueAt (8-(5)))), ((node)(yystack.valueAt (8-(7)))), ((node)(yystack.valueAt (8-(8)))));
 		    },
 
 
-  535: function ()
-    /* Line 229 of lalr1.js  */
+  '535': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3722 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), Qnone, Qnone, ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  536: function ()
-    /* Line 229 of lalr1.js  */
+  '536': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3726 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), Qnone, ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
 		    },
 
 
-  537: function ()
-    /* Line 229 of lalr1.js  */
+  '537': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3730 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (4-(1)))), Qnone, ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  538: function ()
-    /* Line 229 of lalr1.js  */
+  '538': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3734 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (6-(1)))), Qnone, ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
 		    },
 
 
-  539: function ()
-    /* Line 229 of lalr1.js  */
+  '539': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3738 of "parse.y"  */
     {
 			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  540: function ()
-    /* Line 229 of lalr1.js  */
+  '540': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3742 of "parse.y"  */
     {
 			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  541: function ()
-    /* Line 229 of lalr1.js  */
+  '541': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3746 of "parse.y"  */
     {
 			yyval = new_args(Qnone, ((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
 		    },
 
 
-  542: function ()
-    /* Line 229 of lalr1.js  */
+  '542': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3750 of "parse.y"  */
     {
 			yyval = new_args(Qnone, ((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  543: function ()
-    /* Line 229 of lalr1.js  */
+  '543': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3754 of "parse.y"  */
     {
 			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), Qnone, ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  544: function ()
-    /* Line 229 of lalr1.js  */
+  '544': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3758 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (2-(1)))), Qnone, ((node)(yystack.valueAt (2-(2)))));
 		    },
 
 
-  545: function ()
-    /* Line 229 of lalr1.js  */
+  '545': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3762 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
 		    },
 
 
-  546: function ()
-    /* Line 229 of lalr1.js  */
+  '546': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3766 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, Qnone, Qnone, ((node)(yystack.valueAt (1-(1)))));
 		    },
 
 
-  547: function ()
-    /* Line 229 of lalr1.js  */
+  '547': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3770 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
@@ -5421,8 +5404,8 @@ var TOKENS = {
 		    },
 
 
-  548: function ()
-    /* Line 229 of lalr1.js  */
+  '548': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3777 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5434,8 +5417,8 @@ var TOKENS = {
 		    },
 
 
-  549: function ()
-    /* Line 229 of lalr1.js  */
+  '549': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3786 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5447,8 +5430,8 @@ var TOKENS = {
 		    },
 
 
-  550: function ()
-    /* Line 229 of lalr1.js  */
+  '550': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3795 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5460,8 +5443,8 @@ var TOKENS = {
 		    },
 
 
-  551: function ()
-    /* Line 229 of lalr1.js  */
+  '551': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3804 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5473,8 +5456,8 @@ var TOKENS = {
 		    },
 
 
-  553: function ()
-    /* Line 229 of lalr1.js  */
+  '553': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3816 of "parse.y"  */
     {
 			formal_argument(get_id(((id)(yystack.valueAt (1-(1))))));
@@ -5482,8 +5465,8 @@ var TOKENS = {
 		    },
 
 
-  554: function ()
-    /* Line 229 of lalr1.js  */
+  '554': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3823 of "parse.y"  */
     {
 			arg_var(get_id(((id)(yystack.valueAt (1-(1))))));
@@ -5495,8 +5478,8 @@ var TOKENS = {
 		    },
 
 
-  555: function ()
-    /* Line 229 of lalr1.js  */
+  '555': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3832 of "parse.y"  */
     {
 			ID tid = internal_id();
@@ -5516,8 +5499,8 @@ var TOKENS = {
 		    },
 
 
-  557: function ()
-    /* Line 229 of lalr1.js  */
+  '557': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3858 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5531,8 +5514,8 @@ var TOKENS = {
 		    },
 
 
-  558: function ()
-    /* Line 229 of lalr1.js  */
+  '558': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3871 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id(((id)(yystack.valueAt (2-(1)))))));
@@ -5545,8 +5528,8 @@ var TOKENS = {
 		    },
 
 
-  559: function ()
-    /* Line 229 of lalr1.js  */
+  '559': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3883 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id(((id)(yystack.valueAt (2-(1)))))));
@@ -5559,8 +5542,8 @@ var TOKENS = {
 		    },
 
 
-  560: function ()
-    /* Line 229 of lalr1.js  */
+  '560': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3895 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5571,8 +5554,8 @@ var TOKENS = {
 		    },
 
 
-  561: function ()
-    /* Line 229 of lalr1.js  */
+  '561': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3903 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5589,8 +5572,8 @@ var TOKENS = {
 		    },
 
 
-  562: function ()
-    /* Line 229 of lalr1.js  */
+  '562': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3920 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5601,8 +5584,8 @@ var TOKENS = {
 		    },
 
 
-  563: function ()
-    /* Line 229 of lalr1.js  */
+  '563': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3928 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5619,8 +5602,8 @@ var TOKENS = {
 		    },
 
 
-  566: function ()
-    /* Line 229 of lalr1.js  */
+  '566': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3948 of "parse.y"  */
     {
 			shadowing_lvar(get_id(((id)(yystack.valueAt (2-(2))))));
@@ -5628,16 +5611,16 @@ var TOKENS = {
 		    },
 
 
-  567: function ()
-    /* Line 229 of lalr1.js  */
+  '567': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3953 of "parse.y"  */
     {
 			yyval = internal_id();
 		    },
 
 
-  568: function ()
-    /* Line 229 of lalr1.js  */
+  '568': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3959 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id(((id)(yystack.valueAt (3-(1)))))));
@@ -5650,8 +5633,8 @@ var TOKENS = {
 		    },
 
 
-  569: function ()
-    /* Line 229 of lalr1.js  */
+  '569': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3971 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id(((id)(yystack.valueAt (3-(1)))))));
@@ -5664,8 +5647,8 @@ var TOKENS = {
 		    },
 
 
-  570: function ()
-    /* Line 229 of lalr1.js  */
+  '570': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3983 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5676,8 +5659,8 @@ var TOKENS = {
 		    },
 
 
-  571: function ()
-    /* Line 229 of lalr1.js  */
+  '571': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 3991 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5694,8 +5677,8 @@ var TOKENS = {
 		    },
 
 
-  572: function ()
-    /* Line 229 of lalr1.js  */
+  '572': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4007 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5706,8 +5689,8 @@ var TOKENS = {
 		    },
 
 
-  573: function ()
-    /* Line 229 of lalr1.js  */
+  '573': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4015 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5724,8 +5707,8 @@ var TOKENS = {
 		    },
 
 
-  576: function ()
-    /* Line 229 of lalr1.js  */
+  '576': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4035 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5741,8 +5724,8 @@ var TOKENS = {
 		    },
 
 
-  577: function ()
-    /* Line 229 of lalr1.js  */
+  '577': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4048 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5754,8 +5737,8 @@ var TOKENS = {
 		    },
 
 
-  580: function ()
-    /* Line 229 of lalr1.js  */
+  '580': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4063 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5773,16 +5756,16 @@ var TOKENS = {
 		    },
 
 
-  581: function ()
-    /* Line 229 of lalr1.js  */
+  '581': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4080 of "parse.y"  */
     {
 			yyval = ((id)(yystack.valueAt (2-(2))));
 		    },
 
 
-  582: function ()
-    /* Line 229 of lalr1.js  */
+  '582': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4084 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5793,8 +5776,8 @@ var TOKENS = {
 		    },
 
 
-  583: function ()
-    /* Line 229 of lalr1.js  */
+  '583': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4094 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5807,14 +5790,14 @@ var TOKENS = {
 		    },
 
 
-  584: function ()
-    /* Line 229 of lalr1.js  */
+  '584': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4103 of "parse.y"  */
     {lex_state = EXPR_BEG;},
 
 
-  585: function ()
-    /* Line 229 of lalr1.js  */
+  '585': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4104 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5844,8 +5827,8 @@ var TOKENS = {
 		    },
 
 
-  587: function ()
-    /* Line 229 of lalr1.js  */
+  '587': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4134 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5856,8 +5839,8 @@ var TOKENS = {
 		    },
 
 
-  589: function ()
-    /* Line 229 of lalr1.js  */
+  '589': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4151 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5868,8 +5851,8 @@ var TOKENS = {
 		    },
 
 
-  590: function ()
-    /* Line 229 of lalr1.js  */
+  '590': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4161 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5880,8 +5863,8 @@ var TOKENS = {
 		    },
 
 
-  591: function ()
-    /* Line 229 of lalr1.js  */
+  '591': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4169 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5892,8 +5875,8 @@ var TOKENS = {
 		    },
 
 
-  592: function ()
-    /* Line 229 of lalr1.js  */
+  '592': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4177 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5904,20 +5887,20 @@ var TOKENS = {
 		    },
 
 
-  614: function ()
-    /* Line 229 of lalr1.js  */
+  '614': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4235 of "parse.y"  */
     {yyerrok;},
 
 
-  617: function ()
-    /* Line 229 of lalr1.js  */
+  '617': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4240 of "parse.y"  */
     {yyerrok;},
 
 
-  618: function ()
-    /* Line 229 of lalr1.js  */
+  '618': function ()
+    /* Line 212 of lalr1.js  */
 /* Line 4244 of "parse.y"  */
     {
 		    /*%%%*/
@@ -5929,26 +5912,48 @@ var TOKENS = {
 
 
 
-/* Line 229 of lalr1.js  */
-/* Line 5934 of "parse.js"  */
-	default: break;
-      }
+/* Line 212 of lalr1.js  */
+/* Line 5917 of "parse.js"  */
+    'terminator': function noop (){} /* comma terminator, needs to be avoided */
+  }
 
-    yy_symbol_print ("-> $$ =", yyr1_[yyn], yyval, yyloc);
 
-    yystack.pop (yylen);
+  function yyaction (yyn, yystack, yylen) // int yyn, YYStack yystack, int yylen
+  {
+    var yyloc = yystack.locationFromNthItemToCurrent(yylen);
+
+    /* If YYLEN is nonzero, implement the default value of the action:
+       `$$ = $1'.  Otherwise, use the top of the stack.
+
+       Otherwise, the following line sets YYVAL to garbage.
+       This behavior is undocumented and Bison
+       users should not rely upon it.  */
+    var yyval;
+    if (yylen > 0)
+      yyval = yystack.valueAt(yylen - 1);
+    else
+      yyval = yystack.valueAt(0);
+
+    yy_reduce_print(yyn, yystack);  // TODO: step into
+
+    var actionClosure = actionsTable[yyn]
+    if (actionClosure)
+      actionClosure()
+
+    yy_symbol_print("-> $$ =", yyr1_[yyn], yyval, yyloc); // TODO: step into
+
+    yystack.pop(yylen);
     yylen = 0;
 
-    /* Shift the result of the reduction.  */
+    // Shift the result of the reduction.
     yyn = yyr1_[yyn];
-    int yystate = yypgoto_[yyn - yyntokens_] + yystack.stateAt (0);
-    if (0 <= yystate && yystate <= yylast_
-	&& yycheck_[yystate] == yystack.stateAt (0))
+    var yystate = yypgoto_[yyn - yyntokens_] + yystack.stateAt(0);
+    if (0 <= yystate && yystate <= yylast_ && yycheck_[yystate] == yystack.stateAt(0))
       yystate = yytable_[yystate];
     else
       yystate = yydefgoto_[yyn - yyntokens_];
 
-    yystack.push (yystate, yyval, yyloc);
+    yystack.push(yystate, yyval, yyloc);
     return YYNEWSTATE;
   }
 
@@ -6575,7 +6580,7 @@ var TOKENS = {
   };
 
   /* YYPGOTO[NTERM-NUM].  */
-  private static final short yypgoto_[] =
+  var yypgoto_ =
   {
       -821,  -821,  -821,  -386,  -821,    41,  -821,  -542,   285,  -821,
      545,  -821,    35,  -821,  -310,   -43,   -70,    19,  -821,  -573,
@@ -6627,7 +6632,7 @@ var TOKENS = {
 
   /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
      positive, shift that token.  If negative, reduce the rule which
-     number is the opposite.  If YYTABLE_NINF_, syntax error.  */
+     number is the opposite.  If yytable_NINF_, syntax error.  */
   private static final short yytable_ninf_ = -619;
   private static final short
   yytable_[] =
@@ -9809,7 +9814,6 @@ var TOKENS = {
   private static final int yyfinal_ = 3;
   private static final int yyterror_ = 1;
   private static final int yyerrcode_ = 256;
-  private static final int yyntokens_ = 159;
 
   private static final int yyuser_token_number_max_ = 386;
   private static final int yyundef_token_ = 2;
