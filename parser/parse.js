@@ -349,10 +349,9 @@ var TOKENS = {
     return yyerrstatus_ == 0;
   }
 
-  private int yyaction (int yyn, YYStack yystack, int yylen)
+  function yyaction (yyn, yystack, yylen) // int yyn, YYStack yystack, int yylen
   {
-    var yyval;
-    Location yyloc = yylloc (yystack, yylen);
+    var yyloc = yylloc(yystack, yylen);
 
     /* If YYLEN is nonzero, implement the default value of the action:
        `$$ = $1'.  Otherwise, use the top of the stack.
@@ -360,10 +359,11 @@ var TOKENS = {
        Otherwise, the following line sets YYVAL to garbage.
        This behavior is undocumented and Bison
        users should not rely upon it.  */
+    var yyval;
     if (yylen > 0)
-      yyval = yystack.valueAt (yylen - 1);
+      yyval = yystack.valueAt(yylen - 1);
     else
-      yyval = yystack.valueAt (0);
+      yyval = yystack.valueAt(0);
 
     yy_reduce_print (yyn, yystack);
 
@@ -6065,16 +6065,16 @@ var TOKENS = {
 	    break;
           }
 
-        /* Read a lookahead token.  */
+        // Read a lookahead token.
         if (yychar == yyempty_)
-          {
-	    yycdebug ("Reading a token: ");
-	    yychar = yylexer.yylex();
+        {
+          yycdebug("Reading a token: ");
+          yychar = yylexer.yylex();
 
-	    yylloc = new Location(yylexer.getStartPos (),
-				            yylexer.getEndPos ());
-            yylval = yylexer.getLVal ();
-          }
+          yylloc = new Location(yylexer.getStartPos(), yylexer.getEndPos());
+          yylval = yylexer.getLVal ();
+        }
+
 
         /* Convert token to internal form.  */
         if (yychar <= EOF)
