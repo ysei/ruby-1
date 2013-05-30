@@ -271,12 +271,12 @@ var TOKENS = {
   private final class YYStack {
     private int stateStack = new int16;
     private Location locStack = new Location16;
-    private ]Object[] valueStack = new Object[16];
+    var valueStack = new Array(16);
 
     public int size = 16;
     public int height = -1;
 
-    public final void push (int state, Object value			    , Location loc) {
+    public final void push (int state, value]			    , Location loc) {
       height++;
       if (size == height)
         {
@@ -288,16 +288,16 @@ var TOKENS = {
 	  System.arraycopy (locStack, 0, newLocStack, 0, height);
 	  locStack = newLocStack;
 
-	  Object[] newValueStack = new Object[size * 2];
+	  var newValueStack = new Array(size * 2);
 	  System.arraycopy (valueStack, 0, newValueStack, 0, height);
 	  valueStack = newValueStack;
 
 	  size *= 2;
 	}
 
-      stateStack[height] = state;
-      locStack[height] = loc;
-      valueStack[height] = value;
+      stateStackheight = state;
+      locStackheight = loc;
+      valueStackheight = value;
     }
 
     public final void pop () {
@@ -308,7 +308,7 @@ var TOKENS = {
       // Avoid memory leaks... garbage collection is a white lie!
       if (num > 0) {
 	java.util.Arrays.fill (valueStack, height - num + 1, height + 1, null);
-        java.util.Arrays.fill (locStack, height - num + 1, height + 1, null);
+        ]java.util.Arrays.fill (locStack, height - num + 1, height + 1, null);
       }
       height -= num;
     }
@@ -321,7 +321,7 @@ var TOKENS = {
       return locStack[height - i];
     }
 
-    public final Object valueAt (int i) {
+    function valueAt (i) {
       return valueStack[height - i];
     }
 
@@ -376,7 +376,7 @@ var TOKENS = {
 
   private int yyaction (int yyn, YYStack yystack, int yylen) 
   {
-    Object yyval;
+    var yyval;
     Location yyloc = yylloc (yystack, yylen);
 
     /* If YYLEN is nonzero, implement the default value of the action:
@@ -6017,7 +6017,7 @@ var TOKENS = {
   `--------------------------------*/
 
   private void yy_symbol_print (String s, int yytype,
-			         Object yyvaluep				 , Object yylocationp)
+        yyvaluep				 , Object yylocationp)
   {
     if (yydebug)
     yycdebug (s + (yytype < yyntokens_ ? " token " : " nterm ")
@@ -6058,7 +6058,7 @@ var TOKENS = {
     Location yyloc;
 
     /// Semantic value of the lookahead.
-    Object yylval = null;
+    var yylval = null;
 
     yycdebug ("Starting parse\n");
     yyerrstatus_ = 0;
