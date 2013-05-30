@@ -242,11 +242,11 @@ var TOKENS = {
 
 
 
-  /**
-   * Set the verbosity of the debugging output; 0 means that all kinds of
-   * output from the parser are suppressed.
-   */
-  var yydebug = 0;
+
+
+
+
+  var yydebug = false;
 
   function yylex () {
     return yylexer.yylex();
@@ -263,15 +263,15 @@ var TOKENS = {
 
 
 
-  protected final void yycdebug (String s) {
-    if (yydebug > 0)
-      yyDebugStream.println (s);
+  function yycdebug (message) {
+    if (yydebug)
+      console.log(message);
   }
 
   private final class YYStack {
-    private int[] stateStack = new int[16];
-    private Location[] locStack = new Location[16];
-    private Object[] valueStack = new Object[16];
+    private int stateStack = new int16;
+    private Location locStack = new Location16;
+    private ]Object[] valueStack = new Object[16];
 
     public int size = 16;
     public int height = -1;
@@ -6019,7 +6019,7 @@ var TOKENS = {
   private void yy_symbol_print (String s, int yytype,
 			         Object yyvaluep				 , Object yylocationp)
   {
-    if (yydebug > 0)
+    if (yydebug)
     yycdebug (s + (yytype < yyntokens_ ? " token " : " nterm ")
 	      + yytname_[yytype] + " ("
 	      + yylocationp + ": "
@@ -6075,7 +6075,7 @@ var TOKENS = {
 	   pushed when we come here.  */
       case YYNEWSTATE:
         yycdebug ("Entering state " + yystate + "\n");
-        if (yydebug > 0)
+        if (yydebug)
           yystack.print (yyDebugStream);
 
         /* Accept?  */
@@ -6247,7 +6247,7 @@ var TOKENS = {
 	    yyerrloc = yystack.locationAt (0);
 	    yystack.pop ();
 	    yystate = yystack.stateAt (0);
-	    if (yydebug > 0)
+	    if (yydebug)
 	      yystack.print (yyDebugStream);
           }
 
@@ -9759,7 +9759,7 @@ var TOKENS = {
   // Report on the debug stream that the rule yyrule is going to be reduced.
   private void yy_reduce_print (int yyrule, YYStack yystack)
   {
-    if (yydebug == 0)
+    if (!yydebug)
       return;
 
     int yylno = yyrline_[yyrule];
