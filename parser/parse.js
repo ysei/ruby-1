@@ -125,11 +125,6 @@ function YYParser (yylexer)
 
 
 
-    /** Version number for the Bison executable that generated this parser.  */
-  var bisonVersion = "2.7.12-4996";
-
-  /** Name of the skeleton that generated this parser.  */
-  var bisonSkeleton = "./lalr1.js";
 
 
   /** True if verbose error messages are enabled.  */
@@ -5935,7 +5930,7 @@ var TOKENS = {
 
 
 /* Line 229 of lalr1.js  */
-/* Line 5939 of "parse.js"  */
+/* Line 5934 of "parse.js"  */
 	default: break;
       }
 
@@ -9822,5 +9817,11 @@ var TOKENS = {
 /* User implementation code.  */
 
 }
+
+// Version number for the Bison executable that generated this parser.
+YYParser.bisonVersion = "2.7.12-4996";
+
+// Name of the skeleton that generated this parser.
+YYParser.bisonSkeleton = "./lalr1.js";
 
 
