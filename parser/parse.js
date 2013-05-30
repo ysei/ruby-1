@@ -218,7 +218,7 @@ var TOKENS = {
   'tLAST_TOKEN': 386,
 
   ' ': 0 /* comma terminator, needs to be avoided */
-}
+};
 
 
   
