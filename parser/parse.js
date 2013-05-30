@@ -317,15 +317,15 @@ var TOKENS = {
     }
 
     function stateAt (i) {
-      return stateStackstateStack.length - i;
+      return stateStack[stateStack.length - i];
     }
 
     function locationAt (i) {
-      return locStacklocStack.length - i;
+      return locStack[locStack.length - i];
     }
 
     function valueAt (i) {
-      return valueStackvalueStack.length - i;
+      return valueStack[valueStack.length - i];
     }
 
     // Print the state stack on the debug stream.
@@ -335,7 +335,7 @@ var TOKENS = {
 
       for (int i = 0; i <= stateStack.length; i++)
       {
-        console.log(' ' + stateStacki);
+        console.log(' ' + stateStack[i]);
       }
     }
   }
