@@ -292,9 +292,9 @@ var TOKENS = {
 
   var yydebug = false;
 
-  function yylex () {
-    return yylexer.yylex();
-  }
+
+
+
   function yyerror (location, message) {
     yylexer.yyerror(location, message);
   }
@@ -6069,8 +6069,8 @@ var TOKENS = {
         if (yychar == yyempty_)
           {
 	    yycdebug ("Reading a token: ");
-	    yychar = yylex ();
-            
+	    yychar = yylexer.yylex();
+
 	    yylloc = new Location(yylexer.getStartPos (),
 				            yylexer.getEndPos ());
             yylval = yylexer.getLVal ();
