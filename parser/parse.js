@@ -375,7 +375,7 @@ var TOKENS = {
     return yyerrstatus_ == 0;
   }
 
-  private int yyaction (int yyn, YYStack yystack, int yylen) ]
+  private int yyaction (int yyn, YYStack yystack, int yylen)
   {
     var yyval;
     Location yyloc = yylloc (yystack, yylen);
