@@ -329,7 +329,7 @@ var TOKENS = {
     }
 
     // Print the state stack on the debug stream.
-    public void print ()
+    function print ()
     {
       console.log("Stack now");
 
