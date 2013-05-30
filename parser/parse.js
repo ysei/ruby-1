@@ -248,7 +248,7 @@ var TOKENS = {
    */
   var yydebug = 0;
 
-  private final int yylex () throws java.io.IOException {
+  private final int yylex () {
     return yylexer.yylex ();
   }
   protected final void yyerror (Location loc, String s) {
@@ -6033,7 +6033,7 @@ var TOKENS = {
    * @return <tt>true</tt> if the parsing succeeds.  Note that this does not
    *          imply that there were no syntax errors.
    */
-  public boolean parse () throws java.io.IOException
+  public boolean parse ()
   {
     /// Lookahead and lookahead in internal form.
     int yychar = yyempty_;
