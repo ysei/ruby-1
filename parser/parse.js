@@ -249,19 +249,19 @@ var TOKENS = {
   var yydebug = 0;
 
   function yylex () {
-    return yylexer.yylex ();
+    return yylexer.yylex();
   }
-  protected final void yyerror (Location loc, String s) {
-    yylexer.yyerror (loc, s);
+  function yyerror (location, message) {
+    yylexer.yyerror(location, message);
   }
 
   
-  protected final void yyerror (String s) {
-    yylexer.yyerror ((Location)null, s);
-  }
-  protected final void yyerror (Position loc, String s) {
-    yylexer.yyerror (new Location (loc), s);
-  }
+
+
+
+
+
+
 
   protected final void yycdebug (String s) {
     if (yydebug > 0)
