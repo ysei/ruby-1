@@ -294,8 +294,8 @@ var TOKENS = {
 
 
 
-
-  function yyerror (location, message) {
+  function yyerror (location, message)
+  {
     yylexer.yyerror(location, message);
   }
 
@@ -306,8 +306,8 @@ var TOKENS = {
 
 
 
-
-  function yycdebug (message) {
+  function yycdebug (message)
+  {
     if (yydebug)
       console.log(message);
   }
