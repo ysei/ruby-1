@@ -6122,7 +6122,7 @@ var TOKENS = {
               --yyerrstatus_;
 
             yystate = yyn;
-            yystack.push (yystate, yylval, yylloc);
+            yystack.push(yystate, yylval, yylloc);
             label = YYNEWSTATE;
           }
         break;
