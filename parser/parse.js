@@ -5962,31 +5962,35 @@ var TOKENS = {
      that double-quoting is unnecessary unless the string contains an
      apostrophe, a comma, or backslash (other than backslash-backslash).
      YYSTR is taken from yytname.  */
-  private final String yytnamerr_ (String yystr)
+  function yytnamerr_ (yystr)
   {
-    if (yystr.charAt (0) == '"')
+    if (yystr[0] == '"')
+    {
+      var yyr = '';
+      strip_quotes:
+      for (var i = 1; i < yystr.length; i++)
       {
-        StringBuffer yyr = new StringBuffer ();
-        strip_quotes: for (int i = 1; i < yystr.length (); i++)
-          switch (yystr.charAt (i))
-            {
-            case '\'':
-            case ',':
+        switch (yystr[i])
+        {
+          case '\'':
+          case ',':
+            break strip_quotes;
+
+          case '\\':
+            if (yystr[++i] != '\\')
               break strip_quotes;
+              // Fall through.
 
-            case '\\':
-	      if (yystr.charAt(++i) != '\\')
-                break strip_quotes;
-              /* Fall through.  */
-            default:
-              yyr.append (yystr.charAt (i));
-              break;
+          case '"':
+            return yyr;
 
-            case '"':
-              return yyr.toString ();
-            }
+          default:
+            yyr += yystr[i];
+            break;
+        }
       }
-    else if (yystr.equals ("$end"))
+    }
+    else if (yystr == "$end")
       return "end of input";
 
     return yystr;
@@ -6299,7 +6303,7 @@ var TOKENS = {
             // with internationalization.
             StringBuffer res =
               new StringBuffer ("syntax error, unexpected ");
-            res.append (yytnamerr_ (yytname_[tok]));
+            res.append(yytnamerr_(yytname_[tok]));
             int yyn = yypact_[yystate];
             if (!yy_pact_value_is_default_ (yyn))
               {
@@ -6324,7 +6328,7 @@ var TOKENS = {
                           && !yy_table_value_is_error_ (yytable_[x + yyn]))
                         {
                           res.append (count++ == 0 ? ", expecting " : " or ");
-                          res.append (yytnamerr_ (yytname_[x]));
+                          res.append(yytnamerr_(yytname_[x]));
                         }
                   }
               }
