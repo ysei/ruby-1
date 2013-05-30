@@ -116,9 +116,15 @@ function YYStack ()
   }
 }
 
-
-function YYParser ()
+// Instantiates the Bison-generated parser.
+function YYParser (yylexer)
 {
+  // The scanner that will supply tokens to the parser.
+  this.yylexer = yylexer;
+
+
+
+
     /** Version number for the Bison executable that generated this parser.  */
   var bisonVersion = "2.7.12-4996";
 
@@ -282,12 +288,6 @@ var TOKENS = {
 
 
 
-  /**
-   * Instantiates the Bison-generated parser.
-   * @param yylexer The scanner that will supply tokens to the parser.
-   */
-  
-  this.yylexer = yylexer;
 
 
 
