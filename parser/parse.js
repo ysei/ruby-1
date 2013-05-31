@@ -314,19 +314,19 @@ var TOKENS = {
 
 
 
-  /**
-   * Returned by a Bison action in order to stop the parsing process and
-   * return success (<tt>true</tt>).  */
+
+  // Returned by a Bison action in order to stop the parsing process
+  // and return success (<tt>true</tt>).
   var YYACCEPT = 0;
 
-  /**
-   * Returned by a Bison action in order to stop the parsing process and
-   * return failure (<tt>false</tt>).  */
+
+   // Returned by a Bison action in order to stop the parsing process
+   // and return failure (<tt>false</tt>).  */
   var YYABORT = 1;
 
-  /**
-   * Returned by a Bison action in order to start error recovery without
-   * printing an error message.  */
+
+  // Returned by a Bison action in order to start error recovery
+  // without printing an error message.
   var YYERROR = 2;
 
   // Internal return codes that are not supported for user semantic
@@ -341,10 +341,10 @@ var TOKENS = {
   var yyntokens_ = 159;
   
   var yyerrstatus_ = 0;
-  /**
-   * Return whether error recovery is being done.  In this state, the parser
-   * reads token until it reaches a known state, and then restarts normal
-   * operation.  */
+  
+  // Return whether error recovery is being done.
+  // In this state, the parser reads token until it reaches a known state,
+  // and then restarts normal operation.
   function recovering ()
   {
     return yyerrstatus_ == 0;
