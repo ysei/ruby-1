@@ -35,7 +35,7 @@
 /* Line 32 of lalr1.js  */
 /* Line 1 of "parse.y"  */
 
-	alert(123)
+  // alert(123)
 
 
 /**
@@ -134,10 +134,10 @@ function YYParser (yylexer)
 
 
 
-  /** True if verbose error messages are enabled.  */
+  // True if verbose error messages are enabled.
   var errorVerbose = false;
 
-  /** Token returned by the scanner to signal the end of its input.  */
+  // Token returned by the scanner to signal the end of its input.
   var EOF = 0;
 
   /* Tokens.  */
@@ -353,5567 +353,1888 @@ var TOKENS = {
   var actionsTable =
   {
       '2': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 114 of "parse.y"  */
-    {
-			lex_state = EXPR_BEG;
-		    /*%%%*/
-			local_push(compile_for_eval || rb_parse_in_main());
-		    /*%
-			local_push(0);
-		    %*/
-		    },
+    {},
 
 
   '3': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 123 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (((node)(yystack.valueAt (2-(2)))) && !compile_for_eval) {
-			    /* last expression should not be void */
-			    if (nd_type(((node)(yystack.valueAt (2-(2))))) != NODE_BLOCK) void_expr(((node)(yystack.valueAt (2-(2)))));
-			    else {
-				NODE *node = ((node)(yystack.valueAt (2-(2))));
-				while (node->nd_next) {
-				    node = node->nd_next;
-				}
-				void_expr(node->nd_head);
-			    }
-			}
-			ruby_eval_tree = NEW_SCOPE(0, block_append(ruby_eval_tree, ((node)(yystack.valueAt (2-(2))))));
-		    /*%
-			$$ = $2;
-			parser->result = dispatch1(program, $$);
-		    %*/
-			local_pop();
-		    },
+    {},
 
 
   '4': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 146 of "parse.y"  */
-    {
-		    /*%%%*/
-			void_stmts(((node)(yystack.valueAt (2-(1)))));
-			fixup_nodes(&deferred_nodes);
-		    /*%
-		    %*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
-		    },
+    {},
 
 
   '5': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 157 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch2(stmts_add, dispatch0(stmts_new),
-						  dispatch0(void_stmt));
-		    %*/
-		    },
+    {},
 
 
   '6': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 166 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = newline_node(((node)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = dispatch2(stmts_add, dispatch0(stmts_new), $1);
-		    %*/
-		    },
+    {},
 
 
   '7': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 174 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = block_append(((node)(yystack.valueAt (3-(1)))), newline_node(((node)(yystack.valueAt (3-(3))))));
-		    /*%
-			$$ = dispatch2(stmts_add, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '8': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 182 of "parse.y"  */
-    {
-			yyval = remove_begin(((node)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '10': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 189 of "parse.y"  */
-    {
-		    /*%%%*/
-			/* local_push(0); */
-		    /*%
-		    %*/
-		    },
+    {},
 
 
   '11': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 196 of "parse.y"  */
-    {
-		    /*%%%*/
-			ruby_eval_tree_begin = block_append(ruby_eval_tree_begin,
-							    ((node)(yystack.valueAt (5-(4)))));
-			/* NEW_PREEXE($4)); */
-			/* local_pop(); */
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch1(BEGIN, $4);
-		    %*/
-		    },
+    {},
 
 
   '12': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 213 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (4-(1))));
-			if (((node)(yystack.valueAt (4-(2))))) {
-			    yyval = NEW_RESCUE(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(2)))), ((node)(yystack.valueAt (4-(3)))));
-			}
-			else if (((node)(yystack.valueAt (4-(3))))) {
-			    rb_warn0("else without rescue is useless");
-			    yyval = block_append(yyval, ((node)(yystack.valueAt (4-(3)))));
-			}
-			if (((node)(yystack.valueAt (4-(4))))) {
-			    if (yyval) {
-				yyval = NEW_ENSURE(yyval, ((node)(yystack.valueAt (4-(4)))));
-			    }
-			    else {
-				yyval = block_append(((node)(yystack.valueAt (4-(4)))), NEW_NIL());
-			    }
-			}
-			fixpos(yyval, ((node)(yystack.valueAt (4-(1)))));
-		    /*%
-			$$ = dispatch4(bodystmt,
-				       escape_Qundef($1),
-				       escape_Qundef($2),
-				       escape_Qundef($3),
-				       escape_Qundef($4));
-		    %*/
-		    },
+    {},
 
 
   '13': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 243 of "parse.y"  */
-    {
-		    /*%%%*/
-			void_stmts(((node)(yystack.valueAt (2-(1)))));
-			fixup_nodes(&deferred_nodes);
-		    /*%
-		    %*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
-		    },
+    {},
 
 
   '14': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 254 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch2(stmts_add, dispatch0(stmts_new),
-						  dispatch0(void_stmt));
-		    %*/
-		    },
+    {},
 
 
   '15': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 263 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = newline_node(((node)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = dispatch2(stmts_add, dispatch0(stmts_new), $1);
-		    %*/
-		    },
+    {},
 
 
   '16': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 271 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = block_append(((node)(yystack.valueAt (3-(1)))), newline_node(((node)(yystack.valueAt (3-(3))))));
-		    /*%
-			$$ = dispatch2(stmts_add, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '17': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 279 of "parse.y"  */
-    {
-			yyval = remove_begin(((node)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '18': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 285 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		    },
+    {},
 
 
   '19': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 289 of "parse.y"  */
-    {
-			yyerror("BEGIN is permitted only at toplevel");
-		    /*%%%*/
-			/* local_push(0); */
-		    /*%
-		    %*/
-		    },
+    {},
 
 
   '20': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 297 of "parse.y"  */
-    {
-		    /*%%%*/
-			ruby_eval_tree_begin = block_append(ruby_eval_tree_begin,
-							    ((node)(yystack.valueAt (5-(4)))));
-			/* NEW_PREEXE($4)); */
-			/* local_pop(); */
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch1(BEGIN, $4);
-		    %*/
-		    },
+    {},
 
 
   '21': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 309 of "parse.y"  */
-    {lex_state = EXPR_FNAME;},
+    {},
 
 
   '22': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 310 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ALIAS(((node)(yystack.valueAt (4-(2)))), ((node)(yystack.valueAt (4-(4)))));
-		    /*%
-			$$ = dispatch2(alias, $2, $4);
-		    %*/
-		    },
+    {},
 
 
   '23': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 318 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_VALIAS(((id)(yystack.valueAt (3-(2)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(var_alias, $2, $3);
-		    %*/
-		    },
+    {},
 
 
   '24': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 326 of "parse.y"  */
-    {
-		    /*%%%*/
-			char buf[2];
-			buf[0] = '$';
-			buf[1] = (char)((node)(yystack.valueAt (3-(3))))->nd_nth;
-			yyval = NEW_VALIAS(((id)(yystack.valueAt (3-(2)))), rb_intern2(buf, 2));
-		    /*%
-			$$ = dispatch2(var_alias, $2, $3);
-		    %*/
-		    },
+    {},
 
 
   '25': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 337 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyerror("can't make alias for the number variables");
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch2(var_alias, $2, $3);
-			$$ = dispatch1(alias_error, $$);
-		    %*/
-		    },
+    {},
 
 
   '26': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 347 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = dispatch1(undef, $2);
-		    %*/
-		    },
+    {},
 
 
   '27': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 355 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_IF(cond(((node)(yystack.valueAt (3-(3))))), remove_begin(((node)(yystack.valueAt (3-(1))))), 0);
-			fixpos(yyval, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(if_mod, $3, $1);
-		    %*/
-		    },
+    {},
 
 
   '28': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 364 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_UNLESS(cond(((node)(yystack.valueAt (3-(3))))), remove_begin(((node)(yystack.valueAt (3-(1))))), 0);
-			fixpos(yyval, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(unless_mod, $3, $1);
-		    %*/
-		    },
+    {},
 
 
   '29': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 373 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (((node)(yystack.valueAt (3-(1)))) && nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_BEGIN) {
-			    yyval = NEW_WHILE(cond(((node)(yystack.valueAt (3-(3))))), ((node)(yystack.valueAt (3-(1))))->nd_body, 0);
-			}
-			else {
-			    yyval = NEW_WHILE(cond(((node)(yystack.valueAt (3-(3))))), ((node)(yystack.valueAt (3-(1)))), 1);
-			}
-		    /*%
-			$$ = dispatch2(while_mod, $3, $1);
-		    %*/
-		    },
+    {},
 
 
   '30': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 386 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (((node)(yystack.valueAt (3-(1)))) && nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_BEGIN) {
-			    yyval = NEW_UNTIL(cond(((node)(yystack.valueAt (3-(3))))), ((node)(yystack.valueAt (3-(1))))->nd_body, 0);
-			}
-			else {
-			    yyval = NEW_UNTIL(cond(((node)(yystack.valueAt (3-(3))))), ((node)(yystack.valueAt (3-(1)))), 1);
-			}
-		    /*%
-			$$ = dispatch2(until_mod, $3, $1);
-		    %*/
-		    },
+    {},
 
 
   '31': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 399 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *resq = NEW_RESBODY(0, remove_begin(((node)(yystack.valueAt (3-(3))))), 0);
-			yyval = NEW_RESCUE(remove_begin(((node)(yystack.valueAt (3-(1))))), resq, 0);
-		    /*%
-			$$ = dispatch2(rescue_mod, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '32': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 408 of "parse.y"  */
-    {
-			if (in_def || in_single) {
-			    rb_warn0("END in method; use at_exit");
-			}
-		    /*%%%*/
-			yyval = NEW_POSTEXE(NEW_NODE(
-			    NODE_SCOPE, 0 /* tbl */, ((node)(yystack.valueAt (4-(3)))) /* body */, 0 /* args */));
-		    /*%
-			$$ = dispatch1(END, $3);
-		    %*/
-		    },
+    {},
 
 
   '34': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 421 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			((node)(yystack.valueAt (3-(1))))->nd_value = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
-		    /*%
-			$$ = dispatch2(massign, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '35': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 431 of "parse.y"  */
-    {
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = new_op_assign(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(2)))), ((node)(yystack.valueAt (3-(3)))));
-		    },
+    {},
 
 
   '36': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 436 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *args;
-
-			value_expr(((node)(yystack.valueAt (6-(6)))));
-			if (!((node)(yystack.valueAt (6-(3))))) ((node)(yystack.valueAt (6-(3)))) = NEW_ZARRAY();
-			args = arg_concat(((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(6)))));
-			if (((id)(yystack.valueAt (6-(5)))) == tOROP) {
-			    ((id)(yystack.valueAt (6-(5)))) = 0;
-			}
-			else if (((id)(yystack.valueAt (6-(5)))) == tANDOP) {
-			    ((id)(yystack.valueAt (6-(5)))) = 1;
-			}
-			yyval = NEW_OP_ASGN1(((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(5)))), args);
-			fixpos(yyval, ((node)(yystack.valueAt (6-(1)))));
-		    /*%
-			$$ = dispatch2(aref_field, $1, escape_Qundef($3));
-			$$ = dispatch3(opassign, $$, $5, $6);
-		    %*/
-		    },
+    {},
 
 
   '37': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 457 of "parse.y"  */
-    {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_id2sym('.'), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    },
+    {},
 
 
   '38': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 462 of "parse.y"  */
-    {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_id2sym('.'), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    },
+    {},
 
 
   '39': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 467 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_COLON2(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))));
-			yyval = new_const_op_assign(yyval, ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    /*%
-			$$ = dispatch2(const_path_field, $1, $3);
-			$$ = dispatch3(opassign, $$, $4, $5);
-		    %*/
-		    },
+    {},
 
 
   '40': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 477 of "parse.y"  */
-    {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_intern("::"), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    },
+    {},
 
 
   '41': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 482 of "parse.y"  */
-    {
-		    /*%%%*/
-			rb_backref_error(((node)(yystack.valueAt (3-(1)))));
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch2(assign, dispatch1(var_field, $1), $3);
-			$$ = dispatch1(assign_error, $$);
-		    %*/
-		    },
+    {},
 
 
   '42': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 492 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = node_assign(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(assign, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '43': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 501 of "parse.y"  */
-    {
-		    /*%%%*/
-			((node)(yystack.valueAt (3-(1))))->nd_value = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
-		    /*%
-			$$ = dispatch2(massign, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '44': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 510 of "parse.y"  */
-    {
-		    /*%%%*/
-			((node)(yystack.valueAt (3-(1))))->nd_value = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
-		    /*%
-			$$ = dispatch2(massign, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '46': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 522 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = node_assign(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(assign, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '47': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 531 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = node_assign(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(assign, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '49': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 544 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = logop(NODE_AND, ((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("and"), $3);
-		    %*/
-		    },
+    {},
 
 
   '50': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 552 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = logop(NODE_OR, ((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("or"), $3);
-		    %*/
-		    },
+    {},
 
 
   '51': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 560 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_uni_op(cond(((node)(yystack.valueAt (3-(3))))), '!');
-		    /*%
-			$$ = dispatch2(unary, ripper_intern("not"), $3);
-		    %*/
-		    },
+    {},
 
 
   '52': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 568 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_uni_op(cond(((node)(yystack.valueAt (2-(2))))), '!');
-		    /*%
-			$$ = dispatch2(unary, ripper_id2sym('!'), $2);
-		    %*/
-		    },
+    {},
 
 
   '54': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 579 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		        if (!yyval) yyval = NEW_NIL();
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '58': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 596 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-		    /*%
-			$$ = dispatch3(call, $1, $2, $3);
-			$$ = method_arg($$, $4);
-		    %*/
-		    },
+    {},
 
 
   '59': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 607 of "parse.y"  */
-    {
-			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-		    %*/
-		    },
+    {},
 
 
   '60': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 617 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ITER(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(2)))));
-		    /*%
-			$$ = dispatch2(brace_block, escape_Qundef($3), $4);
-		    %*/
-			dyna_pop(((vars)(yystack.valueAt (5-(1)))));
-		    },
+    {},
 
 
   '61': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 629 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_FCALL(((id)(yystack.valueAt (1-(1)))), 0);
-			nd_set_line(yyval, tokline);
-		    /*%
-		    %*/
-		    },
+    {},
 
 
   '62': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 639 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
-			yyval->nd_args = ((node)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = dispatch2(command, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '63': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 648 of "parse.y"  */
-    {
-		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (3-(2)))),((node)(yystack.valueAt (3-(3)))));
-			((node)(yystack.valueAt (3-(1))))->nd_args = ((node)(yystack.valueAt (3-(2))));
-		        ((node)(yystack.valueAt (3-(3))))->nd_iter = ((node)(yystack.valueAt (3-(1))));
-			yyval = ((node)(yystack.valueAt (3-(3))));
-			fixpos(yyval, ((node)(yystack.valueAt (3-(1)))));
-		    /*%
-			$$ = dispatch2(command, $1, $2);
-			$$ = method_add_block($$, $3);
-		    %*/
-		    },
+    {},
 
 
   '64': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 661 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-			fixpos(yyval, ((node)(yystack.valueAt (4-(1)))));
-		    /*%
-			$$ = dispatch4(command_call, $1, ripper_id2sym('.'), $3, $4);
-		    %*/
-		    },
+    {},
 
 
   '65': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 670 of "parse.y"  */
-    {
-		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (5-(4)))),((node)(yystack.valueAt (5-(5)))));
-		        ((node)(yystack.valueAt (5-(5))))->nd_iter = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(4)))));
-			yyval = ((node)(yystack.valueAt (5-(5))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(1)))));
-		    /*%
-			$$ = dispatch4(command_call, $1, ripper_id2sym('.'), $3, $4);
-			$$ = method_add_block($$, $5);
-		    %*/
-		   },
+    {},
 
 
   '66': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 682 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-			fixpos(yyval, ((node)(yystack.valueAt (4-(1)))));
-		    /*%
-			$$ = dispatch4(command_call, $1, ripper_intern("::"), $3, $4);
-		    %*/
-		    },
+    {},
 
 
   '67': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 691 of "parse.y"  */
-    {
-		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (5-(4)))),((node)(yystack.valueAt (5-(5)))));
-		        ((node)(yystack.valueAt (5-(5))))->nd_iter = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(4)))));
-			yyval = ((node)(yystack.valueAt (5-(5))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(1)))));
-		    /*%
-			$$ = dispatch4(command_call, $1, ripper_intern("::"), $3, $4);
-			$$ = method_add_block($$, $5);
-		    %*/
-		   },
+    {},
 
 
   '68': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 703 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_SUPER(((node)(yystack.valueAt (2-(2)))));
-			fixpos(yyval, ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch1(super, $2);
-		    %*/
-		    },
+    {},
 
 
   '69': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 712 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = new_yield(((node)(yystack.valueAt (2-(2)))));
-			fixpos(yyval, ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch1(yield, $2);
-		    %*/
-		    },
+    {},
 
 
   '70': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 721 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_RETURN(ret_args(((node)(yystack.valueAt (2-(2))))));
-		    /*%
-			$$ = dispatch1(return, $2);
-		    %*/
-		    },
+    {},
 
 
   '71': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 729 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_BREAK(ret_args(((node)(yystack.valueAt (2-(2))))));
-		    /*%
-			$$ = dispatch1(break, $2);
-		    %*/
-		    },
+    {},
 
 
   '72': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 737 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_NEXT(ret_args(((node)(yystack.valueAt (2-(2))))));
-		    /*%
-			$$ = dispatch1(next, $2);
-		    %*/
-		    },
+    {},
 
 
   '74': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 748 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(mlhs_paren, $2);
-		    %*/
-		    },
+    {},
 
 
   '76': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 759 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(NEW_LIST(((node)(yystack.valueAt (3-(2))))), 0);
-		    /*%
-			$$ = dispatch1(mlhs_paren, $2);
-		    %*/
-		    },
+    {},
 
 
   '77': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 769 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (1-(1)))), 0);
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '78': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 777 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(list_append(((node)(yystack.valueAt (2-(1)))),((node)(yystack.valueAt (2-(2))))), 0);
-		    /*%
-			$$ = mlhs_add($1, $2);
-		    %*/
-		    },
+    {},
 
 
   '79': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 785 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = mlhs_add_star($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '80': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 793 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (5-(1)))), NEW_POSTARG(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(5))))));
-		    /*%
-			$1 = mlhs_add_star($1, $3);
-			$$ = mlhs_add($1, $5);
-		    %*/
-		    },
+    {},
 
 
   '81': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 802 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (2-(1)))), -1);
-		    /*%
-			$$ = mlhs_add_star($1, Qnil);
-		    %*/
-		    },
+    {},
 
 
   '82': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 810 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (4-(1)))), NEW_POSTARG(-1, ((node)(yystack.valueAt (4-(4))))));
-		    /*%
-			$1 = mlhs_add_star($1, Qnil);
-			$$ = mlhs_add($1, $4);
-		    %*/
-		    },
+    {},
 
 
   '83': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 819 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(0, ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), $2);
-		    %*/
-		    },
+    {},
 
 
   '84': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 827 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(((node)(yystack.valueAt (4-(2)))),((node)(yystack.valueAt (4-(4))))));
-		    /*%
-			$2 = mlhs_add_star(mlhs_new(), $2);
-			$$ = mlhs_add($2, $4);
-		    %*/
-		    },
+    {},
 
 
   '85': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 836 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(0, -1);
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), Qnil);
-		    %*/
-		    },
+    {},
 
 
   '86': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 844 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(-1, ((node)(yystack.valueAt (3-(3))))));
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), Qnil);
-			$$ = mlhs_add($$, $3);
-		    %*/
-		    },
+    {},
 
 
   '88': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 856 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(mlhs_paren, $2);
-		    %*/
-		    },
+    {},
 
 
   '89': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 866 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (2-(1)))));
-		    /*%
-			$$ = mlhs_add(mlhs_new(), $1);
-		    %*/
-		    },
+    {},
 
 
   '90': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 874 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(2)))));
-		    /*%
-			$$ = mlhs_add($1, $2);
-		    %*/
-		    },
+    {},
 
 
   '91': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 884 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = mlhs_add(mlhs_new(), $1);
-		    %*/
-		    },
+    {},
 
 
   '92': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 892 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = mlhs_add($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '93': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 902 of "parse.y"  */
-    {
-			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
-		    },
+    {},
 
 
   '94': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 906 of "parse.y"  */
-    {
-		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
-		    },
+    {},
 
 
   '95': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 910 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = aryset(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))));
-		    /*%
-			$$ = dispatch2(aref_field, $1, escape_Qundef($3));
-		    %*/
-		    },
+    {},
 
 
   '96': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 918 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(field, $1, ripper_id2sym('.'), $3);
-		    %*/
-		    },
+    {},
 
 
   '97': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 926 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(const_path_field, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '98': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 934 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(field, $1, ripper_id2sym('.'), $3);
-		    %*/
-		    },
+    {},
 
 
   '99': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 942 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (in_def || in_single)
-			    yyerror("dynamic constant assignment");
-			yyval = NEW_CDECL(0, 0, NEW_COLON2(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3))))));
-		    /*%
-			if (in_def || in_single)
-			    yyerror("dynamic constant assignment");
-			$$ = dispatch2(const_path_field, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '100': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 954 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (in_def || in_single)
-			    yyerror("dynamic constant assignment");
-			yyval = NEW_CDECL(0, 0, NEW_COLON3(((id)(yystack.valueAt (2-(2))))));
-		    /*%
-			$$ = dispatch1(top_const_field, $2);
-		    %*/
-		    },
+    {},
 
 
   '101': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 964 of "parse.y"  */
-    {
-		    /*%%%*/
-			rb_backref_error(((node)(yystack.valueAt (1-(1)))));
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch1(var_field, $1);
-			$$ = dispatch1(assign_error, $$);
-		    %*/
-		    },
+    {},
 
 
   '102': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 976 of "parse.y"  */
-    {
-			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
-		    /*%%%*/
-			if (!yyval) yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch1(var_field, $$);
-		    %*/
-		    },
+    {},
 
 
   '103': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 985 of "parse.y"  */
-    {
-		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
-		    /*%%%*/
-		        if (!yyval) yyval = NEW_BEGIN(0);
-		    /*%
-		        $$ = dispatch1(var_field, $$);
-		    %*/
-		    },
+    {},
 
 
   '104': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 994 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = aryset(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))));
-		    /*%
-			$$ = dispatch2(aref_field, $1, escape_Qundef($3));
-		    %*/
-		    },
+    {},
 
 
   '105': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1002 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(field, $1, ripper_id2sym('.'), $3);
-		    %*/
-		    },
+    {},
 
 
   '106': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1010 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(field, $1, ripper_intern("::"), $3);
-		    %*/
-		    },
+    {},
 
 
   '107': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1018 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(field, $1, ripper_id2sym('.'), $3);
-		    %*/
-		    },
+    {},
 
 
   '108': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1026 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (in_def || in_single)
-			    yyerror("dynamic constant assignment");
-			yyval = NEW_CDECL(0, 0, NEW_COLON2(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3))))));
-		    /*%
-			$$ = dispatch2(const_path_field, $1, $3);
-			if (in_def || in_single) {
-			    $$ = dispatch1(assign_error, $$);
-			}
-		    %*/
-		    },
+    {},
 
 
   '109': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1039 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (in_def || in_single)
-			    yyerror("dynamic constant assignment");
-			yyval = NEW_CDECL(0, 0, NEW_COLON3(((id)(yystack.valueAt (2-(2))))));
-		    /*%
-			$$ = dispatch1(top_const_field, $2);
-			if (in_def || in_single) {
-			    $$ = dispatch1(assign_error, $$);
-			}
-		    %*/
-		    },
+    {},
 
 
   '110': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1052 of "parse.y"  */
-    {
-		    /*%%%*/
-			rb_backref_error(((node)(yystack.valueAt (1-(1)))));
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch1(assign_error, $1);
-		    %*/
-		    },
+    {},
 
 
   '111': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1063 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyerror("class/module name must be CONSTANT");
-		    /*%
-			$$ = dispatch1(class_name_error, $1);
-		    %*/
-		    },
+    {},
 
 
   '113': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1074 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_COLON3(((id)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch1(top_const_ref, $2);
-		    %*/
-		    },
+    {},
 
 
   '114': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1082 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_COLON2(0, yyval);
-		    /*%
-			$$ = dispatch1(const_ref, $1);
-		    %*/
-		    },
+    {},
 
 
   '115': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1090 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_COLON2(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(const_path_ref, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '119': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1103 of "parse.y"  */
-    {
-			lex_state = EXPR_ENDFN;
-			yyval = ((id)(yystack.valueAt (1-(1))));
-		    },
+    {},
 
 
   '120': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1108 of "parse.y"  */
-    {
-			lex_state = EXPR_ENDFN;
-		    /*%%%*/
-			yyval = ((id)(yystack.valueAt (1-(1))));
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '123': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1123 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIT(ID2SYM(((id)(yystack.valueAt (1-(1))))));
-		    /*%
-			$$ = dispatch1(symbol_literal, $1);
-		    %*/
-		    },
+    {},
 
 
   '125': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1134 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_UNDEF(((node)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
 
 
   '126': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1141 of "parse.y"  */
-    {lex_state = EXPR_FNAME;},
+    {},
 
 
   '127': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1142 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = block_append(((node)(yystack.valueAt (4-(1)))), NEW_UNDEF(((node)(yystack.valueAt (4-(4))))));
-		    /*%
-			rb_ary_push($1, $4);
-		    %*/
-		    },
+    {},
 
 
   '128': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1151 of "parse.y"  */
-    { ifndef_ripper(yyval = '|'); },
+    {},
 
 
   '129': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1152 of "parse.y"  */
-    { ifndef_ripper(yyval = '^'); },
+    {},
 
 
   '130': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1153 of "parse.y"  */
-    { ifndef_ripper(yyval = '&'); },
+    {},
 
 
   '131': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1154 of "parse.y"  */
-    { ifndef_ripper(yyval = tCMP); },
+    {},
 
 
   '132': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1155 of "parse.y"  */
-    { ifndef_ripper(yyval = tEQ); },
+    {},
 
 
   '133': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1156 of "parse.y"  */
-    { ifndef_ripper(yyval = tEQQ); },
+    {},
 
 
   '134': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1157 of "parse.y"  */
-    { ifndef_ripper(yyval = tMATCH); },
+    {},
 
 
   '135': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1158 of "parse.y"  */
-    { ifndef_ripper(yyval = tNMATCH); },
+    {},
 
 
   '136': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1159 of "parse.y"  */
-    { ifndef_ripper(yyval = '>'); },
+    {},
 
 
   '137': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1160 of "parse.y"  */
-    { ifndef_ripper(yyval = tGEQ); },
+    {},
 
 
   '138': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1161 of "parse.y"  */
-    { ifndef_ripper(yyval = '<'); },
+    {},
 
 
   '139': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1162 of "parse.y"  */
-    { ifndef_ripper(yyval = tLEQ); },
+    {},
 
 
   '140': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1163 of "parse.y"  */
-    { ifndef_ripper(yyval = tNEQ); },
+    {},
 
 
   '141': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1164 of "parse.y"  */
-    { ifndef_ripper(yyval = tLSHFT); },
+    {},
 
 
   '142': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1165 of "parse.y"  */
-    { ifndef_ripper(yyval = tRSHFT); },
+    {},
 
 
   '143': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1166 of "parse.y"  */
-    { ifndef_ripper(yyval = '+'); },
+    {},
 
 
   '144': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1167 of "parse.y"  */
-    { ifndef_ripper(yyval = '-'); },
+    {},
 
 
   '145': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1168 of "parse.y"  */
-    { ifndef_ripper(yyval = '*'); },
+    {},
 
 
   '146': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1169 of "parse.y"  */
-    { ifndef_ripper(yyval = '*'); },
+    {},
 
 
   '147': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1170 of "parse.y"  */
-    { ifndef_ripper(yyval = '/'); },
+    {},
 
 
   '148': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1171 of "parse.y"  */
-    { ifndef_ripper(yyval = '%'); },
+    {},
 
 
   '149': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1172 of "parse.y"  */
-    { ifndef_ripper(yyval = tPOW); },
+    {},
 
 
   '150': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1173 of "parse.y"  */
-    { ifndef_ripper(yyval = tDSTAR); },
+    {},
 
 
   '151': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1174 of "parse.y"  */
-    { ifndef_ripper(yyval = '!'); },
+    {},
 
 
   '152': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1175 of "parse.y"  */
-    { ifndef_ripper(yyval = '~'); },
+    {},
 
 
   '153': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1176 of "parse.y"  */
-    { ifndef_ripper(yyval = tUPLUS); },
+    {},
 
 
   '154': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1177 of "parse.y"  */
-    { ifndef_ripper(yyval = tUMINUS); },
+    {},
 
 
   '155': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1178 of "parse.y"  */
-    { ifndef_ripper(yyval = tAREF); },
+    {},
 
 
   '156': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1179 of "parse.y"  */
-    { ifndef_ripper(yyval = tASET); },
+    {},
 
 
   '157': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1180 of "parse.y"  */
-    { ifndef_ripper(yyval = '`'); },
+    {},
 
 
   '199': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1198 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = node_assign(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(assign, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '200': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1207 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (5-(3)))));
-		        ((node)(yystack.valueAt (5-(3)))) = NEW_RESCUE(((node)(yystack.valueAt (5-(3)))), NEW_RESBODY(0,((node)(yystack.valueAt (5-(5)))),0), 0);
-			yyval = node_assign(((node)(yystack.valueAt (5-(1)))), ((node)(yystack.valueAt (5-(3)))));
-		    /*%
-			$$ = dispatch2(assign, $1, dispatch2(rescue_mod, $3, $5));
-		    %*/
-		    },
+    {},
 
 
   '201': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1217 of "parse.y"  */
-    {
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = new_op_assign(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(2)))), ((node)(yystack.valueAt (3-(3)))));
-		    },
+    {},
 
 
   '202': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1222 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (5-(3)))));
-		        ((node)(yystack.valueAt (5-(3)))) = NEW_RESCUE(((node)(yystack.valueAt (5-(3)))), NEW_RESBODY(0,((node)(yystack.valueAt (5-(5)))),0), 0);
-		    /*%
-			$3 = dispatch2(rescue_mod, $3, $5);
-		    %*/
-			yyval = new_op_assign(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(2)))), ((node)(yystack.valueAt (5-(3)))));
-		    },
+    {},
 
 
   '203': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1232 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *args;
-
-			value_expr(((node)(yystack.valueAt (6-(6)))));
-			if (!((node)(yystack.valueAt (6-(3))))) ((node)(yystack.valueAt (6-(3)))) = NEW_ZARRAY();
-			if (nd_type(((node)(yystack.valueAt (6-(3))))) == NODE_BLOCK_PASS) {
-			    args = NEW_ARGSCAT(((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(6)))));
-			}
-		        else {
-			    args = arg_concat(((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(6)))));
-		        }
-			if (((id)(yystack.valueAt (6-(5)))) == tOROP) {
-			    ((id)(yystack.valueAt (6-(5)))) = 0;
-			}
-			else if (((id)(yystack.valueAt (6-(5)))) == tANDOP) {
-			    ((id)(yystack.valueAt (6-(5)))) = 1;
-			}
-			yyval = NEW_OP_ASGN1(((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(5)))), args);
-			fixpos(yyval, ((node)(yystack.valueAt (6-(1)))));
-		    /*%
-			$1 = dispatch2(aref_field, $1, escape_Qundef($3));
-			$$ = dispatch3(opassign, $1, $5, $6);
-		    %*/
-		    },
+    {},
 
 
   '204': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1258 of "parse.y"  */
-    {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_id2sym('.'), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    },
+    {},
 
 
   '205': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1263 of "parse.y"  */
-    {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_id2sym('.'), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    },
+    {},
 
 
   '206': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1268 of "parse.y"  */
-    {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_intern("::"), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    },
+    {},
 
 
   '207': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1273 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_COLON2(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))));
-			yyval = new_const_op_assign(yyval, ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    /*%
-			$$ = dispatch2(const_path_field, $1, $3);
-			$$ = dispatch3(opassign, $$, $4, $5);
-		    %*/
-		    },
+    {},
 
 
   '208': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1283 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_COLON3(((id)(yystack.valueAt (4-(2)))));
-			yyval = new_const_op_assign(yyval, ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-		    /*%
-			$$ = dispatch1(top_const_field, $2);
-			$$ = dispatch3(opassign, $$, $3, $4);
-		    %*/
-		    },
+    {},
 
 
   '209': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1293 of "parse.y"  */
-    {
-		    /*%%%*/
-			rb_backref_error(((node)(yystack.valueAt (3-(1)))));
-			yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch1(var_field, $1);
-			$$ = dispatch3(opassign, $$, $2, $3);
-			$$ = dispatch1(assign_error, $$);
-		    %*/
-		    },
+    {},
 
 
   '210': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1304 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(1)))));
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = NEW_DOT2(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-			if (nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_LIT && FIXNUM_P(((node)(yystack.valueAt (3-(1))))->nd_lit) &&
-			    nd_type(((node)(yystack.valueAt (3-(3))))) == NODE_LIT && FIXNUM_P(((node)(yystack.valueAt (3-(3))))->nd_lit)) {
-			    deferred_nodes = list_append(deferred_nodes, yyval);
-			}
-		    /*%
-			$$ = dispatch2(dot2, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '211': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1318 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(1)))));
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = NEW_DOT3(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-			if (nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_LIT && FIXNUM_P(((node)(yystack.valueAt (3-(1))))->nd_lit) &&
-			    nd_type(((node)(yystack.valueAt (3-(3))))) == NODE_LIT && FIXNUM_P(((node)(yystack.valueAt (3-(3))))->nd_lit)) {
-			    deferred_nodes = list_append(deferred_nodes, yyval);
-			}
-		    /*%
-			$$ = dispatch2(dot3, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '212': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1332 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '+', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('+'), $3);
-		    %*/
-		    },
+    {},
 
 
   '213': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1340 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '-', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('-'), $3);
-		    %*/
-		    },
+    {},
 
 
   '214': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1348 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '*', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('*'), $3);
-		    %*/
-		    },
+    {},
 
 
   '215': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1356 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '/', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('/'), $3);
-		    %*/
-		    },
+    {},
 
 
   '216': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1364 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '%', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('%'), $3);
-		    %*/
-		    },
+    {},
 
 
   '217': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1372 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tPOW, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("**"), $3);
-		    %*/
-		    },
+    {},
 
 
   '218': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1380 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(call_bin_op(((node)(yystack.valueAt (4-(2)))), tPOW, ((node)(yystack.valueAt (4-(4))))), tUMINUS, 0);
-		    /*%
-			$$ = dispatch3(binary, $2, ripper_intern("**"), $4);
-			$$ = dispatch2(unary, ripper_intern("-@"), $$);
-		    %*/
-		    },
+    {},
 
 
   '219': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1389 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(call_bin_op(((node)(yystack.valueAt (4-(2)))), tPOW, ((node)(yystack.valueAt (4-(4))))), tUMINUS, 0);
-		    /*%
-			$$ = dispatch3(binary, $2, ripper_intern("**"), $4);
-			$$ = dispatch2(unary, ripper_intern("-@"), $$);
-		    %*/
-		    },
+    {},
 
 
   '220': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1398 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_uni_op(((node)(yystack.valueAt (2-(2)))), tUPLUS);
-		    /*%
-			$$ = dispatch2(unary, ripper_intern("+@"), $2);
-		    %*/
-		    },
+    {},
 
 
   '221': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1406 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_uni_op(((node)(yystack.valueAt (2-(2)))), tUMINUS);
-		    /*%
-			$$ = dispatch2(unary, ripper_intern("-@"), $2);
-		    %*/
-		    },
+    {},
 
 
   '222': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1414 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '|', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('|'), $3);
-		    %*/
-		    },
+    {},
 
 
   '223': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1422 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '^', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('^'), $3);
-		    %*/
-		    },
+    {},
 
 
   '224': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1430 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '&', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('&'), $3);
-		    %*/
-		    },
+    {},
 
 
   '225': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1438 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tCMP, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("<=>"), $3);
-		    %*/
-		    },
+    {},
 
 
   '226': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1446 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '>', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('>'), $3);
-		    %*/
-		    },
+    {},
 
 
   '227': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1454 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tGEQ, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern(">="), $3);
-		    %*/
-		    },
+    {},
 
 
   '228': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1462 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '<', ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ID2SYM('<'), $3);
-		    %*/
-		    },
+    {},
 
 
   '229': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1470 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tLEQ, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("<="), $3);
-		    %*/
-		    },
+    {},
 
 
   '230': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1478 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tEQ, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("=="), $3);
-		    %*/
-		    },
+    {},
 
 
   '231': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1486 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tEQQ, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("==="), $3);
-		    %*/
-		    },
+    {},
 
 
   '232': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1494 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tNEQ, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("!="), $3);
-		    %*/
-		    },
+    {},
 
 
   '233': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1502 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = match_op(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-                        if (nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_LIT && RB_TYPE_P(((node)(yystack.valueAt (3-(1))))->nd_lit, T_REGEXP)) {
-                            yyval = reg_named_capture_assign(((node)(yystack.valueAt (3-(1))))->nd_lit, yyval);
-                        }
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("=~"), $3);
-		    %*/
-		    },
+    {},
 
 
   '234': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1513 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tNMATCH, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("!~"), $3);
-		    %*/
-		    },
+    {},
 
 
   '235': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1521 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_uni_op(cond(((node)(yystack.valueAt (2-(2))))), '!');
-		    /*%
-			$$ = dispatch2(unary, ID2SYM('!'), $2);
-		    %*/
-		    },
+    {},
 
 
   '236': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1529 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_uni_op(((node)(yystack.valueAt (2-(2)))), '~');
-		    /*%
-			$$ = dispatch2(unary, ID2SYM('~'), $2);
-		    %*/
-		    },
+    {},
 
 
   '237': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1537 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tLSHFT, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("<<"), $3);
-		    %*/
-		    },
+    {},
 
 
   '238': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1545 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tRSHFT, ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern(">>"), $3);
-		    %*/
-		    },
+    {},
 
 
   '239': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1553 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = logop(NODE_AND, ((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("&&"), $3);
-		    %*/
-		    },
+    {},
 
 
   '240': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1561 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = logop(NODE_OR, ((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch3(binary, $1, ripper_intern("||"), $3);
-		    %*/
-		    },
+    {},
 
 
   '241': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1568 of "parse.y"  */
-    {in_defined = 1;},
+    {},
 
 
   '242': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1569 of "parse.y"  */
-    {
-		    /*%%%*/
-			in_defined = 0;
-			yyval = NEW_DEFINED(((node)(yystack.valueAt (4-(4)))));
-		    /*%
-			in_defined = 0;
-			$$ = dispatch1(defined, $4);
-		    %*/
-		    },
+    {},
 
 
   '243': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1579 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (6-(1)))));
-			yyval = NEW_IF(cond(((node)(yystack.valueAt (6-(1))))), ((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(6)))));
-			fixpos(yyval, ((node)(yystack.valueAt (6-(1)))));
-		    /*%
-			$$ = dispatch3(ifop, $1, $3, $6);
-		    %*/
-		    },
+    {},
 
 
   '244': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1589 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		    },
+    {},
 
 
   '245': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1595 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		        if (!yyval) yyval = NEW_NIL();
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '247': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1608 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (2-(1))));
-		    },
+    {},
 
 
   '248': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1612 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = arg_append(((node)(yystack.valueAt (4-(1)))), NEW_HASH(((node)(yystack.valueAt (4-(3))))));
-		    /*%
-			$$ = arg_add_assocs($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '249': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1620 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIST(NEW_HASH(((node)(yystack.valueAt (2-(1))))));
-		    /*%
-			$$ = arg_add_assocs(arg_new(), $1);
-		    %*/
-		    },
+    {},
 
 
   '250': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1630 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(arg_paren, escape_Qundef($2));
-		    %*/
-		    },
+    {},
 
 
   '255': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1646 of "parse.y"  */
-    {
-		      yyval = ((node)(yystack.valueAt (2-(1))));
-		    },
+    {},
 
 
   '256': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1650 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = arg_append(((node)(yystack.valueAt (4-(1)))), NEW_HASH(((node)(yystack.valueAt (4-(3))))));
-		    /*%
-			$$ = arg_add_assocs($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '257': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1658 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIST(NEW_HASH(((node)(yystack.valueAt (2-(1))))));
-		    /*%
-			$$ = arg_add_assocs(arg_new(), $1);
-		    %*/
-		    },
+    {},
 
 
   '258': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1668 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = arg_add(arg_new(), $1);
-		    %*/
-		    },
+    {},
 
 
   '259': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1677 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = arg_blk_pass(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = arg_add_optblock($1, $2);
-		    %*/
-		    },
+    {},
 
 
   '260': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1685 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIST(NEW_HASH(((node)(yystack.valueAt (2-(1))))));
-			yyval = arg_blk_pass(yyval, ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = arg_add_assocs(arg_new(), $1);
-			$$ = arg_add_optblock($$, $2);
-		    %*/
-		    },
+    {},
 
 
   '261': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1695 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = arg_append(((node)(yystack.valueAt (4-(1)))), NEW_HASH(((node)(yystack.valueAt (4-(3))))));
-			yyval = arg_blk_pass(yyval, ((node)(yystack.valueAt (4-(4)))));
-		    /*%
-			$$ = arg_add_optblock(arg_add_assocs($1, $3), $4);
-		    %*/
-		    },
+    {},
 
 
   '263': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1712 of "parse.y"  */
-    {
-			yyval = cmdarg_stack;
-			CMDARG_PUSH(1);
-		    },
+    {},
 
 
   '264': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1717 of "parse.y"  */
-    {
-			/* CMDARG_POP() */
-			cmdarg_stack = ((val)(yystack.valueAt (2-(1))));
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    },
+    {},
 
 
   '265': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1725 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_BLOCK_PASS(((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = $2;
-		    %*/
-		    },
+    {},
 
 
   '266': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1735 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    },
+    {},
 
 
   '267': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1739 of "parse.y"  */
-    {
-			yyval = 0;
-		    },
+    {},
 
 
   '268': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1745 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = arg_add(arg_new(), $1);
-		    %*/
-		    },
+    {},
 
 
   '269': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1753 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_SPLAT(((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = arg_add_star(arg_new(), $2);
-		    %*/
-		    },
+    {},
 
 
   '270': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1761 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *n1;
-			if ((n1 = splat_array(((node)(yystack.valueAt (3-(1)))))) != 0) {
-			    yyval = list_append(n1, ((node)(yystack.valueAt (3-(3)))));
-			}
-			else {
-			    yyval = arg_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-			}
-		    /*%
-			$$ = arg_add($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '271': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1775 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *n1;
-			if ((nd_type(((node)(yystack.valueAt (4-(4))))) == NODE_ARRAY) && (n1 = splat_array(((node)(yystack.valueAt (4-(1)))))) != 0) {
-			    yyval = list_concat(n1, ((node)(yystack.valueAt (4-(4)))));
-			}
-			else {
-			    yyval = arg_concat(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(4)))));
-			}
-		    /*%
-			$$ = arg_add_star($1, $4);
-		    %*/
-		    },
+    {},
 
 
   '272': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1791 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *n1;
-			if ((n1 = splat_array(((node)(yystack.valueAt (3-(1)))))) != 0) {
-			    yyval = list_append(n1, ((node)(yystack.valueAt (3-(3)))));
-			}
-			else {
-			    yyval = arg_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-			}
-		    /*%
-			$$ = mrhs_add(args2mrhs($1), $3);
-		    %*/
-		    },
+    {},
 
 
   '273': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1805 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *n1;
-			if (nd_type(((node)(yystack.valueAt (4-(4))))) == NODE_ARRAY &&
-			    (n1 = splat_array(((node)(yystack.valueAt (4-(1)))))) != 0) {
-			    yyval = list_concat(n1, ((node)(yystack.valueAt (4-(4)))));
-			}
-			else {
-			    yyval = arg_concat(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(4)))));
-			}
-		    /*%
-			$$ = mrhs_add_star(args2mrhs($1), $4);
-		    %*/
-		    },
+    {},
 
 
   '274': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1820 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_SPLAT(((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = mrhs_add_star(mrhs_new(), $2);
-		    %*/
-		    },
+    {},
 
 
   '285': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1840 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_FCALL(((id)(yystack.valueAt (1-(1)))), 0);
-		    /*%
-			$$ = method_arg(dispatch1(fcall, $1), arg_new());
-		    %*/
-		    },
+    {},
 
 
   '286': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1848 of "parse.y"  */
-    {
-			((val)(yystack.valueAt (1-(1)))) = cmdarg_stack;
-			cmdarg_stack = 0;
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-		    %*/
-		    },
+    {},
 
 
   '287': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1858 of "parse.y"  */
-    {
-			cmdarg_stack = ((val)(yystack.valueAt (4-(1))));
-		    /*%%%*/
-			if (((node)(yystack.valueAt (4-(3)))) == NULL) {
-			    yyval = NEW_NIL();
-			}
-			else {
-			    if (nd_type(((node)(yystack.valueAt (4-(3))))) == NODE_RESCUE ||
-				nd_type(((node)(yystack.valueAt (4-(3))))) == NODE_ENSURE)
-				nd_set_line(((node)(yystack.valueAt (4-(3)))), ((num)(yystack.valueAt (4-(2)))));
-			    yyval = NEW_BEGIN(((node)(yystack.valueAt (4-(3)))));
-			}
-			nd_set_line(yyval, ((num)(yystack.valueAt (4-(2)))));
-		    /*%
-			$$ = dispatch1(begin, $3);
-		    %*/
-		    },
+    {},
 
 
   '288': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1875 of "parse.y"  */
-    {lex_state = EXPR_ENDARG;},
+    {},
 
 
   '289': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1876 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch1(paren, 0);
-		    %*/
-		    },
+    {},
 
 
   '290': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1883 of "parse.y"  */
-    {lex_state = EXPR_ENDARG;},
+    {},
 
 
   '291': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1884 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (4-(2))));
-		    /*%
-			$$ = dispatch1(paren, $2);
-		    %*/
-		    },
+    {},
 
 
   '292': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1892 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(paren, $2);
-		    %*/
-		    },
+    {},
 
 
   '293': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1900 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_COLON2(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(const_path_ref, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '294': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1908 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_COLON3(((id)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch1(top_const_ref, $2);
-		    %*/
-		    },
+    {},
 
 
   '295': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1916 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (((node)(yystack.valueAt (3-(2)))) == 0) {
-			    yyval = NEW_ZARRAY(); /* zero length array*/
-			}
-			else {
-			    yyval = ((node)(yystack.valueAt (3-(2))));
-			}
-		    /*%
-			$$ = dispatch1(array, escape_Qundef($2));
-		    %*/
-		    },
+    {},
 
 
   '296': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1929 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_HASH(((node)(yystack.valueAt (3-(2)))));
-		    /*%
-			$$ = dispatch1(hash, escape_Qundef($2));
-		    %*/
-		    },
+    {},
 
 
   '297': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1937 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_RETURN(0);
-		    /*%
-			$$ = dispatch0(return0);
-		    %*/
-		    },
+    {},
 
 
   '298': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1945 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = new_yield(((node)(yystack.valueAt (4-(3)))));
-		    /*%
-			$$ = dispatch1(yield, dispatch1(paren, $3));
-		    %*/
-		    },
+    {},
 
 
   '299': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1953 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_YIELD(0);
-		    /*%
-			$$ = dispatch1(yield, dispatch1(paren, arg_new()));
-		    %*/
-		    },
+    {},
 
 
   '300': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1961 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_YIELD(0);
-		    /*%
-			$$ = dispatch0(yield0);
-		    %*/
-		    },
+    {},
 
 
   '301': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1968 of "parse.y"  */
-    {in_defined = 1;},
+    {},
 
 
   '302': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1969 of "parse.y"  */
-    {
-		    /*%%%*/
-			in_defined = 0;
-			yyval = NEW_DEFINED(((node)(yystack.valueAt (6-(5)))));
-		    /*%
-			in_defined = 0;
-			$$ = dispatch1(defined, $5);
-		    %*/
-		    },
+    {},
 
 
   '303': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1979 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_uni_op(cond(((node)(yystack.valueAt (4-(3))))), '!');
-		    /*%
-			$$ = dispatch2(unary, ripper_intern("not"), $3);
-		    %*/
-		    },
+    {},
 
 
   '304': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1987 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = call_uni_op(cond(NEW_NIL()), '!');
-		    /*%
-			$$ = dispatch2(unary, ripper_intern("not"), Qnil);
-		    %*/
-		    },
+    {},
 
 
   '305': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 1995 of "parse.y"  */
-    {
-		    /*%%%*/
-			((node)(yystack.valueAt (2-(2))))->nd_iter = ((node)(yystack.valueAt (2-(1))));
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = method_arg(dispatch1(fcall, $1), arg_new());
-			$$ = method_add_block($$, $2);
-		    %*/
-		    },
+    {},
 
 
   '307': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2006 of "parse.y"  */
-    {
-		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (2-(1))))->nd_args, ((node)(yystack.valueAt (2-(2)))));
-			((node)(yystack.valueAt (2-(2))))->nd_iter = ((node)(yystack.valueAt (2-(1))));
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = method_add_block($1, $2);
-		    %*/
-		    },
+    {},
 
 
   '308': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2016 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    },
+    {},
 
 
   '309': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2023 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_IF(cond(((node)(yystack.valueAt (6-(2))))), ((node)(yystack.valueAt (6-(4)))), ((node)(yystack.valueAt (6-(5)))));
-			fixpos(yyval, ((node)(yystack.valueAt (6-(2)))));
-		    /*%
-			$$ = dispatch3(if, $2, $4, escape_Qundef($5));
-		    %*/
-		    },
+    {},
 
 
   '310': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2035 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_UNLESS(cond(((node)(yystack.valueAt (6-(2))))), ((node)(yystack.valueAt (6-(4)))), ((node)(yystack.valueAt (6-(5)))));
-			fixpos(yyval, ((node)(yystack.valueAt (6-(2)))));
-		    /*%
-			$$ = dispatch3(unless, $2, $4, escape_Qundef($5));
-		    %*/
-		    },
+    {},
 
 
   '311': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2043 of "parse.y"  */
-    {COND_PUSH(1);},
+    {},
 
 
   '312': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2043 of "parse.y"  */
-    {COND_POP();},
+    {},
 
 
   '313': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2046 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_WHILE(cond(((node)(yystack.valueAt (7-(3))))), ((node)(yystack.valueAt (7-(6)))), 1);
-			fixpos(yyval, ((node)(yystack.valueAt (7-(3)))));
-		    /*%
-			$$ = dispatch2(while, $3, $6);
-		    %*/
-		    },
+    {},
 
 
   '314': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2054 of "parse.y"  */
-    {COND_PUSH(1);},
+    {},
 
 
   '315': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2054 of "parse.y"  */
-    {COND_POP();},
+    {},
 
 
   '316': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2057 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_UNTIL(cond(((node)(yystack.valueAt (7-(3))))), ((node)(yystack.valueAt (7-(6)))), 1);
-			fixpos(yyval, ((node)(yystack.valueAt (7-(3)))));
-		    /*%
-			$$ = dispatch2(until, $3, $6);
-		    %*/
-		    },
+    {},
 
 
   '317': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2068 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CASE(((node)(yystack.valueAt (5-(2)))), ((node)(yystack.valueAt (5-(4)))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(2)))));
-		    /*%
-			$$ = dispatch2(case, $2, $4);
-		    %*/
-		    },
+    {},
 
 
   '318': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2077 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CASE(0, ((node)(yystack.valueAt (4-(3)))));
-		    /*%
-			$$ = dispatch2(case, Qnil, $3);
-		    %*/
-		    },
+    {},
 
 
   '319': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2085 of "parse.y"  */
-    {COND_PUSH(1);},
+    {},
 
 
   '320': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2087 of "parse.y"  */
-    {COND_POP();},
+    {},
 
 
   '321': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2090 of "parse.y"  */
-    {
-		    /*%%%*/
-			/*
-			 *  for a, b, c in e
-			 *  #=>
-			 *  e.each{|*x| a, b, c = x
-			 *
-			 *  for a in e
-			 *  #=>
-			 *  e.each{|x| a, = x}
-			 */
-			ID id = internal_id();
-			ID *tbl = ALLOC_N(ID, 2);
-			NODE *m = NEW_ARGS_AUX(0, 0);
-			NODE *args, *scope;
-
-			if (nd_type(((node)(yystack.valueAt (9-(2))))) == NODE_MASGN) {
-			    /* if args.length == 1 && args[0].kind_of?(Array)
-			     *   args = args[0]
-			     * end
-			     */
-			    NODE *one = NEW_LIST(NEW_LIT(INT2FIX(1)));
-			    NODE *zero = NEW_LIST(NEW_LIT(INT2FIX(0)));
-			    m->nd_next = block_append(
-				NEW_IF(
-				    NEW_NODE(NODE_AND,
-					     NEW_CALL(NEW_CALL(NEW_DVAR(id), idLength, 0),
-						      idEq, one),
-					     NEW_CALL(NEW_CALL(NEW_DVAR(id), idAREF, zero),
-						      rb_intern("kind_of?"), NEW_LIST(NEW_LIT(rb_cArray))),
-					     0),
-				    NEW_DASGN_CURR(id,
-						   NEW_CALL(NEW_DVAR(id), idAREF, zero)),
-				    0),
-				node_assign(((node)(yystack.valueAt (9-(2)))), NEW_DVAR(id)));
-
-			    args = new_args(m, 0, id, 0, new_args_tail(0, 0, 0));
-			}
-			else {
-			    if (nd_type(((node)(yystack.valueAt (9-(2))))) == NODE_LASGN ||
-				nd_type(((node)(yystack.valueAt (9-(2))))) == NODE_DASGN ||
-				nd_type(((node)(yystack.valueAt (9-(2))))) == NODE_DASGN_CURR) {
-				((node)(yystack.valueAt (9-(2))))->nd_value = NEW_DVAR(id);
-				m->nd_plen = 1;
-				m->nd_next = ((node)(yystack.valueAt (9-(2))));
-				args = new_args(m, 0, 0, 0, new_args_tail(0, 0, 0));
-			    }
-			    else {
-				m->nd_next = node_assign(NEW_MASGN(NEW_LIST(((node)(yystack.valueAt (9-(2))))), 0), NEW_DVAR(id));
-				args = new_args(m, 0, id, 0, new_args_tail(0, 0, 0));
-			    }
-			}
-			scope = NEW_NODE(NODE_SCOPE, tbl, ((node)(yystack.valueAt (9-(8)))), args);
-			tbl[0] = 1; tbl[1] = id;
-			yyval = NEW_FOR(0, ((node)(yystack.valueAt (9-(5)))), scope);
-			fixpos(yyval, ((node)(yystack.valueAt (9-(2)))));
-		    /*%
-			$$ = dispatch3(for, $2, $5, $8);
-		    %*/
-		    },
+    {},
 
 
   '322': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2151 of "parse.y"  */
-    {
-			if (in_def || in_single)
-			    yyerror("class definition in method body");
-			local_push(0);
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-		    %*/
-		    },
+    {},
 
 
   '323': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2162 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CLASS(((node)(yystack.valueAt (6-(2)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(3)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (6-(4)))));
-		    /*%
-			$$ = dispatch3(class, $2, $3, $5);
-		    %*/
-			local_pop();
-		    },
+    {},
 
 
   '324': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2172 of "parse.y"  */
-    {
-			yyval = in_def;
-			in_def = 0;
-		    },
+    {},
 
 
   '325': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2177 of "parse.y"  */
-    {
-			yyval = in_single;
-			in_single = 0;
-			local_push(0);
-		    },
+    {},
 
 
   '326': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2184 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_SCLASS(((node)(yystack.valueAt (8-(3)))), ((node)(yystack.valueAt (8-(7)))));
-			fixpos(yyval, ((node)(yystack.valueAt (8-(3)))));
-		    /*%
-			$$ = dispatch2(sclass, $3, $7);
-		    %*/
-			local_pop();
-			in_def = ((num)(yystack.valueAt (8-(4))));
-			in_single = ((num)(yystack.valueAt (8-(6))));
-		    },
+    {},
 
 
   '327': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2196 of "parse.y"  */
-    {
-			if (in_def || in_single)
-			    yyerror("module definition in method body");
-			local_push(0);
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-		    %*/
-		    },
+    {},
 
 
   '328': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2207 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MODULE(((node)(yystack.valueAt (5-(2)))), ((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(3)))));
-		    /*%
-			$$ = dispatch2(module, $2, $4);
-		    %*/
-			local_pop();
-		    },
+    {},
 
 
   '329': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2217 of "parse.y"  */
-    {
-			yyval = cur_mid;
-			cur_mid = ((id)(yystack.valueAt (2-(2))));
-			in_def++;
-			local_push(0);
-		    },
+    {},
 
 
   '330': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2226 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *body = remove_begin(((node)(yystack.valueAt (6-(5)))));
-			reduce_nodes(&body);
-			yyval = NEW_DEFN(((id)(yystack.valueAt (6-(2)))), ((node)(yystack.valueAt (6-(4)))), body, NOEX_PRIVATE);
-			nd_set_line(yyval, ((num)(yystack.valueAt (6-(1)))));
-		    /*%
-			$$ = dispatch3(def, $2, $4, $5);
-		    %*/
-			local_pop();
-			in_def--;
-			cur_mid = ((id)(yystack.valueAt (6-(3))));
-		    },
+    {},
 
 
   '331': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2239 of "parse.y"  */
-    {lex_state = EXPR_FNAME;},
+    {},
 
 
   '332': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2240 of "parse.y"  */
-    {
-			in_single++;
-			lex_state = EXPR_ENDFN; /* force for args */
-			local_push(0);
-		    },
+    {},
 
 
   '333': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2248 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *body = remove_begin(((node)(yystack.valueAt (9-(8)))));
-			reduce_nodes(&body);
-			yyval = NEW_DEFS(((node)(yystack.valueAt (9-(2)))), ((id)(yystack.valueAt (9-(5)))), ((node)(yystack.valueAt (9-(7)))), body);
-			nd_set_line(yyval, ((num)(yystack.valueAt (9-(1)))));
-		    /*%
-			$$ = dispatch5(defs, $2, $3, $5, $7, $8);
-		    %*/
-			local_pop();
-			in_single--;
-		    },
+    {},
 
 
   '334': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2261 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_BREAK(0);
-		    /*%
-			$$ = dispatch1(break, arg_new());
-		    %*/
-		    },
+    {},
 
 
   '335': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2269 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_NEXT(0);
-		    /*%
-			$$ = dispatch1(next, arg_new());
-		    %*/
-		    },
+    {},
 
 
   '336': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2277 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_REDO();
-		    /*%
-			$$ = dispatch0(redo);
-		    %*/
-		    },
+    {},
 
 
   '337': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2285 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_RETRY();
-		    /*%
-			$$ = dispatch0(retry);
-		    %*/
-		    },
+    {},
 
 
   '338': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2295 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		        if (!yyval) yyval = NEW_NIL();
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '339': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2307 of "parse.y"  */
-    {
-			token_info_push("begin");
-		    },
+    {},
 
 
   '340': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2313 of "parse.y"  */
-    {
-			token_info_push("if");
-		    },
+    {},
 
 
   '341': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2319 of "parse.y"  */
-    {
-			token_info_push("unless");
-		    },
+    {},
 
 
   '342': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2325 of "parse.y"  */
-    {
-			token_info_push("while");
-		    },
+    {},
 
 
   '343': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2331 of "parse.y"  */
-    {
-			token_info_push("until");
-		    },
+    {},
 
 
   '344': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2337 of "parse.y"  */
-    {
-			token_info_push("case");
-		    },
+    {},
 
 
   '345': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2343 of "parse.y"  */
-    {
-			token_info_push("for");
-		    },
+    {},
 
 
   '346': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2349 of "parse.y"  */
-    {
-			token_info_push("class");
-		    },
+    {},
 
 
   '347': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2355 of "parse.y"  */
-    {
-			token_info_push("module");
-		    },
+    {},
 
 
   '348': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2361 of "parse.y"  */
-    {
-			token_info_push("def");
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-		    %*/
-		    },
+    {},
 
 
   '349': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2371 of "parse.y"  */
-    {
-			token_info_pop("end");
-		    },
+    {},
 
 
   '356': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2401 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_IF(cond(((node)(yystack.valueAt (5-(2))))), ((node)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(2)))));
-		    /*%
-			$$ = dispatch3(elsif, $2, $4, escape_Qundef($5));
-		    %*/
-		    },
+    {},
 
 
   '358': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2413 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = dispatch1(else, $2);
-		    %*/
-		    },
+    {},
 
 
   '361': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2427 of "parse.y"  */
-    {
-			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
-		    /*%%%*/
-		    /*%
-			$$ = dispatch1(mlhs_paren, $$);
-		    %*/
-		    },
+    {},
 
 
   '362': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2435 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(mlhs_paren, $2);
-		    %*/
-		    },
+    {},
 
 
   '363': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2445 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = mlhs_add(mlhs_new(), $1);
-		    %*/
-		    },
+    {},
 
 
   '364': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2453 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = mlhs_add($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '365': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2463 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (1-(1)))), 0);
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '366': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2471 of "parse.y"  */
-    {
-			yyval = assignable(((id)(yystack.valueAt (4-(4)))), 0);
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (4-(1)))), yyval);
-		    /*%
-			$$ = mlhs_add_star($1, $$);
-		    %*/
-		    },
+    {},
 
 
   '367': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2480 of "parse.y"  */
-    {
-			yyval = assignable(((id)(yystack.valueAt (6-(4)))), 0);
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (6-(1)))), NEW_POSTARG(yyval, ((node)(yystack.valueAt (6-(6))))));
-		    /*%
-			$$ = mlhs_add_star($1, $$);
-		    %*/
-		    },
+    {},
 
 
   '368': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2489 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (3-(1)))), -1);
-		    /*%
-			$$ = mlhs_add_star($1, Qnil);
-		    %*/
-		    },
+    {},
 
 
   '369': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2497 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (5-(1)))), NEW_POSTARG(-1, ((node)(yystack.valueAt (5-(5))))));
-		    /*%
-			$$ = mlhs_add_star($1, $5);
-		    %*/
-		    },
+    {},
 
 
   '370': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2505 of "parse.y"  */
-    {
-			yyval = assignable(((id)(yystack.valueAt (2-(2)))), 0);
-		    /*%%%*/
-			yyval = NEW_MASGN(0, yyval);
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), $$);
-		    %*/
-		    },
+    {},
 
 
   '371': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2514 of "parse.y"  */
-    {
-			yyval = assignable(((id)(yystack.valueAt (4-(2)))), 0);
-		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(yyval, ((node)(yystack.valueAt (4-(4))))));
-		    /*%
-		      #if 0
-		      TODO: Check me
-		      #endif
-			$$ = mlhs_add_star($$, $4);
-		    %*/
-		    },
+    {},
 
 
   '372': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2526 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(0, -1);
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), Qnil);
-		    %*/
-		    },
+    {},
 
 
   '373': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2534 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(-1, ((node)(yystack.valueAt (3-(3))))));
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), Qnil);
-		    %*/
-		    },
+    {},
 
 
   '374': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2545 of "parse.y"  */
-    {
-			yyval = new_args_tail(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((id)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '375': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2549 of "parse.y"  */
-    {
-			yyval = new_args_tail(((node)(yystack.valueAt (2-(1)))), Qnone, ((id)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '376': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2553 of "parse.y"  */
-    {
-			yyval = new_args_tail(Qnone, ((id)(yystack.valueAt (2-(1)))), ((id)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '377': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2557 of "parse.y"  */
-    {
-			yyval = new_args_tail(Qnone, Qnone, ((id)(yystack.valueAt (1-(1)))));
-		    },
+    {},
 
 
   '378': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2563 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    },
+    {},
 
 
   '379': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2567 of "parse.y"  */
-    {
-			yyval = new_args_tail(Qnone, Qnone, Qnone);
-		    },
+    {},
 
 
   '380': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2573 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), ((id)(yystack.valueAt (6-(5)))), Qnone, ((node)(yystack.valueAt (6-(6)))));
-		    },
+    {},
 
 
   '381': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2577 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (8-(1)))), ((node)(yystack.valueAt (8-(3)))), ((id)(yystack.valueAt (8-(5)))), ((node)(yystack.valueAt (8-(7)))), ((node)(yystack.valueAt (8-(8)))));
-		    },
+    {},
 
 
   '382': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2581 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), Qnone, Qnone, ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '383': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2585 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), Qnone, ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
-		    },
+    {},
 
 
   '384': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2589 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (4-(1)))), Qnone, ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '385': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2593 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, 1, Qnone, new_args_tail(Qnone, Qnone, Qnone));
-		    /*%%%*/
-		    /*%
-                        dispatch1(excessed_comma, $$);
-		    %*/
-		    },
+    {},
 
 
   '386': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2601 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), Qnone, ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
-		    },
+    {},
 
 
   '387': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2605 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '388': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2609 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '389': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2613 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
-		    },
+    {},
 
 
   '390': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2617 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '391': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2621 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), Qnone, ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '392': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2625 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (2-(1)))), Qnone, ((node)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '393': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2629 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '394': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2633 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, Qnone, Qnone, Qnone, ((node)(yystack.valueAt (1-(1)))));
-		    },
+    {},
 
 
   '396': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2640 of "parse.y"  */
-    {
-			command_start = TRUE;
-		    },
+    {},
 
 
   '397': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2646 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = blockvar_new(params_new(Qnil,Qnil,Qnil,Qnil,Qnil,Qnil,Qnil),
-                                          escape_Qundef($2));
-		    %*/
-		    },
+    {},
 
 
   '398': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2655 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = blockvar_new(params_new(Qnil,Qnil,Qnil,Qnil,Qnil,Qnil,Qnil),
-                                          Qnil);
-		    %*/
-		    },
+    {},
 
 
   '399': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2664 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (4-(2))));
-		    /*%
-			$$ = blockvar_new(escape_Qundef($2), escape_Qundef($3));
-		    %*/
-		    },
+    {},
 
 
   '400': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2675 of "parse.y"  */
-    {
-		      yyval = 0;
-		    },
+    {},
 
 
   '401': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2679 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = $3;
-		    %*/
-		    },
+    {},
 
 
   '404': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2705 of "parse.y"  */
-    {
-			new_bv(get_id(((id)(yystack.valueAt (1-(1))))));
-		    /*%%%*/
-		    /*%
-			$$ = get_value($1);
-		    %*/
-		    },
+    {},
 
 
   '405': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2713 of "parse.y"  */
-    {
-			yyval = 0;
-		    },
+    {},
 
 
   '406': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2718 of "parse.y"  */
-    {
-			yyval = dyna_push();
-		    },
+    {},
 
 
   '407': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2721 of "parse.y"  */
-    {
-			yyval = lpar_beg;
-			lpar_beg = ++paren_nest;
-		    },
+    {},
 
 
   '408': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2727 of "parse.y"  */
-    {
-			lpar_beg = ((num)(yystack.valueAt (4-(2))));
-		    /*%%%*/
-			yyval = NEW_LAMBDA(((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-		    /*%
-			$$ = dispatch2(lambda, $3, $4);
-		    %*/
-			dyna_pop(((vars)(yystack.valueAt (4-(1)))));
-		    },
+    {},
 
 
   '409': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2739 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (4-(2))));
-		    /*%
-			$$ = dispatch1(paren, $2);
-		    %*/
-		    },
+    {},
 
 
   '410': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2747 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '411': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2757 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    },
+    {},
 
 
   '412': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2761 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    },
+    {},
 
 
   '413': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2767 of "parse.y"  */
-    {
-			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
 
 
   '414': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2776 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ITER(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(2)))));
-		    /*%
-			$$ = dispatch2(do_block, escape_Qundef($3), $4);
-		    %*/
-			dyna_pop(((vars)(yystack.valueAt (5-(1)))));
-		    },
+    {},
 
 
   '415': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2788 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (nd_type(((node)(yystack.valueAt (2-(1))))) == NODE_YIELD) {
-			    compile_error(PARSER_ARG "block given to yield");
-			}
-			else {
-			    block_dup_check(((node)(yystack.valueAt (2-(1))))->nd_args, ((node)(yystack.valueAt (2-(2)))));
-			}
-			((node)(yystack.valueAt (2-(2))))->nd_iter = ((node)(yystack.valueAt (2-(1))));
-			yyval = ((node)(yystack.valueAt (2-(2))));
-			fixpos(yyval, ((node)(yystack.valueAt (2-(1)))));
-		    /*%
-			$$ = method_add_block($1, $2);
-		    %*/
-		    },
+    {},
 
 
   '416': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2804 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-		    /*%
-			$$ = dispatch3(call, $1, $2, $3);
-			$$ = method_optarg($$, $4);
-		    %*/
-		    },
+    {},
 
 
   '417': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2813 of "parse.y"  */
-    {
-		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-			((node)(yystack.valueAt (5-(5))))->nd_iter = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(4)))));
-			yyval = ((node)(yystack.valueAt (5-(5))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(1)))));
-		    /*%
-			$$ = dispatch4(command_call, $1, $2, $3, $4);
-			$$ = method_add_block($$, $5);
-		    %*/
-		    },
+    {},
 
 
   '418': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2825 of "parse.y"  */
-    {
-		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-			((node)(yystack.valueAt (5-(5))))->nd_iter = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(4)))));
-			yyval = ((node)(yystack.valueAt (5-(5))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(1)))));
-		    /*%
-			$$ = dispatch4(command_call, $1, $2, $3, $4);
-			$$ = method_add_block($$, $5);
-		    %*/
-		    },
+    {},
 
 
   '419': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2839 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
-			yyval->nd_args = ((node)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = method_arg(dispatch1(fcall, $1), $2);
-		    %*/
-		    },
+    {},
 
 
   '420': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2848 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
 
 
   '421': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2854 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(5)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(4)))));
-		    /*%
-			$$ = dispatch3(call, $1, ripper_id2sym('.'), $3);
-			$$ = method_optarg($$, $5);
-		    %*/
-		    },
+    {},
 
 
   '422': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2864 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
 
 
   '423': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2870 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(5)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(4)))));
-		    /*%
-			$$ = dispatch3(call, $1, ripper_id2sym('.'), $3);
-			$$ = method_optarg($$, $5);
-		    %*/
-		    },
+    {},
 
 
   '424': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2880 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))), 0);
-		    /*%
-			$$ = dispatch3(call, $1, ripper_intern("::"), $3);
-		    %*/
-		    },
+    {},
 
 
   '425': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2888 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
 
 
   '426': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2894 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), rb_intern("call"), ((node)(yystack.valueAt (4-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (4-(3)))));
-		    /*%
-			$$ = dispatch3(call, $1, ripper_id2sym('.'),
-				       ripper_intern("call"));
-			$$ = method_optarg($$, $4);
-		    %*/
-		    },
+    {},
 
 
   '427': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2905 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
 
 
   '428': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2911 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), rb_intern("call"), ((node)(yystack.valueAt (4-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (4-(3)))));
-		    /*%
-			$$ = dispatch3(call, $1, ripper_intern("::"),
-				       ripper_intern("call"));
-			$$ = method_optarg($$, $4);
-		    %*/
-		    },
+    {},
 
 
   '429': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2922 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_SUPER(((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch1(super, $2);
-		    %*/
-		    },
+    {},
 
 
   '430': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2930 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ZSUPER();
-		    /*%
-			$$ = dispatch0(zsuper);
-		    %*/
-		    },
+    {},
 
 
   '431': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2938 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (((node)(yystack.valueAt (4-(1)))) && nd_type(((node)(yystack.valueAt (4-(1))))) == NODE_SELF)
-			    yyval = NEW_FCALL(tAREF, ((node)(yystack.valueAt (4-(3)))));
-			else
-			    yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), tAREF, ((node)(yystack.valueAt (4-(3)))));
-			fixpos(yyval, ((node)(yystack.valueAt (4-(1)))));
-		    /*%
-			$$ = dispatch2(aref, $1, escape_Qundef($3));
-		    %*/
-		    },
+    {},
 
 
   '432': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2952 of "parse.y"  */
-    {
-			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-                    %*/
-		    },
+    {},
 
 
   '433': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2961 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ITER(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(2)))));
-		    /*%
-			$$ = dispatch2(brace_block, escape_Qundef($3), $4);
-		    %*/
-			dyna_pop(((vars)(yystack.valueAt (5-(1)))));
-		    },
+    {},
 
 
   '434': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2971 of "parse.y"  */
-    {
-			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-                    %*/
-		    },
+    {},
 
 
   '435': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2980 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ITER(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(2)))));
-		    /*%
-			$$ = dispatch2(do_block, escape_Qundef($3), $4);
-		    %*/
-			dyna_pop(((vars)(yystack.valueAt (5-(1)))));
-		    },
+    {},
 
 
   '436': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 2994 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_WHEN(((node)(yystack.valueAt (5-(2)))), ((node)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-		    /*%
-			$$ = dispatch3(when, $2, $4, escape_Qundef($5));
-		    %*/
-		    },
+    {},
 
 
   '439': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3010 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (((node)(yystack.valueAt (6-(3))))) {
-			    ((node)(yystack.valueAt (6-(3)))) = node_assign(((node)(yystack.valueAt (6-(3)))), NEW_ERRINFO());
-			    ((node)(yystack.valueAt (6-(5)))) = block_append(((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))));
-			}
-			yyval = NEW_RESBODY(((node)(yystack.valueAt (6-(2)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
-			fixpos(yyval, ((node)(yystack.valueAt (6-(2))))?((node)(yystack.valueAt (6-(2)))):((node)(yystack.valueAt (6-(5)))));
-		    /*%
-			$$ = dispatch4(rescue,
-				       escape_Qundef($2),
-				       escape_Qundef($3),
-				       escape_Qundef($5),
-				       escape_Qundef($6));
-		    %*/
-		    },
+    {},
 
 
   '441': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3030 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
 
 
   '442': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3038 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (!(yyval = splat_array(((node)(yystack.valueAt (1-(1))))))) yyval = ((node)(yystack.valueAt (1-(1))));
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '444': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3049 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    },
+    {},
 
 
   '446': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3056 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = dispatch1(ensure, $2);
-		    %*/
-		    },
+    {},
 
 
   '449': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3068 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_LIT(ID2SYM(((id)(yystack.valueAt (1-(1))))));
-		    /*%
-			$$ = dispatch1(symbol_literal, $1);
-		    %*/
-		    },
+    {},
 
 
   '451': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3079 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *node = ((node)(yystack.valueAt (1-(1))));
-			if (!node) {
-			    node = NEW_STR(STR_NEW0());
-			}
-			else {
-			    node = evstr2dstr(node);
-			}
-			yyval = node;
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '454': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3098 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = literal_concat(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch2(string_concat, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '455': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3108 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(string_literal, $2);
-		    %*/
-		    },
+    {},
 
 
   '456': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3118 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *node = ((node)(yystack.valueAt (3-(2))));
-			if (!node) {
-			    node = NEW_XSTR(STR_NEW0());
-			}
-			else {
-			    switch (nd_type(node)) {
-			      case NODE_STR:
-				nd_set_type(node, NODE_XSTR);
-				break;
-			      case NODE_DSTR:
-				nd_set_type(node, NODE_DXSTR);
-				break;
-			      default:
-				node = NEW_NODE(NODE_DXSTR, Qnil, 1, NEW_LIST(node));
-				break;
-			    }
-			}
-			yyval = node;
-		    /*%
-			$$ = dispatch1(xstring_literal, $2);
-		    %*/
-		    },
+    {},
 
 
   '457': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3145 of "parse.y"  */
-    {
-		    /*%%%*/
-			int options = ((num)(yystack.valueAt (3-(3))));
-			NODE *node = ((node)(yystack.valueAt (3-(2))));
-			NODE *list, *prev;
-			if (!node) {
-			    node = NEW_LIT(reg_compile(STR_NEW0(), options));
-			}
-			else switch (nd_type(node)) {
-			  case NODE_STR:
-			    {
-				VALUE src = node->nd_lit;
-				nd_set_type(node, NODE_LIT);
-				node->nd_lit = reg_compile(src, options);
-			    }
-			    break;
-			  default:
-			    node = NEW_NODE(NODE_DSTR, STR_NEW0(), 1, NEW_LIST(node));
-			  case NODE_DSTR:
-			    if (options & RE_OPTION_ONCE) {
-				nd_set_type(node, NODE_DREGX_ONCE);
-			    }
-			    else {
-				nd_set_type(node, NODE_DREGX);
-			    }
-			    node->nd_cflag = options & RE_OPTION_MASK;
-			    if (!NIL_P(node->nd_lit)) reg_fragment_check(node->nd_lit, options);
-			    for (list = (prev = node)->nd_next; list; list = list->nd_next) {
-				if (nd_type(list->nd_head) == NODE_STR) {
-				    VALUE tail = list->nd_head->nd_lit;
-				    if (reg_fragment_check(tail, options) && prev && !NIL_P(prev->nd_lit)) {
-					VALUE lit = prev == node ? prev->nd_lit : prev->nd_head->nd_lit;
-					if (!literal_concat0(parser, lit, tail)) {
-					    node = 0;
-					    break;
-					}
-					rb_str_resize(tail, 0);
-					prev->nd_next = list->nd_next;
-					rb_gc_force_recycle((VALUE)list->nd_head);
-					rb_gc_force_recycle((VALUE)list);
-					list = prev;
-				    }
-				    else {
-					prev = list;
-				    }
-                                }
-				else {
-				    prev = 0;
-				}
-                            }
-			    if (!node->nd_next) {
-				VALUE src = node->nd_lit;
-				nd_set_type(node, NODE_LIT);
-				node->nd_lit = reg_compile(src, options);
-			    }
-			    break;
-			}
-			yyval = node;
-		    /*%
-			$$ = dispatch2(regexp_literal, $2, $3);
-		    %*/
-		    },
+    {},
 
 
   '458': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3210 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ZARRAY();
-		    /*%
-			$$ = dispatch0(words_new);
-			$$ = dispatch1(array, $$);
-		    %*/
-		    },
+    {},
 
 
   '459': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3219 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(array, $2);
-		    %*/
-		    },
+    {},
 
 
   '460': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3229 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(words_new);
-		    %*/
-		    },
+    {},
 
 
   '461': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3237 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), evstr2dstr(((node)(yystack.valueAt (3-(2))))));
-		    /*%
-			$$ = dispatch2(words_add, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '463': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3255 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = literal_concat(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch2(word_add, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '464': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3265 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ZARRAY();
-		    /*%
-			$$ = dispatch0(symbols_new);
-			$$ = dispatch1(array, $$);
-		    %*/
-		    },
+    {},
 
 
   '465': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3274 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(array, $2);
-		    %*/
-		    },
+    {},
 
 
   '466': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3284 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(symbols_new);
-		    %*/
-		    },
+    {},
 
 
   '467': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3292 of "parse.y"  */
-    {
-		    /*%%%*/
-			((node)(yystack.valueAt (3-(2)))) = evstr2dstr(((node)(yystack.valueAt (3-(2)))));
-			nd_set_type(((node)(yystack.valueAt (3-(2)))), NODE_DSYM);
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(2)))));
-		    /*%
-			$$ = dispatch2(symbols_add, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '468': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3304 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ZARRAY();
-		    /*%
-			$$ = dispatch0(qwords_new);
-			$$ = dispatch1(array, $$);
-		    %*/
-		    },
+    {},
 
 
   '469': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3313 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(array, $2);
-		    %*/
-		    },
+    {},
 
 
   '470': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3323 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_ZARRAY();
-		    /*%
-			$$ = dispatch0(qsymbols_new);
-			$$ = dispatch1(array, $$);
-		    %*/
-		    },
+    {},
 
 
   '471': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3332 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(array, $2);
-		    %*/
-		    },
+    {},
 
 
   '472': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3342 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(qwords_new);
-		    %*/
-		    },
+    {},
 
 
   '473': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3350 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(2)))));
-		    /*%
-			$$ = dispatch2(qwords_add, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '474': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3360 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(qsymbols_new);
-		    %*/
-		    },
+    {},
 
 
   '475': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3368 of "parse.y"  */
-    {
-		    /*%%%*/
-			VALUE lit;
-			lit = ((node)(yystack.valueAt (3-(2))))->nd_lit;
-			((node)(yystack.valueAt (3-(2))))->nd_lit = ID2SYM(rb_intern_str(lit));
-			nd_set_type(((node)(yystack.valueAt (3-(2)))), NODE_LIT);
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(2)))));
-		    /*%
-			$$ = dispatch2(qsymbols_add, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '476': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3382 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(string_content);
-		    %*/
-		    },
+    {},
 
 
   '477': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3390 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = literal_concat(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch2(string_add, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '478': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3400 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(xstring_new);
-		    %*/
-		    },
+    {},
 
 
   '479': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3408 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = literal_concat(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch2(xstring_add, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '480': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3418 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(regexp_new);
-		    %*/
-		    },
+    {},
 
 
   '481': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3426 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *head = ((node)(yystack.valueAt (2-(1)))), *tail = ((node)(yystack.valueAt (2-(2))));
-			if (!head) {
-			    yyval = tail;
-			}
-			else if (!tail) {
-			    yyval = head;
-			}
-			else {
-			    switch (nd_type(head)) {
-			      case NODE_STR:
-				nd_set_type(head, NODE_DSTR);
-				break;
-			      case NODE_DSTR:
-				break;
-			      default:
-				head = list_append(NEW_DSTR(Qnil), head);
-				break;
-			    }
-			    yyval = list_append(head, tail);
-			}
-		    /*%
-			$$ = dispatch2(regexp_add, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '483': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3456 of "parse.y"  */
-    {
-			yyval = lex_strterm;
-			lex_strterm = 0;
-			lex_state = EXPR_BEG;
-		    },
+    {},
 
 
   '484': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3462 of "parse.y"  */
-    {
-		    /*%%%*/
-			lex_strterm = ((node)(yystack.valueAt (3-(2))));
-			yyval = NEW_EVSTR(((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			lex_strterm = $<node>2;
-			$$ = dispatch1(string_dvar, $3);
-		    %*/
-		    },
+    {},
 
 
   '485': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3472 of "parse.y"  */
-    {
-			((val)(yystack.valueAt (1-(1)))) = cond_stack;
-			yyval = cmdarg_stack;
-			cond_stack = 0;
-			cmdarg_stack = 0;
-		    },
+    {},
 
 
   '486': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3478 of "parse.y"  */
-    {
-			yyval = lex_strterm;
-			lex_strterm = 0;
-			lex_state = EXPR_BEG;
-		    },
+    {},
 
 
   '487': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3483 of "parse.y"  */
-    {
-			yyval = brace_nest;
-			brace_nest = 0;
-		    },
+    {},
 
 
   '488': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3488 of "parse.y"  */
-    {
-			cond_stack = ((val)(yystack.valueAt (6-(1))));
-			cmdarg_stack = ((val)(yystack.valueAt (6-(2))));
-			lex_strterm = ((node)(yystack.valueAt (6-(3))));
-			brace_nest = ((num)(yystack.valueAt (6-(4))));
-		    /*%%%*/
-			if (((node)(yystack.valueAt (6-(5))))) ((node)(yystack.valueAt (6-(5))))->flags &= ~NODE_FL_NEWLINE;
-			yyval = new_evstr(((node)(yystack.valueAt (6-(5)))));
-		    /*%
-			$$ = dispatch1(string_embexpr, $5);
-		    %*/
-		    },
+    {},
 
 
   '489': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3503 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_GVAR(((id)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = dispatch1(var_ref, $1);
-		    %*/
-		    },
+    {},
 
 
   '490': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3511 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_IVAR(((id)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = dispatch1(var_ref, $1);
-		    %*/
-		    },
+    {},
 
 
   '491': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3519 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = NEW_CVAR(((id)(yystack.valueAt (1-(1)))));
-		    /*%
-			$$ = dispatch1(var_ref, $1);
-		    %*/
-		    },
+    {},
 
 
   '493': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3530 of "parse.y"  */
-    {
-			lex_state = EXPR_END;
-		    /*%%%*/
-			yyval = ((id)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = dispatch1(symbol, $2);
-		    %*/
-		    },
+    {},
 
 
   '498': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3547 of "parse.y"  */
-    {
-			lex_state = EXPR_END;
-		    /*%%%*/
-			yyval = dsym_node(((node)(yystack.valueAt (3-(2)))));
-		    /*%
-			$$ = dispatch1(dyna_symbol, $2);
-		    %*/
-		    },
+    {},
 
 
   '501': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3560 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = negate_lit(((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch2(unary, ripper_intern("-@"), $2);
-		    %*/
-		    },
+    {},
 
 
   '502': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3568 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = negate_lit(((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch2(unary, ripper_intern("-@"), $2);
-		    %*/
-		    },
+    {},
 
 
   '508': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3584 of "parse.y"  */
-    {ifndef_ripper(yyval = keyword_nil);},
+    {},
 
 
   '509': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3585 of "parse.y"  */
-    {ifndef_ripper(yyval = keyword_self);},
+    {},
 
 
   '510': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3586 of "parse.y"  */
-    {ifndef_ripper(yyval = keyword_true);},
+    {},
 
 
   '511': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3587 of "parse.y"  */
-    {ifndef_ripper(yyval = keyword_false);},
+    {},
 
 
   '512': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3588 of "parse.y"  */
-    {ifndef_ripper(yyval = keyword__FILE__);},
+    {},
 
 
   '513': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3589 of "parse.y"  */
-    {ifndef_ripper(yyval = keyword__LINE__);},
+    {},
 
 
   '514': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3590 of "parse.y"  */
-    {ifndef_ripper(yyval = keyword__ENCODING__);},
+    {},
 
 
   '515': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3594 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (!(yyval = gettable(((id)(yystack.valueAt (1-(1))))))) yyval = NEW_BEGIN(0);
-		    /*%
-			if (id_is_var(get_id($1))) {
-			    $$ = dispatch1(var_ref, $1);
-			}
-			else {
-			    $$ = dispatch1(vcall, $1);
-			}
-		    %*/
-		    },
+    {},
 
 
   '516': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3607 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (!(yyval = gettable(((id)(yystack.valueAt (1-(1))))))) yyval = NEW_BEGIN(0);
-		    /*%
-			$$ = dispatch1(var_ref, $1);
-		    %*/
-		    },
+    {},
 
 
   '517': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3617 of "parse.y"  */
-    {
-			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
-		    /*%%%*/
-		    /*%
-			$$ = dispatch1(var_field, $$);
-		    %*/
-		    },
+    {},
 
 
   '518': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3625 of "parse.y"  */
-    {
-		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
-		    /*%%%*/
-		    /*%
-			$$ = dispatch1(var_field, $$);
-		    %*/
-		    },
+    {},
 
 
   '521': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3639 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = Qnil;
-		    %*/
-		    },
+    {},
 
 
   '522': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3647 of "parse.y"  */
-    {
-			lex_state = EXPR_BEG;
-			command_start = TRUE;
-		    },
+    {},
 
 
   '523': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3652 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (4-(3))));
-		    },
+    {},
 
 
   '524': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3656 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyerrok;
-			yyval = 0;
-		    /*%
-			yyerrok;
-			$$ = Qnil;
-		    %*/
-		    },
+    {},
 
 
   '525': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3668 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(paren, $2);
-		    %*/
-			lex_state = EXPR_BEG;
-			command_start = TRUE;
-		    },
+    {},
 
 
   '526': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3678 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (2-(1))));
-			lex_state = EXPR_BEG;
-			command_start = TRUE;
-		    },
+    {},
 
 
   '527': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3686 of "parse.y"  */
-    {
-			yyval = new_args_tail(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((id)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '528': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3690 of "parse.y"  */
-    {
-			yyval = new_args_tail(((node)(yystack.valueAt (2-(1)))), Qnone, ((id)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '529': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3694 of "parse.y"  */
-    {
-			yyval = new_args_tail(Qnone, ((id)(yystack.valueAt (2-(1)))), ((id)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '530': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3698 of "parse.y"  */
-    {
-			yyval = new_args_tail(Qnone, Qnone, ((id)(yystack.valueAt (1-(1)))));
-		    },
+    {},
 
 
   '531': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3704 of "parse.y"  */
-    {
-			yyval = ((node)(yystack.valueAt (2-(2))));
-		    },
+    {},
 
 
   '532': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3708 of "parse.y"  */
-    {
-			yyval = new_args_tail(Qnone, Qnone, Qnone);
-		    },
+    {},
 
 
   '533': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3714 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), ((id)(yystack.valueAt (6-(5)))), Qnone, ((node)(yystack.valueAt (6-(6)))));
-		    },
+    {},
 
 
   '534': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3718 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (8-(1)))), ((node)(yystack.valueAt (8-(3)))), ((id)(yystack.valueAt (8-(5)))), ((node)(yystack.valueAt (8-(7)))), ((node)(yystack.valueAt (8-(8)))));
-		    },
+    {},
 
 
   '535': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3722 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), Qnone, Qnone, ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '536': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3726 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), Qnone, ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
-		    },
+    {},
 
 
   '537': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3730 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (4-(1)))), Qnone, ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '538': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3734 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), Qnone, ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
-		    },
+    {},
 
 
   '539': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3738 of "parse.y"  */
-    {
-			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '540': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3742 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '541': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3746 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
-		    },
+    {},
 
 
   '542': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3750 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '543': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3754 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), Qnone, ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '544': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3758 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (2-(1)))), Qnone, ((node)(yystack.valueAt (2-(2)))));
-		    },
+    {},
 
 
   '545': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3762 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-		    },
+    {},
 
 
   '546': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3766 of "parse.y"  */
-    {
-			yyval = new_args(Qnone, Qnone, Qnone, Qnone, ((node)(yystack.valueAt (1-(1)))));
-		    },
+    {},
 
 
   '547': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3770 of "parse.y"  */
-    {
-			yyval = new_args_tail(Qnone, Qnone, Qnone);
-			yyval = new_args(Qnone, Qnone, Qnone, Qnone, yyval);
-		    },
+    {},
 
 
   '548': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3777 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyerror("formal argument cannot be a constant");
-			yyval = 0;
-		    /*%
-			$$ = dispatch1(param_error, $1);
-		    %*/
-		    },
+    {},
 
 
   '549': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3786 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyerror("formal argument cannot be an instance variable");
-			yyval = 0;
-		    /*%
-			$$ = dispatch1(param_error, $1);
-		    %*/
-		    },
+    {},
 
 
   '550': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3795 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyerror("formal argument cannot be a global variable");
-			yyval = 0;
-		    /*%
-			$$ = dispatch1(param_error, $1);
-		    %*/
-		    },
+    {},
 
 
   '551': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3804 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyerror("formal argument cannot be a class variable");
-			yyval = 0;
-		    /*%
-			$$ = dispatch1(param_error, $1);
-		    %*/
-		    },
+    {},
 
 
   '553': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3816 of "parse.y"  */
-    {
-			formal_argument(get_id(((id)(yystack.valueAt (1-(1))))));
-			yyval = ((id)(yystack.valueAt (1-(1))));
-		    },
+    {},
 
 
   '554': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3823 of "parse.y"  */
-    {
-			arg_var(get_id(((id)(yystack.valueAt (1-(1))))));
-		    /*%%%*/
-			yyval = NEW_ARGS_AUX(((id)(yystack.valueAt (1-(1)))), 1);
-		    /*%
-			$$ = get_value($1);
-		    %*/
-		    },
+    {},
 
 
   '555': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3832 of "parse.y"  */
-    {
-			ID tid = internal_id();
-			arg_var(tid);
-		    /*%%%*/
-			if (dyna_in_block()) {
-			    ((node)(yystack.valueAt (3-(2))))->nd_value = NEW_DVAR(tid);
-			}
-			else {
-			    ((node)(yystack.valueAt (3-(2))))->nd_value = NEW_LVAR(tid);
-			}
-			yyval = NEW_ARGS_AUX(tid, 1);
-			yyval->nd_next = ((node)(yystack.valueAt (3-(2))));
-		    /*%
-			$$ = dispatch1(mlhs_paren, $2);
-		    %*/
-		    },
+    {},
 
 
   '557': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3858 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(1))));
-			yyval->nd_plen++;
-			yyval->nd_next = block_append(yyval->nd_next, ((node)(yystack.valueAt (3-(3))))->nd_next);
-			rb_gc_force_recycle((VALUE)((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '558': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3871 of "parse.y"  */
-    {
-			arg_var(formal_argument(get_id(((id)(yystack.valueAt (2-(1)))))));
-			yyval = assignable(((id)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
-		    /*%%%*/
-			yyval = NEW_KW_ARG(0, yyval);
-		    /*%
-			$$ = rb_assoc_new($$, $2);
-		    %*/
-		    },
+    {},
 
 
   '559': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3883 of "parse.y"  */
-    {
-			arg_var(formal_argument(get_id(((id)(yystack.valueAt (2-(1)))))));
-			yyval = assignable(((id)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
-		    /*%%%*/
-			yyval = NEW_KW_ARG(0, yyval);
-		    /*%
-			$$ = rb_assoc_new($$, $2);
-		    %*/
-		    },
+    {},
 
 
   '560': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3895 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
 
 
   '561': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3903 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *kws = ((node)(yystack.valueAt (3-(1))));
-
-			while (kws->nd_next) {
-			    kws = kws->nd_next;
-			}
-			kws->nd_next = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '562': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3920 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
 
 
   '563': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3928 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *kws = ((node)(yystack.valueAt (3-(1))));
-
-			while (kws->nd_next) {
-			    kws = kws->nd_next;
-			}
-			kws->nd_next = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '566': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3948 of "parse.y"  */
-    {
-			shadowing_lvar(get_id(((id)(yystack.valueAt (2-(2))))));
-			yyval = ((id)(yystack.valueAt (2-(2))));
-		    },
+    {},
 
 
   '567': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3953 of "parse.y"  */
-    {
-			yyval = internal_id();
-		    },
+    {},
 
 
   '568': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3959 of "parse.y"  */
-    {
-			arg_var(formal_argument(get_id(((id)(yystack.valueAt (3-(1)))))));
-			yyval = assignable(((id)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%%%*/
-			yyval = NEW_OPT_ARG(0, yyval);
-		    /*%
-			$$ = rb_assoc_new($$, $3);
-		    %*/
-		    },
+    {},
 
 
   '569': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3971 of "parse.y"  */
-    {
-			arg_var(formal_argument(get_id(((id)(yystack.valueAt (3-(1)))))));
-			yyval = assignable(((id)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%%%*/
-			yyval = NEW_OPT_ARG(0, yyval);
-		    /*%
-			$$ = rb_assoc_new($$, $3);
-		    %*/
-		    },
+    {},
 
 
   '570': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3983 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
 
 
   '571': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 3991 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *opts = ((node)(yystack.valueAt (3-(1))));
-
-			while (opts->nd_next) {
-			    opts = opts->nd_next;
-			}
-			opts->nd_next = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '572': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4007 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
 
 
   '573': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4015 of "parse.y"  */
-    {
-		    /*%%%*/
-			NODE *opts = ((node)(yystack.valueAt (3-(1))));
-
-			while (opts->nd_next) {
-			    opts = opts->nd_next;
-			}
-			opts->nd_next = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '576': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4035 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (!is_local_id(((id)(yystack.valueAt (2-(2))))))
-			    yyerror("rest argument must be local variable");
-		    /*% %*/
-			arg_var(shadowing_lvar(get_id(((id)(yystack.valueAt (2-(2)))))));
-		    /*%%%*/
-			yyval = ((id)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = dispatch1(rest_param, $2);
-		    %*/
-		    },
+    {},
 
 
   '577': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4048 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = internal_id();
-			arg_var(yyval);
-		    /*%
-			$$ = dispatch1(rest_param, Qnil);
-		    %*/
-		    },
+    {},
 
 
   '580': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4063 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (!is_local_id(((id)(yystack.valueAt (2-(2))))))
-			    yyerror("block argument must be local variable");
-			else if (!dyna_in_block() && local_id(((id)(yystack.valueAt (2-(2))))))
-			    yyerror("duplicated block argument name");
-		    /*% %*/
-			arg_var(shadowing_lvar(get_id(((id)(yystack.valueAt (2-(2)))))));
-		    /*%%%*/
-			yyval = ((id)(yystack.valueAt (2-(2))));
-		    /*%
-			$$ = dispatch1(blockarg, $2);
-		    %*/
-		    },
+    {},
 
 
   '581': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4080 of "parse.y"  */
-    {
-			yyval = ((id)(yystack.valueAt (2-(2))));
-		    },
+    {},
 
 
   '582': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4084 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = Qundef;
-		    %*/
-		    },
+    {},
 
 
   '583': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4094 of "parse.y"  */
-    {
-		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = ((node)(yystack.valueAt (1-(1))));
-		        if (!yyval) yyval = NEW_NIL();
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
 
 
   '584': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4103 of "parse.y"  */
-    {lex_state = EXPR_BEG;},
+    {},
 
 
   '585': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4104 of "parse.y"  */
-    {
-		    /*%%%*/
-			if (((node)(yystack.valueAt (4-(3)))) == 0) {
-			    yyerror("can't define singleton method for ().");
-			}
-			else {
-			    switch (nd_type(((node)(yystack.valueAt (4-(3)))))) {
-			      case NODE_STR:
-			      case NODE_DSTR:
-			      case NODE_XSTR:
-			      case NODE_DXSTR:
-			      case NODE_DREGX:
-			      case NODE_LIT:
-			      case NODE_ARRAY:
-			      case NODE_ZARRAY:
-				yyerror("can't define singleton method for literals");
-			      default:
-				value_expr(((node)(yystack.valueAt (4-(3)))));
-				break;
-			    }
-			}
-			yyval = ((node)(yystack.valueAt (4-(3))));
-		    /*%
-			$$ = dispatch1(paren, $3);
-		    %*/
-		    },
+    {},
 
 
   '587': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4134 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
-		    /*%
-			$$ = dispatch1(assoclist_from_args, $1);
-		    %*/
-		    },
+    {},
 
 
   '589': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4151 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_concat(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
 
 
   '590': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4161 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_append(NEW_LIST(((node)(yystack.valueAt (3-(1))))), ((node)(yystack.valueAt (3-(3)))));
-		    /*%
-			$$ = dispatch2(assoc_new, $1, $3);
-		    %*/
-		    },
+    {},
 
 
   '591': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4169 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_append(NEW_LIST(NEW_LIT(ID2SYM(((id)(yystack.valueAt (2-(1))))))), ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch2(assoc_new, $1, $2);
-		    %*/
-		    },
+    {},
 
 
   '592': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4177 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = list_append(NEW_LIST(0), ((node)(yystack.valueAt (2-(2)))));
-		    /*%
-			$$ = dispatch1(assoc_splat, $2);
-		    %*/
-		    },
+    {},
 
 
   '614': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4235 of "parse.y"  */
-    {yyerrok;},
+    {},
 
 
   '617': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4240 of "parse.y"  */
-    {yyerrok;},
+    {},
 
 
   '618': function ()
-    /* Line 212 of lalr1.js  */
-/* Line 4244 of "parse.y"  */
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = Qundef;
-		    %*/
-		    },
+    {},
 
 
 
 /* Line 212 of lalr1.js  */
-/* Line 5917 of "parse.js"  */
+/* Line 2238 of "parse.js"  */
     'terminator': function noop (){} /* comma terminator, needs to be avoided */
   }
 
@@ -6038,7 +2359,7 @@ var TOKENS = {
     var yystack = new YYStack();
 
     /* Error handling.  */
-    int yynerrs_ = 0;
+    var yynerrs_ = 0;
     /// The location where the error started.
     var yyerrloc = null;
 
@@ -6058,7 +2379,7 @@ var TOKENS = {
     /* Initialize the stack.  */
     yystack.push(yystate, yylval, yylloc);
 
-    int label = YYNEWSTATE;
+    var label = YYNEWSTATE;
     for (;;)
     switch (label)
     {
@@ -6263,7 +2584,7 @@ var TOKENS = {
           yystate = yystack.stateAt(0);
           if (yydebug)
           {
-            yystack.print (yyDebugStream);
+            yystack.print(yyDebugStream);
           }
         }
 
@@ -9826,7 +6147,7 @@ var TOKENS = {
   }
 
   // YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.
-  function yytranslate_table_ =
+  var yytranslate_table_ =
   [
     //]
          0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
