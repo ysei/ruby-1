@@ -6688,10 +6688,10 @@ var TOKENS = {
   // If positive, shift that token.
   // If negative, reduce the rule which number is the opposite.
   // If yytable_NINF_, syntax error.
-  private static final short yytable_ninf_ = -619;
-  private static final short
-  yytable_[] =
-  {
+  var yytable_ninf_ = -619;
+  var yytable_ =
+  [
+    //]
        116,   400,   316,   283,   234,   305,   325,   258,   421,   432,
      198,   572,   232,   526,   235,   199,   521,   359,   560,   459,
      362,   196,   659,   461,   775,   208,   208,   229,   305,   208,
@@ -7902,12 +7902,13 @@ var TOKENS = {
        0,     0,     0,     0,     0,     0,     0,     0,     0,   179,
      180,   181,   182,   183,   184,   185,   186,   187,   188,     0,
      189,   190,     0,     0,     0,     0,     0,     0,   191
-  };
+    //[
+  ];
 
-  /* YYCHECK.  */
-  private static final short
-  yycheck_[] =
-  {
+  // YYCHECK.
+  var yycheck_ =
+  [
+    //]
          2,    96,    74,    55,    28,    67,    79,    50,   220,   230,
        8,   359,    27,   326,    29,     8,   326,    87,   354,   262,
       90,     8,   472,   266,   651,    16,    17,    22,    90,    20,
@@ -9118,13 +9119,14 @@ var TOKENS = {
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   133,
      134,   135,   136,   137,   138,   139,   140,   141,   142,    -1,
      144,   145,    -1,    -1,    -1,    -1,    -1,    -1,   152
-  };
+    //[
+  ];
 
-  /* STOS_[STATE-NUM] -- The (internal number of the) accessing
-     symbol of state STATE-NUM.  */
-  private static final short
-  yystos_[] =
-  {
+  // STOS_[STATE-NUM]
+  // The (internal number of the) accessing symbol of state STATE-NUM.
+  var yystos_ =
+  [
+    //]
          0,   160,   161,     0,     1,     3,     4,     5,     6,     7,
       11,    12,    16,    18,    19,    20,    21,    22,    23,    24,
       30,    31,    32,    33,    34,    35,    36,    39,    45,    46,
@@ -9231,13 +9233,14 @@ var TOKENS = {
      323,   335,   323,   323,   258,    52,    56,   205,    52,    56,
      277,   245,   242,   242,   249,   323,   252,   151,   252,   252,
      252,   351,   318,   323,   252
-  };
+    //[
+  ];
 
-  /* TOKEN_NUMBER_[YYLEX-NUM] -- Internal symbol number corresponding
-     to YYLEX-NUM.  */
-  private static final short
-  yytoken_number_[] =
-  {
+  // TOKEN_NUMBER_[YYLEX-NUM]
+  // Internal symbol number corresponding to YYLEX-NUM.
+  var yytoken_number_ =
+  [
+    //]
          0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
@@ -9254,12 +9257,13 @@ var TOKENS = {
       61,    63,    58,    62,    60,   124,    94,    38,    43,    45,
       42,    47,    37,   385,    33,   126,   386,   123,   125,    91,
       46,    44,    96,    40,    41,    93,    59,    32,    10
-  };
+    //[
+  ];
 
-  /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
-  private static final short
-  yyr1_[] =
-  {
+  // YYR1[YYN] -- Symbol number of symbol that rule YYN derives.
+  var yyr1_ =
+  [
+    //]
          0,   159,   161,   160,   162,   163,   163,   163,   163,   164,
      165,   164,   166,   167,   168,   168,   168,   168,   169,   170,
      169,   172,   171,   171,   171,   171,   171,   171,   171,   171,
@@ -9322,12 +9326,13 @@ var TOKENS = {
      343,   343,   343,   344,   344,   344,   345,   345,   345,   345,
      346,   346,   346,   347,   347,   348,   348,   349,   349,   350,
      351,   352,   352,   352,   353,   353,   354,   354,   355
-  };
+    //[
+  ];
 
-  /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
-  private static final byte
-  yyr2_[] =
-  {
+  // YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.
+  var yyr2_ =
+  [
+    //]
          0,     2,     0,     2,     2,     1,     1,     3,     2,     1,
        0,     5,     4,     2,     1,     1,     3,     2,     1,     0,
        5,     0,     4,     3,     3,     3,     2,     3,     3,     3,
@@ -9390,12 +9395,14 @@ var TOKENS = {
        3,     2,     2,     1,     1,     1,     1,     1,     1,     1,
        1,     1,     1,     1,     1,     0,     1,     0,     1,     2,
        2,     0,     1,     1,     1,     1,     1,     2,     0
-  };
+    //[
+  ];
 
-  /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
-     First, the terminals, then, starting at \a yyntokens_, nonterminals.  */
-  private static final String yytname_[] =
-  {
+  // YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
+  // First, the terminals, then, starting at \a yyntokens_, nonterminals.
+  var yytname_ =
+  [
+    //]
     "\"end-of-input\"", "error", "$undefined", "keyword_class",
   "keyword_module", "keyword_def", "keyword_undef", "keyword_begin",
   "keyword_rescue", "keyword_ensure", "keyword_end", "keyword_if",
@@ -9459,11 +9466,13 @@ var TOKENS = {
   "singleton", "$@40", "assoc_list", "assocs", "assoc", "operation",
   "operation2", "operation3", "dot_or_colon", "opt_terms", "opt_nl",
   "rparen", "rbracket", "trailer", "term", "terms", "none", null
-  };
+    //[
+  ];
 
-  /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
-  private static final short yyrhs_[] =
-  {
+  // YYRHS -- A `-1'-separated list of the rules' RHS.
+  var yyrhs_ =
+  [
+    //]
        160,     0,    -1,    -1,   161,   162,    -1,   163,   348,    -1,
      355,    -1,   164,    -1,   163,   354,   164,    -1,     1,   164,
       -1,   171,    -1,    -1,    47,   165,   147,   162,   148,    -1,
@@ -9654,12 +9663,13 @@ var TOKENS = {
       -1,   158,    -1,   349,   154,    -1,   349,   155,    -1,    -1,
      158,    -1,   151,    -1,   156,    -1,   158,    -1,   353,    -1,
      354,   156,    -1,    -1
-  };
+    //[
+  ];
 
-  /* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
-     YYRHS.  */
-  private static final short yyprhs_[] =
-  {
+  // YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in YYRHS.
+  var yyprhs_ =
+  [
+    //]
          0,     0,     3,     4,     7,    10,    12,    14,    18,    21,
       23,    24,    30,    35,    38,    40,    42,    46,    49,    51,
       52,    58,    59,    64,    68,    72,    76,    79,    83,    87,
@@ -9722,11 +9732,13 @@ var TOKENS = {
     1833,  1837,  1840,  1843,  1845,  1847,  1849,  1851,  1853,  1855,
     1857,  1859,  1861,  1863,  1865,  1867,  1868,  1870,  1871,  1873,
     1876,  1879,  1880,  1882,  1884,  1886,  1888,  1890,  1893
-  };
+    //[
+  ];
 
-  /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-  private static final short yyrline_[] =
-  {
+  // YYRLINE[YYN] -- Source line where rule number YYN was defined.
+  var yyrline_ =
+  [
+    //]
          0,   114,   114,   114,   145,   156,   165,   173,   181,   187,
      189,   188,   209,   242,   253,   262,   270,   278,   284,   289,
      288,   309,   309,   317,   325,   336,   346,   354,   363,   372,
@@ -9789,7 +9801,8 @@ var TOKENS = {
     4160,  4168,  4176,  4188,  4189,  4190,  4193,  4194,  4195,  4196,
     4199,  4200,  4201,  4204,  4209,  4216,  4217,  4220,  4221,  4224,
     4227,  4230,  4231,  4232,  4235,  4236,  4239,  4240,  4244
-  };
+    //[
+  ];
 
   // Report on the debug stream that the rule yyrule is going to be reduced.
   private void yy_reduce_print (int yyrule, YYStack yystack)
