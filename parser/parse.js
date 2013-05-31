@@ -9825,9 +9825,10 @@ var TOKENS = {
       );
   }
 
-  /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
-  private static final short yytranslate_table_[] =
-  {
+  // YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.
+  function yytranslate_table_ =
+  [
+    //]
          0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
      158,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -9867,9 +9868,10 @@ var TOKENS = {
      105,   106,   107,   108,   109,   110,   111,   112,   113,   114,
      115,   116,   117,   118,   119,   120,   121,   122,   123,   124,
      125,   126,   127,   128,   129,   143,   146
-  };
+    //[
+  ];
 
-  private static final short yytranslate_ (int t)
+  function yytranslate_ (t)
   {
     if (t >= 0 && t <= yyuser_token_number_max_)
       return yytranslate_table_[t];
@@ -9877,18 +9879,15 @@ var TOKENS = {
       return yyundef_token_;
   }
 
-  private static final int yylast_ = 12098;
-  private static final int yynnts_ = 197;
-  private static final int yyempty_ = -2;
-  private static final int yyfinal_ = 3;
-  private static final int yyterror_ = 1;
-  private static final int yyerrcode_ = 256;
+  var yylast_ = 12098;
+  var yynnts_ = 197;
+  var yyempty_ = -2;
+  var yyfinal_ = 3;
+  var yyterror_ = 1;
+  var yyerrcode_ = 256;
 
-  private static final int yyuser_token_number_max_ = 386;
-  private static final int yyundef_token_ = 2;
-
-/* User implementation code.  */
-
+  var yyuser_token_number_max_ = 386;
+  var yyundef_token_ = 2;
 }
 
 // Version number for the Bison executable that generated this parser.
