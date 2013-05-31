@@ -140,8 +140,9 @@ function YYParser (yylexer)
   // Token returned by the scanner to signal the end of its input.
   var EOF = 0;
 
-  /* Tokens.  */
-/** Token numbers, to be returned by the scanner.  */
+  // Tokens.
+  // Token numbers, to be returned by the scanner.
+  
 var TOKENS = {
   'END_OF_INPUT': 0,
   'keyword_class': 258,
@@ -278,7 +279,7 @@ var TOKENS = {
 };
 
 
-  
+
 
 
 
