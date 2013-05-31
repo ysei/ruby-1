@@ -6515,11 +6515,12 @@ var TOKENS = {
     //[
   ];
 
-  /* YYDEFACT[S] -- default reduction number in state S.  Performed when
-     YYTABLE doesn't specify something else to do.  Zero means the
-     default is an error.  */
-  private static final short yydefact_[] =
-  {
+  // YYDEFACT[S] -- default reduction number in state S.
+  // Performed when YYTABLE doesn't specify something else to do.
+  // Zero means the default is an error.  */
+  var yydefact_ =
+  [
+    //]
          2,     0,     0,     1,     0,   346,   347,   348,     0,   339,
      340,   341,   344,   342,   343,   345,   334,   335,   336,   337,
      297,   263,   263,   509,   508,   510,   511,   607,     0,   607,
@@ -6626,11 +6627,13 @@ var TOKENS = {
      379,   379,   379,   379,   403,   600,   108,   607,   596,   597,
      439,   356,   321,   333,   367,   532,   383,     0,   380,   386,
      389,   431,   534,   379,   381
-  };
+    //[
+  ];
 
-  /* YYPGOTO[NTERM-NUM].  */
+  // YYPGOTO[NTERM-NUM].
   var yypgoto_ =
-  {
+  [
+    //]
       -821,  -821,  -821,  -386,  -821,    41,  -821,  -542,   285,  -821,
      545,  -821,    35,  -821,  -310,   -43,   -70,    19,  -821,  -573,
     -821,   680,     9,   905,  -159,    27,   -73,  -821,  -404,     6,
@@ -6651,12 +6654,13 @@ var TOKENS = {
      -83,  -721,  -809,   140,   271,  -821,  -574,  -821,  -463,  -579,
     -821,  -821,  -821,   102,  -374,  -821,  -322,  -821,   654,   -29,
      -15,  -221,  -578,  -243,   -62,   -11,    -2
-  };
+    //[
+  ];
 
-  /* YYDEFGOTO[NTERM-NUM].  */
-  private static final short
-  yydefgoto_[] =
-  {
+  // YYDEFGOTO[NTERM-NUM].
+  var yydefgoto_ =
+  [
+    //]
         -1,     1,     2,    66,    67,    68,   236,   567,   568,   252,
      253,   446,   254,   437,    70,    71,   358,    72,    73,   510,
      690,   243,    75,    76,   255,    77,    78,    79,   467,    80,
@@ -6677,11 +6681,13 @@ var TOKENS = {
      668,   669,   809,   810,   670,   671,   672,   673,   674,   783,
      396,   595,   265,   429,   221,   115,   629,   559,   399,   304,
      423,   424,   706,   457,   571,   364,   257
-  };
+    //[
+  ];
 
-  /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
-     positive, shift that token.  If negative, reduce the rule which
-     number is the opposite.  If yytable_NINF_, syntax error.  */
+  // YYTABLE[YYPACT[STATE-NUM]]. What to do in state STATE-NUM.
+  // If positive, shift that token.
+  // If negative, reduce the rule which number is the opposite.
+  // If yytable_NINF_, syntax error.
   private static final short yytable_ninf_ = -619;
   private static final short
   yytable_[] =
