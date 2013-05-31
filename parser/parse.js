@@ -273,9 +273,7 @@ var TOKENS = {
   'tLAMBEG': 383,
   'tLOWEST': 384,
   'tUMINUS_NUM': 385,
-  'tLAST_TOKEN': 386,
-
-  'terminator': 0 /* FIXME: comma terminator */
+  'tLAST_TOKEN': 386
 };
 
 
@@ -5914,7 +5912,7 @@ var TOKENS = {
 
 
 /* Line 214 of lalr1.js  */
-/* Line 5918 of "parse.js"  */
+/* Line 5916 of "parse.js"  */
     'terminator': function noop (){} /* FIXME: comma terminator */
   }
 
