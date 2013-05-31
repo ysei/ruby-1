@@ -6402,9 +6402,10 @@ var TOKENS = {
   }
 
   // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing STATE-NUM.
-  private static final short yypact_ninf_ = -821;
-  private static final short yypact_[] =
-  {
+  var yypact_ninf_ = -821;
+  var yypact_ =
+  [
+    //]
       -821,   115,  2751,  -821,  8004,  -821,  -821,  -821,  7459,  -821,
     -821,  -821,  -821,  -821,  -821,  -821,  8134,  8134,  -821,  -821,
     8134,  4270,  3814,  -821,  -821,  -821,  -821,    42,  7309,    11,
@@ -6511,7 +6512,8 @@ var TOKENS = {
      826,   833,   826,   826,  -821,   152,   341,    11,   116,   195,
     -821,  -821,  -821,  -821,   816,   794,  -821,  1341,  -821,  -821,
     -821,   275,  -821,   826,  -821
-  };
+    //[
+  ];
 
   /* YYDEFACT[S] -- default reduction number in state S.  Performed when
      YYTABLE doesn't specify something else to do.  Zero means the
