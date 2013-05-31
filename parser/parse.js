@@ -274,7 +274,7 @@ var TOKENS = {
   'tUMINUS_NUM': 385,
   'tLAST_TOKEN': 386,
 
-  'terminator': 0 /* comma terminator, needs to be avoided */
+  'terminator': 0 /* FIXME: comma terminator */
 };
 
 
@@ -5914,7 +5914,7 @@ var TOKENS = {
 
 /* Line 212 of lalr1.js  */
 /* Line 5917 of "parse.js"  */
-    'terminator': function noop (){} /* comma terminator, needs to be avoided */
+    'terminator': function noop (){} /* FIXME: comma terminator */
   }
 
 
