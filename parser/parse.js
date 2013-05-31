@@ -323,7 +323,6 @@ var TOKENS = {
    // and return failure (<tt>false</tt>).  */
   var YYABORT = 1;
 
-
   // Returned by a Bison action in order to start error recovery
   // without printing an error message.
   var YYERROR = 2;
@@ -349,6 +348,7 @@ var TOKENS = {
     return yyerrstatus_ == 0;
   }
 
+  var yyval;
   var actionsTable =
   {
       '2': function ()
@@ -4972,7 +4972,6 @@ var TOKENS = {
 		    }
   }
 
-
   function yyaction (yyn, yystack, yylen) // int yyn, YYStack yystack, int yylen
   {
     var yyloc = yystack.locationFromNthItemToCurrent(yylen);
@@ -4983,7 +4982,7 @@ var TOKENS = {
        Otherwise, the following line sets YYVAL to garbage.
        This behavior is undocumented and Bison
        users should not rely upon it.  */
-    var yyval;
+    // var yyval; moved up in scope chain to share with actions
     if (yylen > 0)
       yyval = yystack.valueAt(yylen - 1);
     else
