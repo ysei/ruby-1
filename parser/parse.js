@@ -32,12 +32,9 @@
 
 
 
-
-
-
 ;(function(){ // start of the parser namespase
 /* First part of user declarations.  */
-/* Line 86 of lalr1.js  */
+/* Line 77 of lalr1.js  */
 /* Line 1 of "parse.y"  */
 
   // alert(123)
@@ -49,8 +46,6 @@
  * @author LALR (1) parser skeleton written by Paolo Bonzini.
  * @author Java skeleton ported by Peter Leonov.
  */
-
-
 
 
 /**
@@ -143,8 +138,6 @@ function YYParser (yylexer)
   this.yylexer = yylexer;
 
 
-
-
   // True if verbose error messages are enabled.
   var errorVerbose = true;
 
@@ -154,18 +147,10 @@ function YYParser (yylexer)
   var yydebug = true;
 
 
-
   function yyerror (location, message)
   {
     yylexer.yyerror(location, message);
   }
-
-  
-
-
-
-
-
 
   function yycdebug (message)
   {
@@ -174,15 +159,12 @@ function YYParser (yylexer)
   }
 
 
-
-
   // Returned by a Bison action in order to stop the parsing process
   // and return success (<tt>true</tt>).
   var YYACCEPT = 0;
 
-
-   // Returned by a Bison action in order to stop the parsing process
-   // and return failure (<tt>false</tt>).  */
+  // Returned by a Bison action in order to stop the parsing process
+  // and return failure (<tt>false</tt>).  */
   var YYABORT = 1;
 
   // Returned by a Bison action in order to start error recovery
@@ -214,7 +196,7 @@ function YYParser (yylexer)
   var actionsTable =
   {
       '2': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 114 of "parse.y"  */
     {
 			lex_state = EXPR_BEG;
@@ -225,7 +207,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '3': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 123 of "parse.y"  */
     {
 		    /*%%%*/
@@ -248,7 +230,7 @@ function YYParser (yylexer)
 			local_pop();
 		    }; return yystack},
   '4': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 146 of "parse.y"  */
     {
 		    /*%%%*/
@@ -259,7 +241,7 @@ function YYParser (yylexer)
 			yyval = (yystack.valueAt(2-(1)));
 		    }; return yystack},
   '5': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 157 of "parse.y"  */
     {
 		    /*%%%*/
@@ -270,7 +252,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '6': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 166 of "parse.y"  */
     {
 		    /*%%%*/
@@ -280,7 +262,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '7': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 174 of "parse.y"  */
     {
 		    /*%%%*/
@@ -290,13 +272,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '8': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 182 of "parse.y"  */
     {
 			yyval = remove_begin((yystack.valueAt(2-(2))));
 		    }; return yystack},
   '10': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 189 of "parse.y"  */
     {
 		    /*%%%*/
@@ -305,7 +287,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '11': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 196 of "parse.y"  */
     {
 		    /*%%%*/
@@ -319,7 +301,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '12': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 213 of "parse.y"  */
     {
 		    /*%%%*/
@@ -349,7 +331,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '13': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 243 of "parse.y"  */
     {
 		    /*%%%*/
@@ -360,7 +342,7 @@ function YYParser (yylexer)
 			yyval = (yystack.valueAt(2-(1)));
 		    }; return yystack},
   '14': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 254 of "parse.y"  */
     {
 		    /*%%%*/
@@ -371,7 +353,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '15': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 263 of "parse.y"  */
     {
 		    /*%%%*/
@@ -381,7 +363,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '16': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 271 of "parse.y"  */
     {
 		    /*%%%*/
@@ -391,19 +373,19 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '17': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 279 of "parse.y"  */
     {
 			yyval = remove_begin((yystack.valueAt(2-(2))));
 		    }; return yystack},
   '18': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 285 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(1-(1)));
 		    }; return yystack},
   '19': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 289 of "parse.y"  */
     {
 			yyerror("BEGIN is permitted only at toplevel");
@@ -413,7 +395,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '20': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 297 of "parse.y"  */
     {
 		    /*%%%*/
@@ -427,11 +409,11 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '21': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 309 of "parse.y"  */
     {lex_state = EXPR_FNAME;}; return yystack},
   '22': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 310 of "parse.y"  */
     {
 		    /*%%%*/
@@ -441,7 +423,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '23': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 318 of "parse.y"  */
     {
 		    /*%%%*/
@@ -451,7 +433,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '24': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 326 of "parse.y"  */
     {
 		    /*%%%*/
@@ -464,7 +446,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '25': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 337 of "parse.y"  */
     {
 		    /*%%%*/
@@ -476,7 +458,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '26': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 347 of "parse.y"  */
     {
 		    /*%%%*/
@@ -486,7 +468,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '27': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 355 of "parse.y"  */
     {
 		    /*%%%*/
@@ -497,7 +479,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '28': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 364 of "parse.y"  */
     {
 		    /*%%%*/
@@ -508,7 +490,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '29': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 373 of "parse.y"  */
     {
 		    /*%%%*/
@@ -523,7 +505,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '30': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 386 of "parse.y"  */
     {
 		    /*%%%*/
@@ -538,7 +520,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '31': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 399 of "parse.y"  */
     {
 		    /*%%%*/
@@ -549,7 +531,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '32': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 408 of "parse.y"  */
     {
 			if (in_def || in_single) {
@@ -563,7 +545,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '34': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 421 of "parse.y"  */
     {
 		    /*%%%*/
@@ -575,14 +557,14 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '35': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 431 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(3-(3))));
 			yyval = new_op_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))), (yystack.valueAt(3-(3))));
 		    }; return yystack},
   '36': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 436 of "parse.y"  */
     {
 		    /*%%%*/
@@ -605,21 +587,21 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '37': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 457 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    }; return yystack},
   '38': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 462 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    }; return yystack},
   '39': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 467 of "parse.y"  */
     {
 		    /*%%%*/
@@ -631,14 +613,14 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '40': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 477 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_intern("::"), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    }; return yystack},
   '41': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 482 of "parse.y"  */
     {
 		    /*%%%*/
@@ -650,7 +632,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '42': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 492 of "parse.y"  */
     {
 		    /*%%%*/
@@ -661,7 +643,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '43': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 501 of "parse.y"  */
     {
 		    /*%%%*/
@@ -672,7 +654,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '44': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 510 of "parse.y"  */
     {
 		    /*%%%*/
@@ -683,7 +665,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '46': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 522 of "parse.y"  */
     {
 		    /*%%%*/
@@ -694,7 +676,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '47': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 531 of "parse.y"  */
     {
 		    /*%%%*/
@@ -705,7 +687,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '49': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 544 of "parse.y"  */
     {
 		    /*%%%*/
@@ -715,7 +697,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '50': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 552 of "parse.y"  */
     {
 		    /*%%%*/
@@ -725,7 +707,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '51': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 560 of "parse.y"  */
     {
 		    /*%%%*/
@@ -735,7 +717,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '52': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 568 of "parse.y"  */
     {
 		    /*%%%*/
@@ -745,7 +727,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '54': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 579 of "parse.y"  */
     {
 		    /*%%%*/
@@ -757,7 +739,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '58': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 596 of "parse.y"  */
     {
 		    /*%%%*/
@@ -768,7 +750,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '59': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 607 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = dyna_push();
@@ -778,7 +760,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '60': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 617 of "parse.y"  */
     {
 		    /*%%%*/
@@ -790,7 +772,7 @@ function YYParser (yylexer)
 			dyna_pop((yystack.valueAt(5-(1))));
 		    }; return yystack},
   '61': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 629 of "parse.y"  */
     {
 		    /*%%%*/
@@ -800,7 +782,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '62': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 639 of "parse.y"  */
     {
 		    /*%%%*/
@@ -811,7 +793,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '63': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 648 of "parse.y"  */
     {
 		    /*%%%*/
@@ -826,7 +808,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '64': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 661 of "parse.y"  */
     {
 		    /*%%%*/
@@ -837,7 +819,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '65': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 670 of "parse.y"  */
     {
 		    /*%%%*/
@@ -851,7 +833,7 @@ function YYParser (yylexer)
 		    %*/
 		   }; return yystack},
   '66': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 682 of "parse.y"  */
     {
 		    /*%%%*/
@@ -862,7 +844,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '67': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 691 of "parse.y"  */
     {
 		    /*%%%*/
@@ -876,7 +858,7 @@ function YYParser (yylexer)
 		    %*/
 		   }; return yystack},
   '68': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 703 of "parse.y"  */
     {
 		    /*%%%*/
@@ -887,7 +869,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '69': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 712 of "parse.y"  */
     {
 		    /*%%%*/
@@ -898,7 +880,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '70': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 721 of "parse.y"  */
     {
 		    /*%%%*/
@@ -908,7 +890,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '71': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 729 of "parse.y"  */
     {
 		    /*%%%*/
@@ -918,7 +900,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '72': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 737 of "parse.y"  */
     {
 		    /*%%%*/
@@ -928,7 +910,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '74': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 748 of "parse.y"  */
     {
 		    /*%%%*/
@@ -938,7 +920,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '76': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 759 of "parse.y"  */
     {
 		    /*%%%*/
@@ -948,7 +930,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '77': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 769 of "parse.y"  */
     {
 		    /*%%%*/
@@ -958,7 +940,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '78': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 777 of "parse.y"  */
     {
 		    /*%%%*/
@@ -968,7 +950,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '79': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 785 of "parse.y"  */
     {
 		    /*%%%*/
@@ -978,7 +960,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '80': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 793 of "parse.y"  */
     {
 		    /*%%%*/
@@ -989,7 +971,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '81': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 802 of "parse.y"  */
     {
 		    /*%%%*/
@@ -999,7 +981,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '82': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 810 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1010,7 +992,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '83': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 819 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1020,7 +1002,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '84': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 827 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1031,7 +1013,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '85': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 836 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1041,7 +1023,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '86': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 844 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1052,7 +1034,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '88': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 856 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1062,7 +1044,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '89': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 866 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1072,7 +1054,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '90': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 874 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1082,7 +1064,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '91': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 884 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1092,7 +1074,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '92': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 892 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1102,19 +1084,19 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '93': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 902 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    }; return yystack},
   '94': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 906 of "parse.y"  */
     {
 		        yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    }; return yystack},
   '95': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 910 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1124,7 +1106,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '96': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 918 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1134,7 +1116,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '97': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 926 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1144,7 +1126,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '98': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 934 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1154,7 +1136,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '99': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 942 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1168,7 +1150,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '100': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 954 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1180,7 +1162,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '101': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 964 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1192,7 +1174,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '102': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 976 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(1-(1))), 0);
@@ -1203,7 +1185,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '103': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 985 of "parse.y"  */
     {
 		        yyval = assignable((yystack.valueAt(1-(1))), 0);
@@ -1214,7 +1196,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '104': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 994 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1224,7 +1206,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '105': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1002 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1234,7 +1216,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '106': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1010 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1244,7 +1226,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '107': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1018 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1254,7 +1236,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '108': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1026 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1269,7 +1251,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '109': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1039 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1284,7 +1266,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '110': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1052 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1295,7 +1277,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '111': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1063 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1305,7 +1287,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '113': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1074 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1315,7 +1297,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '114': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1082 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1325,7 +1307,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '115': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1090 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1335,14 +1317,14 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '119': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1103 of "parse.y"  */
     {
 			lex_state = EXPR_ENDFN;
 			yyval = (yystack.valueAt(1-(1)));
 		    }; return yystack},
   '120': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1108 of "parse.y"  */
     {
 			lex_state = EXPR_ENDFN;
@@ -1353,7 +1335,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '123': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1123 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1363,7 +1345,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '125': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1134 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1373,11 +1355,11 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '126': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1141 of "parse.y"  */
     {lex_state = EXPR_FNAME;}; return yystack},
   '127': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1142 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1387,127 +1369,127 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '128': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1151 of "parse.y"  */
     { ifndef_ripper(yyval = '|'); }; return yystack},
   '129': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1152 of "parse.y"  */
     { ifndef_ripper(yyval = '^'); }; return yystack},
   '130': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1153 of "parse.y"  */
     { ifndef_ripper(yyval = '&'); }; return yystack},
   '131': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1154 of "parse.y"  */
     { ifndef_ripper(yyval = tCMP); }; return yystack},
   '132': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1155 of "parse.y"  */
     { ifndef_ripper(yyval = tEQ); }; return yystack},
   '133': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1156 of "parse.y"  */
     { ifndef_ripper(yyval = tEQQ); }; return yystack},
   '134': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1157 of "parse.y"  */
     { ifndef_ripper(yyval = tMATCH); }; return yystack},
   '135': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1158 of "parse.y"  */
     { ifndef_ripper(yyval = tNMATCH); }; return yystack},
   '136': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1159 of "parse.y"  */
     { ifndef_ripper(yyval = '>'); }; return yystack},
   '137': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1160 of "parse.y"  */
     { ifndef_ripper(yyval = tGEQ); }; return yystack},
   '138': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1161 of "parse.y"  */
     { ifndef_ripper(yyval = '<'); }; return yystack},
   '139': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1162 of "parse.y"  */
     { ifndef_ripper(yyval = tLEQ); }; return yystack},
   '140': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1163 of "parse.y"  */
     { ifndef_ripper(yyval = tNEQ); }; return yystack},
   '141': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1164 of "parse.y"  */
     { ifndef_ripper(yyval = tLSHFT); }; return yystack},
   '142': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1165 of "parse.y"  */
     { ifndef_ripper(yyval = tRSHFT); }; return yystack},
   '143': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1166 of "parse.y"  */
     { ifndef_ripper(yyval = '+'); }; return yystack},
   '144': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1167 of "parse.y"  */
     { ifndef_ripper(yyval = '-'); }; return yystack},
   '145': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1168 of "parse.y"  */
     { ifndef_ripper(yyval = '*'); }; return yystack},
   '146': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1169 of "parse.y"  */
     { ifndef_ripper(yyval = '*'); }; return yystack},
   '147': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1170 of "parse.y"  */
     { ifndef_ripper(yyval = '/'); }; return yystack},
   '148': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1171 of "parse.y"  */
     { ifndef_ripper(yyval = '%'); }; return yystack},
   '149': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1172 of "parse.y"  */
     { ifndef_ripper(yyval = tPOW); }; return yystack},
   '150': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1173 of "parse.y"  */
     { ifndef_ripper(yyval = tDSTAR); }; return yystack},
   '151': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1174 of "parse.y"  */
     { ifndef_ripper(yyval = '!'); }; return yystack},
   '152': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1175 of "parse.y"  */
     { ifndef_ripper(yyval = '~'); }; return yystack},
   '153': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1176 of "parse.y"  */
     { ifndef_ripper(yyval = tUPLUS); }; return yystack},
   '154': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1177 of "parse.y"  */
     { ifndef_ripper(yyval = tUMINUS); }; return yystack},
   '155': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1178 of "parse.y"  */
     { ifndef_ripper(yyval = tAREF); }; return yystack},
   '156': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1179 of "parse.y"  */
     { ifndef_ripper(yyval = tASET); }; return yystack},
   '157': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1180 of "parse.y"  */
     { ifndef_ripper(yyval = '`'); }; return yystack},
   '199': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1198 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1518,7 +1500,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '200': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1207 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1530,14 +1512,14 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '201': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1217 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(3-(3))));
 			yyval = new_op_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))), (yystack.valueAt(3-(3))));
 		    }; return yystack},
   '202': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1222 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1549,7 +1531,7 @@ function YYParser (yylexer)
 			yyval = new_op_assign((yystack.valueAt(5-(1))), (yystack.valueAt(5-(2))), (yystack.valueAt(5-(3))));
 		    }; return yystack},
   '203': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1232 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1577,28 +1559,28 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '204': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1258 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    }; return yystack},
   '205': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1263 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    }; return yystack},
   '206': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1268 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_intern("::"), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    }; return yystack},
   '207': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1273 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1610,7 +1592,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '208': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1283 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1622,7 +1604,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '209': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1293 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1635,7 +1617,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '210': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1304 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1651,7 +1633,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '211': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1318 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1667,7 +1649,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '212': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1332 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1677,7 +1659,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '213': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1340 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1687,7 +1669,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '214': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1348 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1697,7 +1679,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '215': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1356 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1707,7 +1689,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '216': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1364 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1717,7 +1699,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '217': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1372 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1727,7 +1709,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '218': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1380 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1738,7 +1720,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '219': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1389 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1749,7 +1731,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '220': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1398 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1759,7 +1741,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '221': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1406 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1769,7 +1751,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '222': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1414 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1779,7 +1761,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '223': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1422 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1789,7 +1771,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '224': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1430 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1799,7 +1781,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '225': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1438 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1809,7 +1791,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '226': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1446 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1819,7 +1801,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '227': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1454 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1829,7 +1811,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '228': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1462 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1839,7 +1821,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '229': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1470 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1849,7 +1831,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '230': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1478 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1859,7 +1841,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '231': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1486 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1869,7 +1851,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '232': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1494 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1879,7 +1861,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '233': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1502 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1892,7 +1874,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '234': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1513 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1902,7 +1884,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '235': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1521 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1912,7 +1894,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '236': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1529 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1922,7 +1904,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '237': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1537 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1932,7 +1914,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '238': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1545 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1942,7 +1924,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '239': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1553 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1952,7 +1934,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '240': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1561 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1962,11 +1944,11 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '241': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1568 of "parse.y"  */
     {in_defined = 1;}; return yystack},
   '242': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1569 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1978,7 +1960,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '243': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1579 of "parse.y"  */
     {
 		    /*%%%*/
@@ -1990,13 +1972,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '244': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1589 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(1-(1)));
 		    }; return yystack},
   '245': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1595 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2008,13 +1990,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '247': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1608 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(1)));
 		    }; return yystack},
   '248': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1612 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2024,7 +2006,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '249': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1620 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2034,7 +2016,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '250': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1630 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2044,13 +2026,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '255': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1646 of "parse.y"  */
     {
 		      yyval = (yystack.valueAt(2-(1)));
 		    }; return yystack},
   '256': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1650 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2060,7 +2042,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '257': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1658 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2070,7 +2052,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '258': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1668 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2081,7 +2063,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '259': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1677 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2091,7 +2073,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '260': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1685 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2103,7 +2085,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '261': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1695 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2114,14 +2096,14 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '263': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1712 of "parse.y"  */
     {
 			yyval = cmdarg_stack;
 			CMDARG_PUSH(1);
 		    }; return yystack},
   '264': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1717 of "parse.y"  */
     {
 			/* CMDARG_POP() */
@@ -2129,7 +2111,7 @@ function YYParser (yylexer)
 			yyval = (yystack.valueAt(2-(2)));
 		    }; return yystack},
   '265': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1725 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2139,19 +2121,19 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '266': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1735 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    }; return yystack},
   '267': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1739 of "parse.y"  */
     {
 			yyval = 0;
 		    }; return yystack},
   '268': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1745 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2161,7 +2143,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '269': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1753 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2171,7 +2153,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '270': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1761 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2187,7 +2169,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '271': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1775 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2203,7 +2185,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '272': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1791 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2219,7 +2201,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '273': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1805 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2236,7 +2218,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '274': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1820 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2246,7 +2228,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '285': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1840 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2256,7 +2238,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '286': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1848 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = cmdarg_stack;
@@ -2267,7 +2249,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '287': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1858 of "parse.y"  */
     {
 			cmdarg_stack = (yystack.valueAt(4-(1)));
@@ -2287,11 +2269,11 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '288': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1875 of "parse.y"  */
     {lex_state = EXPR_ENDARG;}; return yystack},
   '289': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1876 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2301,11 +2283,11 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '290': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1883 of "parse.y"  */
     {lex_state = EXPR_ENDARG;}; return yystack},
   '291': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1884 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2315,7 +2297,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '292': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1892 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2325,7 +2307,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '293': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1900 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2335,7 +2317,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '294': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1908 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2345,7 +2327,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '295': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1916 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2360,7 +2342,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '296': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1929 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2370,7 +2352,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '297': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1937 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2380,7 +2362,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '298': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1945 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2390,7 +2372,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '299': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1953 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2400,7 +2382,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '300': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1961 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2410,11 +2392,11 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '301': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1968 of "parse.y"  */
     {in_defined = 1;}; return yystack},
   '302': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1969 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2426,7 +2408,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '303': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1979 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2436,7 +2418,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '304': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1987 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2446,7 +2428,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '305': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 1995 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2458,7 +2440,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '307': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2006 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2470,13 +2452,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '308': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2016 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    }; return yystack},
   '309': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2023 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2487,7 +2469,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '310': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2035 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2498,15 +2480,15 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '311': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2043 of "parse.y"  */
     {COND_PUSH(1);}; return yystack},
   '312': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2043 of "parse.y"  */
     {COND_POP();}; return yystack},
   '313': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2046 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2517,15 +2499,15 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '314': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2054 of "parse.y"  */
     {COND_PUSH(1);}; return yystack},
   '315': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2054 of "parse.y"  */
     {COND_POP();}; return yystack},
   '316': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2057 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2536,7 +2518,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '317': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2068 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2547,7 +2529,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '318': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2077 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2557,15 +2539,15 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '319': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2085 of "parse.y"  */
     {COND_PUSH(1);}; return yystack},
   '320': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2087 of "parse.y"  */
     {COND_POP();}; return yystack},
   '321': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2090 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2628,7 +2610,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '322': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2151 of "parse.y"  */
     {
 			if (in_def || in_single)
@@ -2640,7 +2622,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '323': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2162 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2652,14 +2634,14 @@ function YYParser (yylexer)
 			local_pop();
 		    }; return yystack},
   '324': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2172 of "parse.y"  */
     {
 			yyval = in_def;
 			in_def = 0;
 		    }; return yystack},
   '325': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2177 of "parse.y"  */
     {
 			yyval = in_single;
@@ -2667,7 +2649,7 @@ function YYParser (yylexer)
 			local_push(0);
 		    }; return yystack},
   '326': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2184 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2681,7 +2663,7 @@ function YYParser (yylexer)
 			in_single = (yystack.valueAt(8-(6)));
 		    }; return yystack},
   '327': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2196 of "parse.y"  */
     {
 			if (in_def || in_single)
@@ -2693,7 +2675,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '328': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2207 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2705,7 +2687,7 @@ function YYParser (yylexer)
 			local_pop();
 		    }; return yystack},
   '329': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2217 of "parse.y"  */
     {
 			yyval = cur_mid;
@@ -2714,7 +2696,7 @@ function YYParser (yylexer)
 			local_push(0);
 		    }; return yystack},
   '330': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2226 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2730,11 +2712,11 @@ function YYParser (yylexer)
 			cur_mid = (yystack.valueAt(6-(3)));
 		    }; return yystack},
   '331': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2239 of "parse.y"  */
     {lex_state = EXPR_FNAME;}; return yystack},
   '332': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2240 of "parse.y"  */
     {
 			in_single++;
@@ -2742,7 +2724,7 @@ function YYParser (yylexer)
 			local_push(0);
 		    }; return yystack},
   '333': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2248 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2757,7 +2739,7 @@ function YYParser (yylexer)
 			in_single--;
 		    }; return yystack},
   '334': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2261 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2767,7 +2749,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '335': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2269 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2777,7 +2759,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '336': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2277 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2787,7 +2769,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '337': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2285 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2797,7 +2779,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '338': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2295 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2809,61 +2791,61 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '339': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2307 of "parse.y"  */
     {
 			token_info_push("begin");
 		    }; return yystack},
   '340': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2313 of "parse.y"  */
     {
 			token_info_push("if");
 		    }; return yystack},
   '341': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2319 of "parse.y"  */
     {
 			token_info_push("unless");
 		    }; return yystack},
   '342': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2325 of "parse.y"  */
     {
 			token_info_push("while");
 		    }; return yystack},
   '343': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2331 of "parse.y"  */
     {
 			token_info_push("until");
 		    }; return yystack},
   '344': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2337 of "parse.y"  */
     {
 			token_info_push("case");
 		    }; return yystack},
   '345': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2343 of "parse.y"  */
     {
 			token_info_push("for");
 		    }; return yystack},
   '346': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2349 of "parse.y"  */
     {
 			token_info_push("class");
 		    }; return yystack},
   '347': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2355 of "parse.y"  */
     {
 			token_info_push("module");
 		    }; return yystack},
   '348': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2361 of "parse.y"  */
     {
 			token_info_push("def");
@@ -2873,13 +2855,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '349': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2371 of "parse.y"  */
     {
 			token_info_pop("end");
 		    }; return yystack},
   '356': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2401 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2890,7 +2872,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '358': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2413 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2900,7 +2882,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '361': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2427 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(1-(1))), 0);
@@ -2910,7 +2892,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '362': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2435 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2920,7 +2902,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '363': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2445 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2930,7 +2912,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '364': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2453 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2940,7 +2922,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '365': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2463 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2950,7 +2932,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '366': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2471 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(4-(4))), 0);
@@ -2961,7 +2943,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '367': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2480 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(6-(4))), 0);
@@ -2972,7 +2954,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '368': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2489 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2982,7 +2964,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '369': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2497 of "parse.y"  */
     {
 		    /*%%%*/
@@ -2992,7 +2974,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '370': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2505 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(2-(2))), 0);
@@ -3003,7 +2985,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '371': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2514 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(4-(2))), 0);
@@ -3017,7 +2999,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '372': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2526 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3027,7 +3009,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '373': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2534 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3037,73 +3019,73 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '374': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2545 of "parse.y"  */
     {
 			yyval = new_args_tail((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '375': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2549 of "parse.y"  */
     {
 			yyval = new_args_tail((yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '376': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2553 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, (yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '377': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2557 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    }; return yystack},
   '378': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2563 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    }; return yystack},
   '379': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2567 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
 		    }; return yystack},
   '380': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2573 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), Qnone, (yystack.valueAt(6-(6))));
 		    }; return yystack},
   '381': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2577 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(8-(1))), (yystack.valueAt(8-(3))), (yystack.valueAt(8-(5))), (yystack.valueAt(8-(7))), (yystack.valueAt(8-(8))));
 		    }; return yystack},
   '382': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2581 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, Qnone, (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '383': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2585 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), Qnone, (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    }; return yystack},
   '384': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2589 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '385': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2593 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(2-(1))), Qnone, 1, Qnone, new_args_tail(Qnone, Qnone, Qnone));
@@ -3113,67 +3095,67 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '386': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2601 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), Qnone, (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    }; return yystack},
   '387': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2605 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(2-(1))), Qnone, Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '388': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2609 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '389': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2613 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    }; return yystack},
   '390': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2617 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(2-(1))), Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '391': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2621 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '392': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2625 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, (yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '393': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2629 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '394': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2633 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    }; return yystack},
   '396': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2640 of "parse.y"  */
     {
 			command_start = TRUE;
 		    }; return yystack},
   '397': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2646 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3184,7 +3166,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '398': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2655 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3195,7 +3177,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '399': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2664 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3205,13 +3187,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '400': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2675 of "parse.y"  */
     {
 		      yyval = 0;
 		    }; return yystack},
   '401': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2679 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3221,7 +3203,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '404': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2705 of "parse.y"  */
     {
 			new_bv(get_id((yystack.valueAt(1-(1)))));
@@ -3231,26 +3213,26 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '405': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2713 of "parse.y"  */
     {
 			yyval = 0;
 		    }; return yystack},
   '406': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2718 of "parse.y"  */
     {
 			yyval = dyna_push();
 		    }; return yystack},
   '407': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2721 of "parse.y"  */
     {
 			yyval = lpar_beg;
 			lpar_beg = ++paren_nest;
 		    }; return yystack},
   '408': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2727 of "parse.y"  */
     {
 			lpar_beg = (yystack.valueAt(4-(2)));
@@ -3262,7 +3244,7 @@ function YYParser (yylexer)
 			dyna_pop((yystack.valueAt(4-(1))));
 		    }; return yystack},
   '409': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2739 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3272,7 +3254,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '410': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2747 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3282,19 +3264,19 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '411': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2757 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(3-(2)));
 		    }; return yystack},
   '412': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2761 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(3-(2)));
 		    }; return yystack},
   '413': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2767 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = dyna_push();
@@ -3303,7 +3285,7 @@ function YYParser (yylexer)
 		    /*% %*/
 		    }; return yystack},
   '414': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2776 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3315,7 +3297,7 @@ function YYParser (yylexer)
 			dyna_pop((yystack.valueAt(5-(1))));
 		    }; return yystack},
   '415': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2788 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3333,7 +3315,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '416': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2804 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3344,7 +3326,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '417': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2813 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3358,7 +3340,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '418': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2825 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3372,7 +3354,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '419': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2839 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3383,7 +3365,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '420': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2848 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3391,7 +3373,7 @@ function YYParser (yylexer)
 		    /*% %*/
 		    }; return yystack},
   '421': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2854 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3403,7 +3385,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '422': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2864 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3411,7 +3393,7 @@ function YYParser (yylexer)
 		    /*% %*/
 		    }; return yystack},
   '423': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2870 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3423,7 +3405,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '424': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2880 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3433,7 +3415,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '425': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2888 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3441,7 +3423,7 @@ function YYParser (yylexer)
 		    /*% %*/
 		    }; return yystack},
   '426': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2894 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3454,7 +3436,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '427': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2905 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3462,7 +3444,7 @@ function YYParser (yylexer)
 		    /*% %*/
 		    }; return yystack},
   '428': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2911 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3475,7 +3457,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '429': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2922 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3485,7 +3467,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '430': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2930 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3495,7 +3477,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '431': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2938 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3509,7 +3491,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '432': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2952 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = dyna_push();
@@ -3519,7 +3501,7 @@ function YYParser (yylexer)
                     %*/
 		    }; return yystack},
   '433': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2961 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3531,7 +3513,7 @@ function YYParser (yylexer)
 			dyna_pop((yystack.valueAt(5-(1))));
 		    }; return yystack},
   '434': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2971 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = dyna_push();
@@ -3541,7 +3523,7 @@ function YYParser (yylexer)
                     %*/
 		    }; return yystack},
   '435': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2980 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3553,7 +3535,7 @@ function YYParser (yylexer)
 			dyna_pop((yystack.valueAt(5-(1))));
 		    }; return yystack},
   '436': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 2994 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3563,7 +3545,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '439': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3010 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3582,7 +3564,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '441': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3030 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3592,7 +3574,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '442': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3038 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3602,13 +3584,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '444': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3049 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    }; return yystack},
   '446': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3056 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3618,7 +3600,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '449': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3068 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3628,7 +3610,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '451': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3079 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3645,7 +3627,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '454': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3098 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3655,7 +3637,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '455': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3108 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3665,7 +3647,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '456': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3118 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3692,7 +3674,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '457': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3145 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3757,7 +3739,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '458': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3210 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3768,7 +3750,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '459': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3219 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3778,7 +3760,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '460': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3229 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3788,7 +3770,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '461': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3237 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3798,7 +3780,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '463': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3255 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3808,7 +3790,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '464': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3265 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3819,7 +3801,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '465': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3274 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3829,7 +3811,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '466': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3284 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3839,7 +3821,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '467': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3292 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3851,7 +3833,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '468': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3304 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3862,7 +3844,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '469': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3313 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3872,7 +3854,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '470': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3323 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3883,7 +3865,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '471': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3332 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3893,7 +3875,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '472': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3342 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3903,7 +3885,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '473': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3350 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3913,7 +3895,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '474': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3360 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3923,7 +3905,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '475': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3368 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3937,7 +3919,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '476': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3382 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3947,7 +3929,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '477': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3390 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3957,7 +3939,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '478': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3400 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3967,7 +3949,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '479': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3408 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3977,7 +3959,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '480': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3418 of "parse.y"  */
     {
 		    /*%%%*/
@@ -3987,7 +3969,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '481': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3426 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4016,7 +3998,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '483': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3456 of "parse.y"  */
     {
 			yyval = lex_strterm;
@@ -4024,7 +4006,7 @@ function YYParser (yylexer)
 			lex_state = EXPR_BEG;
 		    }; return yystack},
   '484': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3462 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4036,7 +4018,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '485': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3472 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = cond_stack;
@@ -4045,7 +4027,7 @@ function YYParser (yylexer)
 			cmdarg_stack = 0;
 		    }; return yystack},
   '486': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3478 of "parse.y"  */
     {
 			yyval = lex_strterm;
@@ -4053,14 +4035,14 @@ function YYParser (yylexer)
 			lex_state = EXPR_BEG;
 		    }; return yystack},
   '487': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3483 of "parse.y"  */
     {
 			yyval = brace_nest;
 			brace_nest = 0;
 		    }; return yystack},
   '488': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3488 of "parse.y"  */
     {
 			cond_stack = (yystack.valueAt(6-(1)));
@@ -4075,7 +4057,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '489': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3503 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4085,7 +4067,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '490': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3511 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4095,7 +4077,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '491': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3519 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4105,7 +4087,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '493': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3530 of "parse.y"  */
     {
 			lex_state = EXPR_END;
@@ -4116,7 +4098,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '498': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3547 of "parse.y"  */
     {
 			lex_state = EXPR_END;
@@ -4127,7 +4109,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '501': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3560 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4137,7 +4119,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '502': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3568 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4147,35 +4129,35 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '508': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3584 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_nil);}; return yystack},
   '509': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3585 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_self);}; return yystack},
   '510': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3586 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_true);}; return yystack},
   '511': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3587 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_false);}; return yystack},
   '512': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3588 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__FILE__);}; return yystack},
   '513': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3589 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__LINE__);}; return yystack},
   '514': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3590 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__ENCODING__);}; return yystack},
   '515': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3594 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4190,7 +4172,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '516': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3607 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4200,7 +4182,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '517': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3617 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(1-(1))), 0);
@@ -4210,7 +4192,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '518': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3625 of "parse.y"  */
     {
 		        yyval = assignable((yystack.valueAt(1-(1))), 0);
@@ -4220,7 +4202,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '521': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3639 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4230,20 +4212,20 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '522': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3647 of "parse.y"  */
     {
 			lex_state = EXPR_BEG;
 			command_start = TRUE;
 		    }; return yystack},
   '523': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3652 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(4-(3)));
 		    }; return yystack},
   '524': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3656 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4255,7 +4237,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '525': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3668 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4267,7 +4249,7 @@ function YYParser (yylexer)
 			command_start = TRUE;
 		    }; return yystack},
   '526': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3678 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(1)));
@@ -4275,134 +4257,134 @@ function YYParser (yylexer)
 			command_start = TRUE;
 		    }; return yystack},
   '527': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3686 of "parse.y"  */
     {
 			yyval = new_args_tail((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '528': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3690 of "parse.y"  */
     {
 			yyval = new_args_tail((yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '529': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3694 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, (yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '530': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3698 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    }; return yystack},
   '531': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3704 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    }; return yystack},
   '532': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3708 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
 		    }; return yystack},
   '533': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3714 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), Qnone, (yystack.valueAt(6-(6))));
 		    }; return yystack},
   '534': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3718 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(8-(1))), (yystack.valueAt(8-(3))), (yystack.valueAt(8-(5))), (yystack.valueAt(8-(7))), (yystack.valueAt(8-(8))));
 		    }; return yystack},
   '535': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3722 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, Qnone, (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '536': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3726 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), Qnone, (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    }; return yystack},
   '537': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3730 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '538': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3734 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), Qnone, (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    }; return yystack},
   '539': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3738 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(2-(1))), Qnone, Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '540': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3742 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '541': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3746 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    }; return yystack},
   '542': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3750 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(2-(1))), Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '543': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3754 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '544': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3758 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, (yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    }; return yystack},
   '545': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3762 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    }; return yystack},
   '546': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3766 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    }; return yystack},
   '547': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3770 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
 			yyval = new_args(Qnone, Qnone, Qnone, Qnone, yyval);
 		    }; return yystack},
   '548': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3777 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4413,7 +4395,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '549': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3786 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4424,7 +4406,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '550': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3795 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4435,7 +4417,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '551': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3804 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4446,14 +4428,14 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '553': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3816 of "parse.y"  */
     {
 			formal_argument(get_id((yystack.valueAt(1-(1)))));
 			yyval = (yystack.valueAt(1-(1)));
 		    }; return yystack},
   '554': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3823 of "parse.y"  */
     {
 			arg_var(get_id((yystack.valueAt(1-(1)))));
@@ -4464,7 +4446,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '555': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3832 of "parse.y"  */
     {
 			ID tid = internal_id();
@@ -4483,7 +4465,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '557': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3858 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4496,7 +4478,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '558': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3871 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id((yystack.valueAt(2-(1))))));
@@ -4508,7 +4490,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '559': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3883 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id((yystack.valueAt(2-(1))))));
@@ -4520,7 +4502,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '560': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3895 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4530,7 +4512,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '561': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3903 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4546,7 +4528,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '562': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3920 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4556,7 +4538,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '563': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3928 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4572,20 +4554,20 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '566': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3948 of "parse.y"  */
     {
 			shadowing_lvar(get_id((yystack.valueAt(2-(2)))));
 			yyval = (yystack.valueAt(2-(2)));
 		    }; return yystack},
   '567': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3953 of "parse.y"  */
     {
 			yyval = internal_id();
 		    }; return yystack},
   '568': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3959 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id((yystack.valueAt(3-(1))))));
@@ -4597,7 +4579,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '569': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3971 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id((yystack.valueAt(3-(1))))));
@@ -4609,7 +4591,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '570': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3983 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4619,7 +4601,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '571': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 3991 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4635,7 +4617,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '572': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4007 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4645,7 +4627,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '573': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4015 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4661,7 +4643,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '576': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4035 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4676,7 +4658,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '577': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4048 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4687,7 +4669,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '580': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4063 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4704,13 +4686,13 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '581': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4080 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    }; return yystack},
   '582': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4084 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4720,7 +4702,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '583': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4094 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4732,11 +4714,11 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '584': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4103 of "parse.y"  */
     {lex_state = EXPR_BEG;}; return yystack},
   '585': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4104 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4765,7 +4747,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '587': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4134 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4775,7 +4757,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '589': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4151 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4785,7 +4767,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '590': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4161 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4795,7 +4777,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '591': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4169 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4805,7 +4787,7 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '592': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4177 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4815,15 +4797,15 @@ function YYParser (yylexer)
 		    %*/
 		    }; return yystack},
   '614': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4235 of "parse.y"  */
     {yyerrok;}; return yystack},
   '617': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4240 of "parse.y"  */
     {yyerrok;}; return yystack},
   '618': function (yystack) {
-    /* Line 258 of lalr1.js  */
+    /* Line 234 of lalr1.js  */
 /* Line 4244 of "parse.y"  */
     {
 		    /*%%%*/
@@ -4911,7 +4893,7 @@ function YYParser (yylexer)
     yyerrstatus_ = 0;
 
 
-    /* Initialize the stack.  */
+    // Initialize the stack.
     yystack.push(yystate, yylval, yylloc);
 
     var label = YYNEWSTATE;
