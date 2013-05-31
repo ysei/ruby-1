@@ -370,18 +370,18 @@ var TOKENS = {
 /* Line 123 of "parse.y"  */
     {
 		    /*%%%*/
-			if (((node)(yystack.valueAt (2-(2)))) && !compile_for_eval) {
+			if ((yystack.valueAt(2-(2))) && !compile_for_eval) {
 			    /* last expression should not be void */
-			    if (nd_type(((node)(yystack.valueAt (2-(2))))) != NODE_BLOCK) void_expr(((node)(yystack.valueAt (2-(2)))));
+			    if (nd_type((yystack.valueAt(2-(2)))) != NODE_BLOCK) void_expr((yystack.valueAt(2-(2))));
 			    else {
-				NODE *node = ((node)(yystack.valueAt (2-(2))));
+				NODE *node = (yystack.valueAt(2-(2)));
 				while (node->nd_next) {
 				    node = node->nd_next;
 				}
 				void_expr(node->nd_head);
 			    }
 			}
-			ruby_eval_tree = NEW_SCOPE(0, block_append(ruby_eval_tree, ((node)(yystack.valueAt (2-(2))))));
+			ruby_eval_tree = NEW_SCOPE(0, block_append(ruby_eval_tree, (yystack.valueAt(2-(2)))));
 		    /*%
 			$$ = $2;
 			parser->result = dispatch1(program, $$);
@@ -395,11 +395,11 @@ var TOKENS = {
 /* Line 146 of "parse.y"  */
     {
 		    /*%%%*/
-			void_stmts(((node)(yystack.valueAt (2-(1)))));
+			void_stmts((yystack.valueAt(2-(1))));
 			fixup_nodes(&deferred_nodes);
 		    /*%
 		    %*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
+			yyval = (yystack.valueAt(2-(1)));
 		    },
 
 
@@ -421,7 +421,7 @@ var TOKENS = {
 /* Line 166 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = newline_node(((node)(yystack.valueAt (1-(1)))));
+			yyval = newline_node((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = dispatch2(stmts_add, dispatch0(stmts_new), $1);
 		    %*/
@@ -433,7 +433,7 @@ var TOKENS = {
 /* Line 174 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = block_append(((node)(yystack.valueAt (3-(1)))), newline_node(((node)(yystack.valueAt (3-(3))))));
+			yyval = block_append((yystack.valueAt(3-(1))), newline_node((yystack.valueAt(3-(3)))));
 		    /*%
 			$$ = dispatch2(stmts_add, $1, $3);
 		    %*/
@@ -444,7 +444,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 182 of "parse.y"  */
     {
-			yyval = remove_begin(((node)(yystack.valueAt (2-(2)))));
+			yyval = remove_begin((yystack.valueAt(2-(2))));
 		    },
 
 
@@ -465,7 +465,7 @@ var TOKENS = {
     {
 		    /*%%%*/
 			ruby_eval_tree_begin = block_append(ruby_eval_tree_begin,
-							    ((node)(yystack.valueAt (5-(4)))));
+							    (yystack.valueAt(5-(4))));
 			/* NEW_PREEXE($4)); */
 			/* local_pop(); */
 			yyval = NEW_BEGIN(0);
@@ -480,23 +480,23 @@ var TOKENS = {
 /* Line 213 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (4-(1))));
-			if (((node)(yystack.valueAt (4-(2))))) {
-			    yyval = NEW_RESCUE(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(2)))), ((node)(yystack.valueAt (4-(3)))));
+			yyval = (yystack.valueAt(4-(1)));
+			if ((yystack.valueAt(4-(2)))) {
+			    yyval = NEW_RESCUE((yystack.valueAt(4-(1))), (yystack.valueAt(4-(2))), (yystack.valueAt(4-(3))));
 			}
-			else if (((node)(yystack.valueAt (4-(3))))) {
+			else if ((yystack.valueAt(4-(3)))) {
 			    rb_warn0("else without rescue is useless");
-			    yyval = block_append(yyval, ((node)(yystack.valueAt (4-(3)))));
+			    yyval = block_append(yyval, (yystack.valueAt(4-(3))));
 			}
-			if (((node)(yystack.valueAt (4-(4))))) {
+			if ((yystack.valueAt(4-(4)))) {
 			    if (yyval) {
-				yyval = NEW_ENSURE(yyval, ((node)(yystack.valueAt (4-(4)))));
+				yyval = NEW_ENSURE(yyval, (yystack.valueAt(4-(4))));
 			    }
 			    else {
-				yyval = block_append(((node)(yystack.valueAt (4-(4)))), NEW_NIL());
+				yyval = block_append((yystack.valueAt(4-(4))), NEW_NIL());
 			    }
 			}
-			fixpos(yyval, ((node)(yystack.valueAt (4-(1)))));
+			fixpos(yyval, (yystack.valueAt(4-(1))));
 		    /*%
 			$$ = dispatch4(bodystmt,
 				       escape_Qundef($1),
@@ -512,11 +512,11 @@ var TOKENS = {
 /* Line 243 of "parse.y"  */
     {
 		    /*%%%*/
-			void_stmts(((node)(yystack.valueAt (2-(1)))));
+			void_stmts((yystack.valueAt(2-(1))));
 			fixup_nodes(&deferred_nodes);
 		    /*%
 		    %*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
+			yyval = (yystack.valueAt(2-(1)));
 		    },
 
 
@@ -538,7 +538,7 @@ var TOKENS = {
 /* Line 263 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = newline_node(((node)(yystack.valueAt (1-(1)))));
+			yyval = newline_node((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = dispatch2(stmts_add, dispatch0(stmts_new), $1);
 		    %*/
@@ -550,7 +550,7 @@ var TOKENS = {
 /* Line 271 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = block_append(((node)(yystack.valueAt (3-(1)))), newline_node(((node)(yystack.valueAt (3-(3))))));
+			yyval = block_append((yystack.valueAt(3-(1))), newline_node((yystack.valueAt(3-(3)))));
 		    /*%
 			$$ = dispatch2(stmts_add, $1, $3);
 		    %*/
@@ -561,7 +561,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 279 of "parse.y"  */
     {
-			yyval = remove_begin(((node)(yystack.valueAt (2-(2)))));
+			yyval = remove_begin((yystack.valueAt(2-(2))));
 		    },
 
 
@@ -569,7 +569,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 285 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    },
 
 
@@ -591,7 +591,7 @@ var TOKENS = {
     {
 		    /*%%%*/
 			ruby_eval_tree_begin = block_append(ruby_eval_tree_begin,
-							    ((node)(yystack.valueAt (5-(4)))));
+							    (yystack.valueAt(5-(4))));
 			/* NEW_PREEXE($4)); */
 			/* local_pop(); */
 			yyval = NEW_BEGIN(0);
@@ -612,7 +612,7 @@ var TOKENS = {
 /* Line 310 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_ALIAS(((node)(yystack.valueAt (4-(2)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = NEW_ALIAS((yystack.valueAt(4-(2))), (yystack.valueAt(4-(4))));
 		    /*%
 			$$ = dispatch2(alias, $2, $4);
 		    %*/
@@ -624,7 +624,7 @@ var TOKENS = {
 /* Line 318 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_VALIAS(((id)(yystack.valueAt (3-(2)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = NEW_VALIAS((yystack.valueAt(3-(2))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(var_alias, $2, $3);
 		    %*/
@@ -638,8 +638,8 @@ var TOKENS = {
 		    /*%%%*/
 			char buf[2];
 			buf[0] = '$';
-			buf[1] = (char)((node)(yystack.valueAt (3-(3))))->nd_nth;
-			yyval = NEW_VALIAS(((id)(yystack.valueAt (3-(2)))), rb_intern2(buf, 2));
+			buf[1] = (char)(yystack.valueAt(3-(3)))->nd_nth;
+			yyval = NEW_VALIAS((yystack.valueAt(3-(2))), rb_intern2(buf, 2));
 		    /*%
 			$$ = dispatch2(var_alias, $2, $3);
 		    %*/
@@ -665,7 +665,7 @@ var TOKENS = {
 /* Line 347 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = dispatch1(undef, $2);
 		    %*/
@@ -677,8 +677,8 @@ var TOKENS = {
 /* Line 355 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_IF(cond(((node)(yystack.valueAt (3-(3))))), remove_begin(((node)(yystack.valueAt (3-(1))))), 0);
-			fixpos(yyval, ((node)(yystack.valueAt (3-(3)))));
+			yyval = NEW_IF(cond((yystack.valueAt(3-(3)))), remove_begin((yystack.valueAt(3-(1)))), 0);
+			fixpos(yyval, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(if_mod, $3, $1);
 		    %*/
@@ -690,8 +690,8 @@ var TOKENS = {
 /* Line 364 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_UNLESS(cond(((node)(yystack.valueAt (3-(3))))), remove_begin(((node)(yystack.valueAt (3-(1))))), 0);
-			fixpos(yyval, ((node)(yystack.valueAt (3-(3)))));
+			yyval = NEW_UNLESS(cond((yystack.valueAt(3-(3)))), remove_begin((yystack.valueAt(3-(1)))), 0);
+			fixpos(yyval, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(unless_mod, $3, $1);
 		    %*/
@@ -703,11 +703,11 @@ var TOKENS = {
 /* Line 373 of "parse.y"  */
     {
 		    /*%%%*/
-			if (((node)(yystack.valueAt (3-(1)))) && nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_BEGIN) {
-			    yyval = NEW_WHILE(cond(((node)(yystack.valueAt (3-(3))))), ((node)(yystack.valueAt (3-(1))))->nd_body, 0);
+			if ((yystack.valueAt(3-(1))) && nd_type((yystack.valueAt(3-(1)))) == NODE_BEGIN) {
+			    yyval = NEW_WHILE(cond((yystack.valueAt(3-(3)))), (yystack.valueAt(3-(1)))->nd_body, 0);
 			}
 			else {
-			    yyval = NEW_WHILE(cond(((node)(yystack.valueAt (3-(3))))), ((node)(yystack.valueAt (3-(1)))), 1);
+			    yyval = NEW_WHILE(cond((yystack.valueAt(3-(3)))), (yystack.valueAt(3-(1))), 1);
 			}
 		    /*%
 			$$ = dispatch2(while_mod, $3, $1);
@@ -720,11 +720,11 @@ var TOKENS = {
 /* Line 386 of "parse.y"  */
     {
 		    /*%%%*/
-			if (((node)(yystack.valueAt (3-(1)))) && nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_BEGIN) {
-			    yyval = NEW_UNTIL(cond(((node)(yystack.valueAt (3-(3))))), ((node)(yystack.valueAt (3-(1))))->nd_body, 0);
+			if ((yystack.valueAt(3-(1))) && nd_type((yystack.valueAt(3-(1)))) == NODE_BEGIN) {
+			    yyval = NEW_UNTIL(cond((yystack.valueAt(3-(3)))), (yystack.valueAt(3-(1)))->nd_body, 0);
 			}
 			else {
-			    yyval = NEW_UNTIL(cond(((node)(yystack.valueAt (3-(3))))), ((node)(yystack.valueAt (3-(1)))), 1);
+			    yyval = NEW_UNTIL(cond((yystack.valueAt(3-(3)))), (yystack.valueAt(3-(1))), 1);
 			}
 		    /*%
 			$$ = dispatch2(until_mod, $3, $1);
@@ -737,8 +737,8 @@ var TOKENS = {
 /* Line 399 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *resq = NEW_RESBODY(0, remove_begin(((node)(yystack.valueAt (3-(3))))), 0);
-			yyval = NEW_RESCUE(remove_begin(((node)(yystack.valueAt (3-(1))))), resq, 0);
+			NODE *resq = NEW_RESBODY(0, remove_begin((yystack.valueAt(3-(3)))), 0);
+			yyval = NEW_RESCUE(remove_begin((yystack.valueAt(3-(1)))), resq, 0);
 		    /*%
 			$$ = dispatch2(rescue_mod, $1, $3);
 		    %*/
@@ -754,7 +754,7 @@ var TOKENS = {
 			}
 		    /*%%%*/
 			yyval = NEW_POSTEXE(NEW_NODE(
-			    NODE_SCOPE, 0 /* tbl */, ((node)(yystack.valueAt (4-(3)))) /* body */, 0 /* args */));
+			    NODE_SCOPE, 0 /* tbl */, (yystack.valueAt(4-(3))) /* body */, 0 /* args */));
 		    /*%
 			$$ = dispatch1(END, $3);
 		    %*/
@@ -766,9 +766,9 @@ var TOKENS = {
 /* Line 421 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			((node)(yystack.valueAt (3-(1))))->nd_value = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
+			value_expr((yystack.valueAt(3-(3))));
+			(yystack.valueAt(3-(1)))->nd_value = (yystack.valueAt(3-(3)));
+			yyval = (yystack.valueAt(3-(1)));
 		    /*%
 			$$ = dispatch2(massign, $1, $3);
 		    %*/
@@ -779,8 +779,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 431 of "parse.y"  */
     {
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = new_op_assign(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(2)))), ((node)(yystack.valueAt (3-(3)))));
+			value_expr((yystack.valueAt(3-(3))));
+			yyval = new_op_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))), (yystack.valueAt(3-(3))));
 		    },
 
 
@@ -791,17 +791,17 @@ var TOKENS = {
 		    /*%%%*/
 			NODE *args;
 
-			value_expr(((node)(yystack.valueAt (6-(6)))));
-			if (!((node)(yystack.valueAt (6-(3))))) ((node)(yystack.valueAt (6-(3)))) = NEW_ZARRAY();
-			args = arg_concat(((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(6)))));
-			if (((id)(yystack.valueAt (6-(5)))) == tOROP) {
-			    ((id)(yystack.valueAt (6-(5)))) = 0;
+			value_expr((yystack.valueAt(6-(6))));
+			if (!(yystack.valueAt(6-(3)))) (yystack.valueAt(6-(3))) = NEW_ZARRAY();
+			args = arg_concat((yystack.valueAt(6-(3))), (yystack.valueAt(6-(6))));
+			if ((yystack.valueAt(6-(5))) == tOROP) {
+			    (yystack.valueAt(6-(5))) = 0;
 			}
-			else if (((id)(yystack.valueAt (6-(5)))) == tANDOP) {
-			    ((id)(yystack.valueAt (6-(5)))) = 1;
+			else if ((yystack.valueAt(6-(5))) == tANDOP) {
+			    (yystack.valueAt(6-(5))) = 1;
 			}
-			yyval = NEW_OP_ASGN1(((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(5)))), args);
-			fixpos(yyval, ((node)(yystack.valueAt (6-(1)))));
+			yyval = NEW_OP_ASGN1((yystack.valueAt(6-(1))), (yystack.valueAt(6-(5))), args);
+			fixpos(yyval, (yystack.valueAt(6-(1))));
 		    /*%
 			$$ = dispatch2(aref_field, $1, escape_Qundef($3));
 			$$ = dispatch3(opassign, $$, $5, $6);
@@ -813,8 +813,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 457 of "parse.y"  */
     {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_id2sym('.'), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			value_expr((yystack.valueAt(5-(5))));
+			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
 
 
@@ -822,8 +822,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 462 of "parse.y"  */
     {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_id2sym('.'), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			value_expr((yystack.valueAt(5-(5))));
+			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
 
 
@@ -832,8 +832,8 @@ var TOKENS = {
 /* Line 467 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_COLON2(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))));
-			yyval = new_const_op_assign(yyval, ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			yyval = NEW_COLON2((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))));
+			yyval = new_const_op_assign(yyval, (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    /*%
 			$$ = dispatch2(const_path_field, $1, $3);
 			$$ = dispatch3(opassign, $$, $4, $5);
@@ -845,8 +845,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 477 of "parse.y"  */
     {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_intern("::"), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			value_expr((yystack.valueAt(5-(5))));
+			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_intern("::"), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
 
 
@@ -855,7 +855,7 @@ var TOKENS = {
 /* Line 482 of "parse.y"  */
     {
 		    /*%%%*/
-			rb_backref_error(((node)(yystack.valueAt (3-(1)))));
+			rb_backref_error((yystack.valueAt(3-(1))));
 			yyval = NEW_BEGIN(0);
 		    /*%
 			$$ = dispatch2(assign, dispatch1(var_field, $1), $3);
@@ -869,8 +869,8 @@ var TOKENS = {
 /* Line 492 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = node_assign(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			value_expr((yystack.valueAt(3-(3))));
+			yyval = node_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(assign, $1, $3);
 		    %*/
@@ -882,8 +882,8 @@ var TOKENS = {
 /* Line 501 of "parse.y"  */
     {
 		    /*%%%*/
-			((node)(yystack.valueAt (3-(1))))->nd_value = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
+			(yystack.valueAt(3-(1)))->nd_value = (yystack.valueAt(3-(3)));
+			yyval = (yystack.valueAt(3-(1)));
 		    /*%
 			$$ = dispatch2(massign, $1, $3);
 		    %*/
@@ -895,8 +895,8 @@ var TOKENS = {
 /* Line 510 of "parse.y"  */
     {
 		    /*%%%*/
-			((node)(yystack.valueAt (3-(1))))->nd_value = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
+			(yystack.valueAt(3-(1)))->nd_value = (yystack.valueAt(3-(3)));
+			yyval = (yystack.valueAt(3-(1)));
 		    /*%
 			$$ = dispatch2(massign, $1, $3);
 		    %*/
@@ -908,8 +908,8 @@ var TOKENS = {
 /* Line 522 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = node_assign(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			value_expr((yystack.valueAt(3-(3))));
+			yyval = node_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(assign, $1, $3);
 		    %*/
@@ -921,8 +921,8 @@ var TOKENS = {
 /* Line 531 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = node_assign(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			value_expr((yystack.valueAt(3-(3))));
+			yyval = node_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(assign, $1, $3);
 		    %*/
@@ -934,7 +934,7 @@ var TOKENS = {
 /* Line 544 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = logop(NODE_AND, ((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = logop(NODE_AND, (yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("and"), $3);
 		    %*/
@@ -946,7 +946,7 @@ var TOKENS = {
 /* Line 552 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = logop(NODE_OR, ((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = logop(NODE_OR, (yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("or"), $3);
 		    %*/
@@ -958,7 +958,7 @@ var TOKENS = {
 /* Line 560 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_uni_op(cond(((node)(yystack.valueAt (3-(3))))), '!');
+			yyval = call_uni_op(cond((yystack.valueAt(3-(3)))), '!');
 		    /*%
 			$$ = dispatch2(unary, ripper_intern("not"), $3);
 		    %*/
@@ -970,7 +970,7 @@ var TOKENS = {
 /* Line 568 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_uni_op(cond(((node)(yystack.valueAt (2-(2))))), '!');
+			yyval = call_uni_op(cond((yystack.valueAt(2-(2)))), '!');
 		    /*%
 			$$ = dispatch2(unary, ripper_id2sym('!'), $2);
 		    %*/
@@ -982,8 +982,8 @@ var TOKENS = {
 /* Line 579 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			value_expr((yystack.valueAt(1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		        if (!yyval) yyval = NEW_NIL();
 		    /*%
 			$$ = $1;
@@ -996,7 +996,7 @@ var TOKENS = {
 /* Line 596 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    /*%
 			$$ = dispatch3(call, $1, $2, $3);
 			$$ = method_arg($$, $4);
@@ -1008,7 +1008,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 607 of "parse.y"  */
     {
-			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
+			(yystack.valueAt(1-(1))) = dyna_push();
 		    /*%%%*/
 			yyval = ruby_sourceline;
 		    /*%
@@ -1021,12 +1021,12 @@ var TOKENS = {
 /* Line 617 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_ITER(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(2)))));
+			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
+			nd_set_line(yyval, (yystack.valueAt(5-(2))));
 		    /*%
 			$$ = dispatch2(brace_block, escape_Qundef($3), $4);
 		    %*/
-			dyna_pop(((vars)(yystack.valueAt (5-(1)))));
+			dyna_pop((yystack.valueAt(5-(1))));
 		    },
 
 
@@ -1035,7 +1035,7 @@ var TOKENS = {
 /* Line 629 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_FCALL(((id)(yystack.valueAt (1-(1)))), 0);
+			yyval = NEW_FCALL((yystack.valueAt(1-(1))), 0);
 			nd_set_line(yyval, tokline);
 		    /*%
 		    %*/
@@ -1047,8 +1047,8 @@ var TOKENS = {
 /* Line 639 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
-			yyval->nd_args = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(1)));
+			yyval->nd_args = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = dispatch2(command, $1, $2);
 		    %*/
@@ -1060,11 +1060,11 @@ var TOKENS = {
 /* Line 648 of "parse.y"  */
     {
 		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (3-(2)))),((node)(yystack.valueAt (3-(3)))));
-			((node)(yystack.valueAt (3-(1))))->nd_args = ((node)(yystack.valueAt (3-(2))));
-		        ((node)(yystack.valueAt (3-(3))))->nd_iter = ((node)(yystack.valueAt (3-(1))));
-			yyval = ((node)(yystack.valueAt (3-(3))));
-			fixpos(yyval, ((node)(yystack.valueAt (3-(1)))));
+			block_dup_check((yystack.valueAt(3-(2))),(yystack.valueAt(3-(3))));
+			(yystack.valueAt(3-(1)))->nd_args = (yystack.valueAt(3-(2)));
+		        (yystack.valueAt(3-(3)))->nd_iter = (yystack.valueAt(3-(1)));
+			yyval = (yystack.valueAt(3-(3)));
+			fixpos(yyval, (yystack.valueAt(3-(1))));
 		    /*%
 			$$ = dispatch2(command, $1, $2);
 			$$ = method_add_block($$, $3);
@@ -1077,8 +1077,8 @@ var TOKENS = {
 /* Line 661 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-			fixpos(yyval, ((node)(yystack.valueAt (4-(1)))));
+			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
+			fixpos(yyval, (yystack.valueAt(4-(1))));
 		    /*%
 			$$ = dispatch4(command_call, $1, ripper_id2sym('.'), $3, $4);
 		    %*/
@@ -1090,10 +1090,10 @@ var TOKENS = {
 /* Line 670 of "parse.y"  */
     {
 		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (5-(4)))),((node)(yystack.valueAt (5-(5)))));
-		        ((node)(yystack.valueAt (5-(5))))->nd_iter = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(4)))));
-			yyval = ((node)(yystack.valueAt (5-(5))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(1)))));
+			block_dup_check((yystack.valueAt(5-(4))),(yystack.valueAt(5-(5))));
+		        (yystack.valueAt(5-(5)))->nd_iter = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))));
+			yyval = (yystack.valueAt(5-(5)));
+			fixpos(yyval, (yystack.valueAt(5-(1))));
 		    /*%
 			$$ = dispatch4(command_call, $1, ripper_id2sym('.'), $3, $4);
 			$$ = method_add_block($$, $5);
@@ -1106,8 +1106,8 @@ var TOKENS = {
 /* Line 682 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
-			fixpos(yyval, ((node)(yystack.valueAt (4-(1)))));
+			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
+			fixpos(yyval, (yystack.valueAt(4-(1))));
 		    /*%
 			$$ = dispatch4(command_call, $1, ripper_intern("::"), $3, $4);
 		    %*/
@@ -1119,10 +1119,10 @@ var TOKENS = {
 /* Line 691 of "parse.y"  */
     {
 		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (5-(4)))),((node)(yystack.valueAt (5-(5)))));
-		        ((node)(yystack.valueAt (5-(5))))->nd_iter = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(4)))));
-			yyval = ((node)(yystack.valueAt (5-(5))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(1)))));
+			block_dup_check((yystack.valueAt(5-(4))),(yystack.valueAt(5-(5))));
+		        (yystack.valueAt(5-(5)))->nd_iter = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))));
+			yyval = (yystack.valueAt(5-(5)));
+			fixpos(yyval, (yystack.valueAt(5-(1))));
 		    /*%
 			$$ = dispatch4(command_call, $1, ripper_intern("::"), $3, $4);
 			$$ = method_add_block($$, $5);
@@ -1135,8 +1135,8 @@ var TOKENS = {
 /* Line 703 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_SUPER(((node)(yystack.valueAt (2-(2)))));
-			fixpos(yyval, ((node)(yystack.valueAt (2-(2)))));
+			yyval = NEW_SUPER((yystack.valueAt(2-(2))));
+			fixpos(yyval, (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch1(super, $2);
 		    %*/
@@ -1148,8 +1148,8 @@ var TOKENS = {
 /* Line 712 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = new_yield(((node)(yystack.valueAt (2-(2)))));
-			fixpos(yyval, ((node)(yystack.valueAt (2-(2)))));
+			yyval = new_yield((yystack.valueAt(2-(2))));
+			fixpos(yyval, (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch1(yield, $2);
 		    %*/
@@ -1161,7 +1161,7 @@ var TOKENS = {
 /* Line 721 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_RETURN(ret_args(((node)(yystack.valueAt (2-(2))))));
+			yyval = NEW_RETURN(ret_args((yystack.valueAt(2-(2)))));
 		    /*%
 			$$ = dispatch1(return, $2);
 		    %*/
@@ -1173,7 +1173,7 @@ var TOKENS = {
 /* Line 729 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_BREAK(ret_args(((node)(yystack.valueAt (2-(2))))));
+			yyval = NEW_BREAK(ret_args((yystack.valueAt(2-(2)))));
 		    /*%
 			$$ = dispatch1(break, $2);
 		    %*/
@@ -1185,7 +1185,7 @@ var TOKENS = {
 /* Line 737 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_NEXT(ret_args(((node)(yystack.valueAt (2-(2))))));
+			yyval = NEW_NEXT(ret_args((yystack.valueAt(2-(2)))));
 		    /*%
 			$$ = dispatch1(next, $2);
 		    %*/
@@ -1197,7 +1197,7 @@ var TOKENS = {
 /* Line 748 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(mlhs_paren, $2);
 		    %*/
@@ -1209,7 +1209,7 @@ var TOKENS = {
 /* Line 759 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(NEW_LIST(((node)(yystack.valueAt (3-(2))))), 0);
+			yyval = NEW_MASGN(NEW_LIST((yystack.valueAt(3-(2)))), 0);
 		    /*%
 			$$ = dispatch1(mlhs_paren, $2);
 		    %*/
@@ -1221,7 +1221,7 @@ var TOKENS = {
 /* Line 769 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (1-(1)))), 0);
+			yyval = NEW_MASGN((yystack.valueAt(1-(1))), 0);
 		    /*%
 			$$ = $1;
 		    %*/
@@ -1233,7 +1233,7 @@ var TOKENS = {
 /* Line 777 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(list_append(((node)(yystack.valueAt (2-(1)))),((node)(yystack.valueAt (2-(2))))), 0);
+			yyval = NEW_MASGN(list_append((yystack.valueAt(2-(1))),(yystack.valueAt(2-(2)))), 0);
 		    /*%
 			$$ = mlhs_add($1, $2);
 		    %*/
@@ -1245,7 +1245,7 @@ var TOKENS = {
 /* Line 785 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = NEW_MASGN((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = mlhs_add_star($1, $3);
 		    %*/
@@ -1257,7 +1257,7 @@ var TOKENS = {
 /* Line 793 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (5-(1)))), NEW_POSTARG(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(5))))));
+			yyval = NEW_MASGN((yystack.valueAt(5-(1))), NEW_POSTARG((yystack.valueAt(5-(3))),(yystack.valueAt(5-(5)))));
 		    /*%
 			$1 = mlhs_add_star($1, $3);
 			$$ = mlhs_add($1, $5);
@@ -1270,7 +1270,7 @@ var TOKENS = {
 /* Line 802 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (2-(1)))), -1);
+			yyval = NEW_MASGN((yystack.valueAt(2-(1))), -1);
 		    /*%
 			$$ = mlhs_add_star($1, Qnil);
 		    %*/
@@ -1282,7 +1282,7 @@ var TOKENS = {
 /* Line 810 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (4-(1)))), NEW_POSTARG(-1, ((node)(yystack.valueAt (4-(4))))));
+			yyval = NEW_MASGN((yystack.valueAt(4-(1))), NEW_POSTARG(-1, (yystack.valueAt(4-(4)))));
 		    /*%
 			$1 = mlhs_add_star($1, Qnil);
 			$$ = mlhs_add($1, $4);
@@ -1295,7 +1295,7 @@ var TOKENS = {
 /* Line 819 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(0, ((node)(yystack.valueAt (2-(2)))));
+			yyval = NEW_MASGN(0, (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = mlhs_add_star(mlhs_new(), $2);
 		    %*/
@@ -1307,7 +1307,7 @@ var TOKENS = {
 /* Line 827 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(((node)(yystack.valueAt (4-(2)))),((node)(yystack.valueAt (4-(4))))));
+			yyval = NEW_MASGN(0, NEW_POSTARG((yystack.valueAt(4-(2))),(yystack.valueAt(4-(4)))));
 		    /*%
 			$2 = mlhs_add_star(mlhs_new(), $2);
 			$$ = mlhs_add($2, $4);
@@ -1332,7 +1332,7 @@ var TOKENS = {
 /* Line 844 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(-1, ((node)(yystack.valueAt (3-(3))))));
+			yyval = NEW_MASGN(0, NEW_POSTARG(-1, (yystack.valueAt(3-(3)))));
 		    /*%
 			$$ = mlhs_add_star(mlhs_new(), Qnil);
 			$$ = mlhs_add($$, $3);
@@ -1345,7 +1345,7 @@ var TOKENS = {
 /* Line 856 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(mlhs_paren, $2);
 		    %*/
@@ -1357,7 +1357,7 @@ var TOKENS = {
 /* Line 866 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (2-(1)))));
+			yyval = NEW_LIST((yystack.valueAt(2-(1))));
 		    /*%
 			$$ = mlhs_add(mlhs_new(), $1);
 		    %*/
@@ -1369,7 +1369,7 @@ var TOKENS = {
 /* Line 874 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(2)))));
+			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
 		    /*%
 			$$ = mlhs_add($1, $2);
 		    %*/
@@ -1381,7 +1381,7 @@ var TOKENS = {
 /* Line 884 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
+			yyval = NEW_LIST((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = mlhs_add(mlhs_new(), $1);
 		    %*/
@@ -1393,7 +1393,7 @@ var TOKENS = {
 /* Line 892 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = mlhs_add($1, $3);
 		    %*/
@@ -1404,7 +1404,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 902 of "parse.y"  */
     {
-			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
+			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    },
 
 
@@ -1412,7 +1412,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 906 of "parse.y"  */
     {
-		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
+		        yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    },
 
 
@@ -1421,7 +1421,7 @@ var TOKENS = {
 /* Line 910 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = aryset(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))));
+			yyval = aryset((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))));
 		    /*%
 			$$ = dispatch2(aref_field, $1, escape_Qundef($3));
 		    %*/
@@ -1433,7 +1433,7 @@ var TOKENS = {
 /* Line 918 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(field, $1, ripper_id2sym('.'), $3);
 		    %*/
@@ -1445,7 +1445,7 @@ var TOKENS = {
 /* Line 926 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(const_path_field, $1, $3);
 		    %*/
@@ -1457,7 +1457,7 @@ var TOKENS = {
 /* Line 934 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(field, $1, ripper_id2sym('.'), $3);
 		    %*/
@@ -1471,7 +1471,7 @@ var TOKENS = {
 		    /*%%%*/
 			if (in_def || in_single)
 			    yyerror("dynamic constant assignment");
-			yyval = NEW_CDECL(0, 0, NEW_COLON2(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3))))));
+			yyval = NEW_CDECL(0, 0, NEW_COLON2((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3)))));
 		    /*%
 			if (in_def || in_single)
 			    yyerror("dynamic constant assignment");
@@ -1487,7 +1487,7 @@ var TOKENS = {
 		    /*%%%*/
 			if (in_def || in_single)
 			    yyerror("dynamic constant assignment");
-			yyval = NEW_CDECL(0, 0, NEW_COLON3(((id)(yystack.valueAt (2-(2))))));
+			yyval = NEW_CDECL(0, 0, NEW_COLON3((yystack.valueAt(2-(2)))));
 		    /*%
 			$$ = dispatch1(top_const_field, $2);
 		    %*/
@@ -1499,7 +1499,7 @@ var TOKENS = {
 /* Line 964 of "parse.y"  */
     {
 		    /*%%%*/
-			rb_backref_error(((node)(yystack.valueAt (1-(1)))));
+			rb_backref_error((yystack.valueAt(1-(1))));
 			yyval = NEW_BEGIN(0);
 		    /*%
 			$$ = dispatch1(var_field, $1);
@@ -1512,7 +1512,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 976 of "parse.y"  */
     {
-			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
+			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
 			if (!yyval) yyval = NEW_BEGIN(0);
 		    /*%
@@ -1525,7 +1525,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 985 of "parse.y"  */
     {
-		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
+		        yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
 		        if (!yyval) yyval = NEW_BEGIN(0);
 		    /*%
@@ -1539,7 +1539,7 @@ var TOKENS = {
 /* Line 994 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = aryset(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))));
+			yyval = aryset((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))));
 		    /*%
 			$$ = dispatch2(aref_field, $1, escape_Qundef($3));
 		    %*/
@@ -1551,7 +1551,7 @@ var TOKENS = {
 /* Line 1002 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(field, $1, ripper_id2sym('.'), $3);
 		    %*/
@@ -1563,7 +1563,7 @@ var TOKENS = {
 /* Line 1010 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(field, $1, ripper_intern("::"), $3);
 		    %*/
@@ -1575,7 +1575,7 @@ var TOKENS = {
 /* Line 1018 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = attrset(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(field, $1, ripper_id2sym('.'), $3);
 		    %*/
@@ -1589,7 +1589,7 @@ var TOKENS = {
 		    /*%%%*/
 			if (in_def || in_single)
 			    yyerror("dynamic constant assignment");
-			yyval = NEW_CDECL(0, 0, NEW_COLON2(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3))))));
+			yyval = NEW_CDECL(0, 0, NEW_COLON2((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3)))));
 		    /*%
 			$$ = dispatch2(const_path_field, $1, $3);
 			if (in_def || in_single) {
@@ -1606,7 +1606,7 @@ var TOKENS = {
 		    /*%%%*/
 			if (in_def || in_single)
 			    yyerror("dynamic constant assignment");
-			yyval = NEW_CDECL(0, 0, NEW_COLON3(((id)(yystack.valueAt (2-(2))))));
+			yyval = NEW_CDECL(0, 0, NEW_COLON3((yystack.valueAt(2-(2)))));
 		    /*%
 			$$ = dispatch1(top_const_field, $2);
 			if (in_def || in_single) {
@@ -1621,7 +1621,7 @@ var TOKENS = {
 /* Line 1052 of "parse.y"  */
     {
 		    /*%%%*/
-			rb_backref_error(((node)(yystack.valueAt (1-(1)))));
+			rb_backref_error((yystack.valueAt(1-(1))));
 			yyval = NEW_BEGIN(0);
 		    /*%
 			$$ = dispatch1(assign_error, $1);
@@ -1646,7 +1646,7 @@ var TOKENS = {
 /* Line 1074 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_COLON3(((id)(yystack.valueAt (2-(2)))));
+			yyval = NEW_COLON3((yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch1(top_const_ref, $2);
 		    %*/
@@ -1670,7 +1670,7 @@ var TOKENS = {
 /* Line 1090 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_COLON2(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = NEW_COLON2((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(const_path_ref, $1, $3);
 		    %*/
@@ -1682,7 +1682,7 @@ var TOKENS = {
 /* Line 1103 of "parse.y"  */
     {
 			lex_state = EXPR_ENDFN;
-			yyval = ((id)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    },
 
 
@@ -1692,7 +1692,7 @@ var TOKENS = {
     {
 			lex_state = EXPR_ENDFN;
 		    /*%%%*/
-			yyval = ((id)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    /*%
 			$$ = $1;
 		    %*/
@@ -1704,7 +1704,7 @@ var TOKENS = {
 /* Line 1123 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIT(ID2SYM(((id)(yystack.valueAt (1-(1))))));
+			yyval = NEW_LIT(ID2SYM((yystack.valueAt(1-(1)))));
 		    /*%
 			$$ = dispatch1(symbol_literal, $1);
 		    %*/
@@ -1716,7 +1716,7 @@ var TOKENS = {
 /* Line 1134 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_UNDEF(((node)(yystack.valueAt (1-(1)))));
+			yyval = NEW_UNDEF((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = rb_ary_new3(1, $1);
 		    %*/
@@ -1734,7 +1734,7 @@ var TOKENS = {
 /* Line 1142 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = block_append(((node)(yystack.valueAt (4-(1)))), NEW_UNDEF(((node)(yystack.valueAt (4-(4))))));
+			yyval = block_append((yystack.valueAt(4-(1))), NEW_UNDEF((yystack.valueAt(4-(4)))));
 		    /*%
 			rb_ary_push($1, $4);
 		    %*/
@@ -1926,8 +1926,8 @@ var TOKENS = {
 /* Line 1198 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = node_assign(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			value_expr((yystack.valueAt(3-(3))));
+			yyval = node_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(assign, $1, $3);
 		    %*/
@@ -1939,9 +1939,9 @@ var TOKENS = {
 /* Line 1207 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (5-(3)))));
-		        ((node)(yystack.valueAt (5-(3)))) = NEW_RESCUE(((node)(yystack.valueAt (5-(3)))), NEW_RESBODY(0,((node)(yystack.valueAt (5-(5)))),0), 0);
-			yyval = node_assign(((node)(yystack.valueAt (5-(1)))), ((node)(yystack.valueAt (5-(3)))));
+			value_expr((yystack.valueAt(5-(3))));
+		        (yystack.valueAt(5-(3))) = NEW_RESCUE((yystack.valueAt(5-(3))), NEW_RESBODY(0,(yystack.valueAt(5-(5))),0), 0);
+			yyval = node_assign((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))));
 		    /*%
 			$$ = dispatch2(assign, $1, dispatch2(rescue_mod, $3, $5));
 		    %*/
@@ -1952,8 +1952,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1217 of "parse.y"  */
     {
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = new_op_assign(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(2)))), ((node)(yystack.valueAt (3-(3)))));
+			value_expr((yystack.valueAt(3-(3))));
+			yyval = new_op_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))), (yystack.valueAt(3-(3))));
 		    },
 
 
@@ -1962,12 +1962,12 @@ var TOKENS = {
 /* Line 1222 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (5-(3)))));
-		        ((node)(yystack.valueAt (5-(3)))) = NEW_RESCUE(((node)(yystack.valueAt (5-(3)))), NEW_RESBODY(0,((node)(yystack.valueAt (5-(5)))),0), 0);
+			value_expr((yystack.valueAt(5-(3))));
+		        (yystack.valueAt(5-(3))) = NEW_RESCUE((yystack.valueAt(5-(3))), NEW_RESBODY(0,(yystack.valueAt(5-(5))),0), 0);
 		    /*%
 			$3 = dispatch2(rescue_mod, $3, $5);
 		    %*/
-			yyval = new_op_assign(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(2)))), ((node)(yystack.valueAt (5-(3)))));
+			yyval = new_op_assign((yystack.valueAt(5-(1))), (yystack.valueAt(5-(2))), (yystack.valueAt(5-(3))));
 		    },
 
 
@@ -1978,22 +1978,22 @@ var TOKENS = {
 		    /*%%%*/
 			NODE *args;
 
-			value_expr(((node)(yystack.valueAt (6-(6)))));
-			if (!((node)(yystack.valueAt (6-(3))))) ((node)(yystack.valueAt (6-(3)))) = NEW_ZARRAY();
-			if (nd_type(((node)(yystack.valueAt (6-(3))))) == NODE_BLOCK_PASS) {
-			    args = NEW_ARGSCAT(((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(6)))));
+			value_expr((yystack.valueAt(6-(6))));
+			if (!(yystack.valueAt(6-(3)))) (yystack.valueAt(6-(3))) = NEW_ZARRAY();
+			if (nd_type((yystack.valueAt(6-(3)))) == NODE_BLOCK_PASS) {
+			    args = NEW_ARGSCAT((yystack.valueAt(6-(3))), (yystack.valueAt(6-(6))));
 			}
 		        else {
-			    args = arg_concat(((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(6)))));
+			    args = arg_concat((yystack.valueAt(6-(3))), (yystack.valueAt(6-(6))));
 		        }
-			if (((id)(yystack.valueAt (6-(5)))) == tOROP) {
-			    ((id)(yystack.valueAt (6-(5)))) = 0;
+			if ((yystack.valueAt(6-(5))) == tOROP) {
+			    (yystack.valueAt(6-(5))) = 0;
 			}
-			else if (((id)(yystack.valueAt (6-(5)))) == tANDOP) {
-			    ((id)(yystack.valueAt (6-(5)))) = 1;
+			else if ((yystack.valueAt(6-(5))) == tANDOP) {
+			    (yystack.valueAt(6-(5))) = 1;
 			}
-			yyval = NEW_OP_ASGN1(((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(5)))), args);
-			fixpos(yyval, ((node)(yystack.valueAt (6-(1)))));
+			yyval = NEW_OP_ASGN1((yystack.valueAt(6-(1))), (yystack.valueAt(6-(5))), args);
+			fixpos(yyval, (yystack.valueAt(6-(1))));
 		    /*%
 			$1 = dispatch2(aref_field, $1, escape_Qundef($3));
 			$$ = dispatch3(opassign, $1, $5, $6);
@@ -2005,8 +2005,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1258 of "parse.y"  */
     {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_id2sym('.'), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			value_expr((yystack.valueAt(5-(5))));
+			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
 
 
@@ -2014,8 +2014,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1263 of "parse.y"  */
     {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_id2sym('.'), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			value_expr((yystack.valueAt(5-(5))));
+			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
 
 
@@ -2023,8 +2023,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1268 of "parse.y"  */
     {
-			value_expr(((node)(yystack.valueAt (5-(5)))));
-			yyval = new_attr_op_assign(((node)(yystack.valueAt (5-(1)))), ripper_intern("::"), ((id)(yystack.valueAt (5-(3)))), ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			value_expr((yystack.valueAt(5-(5))));
+			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_intern("::"), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
 
 
@@ -2033,8 +2033,8 @@ var TOKENS = {
 /* Line 1273 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_COLON2(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))));
-			yyval = new_const_op_assign(yyval, ((id)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			yyval = NEW_COLON2((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))));
+			yyval = new_const_op_assign(yyval, (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    /*%
 			$$ = dispatch2(const_path_field, $1, $3);
 			$$ = dispatch3(opassign, $$, $4, $5);
@@ -2047,8 +2047,8 @@ var TOKENS = {
 /* Line 1283 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_COLON3(((id)(yystack.valueAt (4-(2)))));
-			yyval = new_const_op_assign(yyval, ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = NEW_COLON3((yystack.valueAt(4-(2))));
+			yyval = new_const_op_assign(yyval, (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    /*%
 			$$ = dispatch1(top_const_field, $2);
 			$$ = dispatch3(opassign, $$, $3, $4);
@@ -2061,7 +2061,7 @@ var TOKENS = {
 /* Line 1293 of "parse.y"  */
     {
 		    /*%%%*/
-			rb_backref_error(((node)(yystack.valueAt (3-(1)))));
+			rb_backref_error((yystack.valueAt(3-(1))));
 			yyval = NEW_BEGIN(0);
 		    /*%
 			$$ = dispatch1(var_field, $1);
@@ -2076,11 +2076,11 @@ var TOKENS = {
 /* Line 1304 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(1)))));
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = NEW_DOT2(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-			if (nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_LIT && FIXNUM_P(((node)(yystack.valueAt (3-(1))))->nd_lit) &&
-			    nd_type(((node)(yystack.valueAt (3-(3))))) == NODE_LIT && FIXNUM_P(((node)(yystack.valueAt (3-(3))))->nd_lit)) {
+			value_expr((yystack.valueAt(3-(1))));
+			value_expr((yystack.valueAt(3-(3))));
+			yyval = NEW_DOT2((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
+			if (nd_type((yystack.valueAt(3-(1)))) == NODE_LIT && FIXNUM_P((yystack.valueAt(3-(1)))->nd_lit) &&
+			    nd_type((yystack.valueAt(3-(3)))) == NODE_LIT && FIXNUM_P((yystack.valueAt(3-(3)))->nd_lit)) {
 			    deferred_nodes = list_append(deferred_nodes, yyval);
 			}
 		    /*%
@@ -2094,11 +2094,11 @@ var TOKENS = {
 /* Line 1318 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (3-(1)))));
-			value_expr(((node)(yystack.valueAt (3-(3)))));
-			yyval = NEW_DOT3(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-			if (nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_LIT && FIXNUM_P(((node)(yystack.valueAt (3-(1))))->nd_lit) &&
-			    nd_type(((node)(yystack.valueAt (3-(3))))) == NODE_LIT && FIXNUM_P(((node)(yystack.valueAt (3-(3))))->nd_lit)) {
+			value_expr((yystack.valueAt(3-(1))));
+			value_expr((yystack.valueAt(3-(3))));
+			yyval = NEW_DOT3((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
+			if (nd_type((yystack.valueAt(3-(1)))) == NODE_LIT && FIXNUM_P((yystack.valueAt(3-(1)))->nd_lit) &&
+			    nd_type((yystack.valueAt(3-(3)))) == NODE_LIT && FIXNUM_P((yystack.valueAt(3-(3)))->nd_lit)) {
 			    deferred_nodes = list_append(deferred_nodes, yyval);
 			}
 		    /*%
@@ -2112,7 +2112,7 @@ var TOKENS = {
 /* Line 1332 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '+', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '+', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('+'), $3);
 		    %*/
@@ -2124,7 +2124,7 @@ var TOKENS = {
 /* Line 1340 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '-', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '-', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('-'), $3);
 		    %*/
@@ -2136,7 +2136,7 @@ var TOKENS = {
 /* Line 1348 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '*', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '*', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('*'), $3);
 		    %*/
@@ -2148,7 +2148,7 @@ var TOKENS = {
 /* Line 1356 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '/', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '/', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('/'), $3);
 		    %*/
@@ -2160,7 +2160,7 @@ var TOKENS = {
 /* Line 1364 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '%', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '%', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('%'), $3);
 		    %*/
@@ -2172,7 +2172,7 @@ var TOKENS = {
 /* Line 1372 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tPOW, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tPOW, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("**"), $3);
 		    %*/
@@ -2184,7 +2184,7 @@ var TOKENS = {
 /* Line 1380 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(call_bin_op(((node)(yystack.valueAt (4-(2)))), tPOW, ((node)(yystack.valueAt (4-(4))))), tUMINUS, 0);
+			yyval = NEW_CALL(call_bin_op((yystack.valueAt(4-(2))), tPOW, (yystack.valueAt(4-(4)))), tUMINUS, 0);
 		    /*%
 			$$ = dispatch3(binary, $2, ripper_intern("**"), $4);
 			$$ = dispatch2(unary, ripper_intern("-@"), $$);
@@ -2197,7 +2197,7 @@ var TOKENS = {
 /* Line 1389 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(call_bin_op(((node)(yystack.valueAt (4-(2)))), tPOW, ((node)(yystack.valueAt (4-(4))))), tUMINUS, 0);
+			yyval = NEW_CALL(call_bin_op((yystack.valueAt(4-(2))), tPOW, (yystack.valueAt(4-(4)))), tUMINUS, 0);
 		    /*%
 			$$ = dispatch3(binary, $2, ripper_intern("**"), $4);
 			$$ = dispatch2(unary, ripper_intern("-@"), $$);
@@ -2210,7 +2210,7 @@ var TOKENS = {
 /* Line 1398 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_uni_op(((node)(yystack.valueAt (2-(2)))), tUPLUS);
+			yyval = call_uni_op((yystack.valueAt(2-(2))), tUPLUS);
 		    /*%
 			$$ = dispatch2(unary, ripper_intern("+@"), $2);
 		    %*/
@@ -2222,7 +2222,7 @@ var TOKENS = {
 /* Line 1406 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_uni_op(((node)(yystack.valueAt (2-(2)))), tUMINUS);
+			yyval = call_uni_op((yystack.valueAt(2-(2))), tUMINUS);
 		    /*%
 			$$ = dispatch2(unary, ripper_intern("-@"), $2);
 		    %*/
@@ -2234,7 +2234,7 @@ var TOKENS = {
 /* Line 1414 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '|', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '|', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('|'), $3);
 		    %*/
@@ -2246,7 +2246,7 @@ var TOKENS = {
 /* Line 1422 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '^', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '^', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('^'), $3);
 		    %*/
@@ -2258,7 +2258,7 @@ var TOKENS = {
 /* Line 1430 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '&', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '&', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('&'), $3);
 		    %*/
@@ -2270,7 +2270,7 @@ var TOKENS = {
 /* Line 1438 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tCMP, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tCMP, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("<=>"), $3);
 		    %*/
@@ -2282,7 +2282,7 @@ var TOKENS = {
 /* Line 1446 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '>', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '>', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('>'), $3);
 		    %*/
@@ -2294,7 +2294,7 @@ var TOKENS = {
 /* Line 1454 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tGEQ, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tGEQ, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern(">="), $3);
 		    %*/
@@ -2306,7 +2306,7 @@ var TOKENS = {
 /* Line 1462 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), '<', ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), '<', (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ID2SYM('<'), $3);
 		    %*/
@@ -2318,7 +2318,7 @@ var TOKENS = {
 /* Line 1470 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tLEQ, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tLEQ, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("<="), $3);
 		    %*/
@@ -2330,7 +2330,7 @@ var TOKENS = {
 /* Line 1478 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tEQ, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tEQ, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("=="), $3);
 		    %*/
@@ -2342,7 +2342,7 @@ var TOKENS = {
 /* Line 1486 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tEQQ, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tEQQ, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("==="), $3);
 		    %*/
@@ -2354,7 +2354,7 @@ var TOKENS = {
 /* Line 1494 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tNEQ, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tNEQ, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("!="), $3);
 		    %*/
@@ -2366,9 +2366,9 @@ var TOKENS = {
 /* Line 1502 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = match_op(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
-                        if (nd_type(((node)(yystack.valueAt (3-(1))))) == NODE_LIT && RB_TYPE_P(((node)(yystack.valueAt (3-(1))))->nd_lit, T_REGEXP)) {
-                            yyval = reg_named_capture_assign(((node)(yystack.valueAt (3-(1))))->nd_lit, yyval);
+			yyval = match_op((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
+                        if (nd_type((yystack.valueAt(3-(1)))) == NODE_LIT && RB_TYPE_P((yystack.valueAt(3-(1)))->nd_lit, T_REGEXP)) {
+                            yyval = reg_named_capture_assign((yystack.valueAt(3-(1)))->nd_lit, yyval);
                         }
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("=~"), $3);
@@ -2381,7 +2381,7 @@ var TOKENS = {
 /* Line 1513 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tNMATCH, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tNMATCH, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("!~"), $3);
 		    %*/
@@ -2393,7 +2393,7 @@ var TOKENS = {
 /* Line 1521 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_uni_op(cond(((node)(yystack.valueAt (2-(2))))), '!');
+			yyval = call_uni_op(cond((yystack.valueAt(2-(2)))), '!');
 		    /*%
 			$$ = dispatch2(unary, ID2SYM('!'), $2);
 		    %*/
@@ -2405,7 +2405,7 @@ var TOKENS = {
 /* Line 1529 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_uni_op(((node)(yystack.valueAt (2-(2)))), '~');
+			yyval = call_uni_op((yystack.valueAt(2-(2))), '~');
 		    /*%
 			$$ = dispatch2(unary, ID2SYM('~'), $2);
 		    %*/
@@ -2417,7 +2417,7 @@ var TOKENS = {
 /* Line 1537 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tLSHFT, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tLSHFT, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("<<"), $3);
 		    %*/
@@ -2429,7 +2429,7 @@ var TOKENS = {
 /* Line 1545 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_bin_op(((node)(yystack.valueAt (3-(1)))), tRSHFT, ((node)(yystack.valueAt (3-(3)))));
+			yyval = call_bin_op((yystack.valueAt(3-(1))), tRSHFT, (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern(">>"), $3);
 		    %*/
@@ -2441,7 +2441,7 @@ var TOKENS = {
 /* Line 1553 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = logop(NODE_AND, ((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = logop(NODE_AND, (yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("&&"), $3);
 		    %*/
@@ -2453,7 +2453,7 @@ var TOKENS = {
 /* Line 1561 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = logop(NODE_OR, ((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = logop(NODE_OR, (yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch3(binary, $1, ripper_intern("||"), $3);
 		    %*/
@@ -2472,7 +2472,7 @@ var TOKENS = {
     {
 		    /*%%%*/
 			in_defined = 0;
-			yyval = NEW_DEFINED(((node)(yystack.valueAt (4-(4)))));
+			yyval = NEW_DEFINED((yystack.valueAt(4-(4))));
 		    /*%
 			in_defined = 0;
 			$$ = dispatch1(defined, $4);
@@ -2485,9 +2485,9 @@ var TOKENS = {
 /* Line 1579 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (6-(1)))));
-			yyval = NEW_IF(cond(((node)(yystack.valueAt (6-(1))))), ((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(6)))));
-			fixpos(yyval, ((node)(yystack.valueAt (6-(1)))));
+			value_expr((yystack.valueAt(6-(1))));
+			yyval = NEW_IF(cond((yystack.valueAt(6-(1)))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(6))));
+			fixpos(yyval, (yystack.valueAt(6-(1))));
 		    /*%
 			$$ = dispatch3(ifop, $1, $3, $6);
 		    %*/
@@ -2498,7 +2498,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1589 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    },
 
 
@@ -2507,8 +2507,8 @@ var TOKENS = {
 /* Line 1595 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			value_expr((yystack.valueAt(1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		        if (!yyval) yyval = NEW_NIL();
 		    /*%
 			$$ = $1;
@@ -2520,7 +2520,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1608 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (2-(1))));
+			yyval = (yystack.valueAt(2-(1)));
 		    },
 
 
@@ -2529,7 +2529,7 @@ var TOKENS = {
 /* Line 1612 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = arg_append(((node)(yystack.valueAt (4-(1)))), NEW_HASH(((node)(yystack.valueAt (4-(3))))));
+			yyval = arg_append((yystack.valueAt(4-(1))), NEW_HASH((yystack.valueAt(4-(3)))));
 		    /*%
 			$$ = arg_add_assocs($1, $3);
 		    %*/
@@ -2541,7 +2541,7 @@ var TOKENS = {
 /* Line 1620 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIST(NEW_HASH(((node)(yystack.valueAt (2-(1))))));
+			yyval = NEW_LIST(NEW_HASH((yystack.valueAt(2-(1)))));
 		    /*%
 			$$ = arg_add_assocs(arg_new(), $1);
 		    %*/
@@ -2553,7 +2553,7 @@ var TOKENS = {
 /* Line 1630 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(arg_paren, escape_Qundef($2));
 		    %*/
@@ -2564,7 +2564,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1646 of "parse.y"  */
     {
-		      yyval = ((node)(yystack.valueAt (2-(1))));
+		      yyval = (yystack.valueAt(2-(1)));
 		    },
 
 
@@ -2573,7 +2573,7 @@ var TOKENS = {
 /* Line 1650 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = arg_append(((node)(yystack.valueAt (4-(1)))), NEW_HASH(((node)(yystack.valueAt (4-(3))))));
+			yyval = arg_append((yystack.valueAt(4-(1))), NEW_HASH((yystack.valueAt(4-(3)))));
 		    /*%
 			$$ = arg_add_assocs($1, $3);
 		    %*/
@@ -2585,7 +2585,7 @@ var TOKENS = {
 /* Line 1658 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIST(NEW_HASH(((node)(yystack.valueAt (2-(1))))));
+			yyval = NEW_LIST(NEW_HASH((yystack.valueAt(2-(1)))));
 		    /*%
 			$$ = arg_add_assocs(arg_new(), $1);
 		    %*/
@@ -2597,8 +2597,8 @@ var TOKENS = {
 /* Line 1668 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
+			value_expr((yystack.valueAt(1-(1))));
+			yyval = NEW_LIST((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = arg_add(arg_new(), $1);
 		    %*/
@@ -2610,7 +2610,7 @@ var TOKENS = {
 /* Line 1677 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = arg_blk_pass(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
+			yyval = arg_blk_pass((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = arg_add_optblock($1, $2);
 		    %*/
@@ -2622,8 +2622,8 @@ var TOKENS = {
 /* Line 1685 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIST(NEW_HASH(((node)(yystack.valueAt (2-(1))))));
-			yyval = arg_blk_pass(yyval, ((node)(yystack.valueAt (2-(2)))));
+			yyval = NEW_LIST(NEW_HASH((yystack.valueAt(2-(1)))));
+			yyval = arg_blk_pass(yyval, (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = arg_add_assocs(arg_new(), $1);
 			$$ = arg_add_optblock($$, $2);
@@ -2636,8 +2636,8 @@ var TOKENS = {
 /* Line 1695 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = arg_append(((node)(yystack.valueAt (4-(1)))), NEW_HASH(((node)(yystack.valueAt (4-(3))))));
-			yyval = arg_blk_pass(yyval, ((node)(yystack.valueAt (4-(4)))));
+			yyval = arg_append((yystack.valueAt(4-(1))), NEW_HASH((yystack.valueAt(4-(3)))));
+			yyval = arg_blk_pass(yyval, (yystack.valueAt(4-(4))));
 		    /*%
 			$$ = arg_add_optblock(arg_add_assocs($1, $3), $4);
 		    %*/
@@ -2658,8 +2658,8 @@ var TOKENS = {
 /* Line 1717 of "parse.y"  */
     {
 			/* CMDARG_POP() */
-			cmdarg_stack = ((val)(yystack.valueAt (2-(1))));
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			cmdarg_stack = (yystack.valueAt(2-(1)));
+			yyval = (yystack.valueAt(2-(2)));
 		    },
 
 
@@ -2668,7 +2668,7 @@ var TOKENS = {
 /* Line 1725 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_BLOCK_PASS(((node)(yystack.valueAt (2-(2)))));
+			yyval = NEW_BLOCK_PASS((yystack.valueAt(2-(2))));
 		    /*%
 			$$ = $2;
 		    %*/
@@ -2679,7 +2679,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1735 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    },
 
 
@@ -2696,7 +2696,7 @@ var TOKENS = {
 /* Line 1745 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
+			yyval = NEW_LIST((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = arg_add(arg_new(), $1);
 		    %*/
@@ -2708,7 +2708,7 @@ var TOKENS = {
 /* Line 1753 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_SPLAT(((node)(yystack.valueAt (2-(2)))));
+			yyval = NEW_SPLAT((yystack.valueAt(2-(2))));
 		    /*%
 			$$ = arg_add_star(arg_new(), $2);
 		    %*/
@@ -2721,11 +2721,11 @@ var TOKENS = {
     {
 		    /*%%%*/
 			NODE *n1;
-			if ((n1 = splat_array(((node)(yystack.valueAt (3-(1)))))) != 0) {
-			    yyval = list_append(n1, ((node)(yystack.valueAt (3-(3)))));
+			if ((n1 = splat_array((yystack.valueAt(3-(1))))) != 0) {
+			    yyval = list_append(n1, (yystack.valueAt(3-(3))));
 			}
 			else {
-			    yyval = arg_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			    yyval = arg_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 			}
 		    /*%
 			$$ = arg_add($1, $3);
@@ -2739,11 +2739,11 @@ var TOKENS = {
     {
 		    /*%%%*/
 			NODE *n1;
-			if ((nd_type(((node)(yystack.valueAt (4-(4))))) == NODE_ARRAY) && (n1 = splat_array(((node)(yystack.valueAt (4-(1)))))) != 0) {
-			    yyval = list_concat(n1, ((node)(yystack.valueAt (4-(4)))));
+			if ((nd_type((yystack.valueAt(4-(4)))) == NODE_ARRAY) && (n1 = splat_array((yystack.valueAt(4-(1))))) != 0) {
+			    yyval = list_concat(n1, (yystack.valueAt(4-(4))));
 			}
 			else {
-			    yyval = arg_concat(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(4)))));
+			    yyval = arg_concat((yystack.valueAt(4-(1))), (yystack.valueAt(4-(4))));
 			}
 		    /*%
 			$$ = arg_add_star($1, $4);
@@ -2757,11 +2757,11 @@ var TOKENS = {
     {
 		    /*%%%*/
 			NODE *n1;
-			if ((n1 = splat_array(((node)(yystack.valueAt (3-(1)))))) != 0) {
-			    yyval = list_append(n1, ((node)(yystack.valueAt (3-(3)))));
+			if ((n1 = splat_array((yystack.valueAt(3-(1))))) != 0) {
+			    yyval = list_append(n1, (yystack.valueAt(3-(3))));
 			}
 			else {
-			    yyval = arg_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			    yyval = arg_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 			}
 		    /*%
 			$$ = mrhs_add(args2mrhs($1), $3);
@@ -2775,12 +2775,12 @@ var TOKENS = {
     {
 		    /*%%%*/
 			NODE *n1;
-			if (nd_type(((node)(yystack.valueAt (4-(4))))) == NODE_ARRAY &&
-			    (n1 = splat_array(((node)(yystack.valueAt (4-(1)))))) != 0) {
-			    yyval = list_concat(n1, ((node)(yystack.valueAt (4-(4)))));
+			if (nd_type((yystack.valueAt(4-(4)))) == NODE_ARRAY &&
+			    (n1 = splat_array((yystack.valueAt(4-(1))))) != 0) {
+			    yyval = list_concat(n1, (yystack.valueAt(4-(4))));
 			}
 			else {
-			    yyval = arg_concat(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(4)))));
+			    yyval = arg_concat((yystack.valueAt(4-(1))), (yystack.valueAt(4-(4))));
 			}
 		    /*%
 			$$ = mrhs_add_star(args2mrhs($1), $4);
@@ -2793,7 +2793,7 @@ var TOKENS = {
 /* Line 1820 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_SPLAT(((node)(yystack.valueAt (2-(2)))));
+			yyval = NEW_SPLAT((yystack.valueAt(2-(2))));
 		    /*%
 			$$ = mrhs_add_star(mrhs_new(), $2);
 		    %*/
@@ -2805,7 +2805,7 @@ var TOKENS = {
 /* Line 1840 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_FCALL(((id)(yystack.valueAt (1-(1)))), 0);
+			yyval = NEW_FCALL((yystack.valueAt(1-(1))), 0);
 		    /*%
 			$$ = method_arg(dispatch1(fcall, $1), arg_new());
 		    %*/
@@ -2816,7 +2816,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1848 of "parse.y"  */
     {
-			((val)(yystack.valueAt (1-(1)))) = cmdarg_stack;
+			(yystack.valueAt(1-(1))) = cmdarg_stack;
 			cmdarg_stack = 0;
 		    /*%%%*/
 			yyval = ruby_sourceline;
@@ -2829,18 +2829,18 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 1858 of "parse.y"  */
     {
-			cmdarg_stack = ((val)(yystack.valueAt (4-(1))));
+			cmdarg_stack = (yystack.valueAt(4-(1)));
 		    /*%%%*/
-			if (((node)(yystack.valueAt (4-(3)))) == NULL) {
+			if ((yystack.valueAt(4-(3))) == NULL) {
 			    yyval = NEW_NIL();
 			}
 			else {
-			    if (nd_type(((node)(yystack.valueAt (4-(3))))) == NODE_RESCUE ||
-				nd_type(((node)(yystack.valueAt (4-(3))))) == NODE_ENSURE)
-				nd_set_line(((node)(yystack.valueAt (4-(3)))), ((num)(yystack.valueAt (4-(2)))));
-			    yyval = NEW_BEGIN(((node)(yystack.valueAt (4-(3)))));
+			    if (nd_type((yystack.valueAt(4-(3)))) == NODE_RESCUE ||
+				nd_type((yystack.valueAt(4-(3)))) == NODE_ENSURE)
+				nd_set_line((yystack.valueAt(4-(3))), (yystack.valueAt(4-(2))));
+			    yyval = NEW_BEGIN((yystack.valueAt(4-(3))));
 			}
-			nd_set_line(yyval, ((num)(yystack.valueAt (4-(2)))));
+			nd_set_line(yyval, (yystack.valueAt(4-(2))));
 		    /*%
 			$$ = dispatch1(begin, $3);
 		    %*/
@@ -2876,7 +2876,7 @@ var TOKENS = {
 /* Line 1884 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (4-(2))));
+			yyval = (yystack.valueAt(4-(2)));
 		    /*%
 			$$ = dispatch1(paren, $2);
 		    %*/
@@ -2888,7 +2888,7 @@ var TOKENS = {
 /* Line 1892 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(paren, $2);
 		    %*/
@@ -2900,7 +2900,7 @@ var TOKENS = {
 /* Line 1900 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_COLON2(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))));
+			yyval = NEW_COLON2((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(const_path_ref, $1, $3);
 		    %*/
@@ -2912,7 +2912,7 @@ var TOKENS = {
 /* Line 1908 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_COLON3(((id)(yystack.valueAt (2-(2)))));
+			yyval = NEW_COLON3((yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch1(top_const_ref, $2);
 		    %*/
@@ -2924,11 +2924,11 @@ var TOKENS = {
 /* Line 1916 of "parse.y"  */
     {
 		    /*%%%*/
-			if (((node)(yystack.valueAt (3-(2)))) == 0) {
+			if ((yystack.valueAt(3-(2))) == 0) {
 			    yyval = NEW_ZARRAY(); /* zero length array*/
 			}
 			else {
-			    yyval = ((node)(yystack.valueAt (3-(2))));
+			    yyval = (yystack.valueAt(3-(2)));
 			}
 		    /*%
 			$$ = dispatch1(array, escape_Qundef($2));
@@ -2941,7 +2941,7 @@ var TOKENS = {
 /* Line 1929 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_HASH(((node)(yystack.valueAt (3-(2)))));
+			yyval = NEW_HASH((yystack.valueAt(3-(2))));
 		    /*%
 			$$ = dispatch1(hash, escape_Qundef($2));
 		    %*/
@@ -2965,7 +2965,7 @@ var TOKENS = {
 /* Line 1945 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = new_yield(((node)(yystack.valueAt (4-(3)))));
+			yyval = new_yield((yystack.valueAt(4-(3))));
 		    /*%
 			$$ = dispatch1(yield, dispatch1(paren, $3));
 		    %*/
@@ -3008,7 +3008,7 @@ var TOKENS = {
     {
 		    /*%%%*/
 			in_defined = 0;
-			yyval = NEW_DEFINED(((node)(yystack.valueAt (6-(5)))));
+			yyval = NEW_DEFINED((yystack.valueAt(6-(5))));
 		    /*%
 			in_defined = 0;
 			$$ = dispatch1(defined, $5);
@@ -3021,7 +3021,7 @@ var TOKENS = {
 /* Line 1979 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = call_uni_op(cond(((node)(yystack.valueAt (4-(3))))), '!');
+			yyval = call_uni_op(cond((yystack.valueAt(4-(3)))), '!');
 		    /*%
 			$$ = dispatch2(unary, ripper_intern("not"), $3);
 		    %*/
@@ -3045,8 +3045,8 @@ var TOKENS = {
 /* Line 1995 of "parse.y"  */
     {
 		    /*%%%*/
-			((node)(yystack.valueAt (2-(2))))->nd_iter = ((node)(yystack.valueAt (2-(1))));
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			(yystack.valueAt(2-(2)))->nd_iter = (yystack.valueAt(2-(1)));
+			yyval = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = method_arg(dispatch1(fcall, $1), arg_new());
 			$$ = method_add_block($$, $2);
@@ -3059,9 +3059,9 @@ var TOKENS = {
 /* Line 2006 of "parse.y"  */
     {
 		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (2-(1))))->nd_args, ((node)(yystack.valueAt (2-(2)))));
-			((node)(yystack.valueAt (2-(2))))->nd_iter = ((node)(yystack.valueAt (2-(1))));
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			block_dup_check((yystack.valueAt(2-(1)))->nd_args, (yystack.valueAt(2-(2))));
+			(yystack.valueAt(2-(2)))->nd_iter = (yystack.valueAt(2-(1)));
+			yyval = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = method_add_block($1, $2);
 		    %*/
@@ -3072,7 +3072,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2016 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    },
 
 
@@ -3081,8 +3081,8 @@ var TOKENS = {
 /* Line 2023 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_IF(cond(((node)(yystack.valueAt (6-(2))))), ((node)(yystack.valueAt (6-(4)))), ((node)(yystack.valueAt (6-(5)))));
-			fixpos(yyval, ((node)(yystack.valueAt (6-(2)))));
+			yyval = NEW_IF(cond((yystack.valueAt(6-(2)))), (yystack.valueAt(6-(4))), (yystack.valueAt(6-(5))));
+			fixpos(yyval, (yystack.valueAt(6-(2))));
 		    /*%
 			$$ = dispatch3(if, $2, $4, escape_Qundef($5));
 		    %*/
@@ -3094,8 +3094,8 @@ var TOKENS = {
 /* Line 2035 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_UNLESS(cond(((node)(yystack.valueAt (6-(2))))), ((node)(yystack.valueAt (6-(4)))), ((node)(yystack.valueAt (6-(5)))));
-			fixpos(yyval, ((node)(yystack.valueAt (6-(2)))));
+			yyval = NEW_UNLESS(cond((yystack.valueAt(6-(2)))), (yystack.valueAt(6-(4))), (yystack.valueAt(6-(5))));
+			fixpos(yyval, (yystack.valueAt(6-(2))));
 		    /*%
 			$$ = dispatch3(unless, $2, $4, escape_Qundef($5));
 		    %*/
@@ -3119,8 +3119,8 @@ var TOKENS = {
 /* Line 2046 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_WHILE(cond(((node)(yystack.valueAt (7-(3))))), ((node)(yystack.valueAt (7-(6)))), 1);
-			fixpos(yyval, ((node)(yystack.valueAt (7-(3)))));
+			yyval = NEW_WHILE(cond((yystack.valueAt(7-(3)))), (yystack.valueAt(7-(6))), 1);
+			fixpos(yyval, (yystack.valueAt(7-(3))));
 		    /*%
 			$$ = dispatch2(while, $3, $6);
 		    %*/
@@ -3144,8 +3144,8 @@ var TOKENS = {
 /* Line 2057 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_UNTIL(cond(((node)(yystack.valueAt (7-(3))))), ((node)(yystack.valueAt (7-(6)))), 1);
-			fixpos(yyval, ((node)(yystack.valueAt (7-(3)))));
+			yyval = NEW_UNTIL(cond((yystack.valueAt(7-(3)))), (yystack.valueAt(7-(6))), 1);
+			fixpos(yyval, (yystack.valueAt(7-(3))));
 		    /*%
 			$$ = dispatch2(until, $3, $6);
 		    %*/
@@ -3157,8 +3157,8 @@ var TOKENS = {
 /* Line 2068 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CASE(((node)(yystack.valueAt (5-(2)))), ((node)(yystack.valueAt (5-(4)))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(2)))));
+			yyval = NEW_CASE((yystack.valueAt(5-(2))), (yystack.valueAt(5-(4))));
+			fixpos(yyval, (yystack.valueAt(5-(2))));
 		    /*%
 			$$ = dispatch2(case, $2, $4);
 		    %*/
@@ -3170,7 +3170,7 @@ var TOKENS = {
 /* Line 2077 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CASE(0, ((node)(yystack.valueAt (4-(3)))));
+			yyval = NEW_CASE(0, (yystack.valueAt(4-(3))));
 		    /*%
 			$$ = dispatch2(case, Qnil, $3);
 		    %*/
@@ -3208,7 +3208,7 @@ var TOKENS = {
 			NODE *m = NEW_ARGS_AUX(0, 0);
 			NODE *args, *scope;
 
-			if (nd_type(((node)(yystack.valueAt (9-(2))))) == NODE_MASGN) {
+			if (nd_type((yystack.valueAt(9-(2)))) == NODE_MASGN) {
 			    /* if args.length == 1 && args[0].kind_of?(Array)
 			     *   args = args[0]
 			     * end
@@ -3226,28 +3226,28 @@ var TOKENS = {
 				    NEW_DASGN_CURR(id,
 						   NEW_CALL(NEW_DVAR(id), idAREF, zero)),
 				    0),
-				node_assign(((node)(yystack.valueAt (9-(2)))), NEW_DVAR(id)));
+				node_assign((yystack.valueAt(9-(2))), NEW_DVAR(id)));
 
 			    args = new_args(m, 0, id, 0, new_args_tail(0, 0, 0));
 			}
 			else {
-			    if (nd_type(((node)(yystack.valueAt (9-(2))))) == NODE_LASGN ||
-				nd_type(((node)(yystack.valueAt (9-(2))))) == NODE_DASGN ||
-				nd_type(((node)(yystack.valueAt (9-(2))))) == NODE_DASGN_CURR) {
-				((node)(yystack.valueAt (9-(2))))->nd_value = NEW_DVAR(id);
+			    if (nd_type((yystack.valueAt(9-(2)))) == NODE_LASGN ||
+				nd_type((yystack.valueAt(9-(2)))) == NODE_DASGN ||
+				nd_type((yystack.valueAt(9-(2)))) == NODE_DASGN_CURR) {
+				(yystack.valueAt(9-(2)))->nd_value = NEW_DVAR(id);
 				m->nd_plen = 1;
-				m->nd_next = ((node)(yystack.valueAt (9-(2))));
+				m->nd_next = (yystack.valueAt(9-(2)));
 				args = new_args(m, 0, 0, 0, new_args_tail(0, 0, 0));
 			    }
 			    else {
-				m->nd_next = node_assign(NEW_MASGN(NEW_LIST(((node)(yystack.valueAt (9-(2))))), 0), NEW_DVAR(id));
+				m->nd_next = node_assign(NEW_MASGN(NEW_LIST((yystack.valueAt(9-(2)))), 0), NEW_DVAR(id));
 				args = new_args(m, 0, id, 0, new_args_tail(0, 0, 0));
 			    }
 			}
-			scope = NEW_NODE(NODE_SCOPE, tbl, ((node)(yystack.valueAt (9-(8)))), args);
+			scope = NEW_NODE(NODE_SCOPE, tbl, (yystack.valueAt(9-(8))), args);
 			tbl[0] = 1; tbl[1] = id;
-			yyval = NEW_FOR(0, ((node)(yystack.valueAt (9-(5)))), scope);
-			fixpos(yyval, ((node)(yystack.valueAt (9-(2)))));
+			yyval = NEW_FOR(0, (yystack.valueAt(9-(5))), scope);
+			fixpos(yyval, (yystack.valueAt(9-(2))));
 		    /*%
 			$$ = dispatch3(for, $2, $5, $8);
 		    %*/
@@ -3273,8 +3273,8 @@ var TOKENS = {
 /* Line 2162 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CLASS(((node)(yystack.valueAt (6-(2)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(3)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (6-(4)))));
+			yyval = NEW_CLASS((yystack.valueAt(6-(2))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(3))));
+			nd_set_line(yyval, (yystack.valueAt(6-(4))));
 		    /*%
 			$$ = dispatch3(class, $2, $3, $5);
 		    %*/
@@ -3306,14 +3306,14 @@ var TOKENS = {
 /* Line 2184 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_SCLASS(((node)(yystack.valueAt (8-(3)))), ((node)(yystack.valueAt (8-(7)))));
-			fixpos(yyval, ((node)(yystack.valueAt (8-(3)))));
+			yyval = NEW_SCLASS((yystack.valueAt(8-(3))), (yystack.valueAt(8-(7))));
+			fixpos(yyval, (yystack.valueAt(8-(3))));
 		    /*%
 			$$ = dispatch2(sclass, $3, $7);
 		    %*/
 			local_pop();
-			in_def = ((num)(yystack.valueAt (8-(4))));
-			in_single = ((num)(yystack.valueAt (8-(6))));
+			in_def = (yystack.valueAt(8-(4)));
+			in_single = (yystack.valueAt(8-(6)));
 		    },
 
 
@@ -3336,8 +3336,8 @@ var TOKENS = {
 /* Line 2207 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MODULE(((node)(yystack.valueAt (5-(2)))), ((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(3)))));
+			yyval = NEW_MODULE((yystack.valueAt(5-(2))), (yystack.valueAt(5-(4))));
+			nd_set_line(yyval, (yystack.valueAt(5-(3))));
 		    /*%
 			$$ = dispatch2(module, $2, $4);
 		    %*/
@@ -3350,7 +3350,7 @@ var TOKENS = {
 /* Line 2217 of "parse.y"  */
     {
 			yyval = cur_mid;
-			cur_mid = ((id)(yystack.valueAt (2-(2))));
+			cur_mid = (yystack.valueAt(2-(2)));
 			in_def++;
 			local_push(0);
 		    },
@@ -3361,16 +3361,16 @@ var TOKENS = {
 /* Line 2226 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *body = remove_begin(((node)(yystack.valueAt (6-(5)))));
+			NODE *body = remove_begin((yystack.valueAt(6-(5))));
 			reduce_nodes(&body);
-			yyval = NEW_DEFN(((id)(yystack.valueAt (6-(2)))), ((node)(yystack.valueAt (6-(4)))), body, NOEX_PRIVATE);
-			nd_set_line(yyval, ((num)(yystack.valueAt (6-(1)))));
+			yyval = NEW_DEFN((yystack.valueAt(6-(2))), (yystack.valueAt(6-(4))), body, NOEX_PRIVATE);
+			nd_set_line(yyval, (yystack.valueAt(6-(1))));
 		    /*%
 			$$ = dispatch3(def, $2, $4, $5);
 		    %*/
 			local_pop();
 			in_def--;
-			cur_mid = ((id)(yystack.valueAt (6-(3))));
+			cur_mid = (yystack.valueAt(6-(3)));
 		    },
 
 
@@ -3395,10 +3395,10 @@ var TOKENS = {
 /* Line 2248 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *body = remove_begin(((node)(yystack.valueAt (9-(8)))));
+			NODE *body = remove_begin((yystack.valueAt(9-(8))));
 			reduce_nodes(&body);
-			yyval = NEW_DEFS(((node)(yystack.valueAt (9-(2)))), ((id)(yystack.valueAt (9-(5)))), ((node)(yystack.valueAt (9-(7)))), body);
-			nd_set_line(yyval, ((num)(yystack.valueAt (9-(1)))));
+			yyval = NEW_DEFS((yystack.valueAt(9-(2))), (yystack.valueAt(9-(5))), (yystack.valueAt(9-(7))), body);
+			nd_set_line(yyval, (yystack.valueAt(9-(1))));
 		    /*%
 			$$ = dispatch5(defs, $2, $3, $5, $7, $8);
 		    %*/
@@ -3460,8 +3460,8 @@ var TOKENS = {
 /* Line 2295 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			value_expr((yystack.valueAt(1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		        if (!yyval) yyval = NEW_NIL();
 		    /*%
 			$$ = $1;
@@ -3566,8 +3566,8 @@ var TOKENS = {
 /* Line 2401 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_IF(cond(((node)(yystack.valueAt (5-(2))))), ((node)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(2)))));
+			yyval = NEW_IF(cond((yystack.valueAt(5-(2)))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
+			fixpos(yyval, (yystack.valueAt(5-(2))));
 		    /*%
 			$$ = dispatch3(elsif, $2, $4, escape_Qundef($5));
 		    %*/
@@ -3579,7 +3579,7 @@ var TOKENS = {
 /* Line 2413 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = dispatch1(else, $2);
 		    %*/
@@ -3590,7 +3590,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2427 of "parse.y"  */
     {
-			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
+			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
 		    /*%
 			$$ = dispatch1(mlhs_paren, $$);
@@ -3603,7 +3603,7 @@ var TOKENS = {
 /* Line 2435 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(mlhs_paren, $2);
 		    %*/
@@ -3615,7 +3615,7 @@ var TOKENS = {
 /* Line 2445 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
+			yyval = NEW_LIST((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = mlhs_add(mlhs_new(), $1);
 		    %*/
@@ -3627,7 +3627,7 @@ var TOKENS = {
 /* Line 2453 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = mlhs_add($1, $3);
 		    %*/
@@ -3639,7 +3639,7 @@ var TOKENS = {
 /* Line 2463 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (1-(1)))), 0);
+			yyval = NEW_MASGN((yystack.valueAt(1-(1))), 0);
 		    /*%
 			$$ = $1;
 		    %*/
@@ -3650,9 +3650,9 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2471 of "parse.y"  */
     {
-			yyval = assignable(((id)(yystack.valueAt (4-(4)))), 0);
+			yyval = assignable((yystack.valueAt(4-(4))), 0);
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (4-(1)))), yyval);
+			yyval = NEW_MASGN((yystack.valueAt(4-(1))), yyval);
 		    /*%
 			$$ = mlhs_add_star($1, $$);
 		    %*/
@@ -3663,9 +3663,9 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2480 of "parse.y"  */
     {
-			yyval = assignable(((id)(yystack.valueAt (6-(4)))), 0);
+			yyval = assignable((yystack.valueAt(6-(4))), 0);
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (6-(1)))), NEW_POSTARG(yyval, ((node)(yystack.valueAt (6-(6))))));
+			yyval = NEW_MASGN((yystack.valueAt(6-(1))), NEW_POSTARG(yyval, (yystack.valueAt(6-(6)))));
 		    /*%
 			$$ = mlhs_add_star($1, $$);
 		    %*/
@@ -3677,7 +3677,7 @@ var TOKENS = {
 /* Line 2489 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (3-(1)))), -1);
+			yyval = NEW_MASGN((yystack.valueAt(3-(1))), -1);
 		    /*%
 			$$ = mlhs_add_star($1, Qnil);
 		    %*/
@@ -3689,7 +3689,7 @@ var TOKENS = {
 /* Line 2497 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(((node)(yystack.valueAt (5-(1)))), NEW_POSTARG(-1, ((node)(yystack.valueAt (5-(5))))));
+			yyval = NEW_MASGN((yystack.valueAt(5-(1))), NEW_POSTARG(-1, (yystack.valueAt(5-(5)))));
 		    /*%
 			$$ = mlhs_add_star($1, $5);
 		    %*/
@@ -3700,7 +3700,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2505 of "parse.y"  */
     {
-			yyval = assignable(((id)(yystack.valueAt (2-(2)))), 0);
+			yyval = assignable((yystack.valueAt(2-(2))), 0);
 		    /*%%%*/
 			yyval = NEW_MASGN(0, yyval);
 		    /*%
@@ -3713,9 +3713,9 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2514 of "parse.y"  */
     {
-			yyval = assignable(((id)(yystack.valueAt (4-(2)))), 0);
+			yyval = assignable((yystack.valueAt(4-(2))), 0);
 		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(yyval, ((node)(yystack.valueAt (4-(4))))));
+			yyval = NEW_MASGN(0, NEW_POSTARG(yyval, (yystack.valueAt(4-(4)))));
 		    /*%
 		      #if 0
 		      TODO: Check me
@@ -3742,7 +3742,7 @@ var TOKENS = {
 /* Line 2534 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(-1, ((node)(yystack.valueAt (3-(3))))));
+			yyval = NEW_MASGN(0, NEW_POSTARG(-1, (yystack.valueAt(3-(3)))));
 		    /*%
 			$$ = mlhs_add_star(mlhs_new(), Qnil);
 		    %*/
@@ -3753,7 +3753,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2545 of "parse.y"  */
     {
-			yyval = new_args_tail(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((id)(yystack.valueAt (4-(4)))));
+			yyval = new_args_tail((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -3761,7 +3761,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2549 of "parse.y"  */
     {
-			yyval = new_args_tail(((node)(yystack.valueAt (2-(1)))), Qnone, ((id)(yystack.valueAt (2-(2)))));
+			yyval = new_args_tail((yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -3769,7 +3769,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2553 of "parse.y"  */
     {
-			yyval = new_args_tail(Qnone, ((id)(yystack.valueAt (2-(1)))), ((id)(yystack.valueAt (2-(2)))));
+			yyval = new_args_tail(Qnone, (yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -3777,7 +3777,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2557 of "parse.y"  */
     {
-			yyval = new_args_tail(Qnone, Qnone, ((id)(yystack.valueAt (1-(1)))));
+			yyval = new_args_tail(Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    },
 
 
@@ -3785,7 +3785,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2563 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    },
 
 
@@ -3801,7 +3801,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2573 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), ((id)(yystack.valueAt (6-(5)))), Qnone, ((node)(yystack.valueAt (6-(6)))));
+			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), Qnone, (yystack.valueAt(6-(6))));
 		    },
 
 
@@ -3809,7 +3809,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2577 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (8-(1)))), ((node)(yystack.valueAt (8-(3)))), ((id)(yystack.valueAt (8-(5)))), ((node)(yystack.valueAt (8-(7)))), ((node)(yystack.valueAt (8-(8)))));
+			yyval = new_args((yystack.valueAt(8-(1))), (yystack.valueAt(8-(3))), (yystack.valueAt(8-(5))), (yystack.valueAt(8-(7))), (yystack.valueAt(8-(8))));
 		    },
 
 
@@ -3817,7 +3817,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2581 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), Qnone, Qnone, ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, Qnone, (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -3825,7 +3825,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2585 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), Qnone, ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
+			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), Qnone, (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
 
 
@@ -3833,7 +3833,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2589 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (4-(1)))), Qnone, ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args((yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -3841,7 +3841,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2593 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, 1, Qnone, new_args_tail(Qnone, Qnone, Qnone));
+			yyval = new_args((yystack.valueAt(2-(1))), Qnone, 1, Qnone, new_args_tail(Qnone, Qnone, Qnone));
 		    /*%%%*/
 		    /*%
                         dispatch1(excessed_comma, $$);
@@ -3853,7 +3853,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2601 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), Qnone, ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
+			yyval = new_args((yystack.valueAt(6-(1))), Qnone, (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
 
 
@@ -3861,7 +3861,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2605 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
+			yyval = new_args((yystack.valueAt(2-(1))), Qnone, Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -3869,7 +3869,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2609 of "parse.y"  */
     {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -3877,7 +3877,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2613 of "parse.y"  */
     {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
+			yyval = new_args(Qnone, (yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
 
 
@@ -3885,7 +3885,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2617 of "parse.y"  */
     {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
+			yyval = new_args(Qnone, (yystack.valueAt(2-(1))), Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -3893,7 +3893,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2621 of "parse.y"  */
     {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), Qnone, ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -3901,7 +3901,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2625 of "parse.y"  */
     {
-			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (2-(1)))), Qnone, ((node)(yystack.valueAt (2-(2)))));
+			yyval = new_args(Qnone, Qnone, (yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -3909,7 +3909,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2629 of "parse.y"  */
     {
-			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args(Qnone, Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -3917,7 +3917,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2633 of "parse.y"  */
     {
-			yyval = new_args(Qnone, Qnone, Qnone, Qnone, ((node)(yystack.valueAt (1-(1)))));
+			yyval = new_args(Qnone, Qnone, Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    },
 
 
@@ -3960,7 +3960,7 @@ var TOKENS = {
 /* Line 2664 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (4-(2))));
+			yyval = (yystack.valueAt(4-(2)));
 		    /*%
 			$$ = blockvar_new(escape_Qundef($2), escape_Qundef($3));
 		    %*/
@@ -3991,7 +3991,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2705 of "parse.y"  */
     {
-			new_bv(get_id(((id)(yystack.valueAt (1-(1))))));
+			new_bv(get_id((yystack.valueAt(1-(1)))));
 		    /*%%%*/
 		    /*%
 			$$ = get_value($1);
@@ -4028,13 +4028,13 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2727 of "parse.y"  */
     {
-			lpar_beg = ((num)(yystack.valueAt (4-(2))));
+			lpar_beg = (yystack.valueAt(4-(2)));
 		    /*%%%*/
-			yyval = NEW_LAMBDA(((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = NEW_LAMBDA((yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    /*%
 			$$ = dispatch2(lambda, $3, $4);
 		    %*/
-			dyna_pop(((vars)(yystack.valueAt (4-(1)))));
+			dyna_pop((yystack.valueAt(4-(1))));
 		    },
 
 
@@ -4043,7 +4043,7 @@ var TOKENS = {
 /* Line 2739 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (4-(2))));
+			yyval = (yystack.valueAt(4-(2)));
 		    /*%
 			$$ = dispatch1(paren, $2);
 		    %*/
@@ -4055,7 +4055,7 @@ var TOKENS = {
 /* Line 2747 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    /*%
 			$$ = $1;
 		    %*/
@@ -4066,7 +4066,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2757 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    },
 
 
@@ -4074,7 +4074,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2761 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    },
 
 
@@ -4082,7 +4082,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2767 of "parse.y"  */
     {
-			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
+			(yystack.valueAt(1-(1))) = dyna_push();
 		    /*%%%*/
 			yyval = ruby_sourceline;
 		    /*% %*/
@@ -4094,12 +4094,12 @@ var TOKENS = {
 /* Line 2776 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_ITER(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(2)))));
+			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
+			nd_set_line(yyval, (yystack.valueAt(5-(2))));
 		    /*%
 			$$ = dispatch2(do_block, escape_Qundef($3), $4);
 		    %*/
-			dyna_pop(((vars)(yystack.valueAt (5-(1)))));
+			dyna_pop((yystack.valueAt(5-(1))));
 		    },
 
 
@@ -4108,15 +4108,15 @@ var TOKENS = {
 /* Line 2788 of "parse.y"  */
     {
 		    /*%%%*/
-			if (nd_type(((node)(yystack.valueAt (2-(1))))) == NODE_YIELD) {
+			if (nd_type((yystack.valueAt(2-(1)))) == NODE_YIELD) {
 			    compile_error(PARSER_ARG "block given to yield");
 			}
 			else {
-			    block_dup_check(((node)(yystack.valueAt (2-(1))))->nd_args, ((node)(yystack.valueAt (2-(2)))));
+			    block_dup_check((yystack.valueAt(2-(1)))->nd_args, (yystack.valueAt(2-(2))));
 			}
-			((node)(yystack.valueAt (2-(2))))->nd_iter = ((node)(yystack.valueAt (2-(1))));
-			yyval = ((node)(yystack.valueAt (2-(2))));
-			fixpos(yyval, ((node)(yystack.valueAt (2-(1)))));
+			(yystack.valueAt(2-(2)))->nd_iter = (yystack.valueAt(2-(1)));
+			yyval = (yystack.valueAt(2-(2)));
+			fixpos(yyval, (yystack.valueAt(2-(1))));
 		    /*%
 			$$ = method_add_block($1, $2);
 		    %*/
@@ -4128,7 +4128,7 @@ var TOKENS = {
 /* Line 2804 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    /*%
 			$$ = dispatch3(call, $1, $2, $3);
 			$$ = method_optarg($$, $4);
@@ -4141,10 +4141,10 @@ var TOKENS = {
 /* Line 2813 of "parse.y"  */
     {
 		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-			((node)(yystack.valueAt (5-(5))))->nd_iter = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(4)))));
-			yyval = ((node)(yystack.valueAt (5-(5))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(1)))));
+			block_dup_check((yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
+			(yystack.valueAt(5-(5)))->nd_iter = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))));
+			yyval = (yystack.valueAt(5-(5)));
+			fixpos(yyval, (yystack.valueAt(5-(1))));
 		    /*%
 			$$ = dispatch4(command_call, $1, $2, $3, $4);
 			$$ = method_add_block($$, $5);
@@ -4157,10 +4157,10 @@ var TOKENS = {
 /* Line 2825 of "parse.y"  */
     {
 		    /*%%%*/
-			block_dup_check(((node)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
-			((node)(yystack.valueAt (5-(5))))->nd_iter = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(4)))));
-			yyval = ((node)(yystack.valueAt (5-(5))));
-			fixpos(yyval, ((node)(yystack.valueAt (5-(1)))));
+			block_dup_check((yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
+			(yystack.valueAt(5-(5)))->nd_iter = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))));
+			yyval = (yystack.valueAt(5-(5)));
+			fixpos(yyval, (yystack.valueAt(5-(1))));
 		    /*%
 			$$ = dispatch4(command_call, $1, $2, $3, $4);
 			$$ = method_add_block($$, $5);
@@ -4173,8 +4173,8 @@ var TOKENS = {
 /* Line 2839 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
-			yyval->nd_args = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(1)));
+			yyval->nd_args = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = method_arg(dispatch1(fcall, $1), $2);
 		    %*/
@@ -4196,8 +4196,8 @@ var TOKENS = {
 /* Line 2854 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(5)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(4)))));
+			yyval = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(5))));
+			nd_set_line(yyval, (yystack.valueAt(5-(4))));
 		    /*%
 			$$ = dispatch3(call, $1, ripper_id2sym('.'), $3);
 			$$ = method_optarg($$, $5);
@@ -4220,8 +4220,8 @@ var TOKENS = {
 /* Line 2870 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (5-(1)))), ((id)(yystack.valueAt (5-(3)))), ((node)(yystack.valueAt (5-(5)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(4)))));
+			yyval = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(5))));
+			nd_set_line(yyval, (yystack.valueAt(5-(4))));
 		    /*%
 			$$ = dispatch3(call, $1, ripper_id2sym('.'), $3);
 			$$ = method_optarg($$, $5);
@@ -4234,7 +4234,7 @@ var TOKENS = {
 /* Line 2880 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (3-(1)))), ((id)(yystack.valueAt (3-(3)))), 0);
+			yyval = NEW_CALL((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))), 0);
 		    /*%
 			$$ = dispatch3(call, $1, ripper_intern("::"), $3);
 		    %*/
@@ -4256,8 +4256,8 @@ var TOKENS = {
 /* Line 2894 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), rb_intern("call"), ((node)(yystack.valueAt (4-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (4-(3)))));
+			yyval = NEW_CALL((yystack.valueAt(4-(1))), rb_intern("call"), (yystack.valueAt(4-(4))));
+			nd_set_line(yyval, (yystack.valueAt(4-(3))));
 		    /*%
 			$$ = dispatch3(call, $1, ripper_id2sym('.'),
 				       ripper_intern("call"));
@@ -4281,8 +4281,8 @@ var TOKENS = {
 /* Line 2911 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), rb_intern("call"), ((node)(yystack.valueAt (4-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (4-(3)))));
+			yyval = NEW_CALL((yystack.valueAt(4-(1))), rb_intern("call"), (yystack.valueAt(4-(4))));
+			nd_set_line(yyval, (yystack.valueAt(4-(3))));
 		    /*%
 			$$ = dispatch3(call, $1, ripper_intern("::"),
 				       ripper_intern("call"));
@@ -4296,7 +4296,7 @@ var TOKENS = {
 /* Line 2922 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_SUPER(((node)(yystack.valueAt (2-(2)))));
+			yyval = NEW_SUPER((yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch1(super, $2);
 		    %*/
@@ -4320,11 +4320,11 @@ var TOKENS = {
 /* Line 2938 of "parse.y"  */
     {
 		    /*%%%*/
-			if (((node)(yystack.valueAt (4-(1)))) && nd_type(((node)(yystack.valueAt (4-(1))))) == NODE_SELF)
-			    yyval = NEW_FCALL(tAREF, ((node)(yystack.valueAt (4-(3)))));
+			if ((yystack.valueAt(4-(1))) && nd_type((yystack.valueAt(4-(1)))) == NODE_SELF)
+			    yyval = NEW_FCALL(tAREF, (yystack.valueAt(4-(3))));
 			else
-			    yyval = NEW_CALL(((node)(yystack.valueAt (4-(1)))), tAREF, ((node)(yystack.valueAt (4-(3)))));
-			fixpos(yyval, ((node)(yystack.valueAt (4-(1)))));
+			    yyval = NEW_CALL((yystack.valueAt(4-(1))), tAREF, (yystack.valueAt(4-(3))));
+			fixpos(yyval, (yystack.valueAt(4-(1))));
 		    /*%
 			$$ = dispatch2(aref, $1, escape_Qundef($3));
 		    %*/
@@ -4335,7 +4335,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2952 of "parse.y"  */
     {
-			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
+			(yystack.valueAt(1-(1))) = dyna_push();
 		    /*%%%*/
 			yyval = ruby_sourceline;
 		    /*%
@@ -4348,12 +4348,12 @@ var TOKENS = {
 /* Line 2961 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_ITER(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(2)))));
+			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
+			nd_set_line(yyval, (yystack.valueAt(5-(2))));
 		    /*%
 			$$ = dispatch2(brace_block, escape_Qundef($3), $4);
 		    %*/
-			dyna_pop(((vars)(yystack.valueAt (5-(1)))));
+			dyna_pop((yystack.valueAt(5-(1))));
 		    },
 
 
@@ -4361,7 +4361,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 2971 of "parse.y"  */
     {
-			((vars)(yystack.valueAt (1-(1)))) = dyna_push();
+			(yystack.valueAt(1-(1))) = dyna_push();
 		    /*%%%*/
 			yyval = ruby_sourceline;
 		    /*%
@@ -4374,12 +4374,12 @@ var TOKENS = {
 /* Line 2980 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_ITER(((node)(yystack.valueAt (5-(3)))),((node)(yystack.valueAt (5-(4)))));
-			nd_set_line(yyval, ((num)(yystack.valueAt (5-(2)))));
+			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
+			nd_set_line(yyval, (yystack.valueAt(5-(2))));
 		    /*%
 			$$ = dispatch2(do_block, escape_Qundef($3), $4);
 		    %*/
-			dyna_pop(((vars)(yystack.valueAt (5-(1)))));
+			dyna_pop((yystack.valueAt(5-(1))));
 		    },
 
 
@@ -4388,7 +4388,7 @@ var TOKENS = {
 /* Line 2994 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_WHEN(((node)(yystack.valueAt (5-(2)))), ((node)(yystack.valueAt (5-(4)))), ((node)(yystack.valueAt (5-(5)))));
+			yyval = NEW_WHEN((yystack.valueAt(5-(2))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    /*%
 			$$ = dispatch3(when, $2, $4, escape_Qundef($5));
 		    %*/
@@ -4400,12 +4400,12 @@ var TOKENS = {
 /* Line 3010 of "parse.y"  */
     {
 		    /*%%%*/
-			if (((node)(yystack.valueAt (6-(3))))) {
-			    ((node)(yystack.valueAt (6-(3)))) = node_assign(((node)(yystack.valueAt (6-(3)))), NEW_ERRINFO());
-			    ((node)(yystack.valueAt (6-(5)))) = block_append(((node)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))));
+			if ((yystack.valueAt(6-(3)))) {
+			    (yystack.valueAt(6-(3))) = node_assign((yystack.valueAt(6-(3))), NEW_ERRINFO());
+			    (yystack.valueAt(6-(5))) = block_append((yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))));
 			}
-			yyval = NEW_RESBODY(((node)(yystack.valueAt (6-(2)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
-			fixpos(yyval, ((node)(yystack.valueAt (6-(2))))?((node)(yystack.valueAt (6-(2)))):((node)(yystack.valueAt (6-(5)))));
+			yyval = NEW_RESBODY((yystack.valueAt(6-(2))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
+			fixpos(yyval, (yystack.valueAt(6-(2)))?(yystack.valueAt(6-(2))):(yystack.valueAt(6-(5))));
 		    /*%
 			$$ = dispatch4(rescue,
 				       escape_Qundef($2),
@@ -4421,7 +4421,7 @@ var TOKENS = {
 /* Line 3030 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIST(((node)(yystack.valueAt (1-(1)))));
+			yyval = NEW_LIST((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = rb_ary_new3(1, $1);
 		    %*/
@@ -4433,7 +4433,7 @@ var TOKENS = {
 /* Line 3038 of "parse.y"  */
     {
 		    /*%%%*/
-			if (!(yyval = splat_array(((node)(yystack.valueAt (1-(1))))))) yyval = ((node)(yystack.valueAt (1-(1))));
+			if (!(yyval = splat_array((yystack.valueAt(1-(1)))))) yyval = (yystack.valueAt(1-(1)));
 		    /*%
 			$$ = $1;
 		    %*/
@@ -4444,7 +4444,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3049 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    },
 
 
@@ -4453,7 +4453,7 @@ var TOKENS = {
 /* Line 3056 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = dispatch1(ensure, $2);
 		    %*/
@@ -4465,7 +4465,7 @@ var TOKENS = {
 /* Line 3068 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_LIT(ID2SYM(((id)(yystack.valueAt (1-(1))))));
+			yyval = NEW_LIT(ID2SYM((yystack.valueAt(1-(1)))));
 		    /*%
 			$$ = dispatch1(symbol_literal, $1);
 		    %*/
@@ -4477,7 +4477,7 @@ var TOKENS = {
 /* Line 3079 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *node = ((node)(yystack.valueAt (1-(1))));
+			NODE *node = (yystack.valueAt(1-(1)));
 			if (!node) {
 			    node = NEW_STR(STR_NEW0());
 			}
@@ -4496,7 +4496,7 @@ var TOKENS = {
 /* Line 3098 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = literal_concat(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
+			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch2(string_concat, $1, $2);
 		    %*/
@@ -4508,7 +4508,7 @@ var TOKENS = {
 /* Line 3108 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(string_literal, $2);
 		    %*/
@@ -4520,7 +4520,7 @@ var TOKENS = {
 /* Line 3118 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *node = ((node)(yystack.valueAt (3-(2))));
+			NODE *node = (yystack.valueAt(3-(2)));
 			if (!node) {
 			    node = NEW_XSTR(STR_NEW0());
 			}
@@ -4549,8 +4549,8 @@ var TOKENS = {
 /* Line 3145 of "parse.y"  */
     {
 		    /*%%%*/
-			int options = ((num)(yystack.valueAt (3-(3))));
-			NODE *node = ((node)(yystack.valueAt (3-(2))));
+			int options = (yystack.valueAt(3-(3)));
+			NODE *node = (yystack.valueAt(3-(2)));
 			NODE *list, *prev;
 			if (!node) {
 			    node = NEW_LIT(reg_compile(STR_NEW0(), options));
@@ -4629,7 +4629,7 @@ var TOKENS = {
 /* Line 3219 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(array, $2);
 		    %*/
@@ -4653,7 +4653,7 @@ var TOKENS = {
 /* Line 3237 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), evstr2dstr(((node)(yystack.valueAt (3-(2))))));
+			yyval = list_append((yystack.valueAt(3-(1))), evstr2dstr((yystack.valueAt(3-(2)))));
 		    /*%
 			$$ = dispatch2(words_add, $1, $2);
 		    %*/
@@ -4665,7 +4665,7 @@ var TOKENS = {
 /* Line 3255 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = literal_concat(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
+			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch2(word_add, $1, $2);
 		    %*/
@@ -4690,7 +4690,7 @@ var TOKENS = {
 /* Line 3274 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(array, $2);
 		    %*/
@@ -4714,9 +4714,9 @@ var TOKENS = {
 /* Line 3292 of "parse.y"  */
     {
 		    /*%%%*/
-			((node)(yystack.valueAt (3-(2)))) = evstr2dstr(((node)(yystack.valueAt (3-(2)))));
-			nd_set_type(((node)(yystack.valueAt (3-(2)))), NODE_DSYM);
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(2)))));
+			(yystack.valueAt(3-(2))) = evstr2dstr((yystack.valueAt(3-(2))));
+			nd_set_type((yystack.valueAt(3-(2))), NODE_DSYM);
+			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
 		    /*%
 			$$ = dispatch2(symbols_add, $1, $2);
 		    %*/
@@ -4741,7 +4741,7 @@ var TOKENS = {
 /* Line 3313 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(array, $2);
 		    %*/
@@ -4766,7 +4766,7 @@ var TOKENS = {
 /* Line 3332 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(array, $2);
 		    %*/
@@ -4790,7 +4790,7 @@ var TOKENS = {
 /* Line 3350 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(2)))));
+			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
 		    /*%
 			$$ = dispatch2(qwords_add, $1, $2);
 		    %*/
@@ -4815,10 +4815,10 @@ var TOKENS = {
     {
 		    /*%%%*/
 			VALUE lit;
-			lit = ((node)(yystack.valueAt (3-(2))))->nd_lit;
-			((node)(yystack.valueAt (3-(2))))->nd_lit = ID2SYM(rb_intern_str(lit));
-			nd_set_type(((node)(yystack.valueAt (3-(2)))), NODE_LIT);
-			yyval = list_append(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(2)))));
+			lit = (yystack.valueAt(3-(2)))->nd_lit;
+			(yystack.valueAt(3-(2)))->nd_lit = ID2SYM(rb_intern_str(lit));
+			nd_set_type((yystack.valueAt(3-(2))), NODE_LIT);
+			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
 		    /*%
 			$$ = dispatch2(qsymbols_add, $1, $2);
 		    %*/
@@ -4842,7 +4842,7 @@ var TOKENS = {
 /* Line 3390 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = literal_concat(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
+			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch2(string_add, $1, $2);
 		    %*/
@@ -4866,7 +4866,7 @@ var TOKENS = {
 /* Line 3408 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = literal_concat(((node)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
+			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch2(xstring_add, $1, $2);
 		    %*/
@@ -4890,7 +4890,7 @@ var TOKENS = {
 /* Line 3426 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *head = ((node)(yystack.valueAt (2-(1)))), *tail = ((node)(yystack.valueAt (2-(2))));
+			NODE *head = (yystack.valueAt(2-(1))), *tail = (yystack.valueAt(2-(2)));
 			if (!head) {
 			    yyval = tail;
 			}
@@ -4931,8 +4931,8 @@ var TOKENS = {
 /* Line 3462 of "parse.y"  */
     {
 		    /*%%%*/
-			lex_strterm = ((node)(yystack.valueAt (3-(2))));
-			yyval = NEW_EVSTR(((node)(yystack.valueAt (3-(3)))));
+			lex_strterm = (yystack.valueAt(3-(2)));
+			yyval = NEW_EVSTR((yystack.valueAt(3-(3))));
 		    /*%
 			lex_strterm = $<node>2;
 			$$ = dispatch1(string_dvar, $3);
@@ -4944,7 +4944,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3472 of "parse.y"  */
     {
-			((val)(yystack.valueAt (1-(1)))) = cond_stack;
+			(yystack.valueAt(1-(1))) = cond_stack;
 			yyval = cmdarg_stack;
 			cond_stack = 0;
 			cmdarg_stack = 0;
@@ -4974,13 +4974,13 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3488 of "parse.y"  */
     {
-			cond_stack = ((val)(yystack.valueAt (6-(1))));
-			cmdarg_stack = ((val)(yystack.valueAt (6-(2))));
-			lex_strterm = ((node)(yystack.valueAt (6-(3))));
-			brace_nest = ((num)(yystack.valueAt (6-(4))));
+			cond_stack = (yystack.valueAt(6-(1)));
+			cmdarg_stack = (yystack.valueAt(6-(2)));
+			lex_strterm = (yystack.valueAt(6-(3)));
+			brace_nest = (yystack.valueAt(6-(4)));
 		    /*%%%*/
-			if (((node)(yystack.valueAt (6-(5))))) ((node)(yystack.valueAt (6-(5))))->flags &= ~NODE_FL_NEWLINE;
-			yyval = new_evstr(((node)(yystack.valueAt (6-(5)))));
+			if ((yystack.valueAt(6-(5)))) (yystack.valueAt(6-(5)))->flags &= ~NODE_FL_NEWLINE;
+			yyval = new_evstr((yystack.valueAt(6-(5))));
 		    /*%
 			$$ = dispatch1(string_embexpr, $5);
 		    %*/
@@ -4992,7 +4992,7 @@ var TOKENS = {
 /* Line 3503 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_GVAR(((id)(yystack.valueAt (1-(1)))));
+			yyval = NEW_GVAR((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = dispatch1(var_ref, $1);
 		    %*/
@@ -5004,7 +5004,7 @@ var TOKENS = {
 /* Line 3511 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_IVAR(((id)(yystack.valueAt (1-(1)))));
+			yyval = NEW_IVAR((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = dispatch1(var_ref, $1);
 		    %*/
@@ -5016,7 +5016,7 @@ var TOKENS = {
 /* Line 3519 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = NEW_CVAR(((id)(yystack.valueAt (1-(1)))));
+			yyval = NEW_CVAR((yystack.valueAt(1-(1))));
 		    /*%
 			$$ = dispatch1(var_ref, $1);
 		    %*/
@@ -5029,7 +5029,7 @@ var TOKENS = {
     {
 			lex_state = EXPR_END;
 		    /*%%%*/
-			yyval = ((id)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = dispatch1(symbol, $2);
 		    %*/
@@ -5042,7 +5042,7 @@ var TOKENS = {
     {
 			lex_state = EXPR_END;
 		    /*%%%*/
-			yyval = dsym_node(((node)(yystack.valueAt (3-(2)))));
+			yyval = dsym_node((yystack.valueAt(3-(2))));
 		    /*%
 			$$ = dispatch1(dyna_symbol, $2);
 		    %*/
@@ -5054,7 +5054,7 @@ var TOKENS = {
 /* Line 3560 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = negate_lit(((node)(yystack.valueAt (2-(2)))));
+			yyval = negate_lit((yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch2(unary, ripper_intern("-@"), $2);
 		    %*/
@@ -5066,7 +5066,7 @@ var TOKENS = {
 /* Line 3568 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = negate_lit(((node)(yystack.valueAt (2-(2)))));
+			yyval = negate_lit((yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch2(unary, ripper_intern("-@"), $2);
 		    %*/
@@ -5120,7 +5120,7 @@ var TOKENS = {
 /* Line 3594 of "parse.y"  */
     {
 		    /*%%%*/
-			if (!(yyval = gettable(((id)(yystack.valueAt (1-(1))))))) yyval = NEW_BEGIN(0);
+			if (!(yyval = gettable((yystack.valueAt(1-(1)))))) yyval = NEW_BEGIN(0);
 		    /*%
 			if (id_is_var(get_id($1))) {
 			    $$ = dispatch1(var_ref, $1);
@@ -5137,7 +5137,7 @@ var TOKENS = {
 /* Line 3607 of "parse.y"  */
     {
 		    /*%%%*/
-			if (!(yyval = gettable(((id)(yystack.valueAt (1-(1))))))) yyval = NEW_BEGIN(0);
+			if (!(yyval = gettable((yystack.valueAt(1-(1)))))) yyval = NEW_BEGIN(0);
 		    /*%
 			$$ = dispatch1(var_ref, $1);
 		    %*/
@@ -5148,7 +5148,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3617 of "parse.y"  */
     {
-			yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
+			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
 		    /*%
 			$$ = dispatch1(var_field, $$);
@@ -5160,7 +5160,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3625 of "parse.y"  */
     {
-		        yyval = assignable(((id)(yystack.valueAt (1-(1)))), 0);
+		        yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
 		    /*%
 			$$ = dispatch1(var_field, $$);
@@ -5193,7 +5193,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3652 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (4-(3))));
+			yyval = (yystack.valueAt(4-(3)));
 		    },
 
 
@@ -5216,7 +5216,7 @@ var TOKENS = {
 /* Line 3668 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(2))));
+			yyval = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(paren, $2);
 		    %*/
@@ -5229,7 +5229,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3678 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (2-(1))));
+			yyval = (yystack.valueAt(2-(1)));
 			lex_state = EXPR_BEG;
 			command_start = TRUE;
 		    },
@@ -5239,7 +5239,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3686 of "parse.y"  */
     {
-			yyval = new_args_tail(((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), ((id)(yystack.valueAt (4-(4)))));
+			yyval = new_args_tail((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -5247,7 +5247,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3690 of "parse.y"  */
     {
-			yyval = new_args_tail(((node)(yystack.valueAt (2-(1)))), Qnone, ((id)(yystack.valueAt (2-(2)))));
+			yyval = new_args_tail((yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -5255,7 +5255,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3694 of "parse.y"  */
     {
-			yyval = new_args_tail(Qnone, ((id)(yystack.valueAt (2-(1)))), ((id)(yystack.valueAt (2-(2)))));
+			yyval = new_args_tail(Qnone, (yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -5263,7 +5263,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3698 of "parse.y"  */
     {
-			yyval = new_args_tail(Qnone, Qnone, ((id)(yystack.valueAt (1-(1)))));
+			yyval = new_args_tail(Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    },
 
 
@@ -5271,7 +5271,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3704 of "parse.y"  */
     {
-			yyval = ((node)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    },
 
 
@@ -5287,7 +5287,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3714 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), ((id)(yystack.valueAt (6-(5)))), Qnone, ((node)(yystack.valueAt (6-(6)))));
+			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), Qnone, (yystack.valueAt(6-(6))));
 		    },
 
 
@@ -5295,7 +5295,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3718 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (8-(1)))), ((node)(yystack.valueAt (8-(3)))), ((id)(yystack.valueAt (8-(5)))), ((node)(yystack.valueAt (8-(7)))), ((node)(yystack.valueAt (8-(8)))));
+			yyval = new_args((yystack.valueAt(8-(1))), (yystack.valueAt(8-(3))), (yystack.valueAt(8-(5))), (yystack.valueAt(8-(7))), (yystack.valueAt(8-(8))));
 		    },
 
 
@@ -5303,7 +5303,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3722 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), Qnone, Qnone, ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, Qnone, (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -5311,7 +5311,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3726 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), ((node)(yystack.valueAt (6-(3)))), Qnone, ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
+			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), Qnone, (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
 
 
@@ -5319,7 +5319,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3730 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (4-(1)))), Qnone, ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args((yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -5327,7 +5327,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3734 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (6-(1)))), Qnone, ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
+			yyval = new_args((yystack.valueAt(6-(1))), Qnone, (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
 
 
@@ -5335,7 +5335,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3738 of "parse.y"  */
     {
-			yyval = new_args(((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
+			yyval = new_args((yystack.valueAt(2-(1))), Qnone, Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -5343,7 +5343,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3742 of "parse.y"  */
     {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), ((id)(yystack.valueAt (4-(3)))), Qnone, ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -5351,7 +5351,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3746 of "parse.y"  */
     {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (6-(1)))), ((id)(yystack.valueAt (6-(3)))), ((node)(yystack.valueAt (6-(5)))), ((node)(yystack.valueAt (6-(6)))));
+			yyval = new_args(Qnone, (yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
 
 
@@ -5359,7 +5359,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3750 of "parse.y"  */
     {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (2-(1)))), Qnone, Qnone, ((node)(yystack.valueAt (2-(2)))));
+			yyval = new_args(Qnone, (yystack.valueAt(2-(1))), Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -5367,7 +5367,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3754 of "parse.y"  */
     {
-			yyval = new_args(Qnone, ((node)(yystack.valueAt (4-(1)))), Qnone, ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -5375,7 +5375,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3758 of "parse.y"  */
     {
-			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (2-(1)))), Qnone, ((node)(yystack.valueAt (2-(2)))));
+			yyval = new_args(Qnone, Qnone, (yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    },
 
 
@@ -5383,7 +5383,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3762 of "parse.y"  */
     {
-			yyval = new_args(Qnone, Qnone, ((id)(yystack.valueAt (4-(1)))), ((node)(yystack.valueAt (4-(3)))), ((node)(yystack.valueAt (4-(4)))));
+			yyval = new_args(Qnone, Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
 
 
@@ -5391,7 +5391,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3766 of "parse.y"  */
     {
-			yyval = new_args(Qnone, Qnone, Qnone, Qnone, ((node)(yystack.valueAt (1-(1)))));
+			yyval = new_args(Qnone, Qnone, Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    },
 
 
@@ -5460,8 +5460,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3816 of "parse.y"  */
     {
-			formal_argument(get_id(((id)(yystack.valueAt (1-(1))))));
-			yyval = ((id)(yystack.valueAt (1-(1))));
+			formal_argument(get_id((yystack.valueAt(1-(1)))));
+			yyval = (yystack.valueAt(1-(1)));
 		    },
 
 
@@ -5469,9 +5469,9 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3823 of "parse.y"  */
     {
-			arg_var(get_id(((id)(yystack.valueAt (1-(1))))));
+			arg_var(get_id((yystack.valueAt(1-(1)))));
 		    /*%%%*/
-			yyval = NEW_ARGS_AUX(((id)(yystack.valueAt (1-(1)))), 1);
+			yyval = NEW_ARGS_AUX((yystack.valueAt(1-(1))), 1);
 		    /*%
 			$$ = get_value($1);
 		    %*/
@@ -5486,13 +5486,13 @@ var TOKENS = {
 			arg_var(tid);
 		    /*%%%*/
 			if (dyna_in_block()) {
-			    ((node)(yystack.valueAt (3-(2))))->nd_value = NEW_DVAR(tid);
+			    (yystack.valueAt(3-(2)))->nd_value = NEW_DVAR(tid);
 			}
 			else {
-			    ((node)(yystack.valueAt (3-(2))))->nd_value = NEW_LVAR(tid);
+			    (yystack.valueAt(3-(2)))->nd_value = NEW_LVAR(tid);
 			}
 			yyval = NEW_ARGS_AUX(tid, 1);
-			yyval->nd_next = ((node)(yystack.valueAt (3-(2))));
+			yyval->nd_next = (yystack.valueAt(3-(2)));
 		    /*%
 			$$ = dispatch1(mlhs_paren, $2);
 		    %*/
@@ -5504,10 +5504,10 @@ var TOKENS = {
 /* Line 3858 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (3-(1))));
+			yyval = (yystack.valueAt(3-(1)));
 			yyval->nd_plen++;
-			yyval->nd_next = block_append(yyval->nd_next, ((node)(yystack.valueAt (3-(3))))->nd_next);
-			rb_gc_force_recycle((VALUE)((node)(yystack.valueAt (3-(3)))));
+			yyval->nd_next = block_append(yyval->nd_next, (yystack.valueAt(3-(3)))->nd_next);
+			rb_gc_force_recycle((VALUE)(yystack.valueAt(3-(3))));
 		    /*%
 			$$ = rb_ary_push($1, $3);
 		    %*/
@@ -5518,8 +5518,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3871 of "parse.y"  */
     {
-			arg_var(formal_argument(get_id(((id)(yystack.valueAt (2-(1)))))));
-			yyval = assignable(((id)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
+			arg_var(formal_argument(get_id((yystack.valueAt(2-(1))))));
+			yyval = assignable((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    /*%%%*/
 			yyval = NEW_KW_ARG(0, yyval);
 		    /*%
@@ -5532,8 +5532,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3883 of "parse.y"  */
     {
-			arg_var(formal_argument(get_id(((id)(yystack.valueAt (2-(1)))))));
-			yyval = assignable(((id)(yystack.valueAt (2-(1)))), ((node)(yystack.valueAt (2-(2)))));
+			arg_var(formal_argument(get_id((yystack.valueAt(2-(1))))));
+			yyval = assignable((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    /*%%%*/
 			yyval = NEW_KW_ARG(0, yyval);
 		    /*%
@@ -5547,7 +5547,7 @@ var TOKENS = {
 /* Line 3895 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    /*%
 			$$ = rb_ary_new3(1, $1);
 		    %*/
@@ -5559,13 +5559,13 @@ var TOKENS = {
 /* Line 3903 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *kws = ((node)(yystack.valueAt (3-(1))));
+			NODE *kws = (yystack.valueAt(3-(1)));
 
 			while (kws->nd_next) {
 			    kws = kws->nd_next;
 			}
-			kws->nd_next = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
+			kws->nd_next = (yystack.valueAt(3-(3)));
+			yyval = (yystack.valueAt(3-(1)));
 		    /*%
 			$$ = rb_ary_push($1, $3);
 		    %*/
@@ -5577,7 +5577,7 @@ var TOKENS = {
 /* Line 3920 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    /*%
 			$$ = rb_ary_new3(1, $1);
 		    %*/
@@ -5589,13 +5589,13 @@ var TOKENS = {
 /* Line 3928 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *kws = ((node)(yystack.valueAt (3-(1))));
+			NODE *kws = (yystack.valueAt(3-(1)));
 
 			while (kws->nd_next) {
 			    kws = kws->nd_next;
 			}
-			kws->nd_next = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
+			kws->nd_next = (yystack.valueAt(3-(3)));
+			yyval = (yystack.valueAt(3-(1)));
 		    /*%
 			$$ = rb_ary_push($1, $3);
 		    %*/
@@ -5606,8 +5606,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3948 of "parse.y"  */
     {
-			shadowing_lvar(get_id(((id)(yystack.valueAt (2-(2))))));
-			yyval = ((id)(yystack.valueAt (2-(2))));
+			shadowing_lvar(get_id((yystack.valueAt(2-(2)))));
+			yyval = (yystack.valueAt(2-(2)));
 		    },
 
 
@@ -5623,8 +5623,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3959 of "parse.y"  */
     {
-			arg_var(formal_argument(get_id(((id)(yystack.valueAt (3-(1)))))));
-			yyval = assignable(((id)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			arg_var(formal_argument(get_id((yystack.valueAt(3-(1))))));
+			yyval = assignable((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%%%*/
 			yyval = NEW_OPT_ARG(0, yyval);
 		    /*%
@@ -5637,8 +5637,8 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 3971 of "parse.y"  */
     {
-			arg_var(formal_argument(get_id(((id)(yystack.valueAt (3-(1)))))));
-			yyval = assignable(((id)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			arg_var(formal_argument(get_id((yystack.valueAt(3-(1))))));
+			yyval = assignable((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%%%*/
 			yyval = NEW_OPT_ARG(0, yyval);
 		    /*%
@@ -5652,7 +5652,7 @@ var TOKENS = {
 /* Line 3983 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    /*%
 			$$ = rb_ary_new3(1, $1);
 		    %*/
@@ -5664,13 +5664,13 @@ var TOKENS = {
 /* Line 3991 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *opts = ((node)(yystack.valueAt (3-(1))));
+			NODE *opts = (yystack.valueAt(3-(1)));
 
 			while (opts->nd_next) {
 			    opts = opts->nd_next;
 			}
-			opts->nd_next = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
+			opts->nd_next = (yystack.valueAt(3-(3)));
+			yyval = (yystack.valueAt(3-(1)));
 		    /*%
 			$$ = rb_ary_push($1, $3);
 		    %*/
@@ -5682,7 +5682,7 @@ var TOKENS = {
 /* Line 4007 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		    /*%
 			$$ = rb_ary_new3(1, $1);
 		    %*/
@@ -5694,13 +5694,13 @@ var TOKENS = {
 /* Line 4015 of "parse.y"  */
     {
 		    /*%%%*/
-			NODE *opts = ((node)(yystack.valueAt (3-(1))));
+			NODE *opts = (yystack.valueAt(3-(1)));
 
 			while (opts->nd_next) {
 			    opts = opts->nd_next;
 			}
-			opts->nd_next = ((node)(yystack.valueAt (3-(3))));
-			yyval = ((node)(yystack.valueAt (3-(1))));
+			opts->nd_next = (yystack.valueAt(3-(3)));
+			yyval = (yystack.valueAt(3-(1)));
 		    /*%
 			$$ = rb_ary_push($1, $3);
 		    %*/
@@ -5712,12 +5712,12 @@ var TOKENS = {
 /* Line 4035 of "parse.y"  */
     {
 		    /*%%%*/
-			if (!is_local_id(((id)(yystack.valueAt (2-(2))))))
+			if (!is_local_id((yystack.valueAt(2-(2)))))
 			    yyerror("rest argument must be local variable");
 		    /*% %*/
-			arg_var(shadowing_lvar(get_id(((id)(yystack.valueAt (2-(2)))))));
+			arg_var(shadowing_lvar(get_id((yystack.valueAt(2-(2))))));
 		    /*%%%*/
-			yyval = ((id)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = dispatch1(rest_param, $2);
 		    %*/
@@ -5742,14 +5742,14 @@ var TOKENS = {
 /* Line 4063 of "parse.y"  */
     {
 		    /*%%%*/
-			if (!is_local_id(((id)(yystack.valueAt (2-(2))))))
+			if (!is_local_id((yystack.valueAt(2-(2)))))
 			    yyerror("block argument must be local variable");
-			else if (!dyna_in_block() && local_id(((id)(yystack.valueAt (2-(2))))))
+			else if (!dyna_in_block() && local_id((yystack.valueAt(2-(2)))))
 			    yyerror("duplicated block argument name");
 		    /*% %*/
-			arg_var(shadowing_lvar(get_id(((id)(yystack.valueAt (2-(2)))))));
+			arg_var(shadowing_lvar(get_id((yystack.valueAt(2-(2))))));
 		    /*%%%*/
-			yyval = ((id)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    /*%
 			$$ = dispatch1(blockarg, $2);
 		    %*/
@@ -5760,7 +5760,7 @@ var TOKENS = {
     /* Line 212 of lalr1.js  */
 /* Line 4080 of "parse.y"  */
     {
-			yyval = ((id)(yystack.valueAt (2-(2))));
+			yyval = (yystack.valueAt(2-(2)));
 		    },
 
 
@@ -5781,8 +5781,8 @@ var TOKENS = {
 /* Line 4094 of "parse.y"  */
     {
 		    /*%%%*/
-			value_expr(((node)(yystack.valueAt (1-(1)))));
-			yyval = ((node)(yystack.valueAt (1-(1))));
+			value_expr((yystack.valueAt(1-(1))));
+			yyval = (yystack.valueAt(1-(1)));
 		        if (!yyval) yyval = NEW_NIL();
 		    /*%
 			$$ = $1;
@@ -5801,11 +5801,11 @@ var TOKENS = {
 /* Line 4104 of "parse.y"  */
     {
 		    /*%%%*/
-			if (((node)(yystack.valueAt (4-(3)))) == 0) {
+			if ((yystack.valueAt(4-(3))) == 0) {
 			    yyerror("can't define singleton method for ().");
 			}
 			else {
-			    switch (nd_type(((node)(yystack.valueAt (4-(3)))))) {
+			    switch (nd_type((yystack.valueAt(4-(3))))) {
 			      case NODE_STR:
 			      case NODE_DSTR:
 			      case NODE_XSTR:
@@ -5816,11 +5816,11 @@ var TOKENS = {
 			      case NODE_ZARRAY:
 				yyerror("can't define singleton method for literals");
 			      default:
-				value_expr(((node)(yystack.valueAt (4-(3)))));
+				value_expr((yystack.valueAt(4-(3))));
 				break;
 			    }
 			}
-			yyval = ((node)(yystack.valueAt (4-(3))));
+			yyval = (yystack.valueAt(4-(3)));
 		    /*%
 			$$ = dispatch1(paren, $3);
 		    %*/
@@ -5832,7 +5832,7 @@ var TOKENS = {
 /* Line 4134 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = ((node)(yystack.valueAt (2-(1))));
+			yyval = (yystack.valueAt(2-(1)));
 		    /*%
 			$$ = dispatch1(assoclist_from_args, $1);
 		    %*/
@@ -5844,7 +5844,7 @@ var TOKENS = {
 /* Line 4151 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_concat(((node)(yystack.valueAt (3-(1)))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = list_concat((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = rb_ary_push($1, $3);
 		    %*/
@@ -5856,7 +5856,7 @@ var TOKENS = {
 /* Line 4161 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_append(NEW_LIST(((node)(yystack.valueAt (3-(1))))), ((node)(yystack.valueAt (3-(3)))));
+			yyval = list_append(NEW_LIST((yystack.valueAt(3-(1)))), (yystack.valueAt(3-(3))));
 		    /*%
 			$$ = dispatch2(assoc_new, $1, $3);
 		    %*/
@@ -5868,7 +5868,7 @@ var TOKENS = {
 /* Line 4169 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_append(NEW_LIST(NEW_LIT(ID2SYM(((id)(yystack.valueAt (2-(1))))))), ((node)(yystack.valueAt (2-(2)))));
+			yyval = list_append(NEW_LIST(NEW_LIT(ID2SYM((yystack.valueAt(2-(1)))))), (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch2(assoc_new, $1, $2);
 		    %*/
@@ -5880,7 +5880,7 @@ var TOKENS = {
 /* Line 4177 of "parse.y"  */
     {
 		    /*%%%*/
-			yyval = list_append(NEW_LIST(0), ((node)(yystack.valueAt (2-(2)))));
+			yyval = list_append(NEW_LIST(0), (yystack.valueAt(2-(2))));
 		    /*%
 			$$ = dispatch1(assoc_splat, $2);
 		    %*/
@@ -9820,7 +9820,7 @@ var TOKENS = {
       yy_symbol_print(
         "   $" + (yyi + 1) + " =",
         yyrhs_[yyprhs_[yyrule] + yyi],
-        ((yystack.valueAt (yynrhs-(yyi + 1)))),
+        (yystack.valueAt(yynrhs-(yyi + 1))),
         yystack.locationAt (yynrhs-(yyi + 1))
       );
   }
