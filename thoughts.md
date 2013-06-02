@@ -6,6 +6,8 @@ JSRuby: Calling user defined Ruby method from Javascript
 
 Port JRuby Java Parser.
 
+Do not run parser in production, or run it server-side or in a Worker.
+
 # DOM methods
 
 Collect methods names and cache it in the `localeStorage`. Purge on the bowser version change or time pass.
