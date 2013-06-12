@@ -1713,49 +1713,19 @@ function YYParser (yylexer)
     {},
   '587': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(2-(1)));
-		    /*%
-			$$ = dispatch1(assoclist_from_args, $1);
-		    %*/
-		    },
+    {},
   '589': function ()
     
-    {
-		    /*%%%*/
-			yyval = list_concat((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
   '590': function ()
     
-    {
-		    /*%%%*/
-			yyval = list_append(NEW_LIST((yystack.valueAt(3-(1)))), (yystack.valueAt(3-(3))));
-		    /*%
-			$$ = dispatch2(assoc_new, $1, $3);
-		    %*/
-		    },
+    {},
   '591': function ()
     
-    {
-		    /*%%%*/
-			yyval = list_append(NEW_LIST(NEW_LIT(ID2SYM((yystack.valueAt(2-(1)))))), (yystack.valueAt(2-(2))));
-		    /*%
-			$$ = dispatch2(assoc_new, $1, $2);
-		    %*/
-		    },
+    {},
   '592': function ()
     
-    {
-		    /*%%%*/
-			yyval = list_append(NEW_LIST(0), (yystack.valueAt(2-(2))));
-		    /*%
-			$$ = dispatch1(assoc_splat, $2);
-		    %*/
-		    },
+    {},
   '614': function ()
     
     {yyerrok;},
@@ -1764,13 +1734,7 @@ function YYParser (yylexer)
     {yyerrok;},
   '618': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = Qundef;
-		    %*/
-		    }
+    {}
   }
 
   function yyaction (yyn, yylen)
@@ -5524,10 +5488,10 @@ function YYParser (yylexer)
     1649,  1651,  1655,  1656,  1660,  1662,  1666,  1667,  1671,  1675,
     1679,  1681,  1686,  1688,  1692,  1693,  1696,  1698,  1702,  1706,
     1710,  1712,  1716,  1718,  1722,  1723,  1726,  1728,  1732,  1733,
-    1736,  1740,  1742,  1746,  1749,  1748,  1756,  1757,  1767,  1774,
-    1784,  1792,  1800,  1812,  1813,  1814,  1817,  1818,  1819,  1820,
-    1823,  1824,  1825,  1828,  1833,  1840,  1841,  1844,  1845,  1848,
-    1851,  1854,  1855,  1856,  1859,  1860,  1863,  1864,  1868
+    1736,  1740,  1742,  1746,  1749,  1748,  1756,  1757,  1761,  1762,
+    1766,  1768,  1770,  1776,  1777,  1778,  1781,  1782,  1783,  1784,
+    1787,  1788,  1789,  1792,  1793,  1796,  1797,  1800,  1801,  1804,
+    1807,  1810,  1811,  1812,  1815,  1816,  1819,  1820,  1824
     //[
   ];
 
