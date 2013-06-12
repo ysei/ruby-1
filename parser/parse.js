@@ -1026,376 +1026,163 @@ function YYParser (yylexer)
     },
   '333': function ()
     
-    {
-		    /*%%%*/
-			NODE *body = remove_begin((yystack.valueAt(9-(8))));
-			reduce_nodes(&body);
-			yyval = NEW_DEFS((yystack.valueAt(9-(2))), (yystack.valueAt(9-(5))), (yystack.valueAt(9-(7))), body);
-			nd_set_line(yyval, (yystack.valueAt(9-(1))));
-		    /*%
-			$$ = dispatch5(defs, $2, $3, $5, $7, $8);
-		    %*/
-
-			in_single--;
-		    },
+    {},
   '334': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_BREAK(0);
-		    /*%
-			$$ = dispatch1(break, arg_new());
-		    %*/
-		    },
+    {},
   '335': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_NEXT(0);
-		    /*%
-			$$ = dispatch1(next, arg_new());
-		    %*/
-		    },
+    {},
   '336': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_REDO();
-		    /*%
-			$$ = dispatch0(redo);
-		    %*/
-		    },
+    {},
   '337': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_RETRY();
-		    /*%
-			$$ = dispatch0(retry);
-		    %*/
-		    },
+    {},
   '338': function ()
     
-    {
-		    /*%%%*/
-			value_expr((yystack.valueAt(1-(1))));
-			yyval = (yystack.valueAt(1-(1)));
-		        if (!yyval) yyval = NEW_NIL();
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
   '339': function ()
     
-    {
-			token_info_push("begin");
-		    },
+    {},
   '340': function ()
     
-    {
-			token_info_push("if");
-		    },
+    {},
   '341': function ()
     
-    {
-			token_info_push("unless");
-		    },
+    {},
   '342': function ()
     
-    {
-			token_info_push("while");
-		    },
+    {},
   '343': function ()
     
-    {
-			token_info_push("until");
-		    },
+    {},
   '344': function ()
     
-    {
-			token_info_push("case");
-		    },
+    {},
   '345': function ()
     
-    {
-			token_info_push("for");
-		    },
+    {},
   '346': function ()
     
-    {
-			token_info_push("class");
-		    },
+    {},
   '347': function ()
     
-    {
-			token_info_push("module");
-		    },
+    {},
   '348': function ()
     
-    {
-			token_info_push("def");
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-		    %*/
-		    },
+    {},
   '349': function ()
     
-    {
-			token_info_pop("end");
-		    },
+    {},
   '356': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_IF(cond((yystack.valueAt(5-(2)))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
-			fixpos(yyval, (yystack.valueAt(5-(2))));
-		    /*%
-			$$ = dispatch3(elsif, $2, $4, escape_Qundef($5));
-		    %*/
-		    },
+    {},
   '358': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(2-(2)));
-		    /*%
-			$$ = dispatch1(else, $2);
-		    %*/
-		    },
+    {},
   '361': function ()
     
-    {
-			yyval = assignable((yystack.valueAt(1-(1))), 0);
-		    /*%%%*/
-		    /*%
-			$$ = dispatch1(mlhs_paren, $$);
-		    %*/
-		    },
+    {},
   '362': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(3-(2)));
-		    /*%
-			$$ = dispatch1(mlhs_paren, $2);
-		    %*/
-		    },
+    {},
   '363': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_LIST((yystack.valueAt(1-(1))));
-		    /*%
-			$$ = mlhs_add(mlhs_new(), $1);
-		    %*/
-		    },
+    {},
   '364': function ()
     
-    {
-		    /*%%%*/
-			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
-		    /*%
-			$$ = mlhs_add($1, $3);
-		    %*/
-		    },
+    {},
   '365': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN((yystack.valueAt(1-(1))), 0);
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
   '366': function ()
     
-    {
-			yyval = assignable((yystack.valueAt(4-(4))), 0);
-		    /*%%%*/
-			yyval = NEW_MASGN((yystack.valueAt(4-(1))), yyval);
-		    /*%
-			$$ = mlhs_add_star($1, $$);
-		    %*/
-		    },
+    {},
   '367': function ()
     
-    {
-			yyval = assignable((yystack.valueAt(6-(4))), 0);
-		    /*%%%*/
-			yyval = NEW_MASGN((yystack.valueAt(6-(1))), NEW_POSTARG(yyval, (yystack.valueAt(6-(6)))));
-		    /*%
-			$$ = mlhs_add_star($1, $$);
-		    %*/
-		    },
+    {},
   '368': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN((yystack.valueAt(3-(1))), -1);
-		    /*%
-			$$ = mlhs_add_star($1, Qnil);
-		    %*/
-		    },
+    {},
   '369': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN((yystack.valueAt(5-(1))), NEW_POSTARG(-1, (yystack.valueAt(5-(5)))));
-		    /*%
-			$$ = mlhs_add_star($1, $5);
-		    %*/
-		    },
+    {},
   '370': function ()
     
-    {
-			yyval = assignable((yystack.valueAt(2-(2))), 0);
-		    /*%%%*/
-			yyval = NEW_MASGN(0, yyval);
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), $$);
-		    %*/
-		    },
+    {},
   '371': function ()
     
-    {
-			yyval = assignable((yystack.valueAt(4-(2))), 0);
-		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(yyval, (yystack.valueAt(4-(4)))));
-		    /*%
-		      #if 0
-		      TODO: Check me
-		      #endif
-			$$ = mlhs_add_star($$, $4);
-		    %*/
-		    },
+    {},
   '372': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(0, -1);
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), Qnil);
-		    %*/
-		    },
+    {},
   '373': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_MASGN(0, NEW_POSTARG(-1, (yystack.valueAt(3-(3)))));
-		    /*%
-			$$ = mlhs_add_star(mlhs_new(), Qnil);
-		    %*/
-		    },
+    {},
   '374': function ()
     
-    {
-			yyval = new_args_tail((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
-		    },
+    {},
   '375': function ()
     
-    {
-			yyval = new_args_tail((yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
-		    },
+    {},
   '376': function ()
     
-    {
-			yyval = new_args_tail(Qnone, (yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
-		    },
+    {},
   '377': function ()
     
-    {
-			yyval = new_args_tail(Qnone, Qnone, (yystack.valueAt(1-(1))));
-		    },
+    {},
   '378': function ()
     
-    {
-			yyval = (yystack.valueAt(2-(2)));
-		    },
+    {},
   '379': function ()
     
-    {
-			yyval = new_args_tail(Qnone, Qnone, Qnone);
-		    },
+    {},
   '380': function ()
     
-    {
-			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), Qnone, (yystack.valueAt(6-(6))));
-		    },
+    {},
   '381': function ()
     
-    {
-			yyval = new_args((yystack.valueAt(8-(1))), (yystack.valueAt(8-(3))), (yystack.valueAt(8-(5))), (yystack.valueAt(8-(7))), (yystack.valueAt(8-(8))));
-		    },
+    {},
   '382': function ()
     
-    {
-			yyval = new_args((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, Qnone, (yystack.valueAt(4-(4))));
-		    },
+    {},
   '383': function ()
     
-    {
-			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), Qnone, (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
-		    },
+    {},
   '384': function ()
     
-    {
-			yyval = new_args((yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
-		    },
+    {},
   '385': function ()
     
-    {
-			yyval = new_args((yystack.valueAt(2-(1))), Qnone, 1, Qnone, new_args_tail(Qnone, Qnone, Qnone));
-		    /*%%%*/
-		    /*%
-                        dispatch1(excessed_comma, $$);
-		    %*/
-		    },
+    {},
   '386': function ()
     
-    {
-			yyval = new_args((yystack.valueAt(6-(1))), Qnone, (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
-		    },
+    {},
   '387': function ()
     
-    {
-			yyval = new_args((yystack.valueAt(2-(1))), Qnone, Qnone, Qnone, (yystack.valueAt(2-(2))));
-		    },
+    {},
   '388': function ()
     
-    {
-			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
-		    },
+    {},
   '389': function ()
     
-    {
-			yyval = new_args(Qnone, (yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
-		    },
+    {},
   '390': function ()
     
-    {
-			yyval = new_args(Qnone, (yystack.valueAt(2-(1))), Qnone, Qnone, (yystack.valueAt(2-(2))));
-		    },
+    {},
   '391': function ()
     
-    {
-			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
-		    },
+    {},
   '392': function ()
     
-    {
-			yyval = new_args(Qnone, Qnone, (yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
-		    },
+    {},
   '393': function ()
     
-    {
-			yyval = new_args(Qnone, Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
-		    },
+    {},
   '394': function ()
     
-    {
-			yyval = new_args(Qnone, Qnone, Qnone, Qnone, (yystack.valueAt(1-(1))));
-		    },
+    {},
   '396': function ()
     
     {
@@ -1403,775 +1190,246 @@ function YYParser (yylexer)
 		    },
   '397': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = blockvar_new(params_new(Qnil,Qnil,Qnil,Qnil,Qnil,Qnil,Qnil),
-                                          escape_Qundef($2));
-		    %*/
-		    },
+    {},
   '398': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = blockvar_new(params_new(Qnil,Qnil,Qnil,Qnil,Qnil,Qnil,Qnil),
-                                          Qnil);
-		    %*/
-		    },
+    {},
   '399': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(4-(2)));
-		    /*%
-			$$ = blockvar_new(escape_Qundef($2), escape_Qundef($3));
-		    %*/
-		    },
+    {},
   '400': function ()
     
-    {
-		      yyval = 0;
-		    },
+    {},
   '401': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = $3;
-		    %*/
-		    },
+    {},
   '404': function ()
     
-    {
-			new_bv(get_id((yystack.valueAt(1-(1)))));
-		    /*%%%*/
-		    /*%
-			$$ = get_value($1);
-		    %*/
-		    },
+    {},
   '405': function ()
     
-    {
-			yyval = 0;
-		    },
+    {},
   '406': function ()
     
-    {
-			yyval = dyna_push();
-		    },
+    {},
   '407': function ()
     
-    {
-			yyval = lpar_beg;
-			lpar_beg = ++paren_nest;
-		    },
+    {},
   '408': function ()
     
     {
-			lpar_beg = (yystack.valueAt(4-(2)));
-		    /*%%%*/
-			yyval = NEW_LAMBDA((yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
-		    /*%
-			$$ = dispatch2(lambda, $3, $4);
-		    %*/
-			dyna_pop((yystack.valueAt(4-(1))));
+          // touching this alters the parse.output
+          (yystack.valueAt(4-(2)));
+          (yystack.valueAt(4-(1)));
 		    },
   '409': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(4-(2)));
-		    /*%
-			$$ = dispatch1(paren, $2);
-		    %*/
-		    },
+    {},
   '410': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(1-(1)));
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
   '411': function ()
     
-    {
-			yyval = (yystack.valueAt(3-(2)));
-		    },
+    {},
   '412': function ()
     
-    {
-			yyval = (yystack.valueAt(3-(2)));
-		    },
+    {},
   '413': function ()
     
-    {
-			(yystack.valueAt(1-(1))) = dyna_push();
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
   '414': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
-			nd_set_line(yyval, (yystack.valueAt(5-(2))));
-		    /*%
-			$$ = dispatch2(do_block, escape_Qundef($3), $4);
-		    %*/
-			dyna_pop((yystack.valueAt(5-(1))));
+	      // touching this alters the parse.output
+        (yystack.valueAt(5-(2)));
+			  (yystack.valueAt(5-(1)));
 		    },
   '415': function ()
     
-    {
-		    /*%%%*/
-			if (nd_type((yystack.valueAt(2-(1)))) == NODE_YIELD) {
-			    compile_error(PARSER_ARG "block given to yield");
-			}
-			else {
-			    block_dup_check((yystack.valueAt(2-(1)))->nd_args, (yystack.valueAt(2-(2))));
-			}
-			(yystack.valueAt(2-(2)))->nd_iter = (yystack.valueAt(2-(1)));
-			yyval = (yystack.valueAt(2-(2)));
-			fixpos(yyval, (yystack.valueAt(2-(1))));
-		    /*%
-			$$ = method_add_block($1, $2);
-		    %*/
-		    },
+    {},
   '416': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
-		    /*%
-			$$ = dispatch3(call, $1, $2, $3);
-			$$ = method_optarg($$, $4);
-		    %*/
-		    },
+    {},
   '417': function ()
     
-    {
-		    /*%%%*/
-			block_dup_check((yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
-			(yystack.valueAt(5-(5)))->nd_iter = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))));
-			yyval = (yystack.valueAt(5-(5)));
-			fixpos(yyval, (yystack.valueAt(5-(1))));
-		    /*%
-			$$ = dispatch4(command_call, $1, $2, $3, $4);
-			$$ = method_add_block($$, $5);
-		    %*/
-		    },
+    {},
   '418': function ()
     
-    {
-		    /*%%%*/
-			block_dup_check((yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
-			(yystack.valueAt(5-(5)))->nd_iter = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))));
-			yyval = (yystack.valueAt(5-(5)));
-			fixpos(yyval, (yystack.valueAt(5-(1))));
-		    /*%
-			$$ = dispatch4(command_call, $1, $2, $3, $4);
-			$$ = method_add_block($$, $5);
-		    %*/
-		    },
+    {},
   '419': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(2-(1)));
-			yyval->nd_args = (yystack.valueAt(2-(2)));
-		    /*%
-			$$ = method_arg(dispatch1(fcall, $1), $2);
-		    %*/
-		    },
+    {},
   '420': function ()
     
-    {
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
   '421': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(5))));
-			nd_set_line(yyval, (yystack.valueAt(5-(4))));
-		    /*%
-			$$ = dispatch3(call, $1, ripper_id2sym('.'), $3);
-			$$ = method_optarg($$, $5);
-		    %*/
+		      // touching this alters the parse.output
+			    (yystack.valueAt(5-(4)));
 		    },
   '422': function ()
     
-    {
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
   '423': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(5))));
-			nd_set_line(yyval, (yystack.valueAt(5-(4))));
-		    /*%
-			$$ = dispatch3(call, $1, ripper_id2sym('.'), $3);
-			$$ = method_optarg($$, $5);
-		    %*/
+		      // touching this alters the parse.output
+			    (yystack.valueAt(5-(4)))
 		    },
   '424': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_CALL((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))), 0);
-		    /*%
-			$$ = dispatch3(call, $1, ripper_intern("::"), $3);
-		    %*/
-		    },
+    {},
   '425': function ()
     
-    {
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
   '426': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_CALL((yystack.valueAt(4-(1))), rb_intern("call"), (yystack.valueAt(4-(4))));
-			nd_set_line(yyval, (yystack.valueAt(4-(3))));
-		    /*%
-			$$ = dispatch3(call, $1, ripper_id2sym('.'),
-				       ripper_intern("call"));
-			$$ = method_optarg($$, $4);
-		    %*/
+          // touching this alters the parse.output
+          nd_set_line(yyval, (yystack.valueAt(4-(3))));
 		    },
   '427': function ()
     
-    {
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*% %*/
-		    },
+    {},
   '428': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_CALL((yystack.valueAt(4-(1))), rb_intern("call"), (yystack.valueAt(4-(4))));
-			nd_set_line(yyval, (yystack.valueAt(4-(3))));
-		    /*%
-			$$ = dispatch3(call, $1, ripper_intern("::"),
-				       ripper_intern("call"));
-			$$ = method_optarg($$, $4);
-		    %*/
+          // touching this alters the parse.output
+          (yystack.valueAt(4-(3)));
 		    },
   '429': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_SUPER((yystack.valueAt(2-(2))));
-		    /*%
-			$$ = dispatch1(super, $2);
-		    %*/
-		    },
+    {},
   '430': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_ZSUPER();
-		    /*%
-			$$ = dispatch0(zsuper);
-		    %*/
-		    },
+    {},
   '431': function ()
     
-    {
-		    /*%%%*/
-			if ((yystack.valueAt(4-(1))) && nd_type((yystack.valueAt(4-(1)))) == NODE_SELF)
-			    yyval = NEW_FCALL(tAREF, (yystack.valueAt(4-(3))));
-			else
-			    yyval = NEW_CALL((yystack.valueAt(4-(1))), tAREF, (yystack.valueAt(4-(3))));
-			fixpos(yyval, (yystack.valueAt(4-(1))));
-		    /*%
-			$$ = dispatch2(aref, $1, escape_Qundef($3));
-		    %*/
-		    },
+    {},
   '432': function ()
     
-    {
-			(yystack.valueAt(1-(1))) = dyna_push();
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-                    %*/
-		    },
+    {},
   '433': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
-			nd_set_line(yyval, (yystack.valueAt(5-(2))));
-		    /*%
-			$$ = dispatch2(brace_block, escape_Qundef($3), $4);
-		    %*/
-			dyna_pop((yystack.valueAt(5-(1))));
+		      // touching this alters the parse.output
+          (yystack.valueAt(5-(2)));
 		    },
   '434': function ()
     
-    {
-			(yystack.valueAt(1-(1))) = dyna_push();
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-                    %*/
-		    },
+    {},
   '435': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
-			nd_set_line(yyval, (yystack.valueAt(5-(2))));
-		    /*%
-			$$ = dispatch2(do_block, escape_Qundef($3), $4);
-		    %*/
-			dyna_pop((yystack.valueAt(5-(1))));
+          // touching this alters the parse.output
+          (yystack.valueAt(5-(2)));
 		    },
   '436': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_WHEN((yystack.valueAt(5-(2))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
-		    /*%
-			$$ = dispatch3(when, $2, $4, escape_Qundef($5));
-		    %*/
-		    },
+    {},
   '439': function ()
     
-    {
-		    /*%%%*/
-			if ((yystack.valueAt(6-(3)))) {
-			    (yystack.valueAt(6-(3))) = node_assign((yystack.valueAt(6-(3))), NEW_ERRINFO());
-			    (yystack.valueAt(6-(5))) = block_append((yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))));
-			}
-			yyval = NEW_RESBODY((yystack.valueAt(6-(2))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
-			fixpos(yyval, (yystack.valueAt(6-(2)))?(yystack.valueAt(6-(2))):(yystack.valueAt(6-(5))));
-		    /*%
-			$$ = dispatch4(rescue,
-				       escape_Qundef($2),
-				       escape_Qundef($3),
-				       escape_Qundef($5),
-				       escape_Qundef($6));
-		    %*/
-		    },
+    {},
   '441': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_LIST((yystack.valueAt(1-(1))));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
   '442': function ()
     
-    {
-		    /*%%%*/
-			if (!(yyval = splat_array((yystack.valueAt(1-(1)))))) yyval = (yystack.valueAt(1-(1)));
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
   '444': function ()
     
-    {
-			yyval = (yystack.valueAt(2-(2)));
-		    },
+    {},
   '446': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(2-(2)));
-		    /*%
-			$$ = dispatch1(ensure, $2);
-		    %*/
-		    },
+    {},
   '449': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_LIT(ID2SYM((yystack.valueAt(1-(1)))));
-		    /*%
-			$$ = dispatch1(symbol_literal, $1);
-		    %*/
-		    },
+    {},
   '451': function ()
     
-    {
-		    /*%%%*/
-			NODE *node = (yystack.valueAt(1-(1)));
-			if (!node) {
-			    node = NEW_STR(STR_NEW0());
-			}
-			else {
-			    node = evstr2dstr(node);
-			}
-			yyval = node;
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
   '454': function ()
     
-    {
-		    /*%%%*/
-			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
-		    /*%
-			$$ = dispatch2(string_concat, $1, $2);
-		    %*/
-		    },
+    {},
   '455': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(3-(2)));
-		    /*%
-			$$ = dispatch1(string_literal, $2);
-		    %*/
-		    },
+    {},
   '456': function ()
     
-    {
-		    /*%%%*/
-			NODE *node = (yystack.valueAt(3-(2)));
-			if (!node) {
-			    node = NEW_XSTR(STR_NEW0());
-			}
-			else {
-			    switch (nd_type(node)) {
-			      case NODE_STR:
-				nd_set_type(node, NODE_XSTR);
-				break;
-			      case NODE_DSTR:
-				nd_set_type(node, NODE_DXSTR);
-				break;
-			      default:
-				node = NEW_NODE(NODE_DXSTR, Qnil, 1, NEW_LIST(node));
-				break;
-			    }
-			}
-			yyval = node;
-		    /*%
-			$$ = dispatch1(xstring_literal, $2);
-		    %*/
-		    },
+    {},
   '457': function ()
     
-    {
-		    /*%%%*/
-			int options = (yystack.valueAt(3-(3)));
-			NODE *node = (yystack.valueAt(3-(2)));
-			NODE *list, *prev;
-			if (!node) {
-			    node = NEW_LIT(reg_compile(STR_NEW0(), options));
-			}
-			else switch (nd_type(node)) {
-			  case NODE_STR:
-			    {
-				VALUE src = node->nd_lit;
-				nd_set_type(node, NODE_LIT);
-				node->nd_lit = reg_compile(src, options);
-			    }
-			    break;
-			  default:
-			    node = NEW_NODE(NODE_DSTR, STR_NEW0(), 1, NEW_LIST(node));
-			  case NODE_DSTR:
-			    if (options & RE_OPTION_ONCE) {
-				nd_set_type(node, NODE_DREGX_ONCE);
-			    }
-			    else {
-				nd_set_type(node, NODE_DREGX);
-			    }
-			    node->nd_cflag = options & RE_OPTION_MASK;
-			    if (!NIL_P(node->nd_lit)) reg_fragment_check(node->nd_lit, options);
-			    for (list = (prev = node)->nd_next; list; list = list->nd_next) {
-				if (nd_type(list->nd_head) == NODE_STR) {
-				    VALUE tail = list->nd_head->nd_lit;
-				    if (reg_fragment_check(tail, options) && prev && !NIL_P(prev->nd_lit)) {
-					VALUE lit = prev == node ? prev->nd_lit : prev->nd_head->nd_lit;
-					if (!literal_concat0(parser, lit, tail)) {
-					    node = 0;
-					    break;
-					}
-					rb_str_resize(tail, 0);
-					prev->nd_next = list->nd_next;
-					rb_gc_force_recycle((VALUE)list->nd_head);
-					rb_gc_force_recycle((VALUE)list);
-					list = prev;
-				    }
-				    else {
-					prev = list;
-				    }
-                                }
-				else {
-				    prev = 0;
-				}
-                            }
-			    if (!node->nd_next) {
-				VALUE src = node->nd_lit;
-				nd_set_type(node, NODE_LIT);
-				node->nd_lit = reg_compile(src, options);
-			    }
-			    break;
-			}
-			yyval = node;
-		    /*%
-			$$ = dispatch2(regexp_literal, $2, $3);
-		    %*/
-		    },
+    {},
   '458': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_ZARRAY();
-		    /*%
-			$$ = dispatch0(words_new);
-			$$ = dispatch1(array, $$);
-		    %*/
-		    },
+    {},
   '459': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(3-(2)));
-		    /*%
-			$$ = dispatch1(array, $2);
-		    %*/
-		    },
+    {},
   '460': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(words_new);
-		    %*/
-		    },
+    {},
   '461': function ()
     
-    {
-		    /*%%%*/
-			yyval = list_append((yystack.valueAt(3-(1))), evstr2dstr((yystack.valueAt(3-(2)))));
-		    /*%
-			$$ = dispatch2(words_add, $1, $2);
-		    %*/
-		    },
+    {},
   '463': function ()
     
-    {
-		    /*%%%*/
-			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
-		    /*%
-			$$ = dispatch2(word_add, $1, $2);
-		    %*/
-		    },
+    {},
   '464': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_ZARRAY();
-		    /*%
-			$$ = dispatch0(symbols_new);
-			$$ = dispatch1(array, $$);
-		    %*/
-		    },
+    {},
   '465': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(3-(2)));
-		    /*%
-			$$ = dispatch1(array, $2);
-		    %*/
-		    },
+    {},
   '466': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(symbols_new);
-		    %*/
-		    },
+    {},
   '467': function ()
     
-    {
-		    /*%%%*/
-			(yystack.valueAt(3-(2))) = evstr2dstr((yystack.valueAt(3-(2))));
-			nd_set_type((yystack.valueAt(3-(2))), NODE_DSYM);
-			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
-		    /*%
-			$$ = dispatch2(symbols_add, $1, $2);
-		    %*/
-		    },
+    {},
   '468': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_ZARRAY();
-		    /*%
-			$$ = dispatch0(qwords_new);
-			$$ = dispatch1(array, $$);
-		    %*/
-		    },
+    {},
   '469': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(3-(2)));
-		    /*%
-			$$ = dispatch1(array, $2);
-		    %*/
-		    },
+    {},
   '470': function ()
     
-    {
-		    /*%%%*/
-			yyval = NEW_ZARRAY();
-		    /*%
-			$$ = dispatch0(qsymbols_new);
-			$$ = dispatch1(array, $$);
-		    %*/
-		    },
+    {},
   '471': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(3-(2)));
-		    /*%
-			$$ = dispatch1(array, $2);
-		    %*/
-		    },
+    {},
   '472': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(qwords_new);
-		    %*/
-		    },
+    {},
   '473': function ()
     
-    {
-		    /*%%%*/
-			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
-		    /*%
-			$$ = dispatch2(qwords_add, $1, $2);
-		    %*/
-		    },
+    {},
   '474': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(qsymbols_new);
-		    %*/
-		    },
+    {},
   '475': function ()
     
-    {
-		    /*%%%*/
-			VALUE lit;
-			lit = (yystack.valueAt(3-(2)))->nd_lit;
-			(yystack.valueAt(3-(2)))->nd_lit = ID2SYM(rb_intern_str(lit));
-			nd_set_type((yystack.valueAt(3-(2))), NODE_LIT);
-			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
-		    /*%
-			$$ = dispatch2(qsymbols_add, $1, $2);
-		    %*/
-		    },
+    {},
   '476': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(string_content);
-		    %*/
-		    },
+    {},
   '477': function ()
     
-    {
-		    /*%%%*/
-			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
-		    /*%
-			$$ = dispatch2(string_add, $1, $2);
-		    %*/
-		    },
+    {},
   '478': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(xstring_new);
-		    %*/
-		    },
+    {},
   '479': function ()
     
-    {
-		    /*%%%*/
-			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
-		    /*%
-			$$ = dispatch2(xstring_add, $1, $2);
-		    %*/
-		    },
+    {},
   '480': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = dispatch0(regexp_new);
-		    %*/
-		    },
+    {},
   '481': function ()
     
-    {
-		    /*%%%*/
-			NODE *head = (yystack.valueAt(2-(1))), *tail = (yystack.valueAt(2-(2)));
-			if (!head) {
-			    yyval = tail;
-			}
-			else if (!tail) {
-			    yyval = head;
-			}
-			else {
-			    switch (nd_type(head)) {
-			      case NODE_STR:
-				nd_set_type(head, NODE_DSTR);
-				break;
-			      case NODE_DSTR:
-				break;
-			      default:
-				head = list_append(NEW_DSTR(Qnil), head);
-				break;
-			    }
-			    yyval = list_append(head, tail);
-			}
-		    /*%
-			$$ = dispatch2(regexp_add, $1, $2);
-		    %*/
-		    },
+    {},
   '483': function ()
     
     {
@@ -2184,15 +1442,10 @@ function YYParser (yylexer)
     {
 		    /*%%%*/
 			yylexer.strterm = (yystack.valueAt(3-(2)));
-			yyval = NEW_EVSTR((yystack.valueAt(3-(3))));
 		    },
   '485': function ()
     
     {
-			(yystack.valueAt(1-(1))) = cond_stack;
-			yyval = cmdarg_stack;
-			cond_stack = 0;
-			cmdarg_stack = 0;
 		    },
   '486': function ()
     
@@ -2210,16 +1463,10 @@ function YYParser (yylexer)
   '488': function ()
     
     {
-			cond_stack = (yystack.valueAt(6-(1)));
-			cmdarg_stack = (yystack.valueAt(6-(2)));
+			yylexer.cond_stack = (yystack.valueAt(6-(1)));
+			yylexer.cmdarg_stack = (yystack.valueAt(6-(2)));
 			yylexer.strterm = (yystack.valueAt(6-(3)));
 			yylexer.brace_nest = (yystack.valueAt(6-(4)));
-		    /*%%%*/
-			if ((yystack.valueAt(6-(5)))) (yystack.valueAt(6-(5)))->flags &= ~NODE_FL_NEWLINE;
-			yyval = new_evstr((yystack.valueAt(6-(5))));
-		    /*%
-			$$ = dispatch1(string_embexpr, $5);
-		    %*/
 		    },
   '489': function ()
     
@@ -6624,35 +5871,35 @@ function YYParser (yylexer)
      923,   925,   925,   927,   929,   931,   933,   934,   936,   938,
      943,   949,   953,   948,   960,   964,   959,   970,   974,   977,
      981,   976,   988,   987,   996,   998,   995,  1007,  1006,  1015,
-    1014,  1026,  1030,  1025,  1048,  1056,  1064,  1072,  1082,  1094,
-    1100,  1106,  1112,  1118,  1124,  1130,  1136,  1142,  1148,  1158,
-    1164,  1169,  1170,  1177,  1182,  1185,  1186,  1199,  1200,  1210,
-    1211,  1214,  1222,  1232,  1240,  1250,  1258,  1267,  1276,  1284,
-    1292,  1301,  1313,  1321,  1332,  1336,  1340,  1344,  1350,  1355,
-    1360,  1364,  1368,  1372,  1376,  1380,  1388,  1392,  1396,  1400,
-    1404,  1408,  1412,  1416,  1420,  1426,  1427,  1433,  1442,  1451,
-    1462,  1466,  1476,  1483,  1492,  1500,  1506,  1509,  1506,  1526,
-    1534,  1544,  1548,  1555,  1554,  1575,  1591,  1600,  1612,  1626,
-    1636,  1635,  1652,  1651,  1667,  1676,  1675,  1693,  1692,  1709,
-    1717,  1725,  1740,  1739,  1759,  1758,  1779,  1791,  1792,  1795,
-    1814,  1817,  1825,  1833,  1836,  1840,  1843,  1851,  1854,  1855,
-    1863,  1866,  1883,  1884,  1885,  1895,  1905,  1932,  1997,  2006,
-    2017,  2024,  2034,  2042,  2052,  2061,  2072,  2079,  2091,  2100,
-    2110,  2119,  2130,  2137,  2148,  2155,  2170,  2177,  2188,  2195,
-    2206,  2213,  2242,  2244,  2243,  2256,  2262,  2267,  2255,  2286,
-    2294,  2302,  2310,  2313,  2324,  2325,  2326,  2327,  2330,  2341,
-    2342,  2343,  2351,  2361,  2362,  2363,  2364,  2365,  2368,  2369,
-    2370,  2371,  2372,  2373,  2374,  2377,  2390,  2400,  2408,  2418,
-    2419,  2422,  2431,  2430,  2439,  2451,  2461,  2469,  2473,  2477,
-    2481,  2487,  2492,  2497,  2501,  2505,  2509,  2513,  2517,  2521,
-    2525,  2529,  2533,  2537,  2541,  2545,  2549,  2554,  2560,  2569,
-    2578,  2587,  2598,  2599,  2606,  2615,  2634,  2641,  2654,  2666,
-    2678,  2686,  2703,  2711,  2727,  2728,  2731,  2736,  2742,  2754,
-    2766,  2774,  2790,  2798,  2814,  2815,  2818,  2831,  2842,  2843,
-    2846,  2863,  2867,  2877,  2887,  2887,  2916,  2917,  2927,  2934,
-    2944,  2952,  2960,  2972,  2973,  2974,  2977,  2978,  2979,  2980,
-    2983,  2984,  2985,  2988,  2993,  3000,  3001,  3004,  3005,  3008,
-    3011,  3014,  3015,  3016,  3019,  3020,  3023,  3024,  3028
+    1014,  1026,  1030,  1025,  1037,  1039,  1041,  1043,  1047,  1051,
+    1055,  1059,  1063,  1067,  1071,  1075,  1079,  1083,  1087,  1091,
+    1095,  1096,  1097,  1100,  1101,  1104,  1105,  1111,  1112,  1116,
+    1117,  1120,  1122,  1126,  1128,  1132,  1134,  1136,  1138,  1140,
+    1142,  1144,  1146,  1148,  1153,  1155,  1157,  1159,  1163,  1166,
+    1169,  1171,  1173,  1175,  1177,  1179,  1181,  1183,  1185,  1187,
+    1189,  1191,  1193,  1195,  1197,  1201,  1202,  1208,  1210,  1212,
+    1217,  1219,  1223,  1224,  1227,  1229,  1233,  1234,  1233,  1244,
+    1246,  1250,  1252,  1257,  1256,  1268,  1270,  1272,  1274,  1278,
+    1281,  1280,  1288,  1287,  1294,  1297,  1296,  1304,  1303,  1310,
+    1312,  1314,  1319,  1318,  1327,  1326,  1336,  1342,  1343,  1346,
+    1350,  1353,  1355,  1357,  1360,  1362,  1365,  1367,  1370,  1371,
+    1373,  1376,  1380,  1381,  1382,  1386,  1390,  1394,  1398,  1400,
+    1405,  1406,  1410,  1411,  1415,  1417,  1422,  1423,  1427,  1429,
+    1433,  1435,  1440,  1441,  1446,  1447,  1452,  1453,  1458,  1459,
+    1464,  1465,  1469,  1471,  1470,  1482,  1484,  1489,  1481,  1502,
+    1510,  1518,  1526,  1529,  1540,  1541,  1542,  1543,  1546,  1557,
+    1558,  1559,  1567,  1577,  1578,  1579,  1580,  1581,  1584,  1585,
+    1586,  1587,  1588,  1589,  1590,  1593,  1606,  1616,  1624,  1634,
+    1635,  1638,  1647,  1646,  1655,  1667,  1677,  1685,  1689,  1693,
+    1697,  1703,  1708,  1713,  1717,  1721,  1725,  1729,  1733,  1737,
+    1741,  1745,  1749,  1753,  1757,  1761,  1765,  1770,  1776,  1785,
+    1794,  1803,  1814,  1815,  1822,  1831,  1850,  1857,  1870,  1882,
+    1894,  1902,  1919,  1927,  1943,  1944,  1947,  1952,  1958,  1970,
+    1982,  1990,  2006,  2014,  2030,  2031,  2034,  2047,  2058,  2059,
+    2062,  2079,  2083,  2093,  2103,  2103,  2132,  2133,  2143,  2150,
+    2160,  2168,  2176,  2188,  2189,  2190,  2193,  2194,  2195,  2196,
+    2199,  2200,  2201,  2204,  2209,  2216,  2217,  2220,  2221,  2224,
+    2227,  2230,  2231,  2232,  2235,  2236,  2239,  2240,  2244
     //[
   ];
 
