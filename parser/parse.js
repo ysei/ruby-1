@@ -972,169 +972,58 @@ function YYParser (yylexer)
 		  },
   '321': function ()
     
-    {
-		    /*%%%*/
-			/*
-			 *  for a, b, c in e
-			 *  #=>
-			 *  e.each{|*x| a, b, c = x
-			 *
-			 *  for a in e
-			 *  #=>
-			 *  e.each{|x| a, = x}
-			 */
-			ID id = internal_id();
-			ID *tbl = ALLOC_N(ID, 2);
-			NODE *m = NEW_ARGS_AUX(0, 0);
-			NODE *args, *scope;
-
-			if (nd_type((yystack.valueAt(9-(2)))) == NODE_MASGN) {
-			    /* if args.length == 1 && args[0].kind_of?(Array)
-			     *   args = args[0]
-			     * end
-			     */
-			    NODE *one = NEW_LIST(NEW_LIT(INT2FIX(1)));
-			    NODE *zero = NEW_LIST(NEW_LIT(INT2FIX(0)));
-			    m->nd_next = block_append(
-				NEW_IF(
-				    NEW_NODE(NODE_AND,
-					     NEW_CALL(NEW_CALL(NEW_DVAR(id), idLength, 0),
-						      idEq, one),
-					     NEW_CALL(NEW_CALL(NEW_DVAR(id), idAREF, zero),
-						      rb_intern("kind_of?"), NEW_LIST(NEW_LIT(rb_cArray))),
-					     0),
-				    NEW_DASGN_CURR(id,
-						   NEW_CALL(NEW_DVAR(id), idAREF, zero)),
-				    0),
-				node_assign((yystack.valueAt(9-(2))), NEW_DVAR(id)));
-
-			    args = new_args(m, 0, id, 0, new_args_tail(0, 0, 0));
-			}
-			else {
-			    if (nd_type((yystack.valueAt(9-(2)))) == NODE_LASGN ||
-				nd_type((yystack.valueAt(9-(2)))) == NODE_DASGN ||
-				nd_type((yystack.valueAt(9-(2)))) == NODE_DASGN_CURR) {
-				(yystack.valueAt(9-(2)))->nd_value = NEW_DVAR(id);
-				m->nd_plen = 1;
-				m->nd_next = (yystack.valueAt(9-(2)));
-				args = new_args(m, 0, 0, 0, new_args_tail(0, 0, 0));
-			    }
-			    else {
-				m->nd_next = node_assign(NEW_MASGN(NEW_LIST((yystack.valueAt(9-(2)))), 0), NEW_DVAR(id));
-				args = new_args(m, 0, id, 0, new_args_tail(0, 0, 0));
-			    }
-			}
-			scope = NEW_NODE(NODE_SCOPE, tbl, (yystack.valueAt(9-(8))), args);
-			tbl[0] = 1; tbl[1] = id;
-			yyval = NEW_FOR(0, (yystack.valueAt(9-(5))), scope);
-			fixpos(yyval, (yystack.valueAt(9-(2))));
-		    /*%
-			$$ = dispatch3(for, $2, $5, $8);
-		    %*/
-		    },
+    {},
   '322': function ()
     
-    {
-			if (in_def || in_single)
-			    yyerror("class definition in method body");
-			local_push(0);
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-		    %*/
-		    },
+    {},
   '323': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_CLASS((yystack.valueAt(6-(2))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(3))));
-			nd_set_line(yyval, (yystack.valueAt(6-(4))));
-		    /*%
-			$$ = dispatch3(class, $2, $3, $5);
-		    %*/
-
+		      // touching this alters the parse.output
+			    (yystack.valueAt(6-(4)));
 		    },
   '324': function ()
     
-    {
-			yyval = in_def;
-			in_def = 0;
-		    },
+    {},
   '325': function ()
     
-    {
-			yyval = in_single;
-			in_single = 0;
-			local_push(0);
-		    },
+    {},
   '326': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_SCLASS((yystack.valueAt(8-(3))), (yystack.valueAt(8-(7))));
-			fixpos(yyval, (yystack.valueAt(8-(3))));
-		    /*%
-			$$ = dispatch2(sclass, $3, $7);
-		    %*/
-
-			in_def = (yystack.valueAt(8-(4)));
-			in_single = (yystack.valueAt(8-(6)));
+		      // touching this alters the parse.output
+		      (yystack.valueAt(8-(4)));
+			    (yystack.valueAt(8-(6)));
 		    },
   '327': function ()
     
-    {
-			if (in_def || in_single)
-			    yyerror("module definition in method body");
-			local_push(0);
-		    /*%%%*/
-			yyval = ruby_sourceline;
-		    /*%
-		    %*/
-		    },
+    {},
   '328': function ()
     
     {
-		    /*%%%*/
-			yyval = NEW_MODULE((yystack.valueAt(5-(2))), (yystack.valueAt(5-(4))));
-			nd_set_line(yyval, (yystack.valueAt(5-(3))));
-		    /*%
-			$$ = dispatch2(module, $2, $4);
-		    %*/
-
+		      // touching this alters the parse.output
+			    (yystack.valueAt(5-(3)));
 		    },
   '329': function ()
     
-    {
-			yyval = cur_mid;
-			cur_mid = (yystack.valueAt(2-(2)));
-			in_def++;
-			local_push(0);
-		    },
+    {},
   '330': function ()
     
     {
-		    /*%%%*/
-			NODE *body = remove_begin((yystack.valueAt(6-(5))));
-			reduce_nodes(&body);
-			yyval = NEW_DEFN((yystack.valueAt(6-(2))), (yystack.valueAt(6-(4))), body, NOEX_PRIVATE);
-			nd_set_line(yyval, (yystack.valueAt(6-(1))));
-		    /*%
-			$$ = dispatch3(def, $2, $4, $5);
-		    %*/
-
-			in_def--;
-			cur_mid = (yystack.valueAt(6-(3)));
+		      // touching this alters the parse.output
+			    (yystack.valueAt(6-(1)));
+			    (yystack.valueAt(6-(3)));
 		    },
   '331': function ()
     
-    {yylexer.state = EXPR_FNAME;},
+    {
+      yylexer.state = EXPR_FNAME;
+    },
   '332': function ()
     
     {
-			in_single++;
-			yylexer.state = EXPR_ENDFN; /* force for args */
-			local_push(0);
-		    },
+      yylexer.state = EXPR_ENDFN; /* force for args */
+    },
   '333': function ()
     
     {
@@ -6734,36 +6623,36 @@ function YYParser (yylexer)
      902,   901,   907,   909,   911,   913,   915,   917,   919,   921,
      923,   925,   925,   927,   929,   931,   933,   934,   936,   938,
      943,   949,   953,   948,   960,   964,   959,   970,   974,   977,
-     981,   976,  1047,  1046,  1068,  1073,  1067,  1092,  1091,  1113,
-    1112,  1135,  1136,  1135,  1156,  1164,  1172,  1180,  1190,  1202,
-    1208,  1214,  1220,  1226,  1232,  1238,  1244,  1250,  1256,  1266,
-    1272,  1277,  1278,  1285,  1290,  1293,  1294,  1307,  1308,  1318,
-    1319,  1322,  1330,  1340,  1348,  1358,  1366,  1375,  1384,  1392,
-    1400,  1409,  1421,  1429,  1440,  1444,  1448,  1452,  1458,  1463,
-    1468,  1472,  1476,  1480,  1484,  1488,  1496,  1500,  1504,  1508,
-    1512,  1516,  1520,  1524,  1528,  1534,  1535,  1541,  1550,  1559,
-    1570,  1574,  1584,  1591,  1600,  1608,  1614,  1617,  1614,  1634,
-    1642,  1652,  1656,  1663,  1662,  1683,  1699,  1708,  1720,  1734,
-    1744,  1743,  1760,  1759,  1775,  1784,  1783,  1801,  1800,  1817,
-    1825,  1833,  1848,  1847,  1867,  1866,  1887,  1899,  1900,  1903,
-    1922,  1925,  1933,  1941,  1944,  1948,  1951,  1959,  1962,  1963,
-    1971,  1974,  1991,  1992,  1993,  2003,  2013,  2040,  2105,  2114,
-    2125,  2132,  2142,  2150,  2160,  2169,  2180,  2187,  2199,  2208,
-    2218,  2227,  2238,  2245,  2256,  2263,  2278,  2285,  2296,  2303,
-    2314,  2321,  2350,  2352,  2351,  2364,  2370,  2375,  2363,  2394,
-    2402,  2410,  2418,  2421,  2432,  2433,  2434,  2435,  2438,  2449,
-    2450,  2451,  2459,  2469,  2470,  2471,  2472,  2473,  2476,  2477,
-    2478,  2479,  2480,  2481,  2482,  2485,  2498,  2508,  2516,  2526,
-    2527,  2530,  2539,  2538,  2547,  2559,  2569,  2577,  2581,  2585,
-    2589,  2595,  2600,  2605,  2609,  2613,  2617,  2621,  2625,  2629,
-    2633,  2637,  2641,  2645,  2649,  2653,  2657,  2662,  2668,  2677,
-    2686,  2695,  2706,  2707,  2714,  2723,  2742,  2749,  2762,  2774,
-    2786,  2794,  2811,  2819,  2835,  2836,  2839,  2844,  2850,  2862,
-    2874,  2882,  2898,  2906,  2922,  2923,  2926,  2939,  2950,  2951,
-    2954,  2971,  2975,  2985,  2995,  2995,  3024,  3025,  3035,  3042,
-    3052,  3060,  3068,  3080,  3081,  3082,  3085,  3086,  3087,  3088,
-    3091,  3092,  3093,  3096,  3101,  3108,  3109,  3112,  3113,  3116,
-    3119,  3122,  3123,  3124,  3127,  3128,  3131,  3132,  3136
+     981,   976,   988,   987,   996,   998,   995,  1007,  1006,  1015,
+    1014,  1026,  1030,  1025,  1048,  1056,  1064,  1072,  1082,  1094,
+    1100,  1106,  1112,  1118,  1124,  1130,  1136,  1142,  1148,  1158,
+    1164,  1169,  1170,  1177,  1182,  1185,  1186,  1199,  1200,  1210,
+    1211,  1214,  1222,  1232,  1240,  1250,  1258,  1267,  1276,  1284,
+    1292,  1301,  1313,  1321,  1332,  1336,  1340,  1344,  1350,  1355,
+    1360,  1364,  1368,  1372,  1376,  1380,  1388,  1392,  1396,  1400,
+    1404,  1408,  1412,  1416,  1420,  1426,  1427,  1433,  1442,  1451,
+    1462,  1466,  1476,  1483,  1492,  1500,  1506,  1509,  1506,  1526,
+    1534,  1544,  1548,  1555,  1554,  1575,  1591,  1600,  1612,  1626,
+    1636,  1635,  1652,  1651,  1667,  1676,  1675,  1693,  1692,  1709,
+    1717,  1725,  1740,  1739,  1759,  1758,  1779,  1791,  1792,  1795,
+    1814,  1817,  1825,  1833,  1836,  1840,  1843,  1851,  1854,  1855,
+    1863,  1866,  1883,  1884,  1885,  1895,  1905,  1932,  1997,  2006,
+    2017,  2024,  2034,  2042,  2052,  2061,  2072,  2079,  2091,  2100,
+    2110,  2119,  2130,  2137,  2148,  2155,  2170,  2177,  2188,  2195,
+    2206,  2213,  2242,  2244,  2243,  2256,  2262,  2267,  2255,  2286,
+    2294,  2302,  2310,  2313,  2324,  2325,  2326,  2327,  2330,  2341,
+    2342,  2343,  2351,  2361,  2362,  2363,  2364,  2365,  2368,  2369,
+    2370,  2371,  2372,  2373,  2374,  2377,  2390,  2400,  2408,  2418,
+    2419,  2422,  2431,  2430,  2439,  2451,  2461,  2469,  2473,  2477,
+    2481,  2487,  2492,  2497,  2501,  2505,  2509,  2513,  2517,  2521,
+    2525,  2529,  2533,  2537,  2541,  2545,  2549,  2554,  2560,  2569,
+    2578,  2587,  2598,  2599,  2606,  2615,  2634,  2641,  2654,  2666,
+    2678,  2686,  2703,  2711,  2727,  2728,  2731,  2736,  2742,  2754,
+    2766,  2774,  2790,  2798,  2814,  2815,  2818,  2831,  2842,  2843,
+    2846,  2863,  2867,  2877,  2887,  2887,  2916,  2917,  2927,  2934,
+    2944,  2952,  2960,  2972,  2973,  2974,  2977,  2978,  2979,  2980,
+    2983,  2984,  2985,  2988,  2993,  3000,  3001,  3004,  3005,  3008,
+    3011,  3014,  3015,  3016,  3019,  3020,  3023,  3024,  3028
     //[
   ];
 
