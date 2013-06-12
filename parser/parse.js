@@ -37,6 +37,8 @@
 /* Line 77 of lalr1.js  */
 /* Line 1 of "parse.y"  */
 
+"use strict";
+
   // alert(123)
 
 
@@ -174,7 +176,7 @@ function YYParser (yylexer)
   {
       '2': function ()
     /* Line 211 of lalr1.js  */
-/* Line 111 of "parse.y"  */
+/* Line 113 of "parse.y"  */
     {
 			lex_state = EXPR_BEG;
 		    /*%%%*/
@@ -185,7 +187,7 @@ function YYParser (yylexer)
 		    },
   '3': function ()
     /* Line 211 of lalr1.js  */
-/* Line 120 of "parse.y"  */
+/* Line 122 of "parse.y"  */
     {
 		    /*%%%*/
 			if ((yystack.valueAt(2-(2))) && !compile_for_eval) {
@@ -208,7 +210,7 @@ function YYParser (yylexer)
 		    },
   '4': function ()
     /* Line 211 of lalr1.js  */
-/* Line 143 of "parse.y"  */
+/* Line 145 of "parse.y"  */
     {
 		    /*%%%*/
 			void_stmts((yystack.valueAt(2-(1))));
@@ -219,7 +221,7 @@ function YYParser (yylexer)
 		    },
   '5': function ()
     /* Line 211 of lalr1.js  */
-/* Line 154 of "parse.y"  */
+/* Line 156 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_BEGIN(0);
@@ -230,7 +232,7 @@ function YYParser (yylexer)
 		    },
   '6': function ()
     /* Line 211 of lalr1.js  */
-/* Line 163 of "parse.y"  */
+/* Line 165 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = newline_node((yystack.valueAt(1-(1))));
@@ -240,7 +242,7 @@ function YYParser (yylexer)
 		    },
   '7': function ()
     /* Line 211 of lalr1.js  */
-/* Line 171 of "parse.y"  */
+/* Line 173 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = block_append((yystack.valueAt(3-(1))), newline_node((yystack.valueAt(3-(3)))));
@@ -250,13 +252,13 @@ function YYParser (yylexer)
 		    },
   '8': function ()
     /* Line 211 of lalr1.js  */
-/* Line 179 of "parse.y"  */
+/* Line 181 of "parse.y"  */
     {
 			yyval = remove_begin((yystack.valueAt(2-(2))));
 		    },
   '10': function ()
     /* Line 211 of lalr1.js  */
-/* Line 186 of "parse.y"  */
+/* Line 188 of "parse.y"  */
     {
 		    /*%%%*/
 			/* local_push(0); */
@@ -265,7 +267,7 @@ function YYParser (yylexer)
 		    },
   '11': function ()
     /* Line 211 of lalr1.js  */
-/* Line 193 of "parse.y"  */
+/* Line 195 of "parse.y"  */
     {
 		    /*%%%*/
 			ruby_eval_tree_begin = block_append(ruby_eval_tree_begin,
@@ -279,7 +281,7 @@ function YYParser (yylexer)
 		    },
   '12': function ()
     /* Line 211 of lalr1.js  */
-/* Line 210 of "parse.y"  */
+/* Line 212 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(4-(1)));
@@ -309,7 +311,7 @@ function YYParser (yylexer)
 		    },
   '13': function ()
     /* Line 211 of lalr1.js  */
-/* Line 240 of "parse.y"  */
+/* Line 242 of "parse.y"  */
     {
 		    /*%%%*/
 			void_stmts((yystack.valueAt(2-(1))));
@@ -320,7 +322,7 @@ function YYParser (yylexer)
 		    },
   '14': function ()
     /* Line 211 of lalr1.js  */
-/* Line 251 of "parse.y"  */
+/* Line 253 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_BEGIN(0);
@@ -331,7 +333,7 @@ function YYParser (yylexer)
 		    },
   '15': function ()
     /* Line 211 of lalr1.js  */
-/* Line 260 of "parse.y"  */
+/* Line 262 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = newline_node((yystack.valueAt(1-(1))));
@@ -341,7 +343,7 @@ function YYParser (yylexer)
 		    },
   '16': function ()
     /* Line 211 of lalr1.js  */
-/* Line 268 of "parse.y"  */
+/* Line 270 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = block_append((yystack.valueAt(3-(1))), newline_node((yystack.valueAt(3-(3)))));
@@ -351,19 +353,19 @@ function YYParser (yylexer)
 		    },
   '17': function ()
     /* Line 211 of lalr1.js  */
-/* Line 276 of "parse.y"  */
+/* Line 278 of "parse.y"  */
     {
 			yyval = remove_begin((yystack.valueAt(2-(2))));
 		    },
   '18': function ()
     /* Line 211 of lalr1.js  */
-/* Line 282 of "parse.y"  */
+/* Line 284 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(1-(1)));
 		    },
   '19': function ()
     /* Line 211 of lalr1.js  */
-/* Line 286 of "parse.y"  */
+/* Line 288 of "parse.y"  */
     {
 			yyerror("BEGIN is permitted only at toplevel");
 		    /*%%%*/
@@ -373,7 +375,7 @@ function YYParser (yylexer)
 		    },
   '20': function ()
     /* Line 211 of lalr1.js  */
-/* Line 294 of "parse.y"  */
+/* Line 296 of "parse.y"  */
     {
 		    /*%%%*/
 			ruby_eval_tree_begin = block_append(ruby_eval_tree_begin,
@@ -387,11 +389,11 @@ function YYParser (yylexer)
 		    },
   '21': function ()
     /* Line 211 of lalr1.js  */
-/* Line 306 of "parse.y"  */
+/* Line 308 of "parse.y"  */
     {lex_state = EXPR_FNAME;},
   '22': function ()
     /* Line 211 of lalr1.js  */
-/* Line 307 of "parse.y"  */
+/* Line 309 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ALIAS((yystack.valueAt(4-(2))), (yystack.valueAt(4-(4))));
@@ -401,7 +403,7 @@ function YYParser (yylexer)
 		    },
   '23': function ()
     /* Line 211 of lalr1.js  */
-/* Line 315 of "parse.y"  */
+/* Line 317 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_VALIAS((yystack.valueAt(3-(2))), (yystack.valueAt(3-(3))));
@@ -411,7 +413,7 @@ function YYParser (yylexer)
 		    },
   '24': function ()
     /* Line 211 of lalr1.js  */
-/* Line 323 of "parse.y"  */
+/* Line 325 of "parse.y"  */
     {
 		    /*%%%*/
 			char buf[2];
@@ -424,7 +426,7 @@ function YYParser (yylexer)
 		    },
   '25': function ()
     /* Line 211 of lalr1.js  */
-/* Line 334 of "parse.y"  */
+/* Line 336 of "parse.y"  */
     {
 		    /*%%%*/
 			yyerror("can't make alias for the number variables");
@@ -436,7 +438,7 @@ function YYParser (yylexer)
 		    },
   '26': function ()
     /* Line 211 of lalr1.js  */
-/* Line 344 of "parse.y"  */
+/* Line 346 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(2-(2)));
@@ -446,7 +448,7 @@ function YYParser (yylexer)
 		    },
   '27': function ()
     /* Line 211 of lalr1.js  */
-/* Line 352 of "parse.y"  */
+/* Line 354 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_IF(cond((yystack.valueAt(3-(3)))), remove_begin((yystack.valueAt(3-(1)))), 0);
@@ -457,7 +459,7 @@ function YYParser (yylexer)
 		    },
   '28': function ()
     /* Line 211 of lalr1.js  */
-/* Line 361 of "parse.y"  */
+/* Line 363 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_UNLESS(cond((yystack.valueAt(3-(3)))), remove_begin((yystack.valueAt(3-(1)))), 0);
@@ -468,7 +470,7 @@ function YYParser (yylexer)
 		    },
   '29': function ()
     /* Line 211 of lalr1.js  */
-/* Line 370 of "parse.y"  */
+/* Line 372 of "parse.y"  */
     {
 		    /*%%%*/
 			if ((yystack.valueAt(3-(1))) && nd_type((yystack.valueAt(3-(1)))) == NODE_BEGIN) {
@@ -483,7 +485,7 @@ function YYParser (yylexer)
 		    },
   '30': function ()
     /* Line 211 of lalr1.js  */
-/* Line 383 of "parse.y"  */
+/* Line 385 of "parse.y"  */
     {
 		    /*%%%*/
 			if ((yystack.valueAt(3-(1))) && nd_type((yystack.valueAt(3-(1)))) == NODE_BEGIN) {
@@ -498,7 +500,7 @@ function YYParser (yylexer)
 		    },
   '31': function ()
     /* Line 211 of lalr1.js  */
-/* Line 396 of "parse.y"  */
+/* Line 398 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *resq = NEW_RESBODY(0, remove_begin((yystack.valueAt(3-(3)))), 0);
@@ -509,7 +511,7 @@ function YYParser (yylexer)
 		    },
   '32': function ()
     /* Line 211 of lalr1.js  */
-/* Line 405 of "parse.y"  */
+/* Line 407 of "parse.y"  */
     {
 			if (in_def || in_single) {
 			    rb_warn0("END in method; use at_exit");
@@ -523,7 +525,7 @@ function YYParser (yylexer)
 		    },
   '34': function ()
     /* Line 211 of lalr1.js  */
-/* Line 418 of "parse.y"  */
+/* Line 420 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(3-(3))));
@@ -535,14 +537,14 @@ function YYParser (yylexer)
 		    },
   '35': function ()
     /* Line 211 of lalr1.js  */
-/* Line 428 of "parse.y"  */
+/* Line 430 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(3-(3))));
 			yyval = new_op_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))), (yystack.valueAt(3-(3))));
 		    },
   '36': function ()
     /* Line 211 of lalr1.js  */
-/* Line 433 of "parse.y"  */
+/* Line 435 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *args;
@@ -565,21 +567,21 @@ function YYParser (yylexer)
 		    },
   '37': function ()
     /* Line 211 of lalr1.js  */
-/* Line 454 of "parse.y"  */
+/* Line 456 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
   '38': function ()
     /* Line 211 of lalr1.js  */
-/* Line 459 of "parse.y"  */
+/* Line 461 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
   '39': function ()
     /* Line 211 of lalr1.js  */
-/* Line 464 of "parse.y"  */
+/* Line 466 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_COLON2((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))));
@@ -591,14 +593,14 @@ function YYParser (yylexer)
 		    },
   '40': function ()
     /* Line 211 of lalr1.js  */
-/* Line 474 of "parse.y"  */
+/* Line 476 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_intern("::"), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
   '41': function ()
     /* Line 211 of lalr1.js  */
-/* Line 479 of "parse.y"  */
+/* Line 481 of "parse.y"  */
     {
 		    /*%%%*/
 			rb_backref_error((yystack.valueAt(3-(1))));
@@ -610,7 +612,7 @@ function YYParser (yylexer)
 		    },
   '42': function ()
     /* Line 211 of lalr1.js  */
-/* Line 489 of "parse.y"  */
+/* Line 491 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(3-(3))));
@@ -621,7 +623,7 @@ function YYParser (yylexer)
 		    },
   '43': function ()
     /* Line 211 of lalr1.js  */
-/* Line 498 of "parse.y"  */
+/* Line 500 of "parse.y"  */
     {
 		    /*%%%*/
 			(yystack.valueAt(3-(1)))->nd_value = (yystack.valueAt(3-(3)));
@@ -632,7 +634,7 @@ function YYParser (yylexer)
 		    },
   '44': function ()
     /* Line 211 of lalr1.js  */
-/* Line 507 of "parse.y"  */
+/* Line 509 of "parse.y"  */
     {
 		    /*%%%*/
 			(yystack.valueAt(3-(1)))->nd_value = (yystack.valueAt(3-(3)));
@@ -643,7 +645,7 @@ function YYParser (yylexer)
 		    },
   '46': function ()
     /* Line 211 of lalr1.js  */
-/* Line 519 of "parse.y"  */
+/* Line 521 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(3-(3))));
@@ -654,7 +656,7 @@ function YYParser (yylexer)
 		    },
   '47': function ()
     /* Line 211 of lalr1.js  */
-/* Line 528 of "parse.y"  */
+/* Line 530 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(3-(3))));
@@ -665,7 +667,7 @@ function YYParser (yylexer)
 		    },
   '49': function ()
     /* Line 211 of lalr1.js  */
-/* Line 541 of "parse.y"  */
+/* Line 543 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = logop(NODE_AND, (yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -675,7 +677,7 @@ function YYParser (yylexer)
 		    },
   '50': function ()
     /* Line 211 of lalr1.js  */
-/* Line 549 of "parse.y"  */
+/* Line 551 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = logop(NODE_OR, (yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -685,7 +687,7 @@ function YYParser (yylexer)
 		    },
   '51': function ()
     /* Line 211 of lalr1.js  */
-/* Line 557 of "parse.y"  */
+/* Line 559 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_uni_op(cond((yystack.valueAt(3-(3)))), '!');
@@ -695,7 +697,7 @@ function YYParser (yylexer)
 		    },
   '52': function ()
     /* Line 211 of lalr1.js  */
-/* Line 565 of "parse.y"  */
+/* Line 567 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_uni_op(cond((yystack.valueAt(2-(2)))), '!');
@@ -705,7 +707,7 @@ function YYParser (yylexer)
 		    },
   '54': function ()
     /* Line 211 of lalr1.js  */
-/* Line 576 of "parse.y"  */
+/* Line 578 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(1-(1))));
@@ -717,7 +719,7 @@ function YYParser (yylexer)
 		    },
   '58': function ()
     /* Line 211 of lalr1.js  */
-/* Line 593 of "parse.y"  */
+/* Line 595 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
@@ -728,7 +730,7 @@ function YYParser (yylexer)
 		    },
   '59': function ()
     /* Line 211 of lalr1.js  */
-/* Line 604 of "parse.y"  */
+/* Line 606 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = dyna_push();
 		    /*%%%*/
@@ -738,7 +740,7 @@ function YYParser (yylexer)
 		    },
   '60': function ()
     /* Line 211 of lalr1.js  */
-/* Line 614 of "parse.y"  */
+/* Line 616 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
@@ -750,7 +752,7 @@ function YYParser (yylexer)
 		    },
   '61': function ()
     /* Line 211 of lalr1.js  */
-/* Line 626 of "parse.y"  */
+/* Line 628 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_FCALL((yystack.valueAt(1-(1))), 0);
@@ -760,7 +762,7 @@ function YYParser (yylexer)
 		    },
   '62': function ()
     /* Line 211 of lalr1.js  */
-/* Line 636 of "parse.y"  */
+/* Line 638 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(2-(1)));
@@ -771,7 +773,7 @@ function YYParser (yylexer)
 		    },
   '63': function ()
     /* Line 211 of lalr1.js  */
-/* Line 645 of "parse.y"  */
+/* Line 647 of "parse.y"  */
     {
 		    /*%%%*/
 			block_dup_check((yystack.valueAt(3-(2))),(yystack.valueAt(3-(3))));
@@ -786,7 +788,7 @@ function YYParser (yylexer)
 		    },
   '64': function ()
     /* Line 211 of lalr1.js  */
-/* Line 658 of "parse.y"  */
+/* Line 660 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
@@ -797,7 +799,7 @@ function YYParser (yylexer)
 		    },
   '65': function ()
     /* Line 211 of lalr1.js  */
-/* Line 667 of "parse.y"  */
+/* Line 669 of "parse.y"  */
     {
 		    /*%%%*/
 			block_dup_check((yystack.valueAt(5-(4))),(yystack.valueAt(5-(5))));
@@ -811,7 +813,7 @@ function YYParser (yylexer)
 		   },
   '66': function ()
     /* Line 211 of lalr1.js  */
-/* Line 679 of "parse.y"  */
+/* Line 681 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
@@ -822,7 +824,7 @@ function YYParser (yylexer)
 		    },
   '67': function ()
     /* Line 211 of lalr1.js  */
-/* Line 688 of "parse.y"  */
+/* Line 690 of "parse.y"  */
     {
 		    /*%%%*/
 			block_dup_check((yystack.valueAt(5-(4))),(yystack.valueAt(5-(5))));
@@ -836,7 +838,7 @@ function YYParser (yylexer)
 		   },
   '68': function ()
     /* Line 211 of lalr1.js  */
-/* Line 700 of "parse.y"  */
+/* Line 702 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_SUPER((yystack.valueAt(2-(2))));
@@ -847,7 +849,7 @@ function YYParser (yylexer)
 		    },
   '69': function ()
     /* Line 211 of lalr1.js  */
-/* Line 709 of "parse.y"  */
+/* Line 711 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = new_yield((yystack.valueAt(2-(2))));
@@ -858,7 +860,7 @@ function YYParser (yylexer)
 		    },
   '70': function ()
     /* Line 211 of lalr1.js  */
-/* Line 718 of "parse.y"  */
+/* Line 720 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_RETURN(ret_args((yystack.valueAt(2-(2)))));
@@ -868,7 +870,7 @@ function YYParser (yylexer)
 		    },
   '71': function ()
     /* Line 211 of lalr1.js  */
-/* Line 726 of "parse.y"  */
+/* Line 728 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_BREAK(ret_args((yystack.valueAt(2-(2)))));
@@ -878,7 +880,7 @@ function YYParser (yylexer)
 		    },
   '72': function ()
     /* Line 211 of lalr1.js  */
-/* Line 734 of "parse.y"  */
+/* Line 736 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_NEXT(ret_args((yystack.valueAt(2-(2)))));
@@ -888,7 +890,7 @@ function YYParser (yylexer)
 		    },
   '74': function ()
     /* Line 211 of lalr1.js  */
-/* Line 745 of "parse.y"  */
+/* Line 747 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -898,7 +900,7 @@ function YYParser (yylexer)
 		    },
   '76': function ()
     /* Line 211 of lalr1.js  */
-/* Line 756 of "parse.y"  */
+/* Line 758 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN(NEW_LIST((yystack.valueAt(3-(2)))), 0);
@@ -908,7 +910,7 @@ function YYParser (yylexer)
 		    },
   '77': function ()
     /* Line 211 of lalr1.js  */
-/* Line 766 of "parse.y"  */
+/* Line 768 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN((yystack.valueAt(1-(1))), 0);
@@ -918,7 +920,7 @@ function YYParser (yylexer)
 		    },
   '78': function ()
     /* Line 211 of lalr1.js  */
-/* Line 774 of "parse.y"  */
+/* Line 776 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN(list_append((yystack.valueAt(2-(1))),(yystack.valueAt(2-(2)))), 0);
@@ -928,7 +930,7 @@ function YYParser (yylexer)
 		    },
   '79': function ()
     /* Line 211 of lalr1.js  */
-/* Line 782 of "parse.y"  */
+/* Line 784 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -938,7 +940,7 @@ function YYParser (yylexer)
 		    },
   '80': function ()
     /* Line 211 of lalr1.js  */
-/* Line 790 of "parse.y"  */
+/* Line 792 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN((yystack.valueAt(5-(1))), NEW_POSTARG((yystack.valueAt(5-(3))),(yystack.valueAt(5-(5)))));
@@ -949,7 +951,7 @@ function YYParser (yylexer)
 		    },
   '81': function ()
     /* Line 211 of lalr1.js  */
-/* Line 799 of "parse.y"  */
+/* Line 801 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN((yystack.valueAt(2-(1))), -1);
@@ -959,7 +961,7 @@ function YYParser (yylexer)
 		    },
   '82': function ()
     /* Line 211 of lalr1.js  */
-/* Line 807 of "parse.y"  */
+/* Line 809 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN((yystack.valueAt(4-(1))), NEW_POSTARG(-1, (yystack.valueAt(4-(4)))));
@@ -970,7 +972,7 @@ function YYParser (yylexer)
 		    },
   '83': function ()
     /* Line 211 of lalr1.js  */
-/* Line 816 of "parse.y"  */
+/* Line 818 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN(0, (yystack.valueAt(2-(2))));
@@ -980,7 +982,7 @@ function YYParser (yylexer)
 		    },
   '84': function ()
     /* Line 211 of lalr1.js  */
-/* Line 824 of "parse.y"  */
+/* Line 826 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN(0, NEW_POSTARG((yystack.valueAt(4-(2))),(yystack.valueAt(4-(4)))));
@@ -991,7 +993,7 @@ function YYParser (yylexer)
 		    },
   '85': function ()
     /* Line 211 of lalr1.js  */
-/* Line 833 of "parse.y"  */
+/* Line 835 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN(0, -1);
@@ -1001,7 +1003,7 @@ function YYParser (yylexer)
 		    },
   '86': function ()
     /* Line 211 of lalr1.js  */
-/* Line 841 of "parse.y"  */
+/* Line 843 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN(0, NEW_POSTARG(-1, (yystack.valueAt(3-(3)))));
@@ -1012,7 +1014,7 @@ function YYParser (yylexer)
 		    },
   '88': function ()
     /* Line 211 of lalr1.js  */
-/* Line 853 of "parse.y"  */
+/* Line 855 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -1022,7 +1024,7 @@ function YYParser (yylexer)
 		    },
   '89': function ()
     /* Line 211 of lalr1.js  */
-/* Line 863 of "parse.y"  */
+/* Line 865 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIST((yystack.valueAt(2-(1))));
@@ -1032,7 +1034,7 @@ function YYParser (yylexer)
 		    },
   '90': function ()
     /* Line 211 of lalr1.js  */
-/* Line 871 of "parse.y"  */
+/* Line 873 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
@@ -1042,7 +1044,7 @@ function YYParser (yylexer)
 		    },
   '91': function ()
     /* Line 211 of lalr1.js  */
-/* Line 881 of "parse.y"  */
+/* Line 883 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIST((yystack.valueAt(1-(1))));
@@ -1052,7 +1054,7 @@ function YYParser (yylexer)
 		    },
   '92': function ()
     /* Line 211 of lalr1.js  */
-/* Line 889 of "parse.y"  */
+/* Line 891 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1062,19 +1064,19 @@ function YYParser (yylexer)
 		    },
   '93': function ()
     /* Line 211 of lalr1.js  */
-/* Line 899 of "parse.y"  */
+/* Line 901 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    },
   '94': function ()
     /* Line 211 of lalr1.js  */
-/* Line 903 of "parse.y"  */
+/* Line 905 of "parse.y"  */
     {
 		        yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    },
   '95': function ()
     /* Line 211 of lalr1.js  */
-/* Line 907 of "parse.y"  */
+/* Line 909 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = aryset((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))));
@@ -1084,7 +1086,7 @@ function YYParser (yylexer)
 		    },
   '96': function ()
     /* Line 211 of lalr1.js  */
-/* Line 915 of "parse.y"  */
+/* Line 917 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1094,7 +1096,7 @@ function YYParser (yylexer)
 		    },
   '97': function ()
     /* Line 211 of lalr1.js  */
-/* Line 923 of "parse.y"  */
+/* Line 925 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1104,7 +1106,7 @@ function YYParser (yylexer)
 		    },
   '98': function ()
     /* Line 211 of lalr1.js  */
-/* Line 931 of "parse.y"  */
+/* Line 933 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1114,7 +1116,7 @@ function YYParser (yylexer)
 		    },
   '99': function ()
     /* Line 211 of lalr1.js  */
-/* Line 939 of "parse.y"  */
+/* Line 941 of "parse.y"  */
     {
 		    /*%%%*/
 			if (in_def || in_single)
@@ -1128,7 +1130,7 @@ function YYParser (yylexer)
 		    },
   '100': function ()
     /* Line 211 of lalr1.js  */
-/* Line 951 of "parse.y"  */
+/* Line 953 of "parse.y"  */
     {
 		    /*%%%*/
 			if (in_def || in_single)
@@ -1140,7 +1142,7 @@ function YYParser (yylexer)
 		    },
   '101': function ()
     /* Line 211 of lalr1.js  */
-/* Line 961 of "parse.y"  */
+/* Line 963 of "parse.y"  */
     {
 		    /*%%%*/
 			rb_backref_error((yystack.valueAt(1-(1))));
@@ -1152,7 +1154,7 @@ function YYParser (yylexer)
 		    },
   '102': function ()
     /* Line 211 of lalr1.js  */
-/* Line 973 of "parse.y"  */
+/* Line 975 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
@@ -1163,7 +1165,7 @@ function YYParser (yylexer)
 		    },
   '103': function ()
     /* Line 211 of lalr1.js  */
-/* Line 982 of "parse.y"  */
+/* Line 984 of "parse.y"  */
     {
 		        yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
@@ -1174,7 +1176,7 @@ function YYParser (yylexer)
 		    },
   '104': function ()
     /* Line 211 of lalr1.js  */
-/* Line 991 of "parse.y"  */
+/* Line 993 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = aryset((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))));
@@ -1184,7 +1186,7 @@ function YYParser (yylexer)
 		    },
   '105': function ()
     /* Line 211 of lalr1.js  */
-/* Line 999 of "parse.y"  */
+/* Line 1001 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1194,7 +1196,7 @@ function YYParser (yylexer)
 		    },
   '106': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1007 of "parse.y"  */
+/* Line 1009 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1204,7 +1206,7 @@ function YYParser (yylexer)
 		    },
   '107': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1015 of "parse.y"  */
+/* Line 1017 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = attrset((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1214,7 +1216,7 @@ function YYParser (yylexer)
 		    },
   '108': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1023 of "parse.y"  */
+/* Line 1025 of "parse.y"  */
     {
 		    /*%%%*/
 			if (in_def || in_single)
@@ -1229,7 +1231,7 @@ function YYParser (yylexer)
 		    },
   '109': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1036 of "parse.y"  */
+/* Line 1038 of "parse.y"  */
     {
 		    /*%%%*/
 			if (in_def || in_single)
@@ -1244,7 +1246,7 @@ function YYParser (yylexer)
 		    },
   '110': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1049 of "parse.y"  */
+/* Line 1051 of "parse.y"  */
     {
 		    /*%%%*/
 			rb_backref_error((yystack.valueAt(1-(1))));
@@ -1255,7 +1257,7 @@ function YYParser (yylexer)
 		    },
   '111': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1060 of "parse.y"  */
+/* Line 1062 of "parse.y"  */
     {
 		    /*%%%*/
 			yyerror("class/module name must be CONSTANT");
@@ -1265,7 +1267,7 @@ function YYParser (yylexer)
 		    },
   '113': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1071 of "parse.y"  */
+/* Line 1073 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_COLON3((yystack.valueAt(2-(2))));
@@ -1275,7 +1277,7 @@ function YYParser (yylexer)
 		    },
   '114': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1079 of "parse.y"  */
+/* Line 1081 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_COLON2(0, yyval);
@@ -1285,7 +1287,7 @@ function YYParser (yylexer)
 		    },
   '115': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1087 of "parse.y"  */
+/* Line 1089 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_COLON2((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1295,14 +1297,14 @@ function YYParser (yylexer)
 		    },
   '119': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1100 of "parse.y"  */
+/* Line 1102 of "parse.y"  */
     {
 			lex_state = EXPR_ENDFN;
 			yyval = (yystack.valueAt(1-(1)));
 		    },
   '120': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1105 of "parse.y"  */
+/* Line 1107 of "parse.y"  */
     {
 			lex_state = EXPR_ENDFN;
 		    /*%%%*/
@@ -1313,7 +1315,7 @@ function YYParser (yylexer)
 		    },
   '123': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1120 of "parse.y"  */
+/* Line 1122 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIT(ID2SYM((yystack.valueAt(1-(1)))));
@@ -1323,7 +1325,7 @@ function YYParser (yylexer)
 		    },
   '125': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1131 of "parse.y"  */
+/* Line 1133 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_UNDEF((yystack.valueAt(1-(1))));
@@ -1333,11 +1335,11 @@ function YYParser (yylexer)
 		    },
   '126': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1138 of "parse.y"  */
+/* Line 1140 of "parse.y"  */
     {lex_state = EXPR_FNAME;},
   '127': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1139 of "parse.y"  */
+/* Line 1141 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = block_append((yystack.valueAt(4-(1))), NEW_UNDEF((yystack.valueAt(4-(4)))));
@@ -1347,127 +1349,127 @@ function YYParser (yylexer)
 		    },
   '128': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1148 of "parse.y"  */
+/* Line 1150 of "parse.y"  */
     { ifndef_ripper(yyval = '|'); },
   '129': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1149 of "parse.y"  */
+/* Line 1151 of "parse.y"  */
     { ifndef_ripper(yyval = '^'); },
   '130': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1150 of "parse.y"  */
+/* Line 1152 of "parse.y"  */
     { ifndef_ripper(yyval = '&'); },
   '131': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1151 of "parse.y"  */
+/* Line 1153 of "parse.y"  */
     { ifndef_ripper(yyval = tCMP); },
   '132': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1152 of "parse.y"  */
+/* Line 1154 of "parse.y"  */
     { ifndef_ripper(yyval = tEQ); },
   '133': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1153 of "parse.y"  */
+/* Line 1155 of "parse.y"  */
     { ifndef_ripper(yyval = tEQQ); },
   '134': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1154 of "parse.y"  */
+/* Line 1156 of "parse.y"  */
     { ifndef_ripper(yyval = tMATCH); },
   '135': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1155 of "parse.y"  */
+/* Line 1157 of "parse.y"  */
     { ifndef_ripper(yyval = tNMATCH); },
   '136': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1156 of "parse.y"  */
+/* Line 1158 of "parse.y"  */
     { ifndef_ripper(yyval = '>'); },
   '137': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1157 of "parse.y"  */
+/* Line 1159 of "parse.y"  */
     { ifndef_ripper(yyval = tGEQ); },
   '138': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1158 of "parse.y"  */
+/* Line 1160 of "parse.y"  */
     { ifndef_ripper(yyval = '<'); },
   '139': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1159 of "parse.y"  */
+/* Line 1161 of "parse.y"  */
     { ifndef_ripper(yyval = tLEQ); },
   '140': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1160 of "parse.y"  */
+/* Line 1162 of "parse.y"  */
     { ifndef_ripper(yyval = tNEQ); },
   '141': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1161 of "parse.y"  */
+/* Line 1163 of "parse.y"  */
     { ifndef_ripper(yyval = tLSHFT); },
   '142': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1162 of "parse.y"  */
+/* Line 1164 of "parse.y"  */
     { ifndef_ripper(yyval = tRSHFT); },
   '143': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1163 of "parse.y"  */
+/* Line 1165 of "parse.y"  */
     { ifndef_ripper(yyval = '+'); },
   '144': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1164 of "parse.y"  */
+/* Line 1166 of "parse.y"  */
     { ifndef_ripper(yyval = '-'); },
   '145': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1165 of "parse.y"  */
+/* Line 1167 of "parse.y"  */
     { ifndef_ripper(yyval = '*'); },
   '146': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1166 of "parse.y"  */
+/* Line 1168 of "parse.y"  */
     { ifndef_ripper(yyval = '*'); },
   '147': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1167 of "parse.y"  */
+/* Line 1169 of "parse.y"  */
     { ifndef_ripper(yyval = '/'); },
   '148': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1168 of "parse.y"  */
+/* Line 1170 of "parse.y"  */
     { ifndef_ripper(yyval = '%'); },
   '149': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1169 of "parse.y"  */
+/* Line 1171 of "parse.y"  */
     { ifndef_ripper(yyval = tPOW); },
   '150': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1170 of "parse.y"  */
+/* Line 1172 of "parse.y"  */
     { ifndef_ripper(yyval = tDSTAR); },
   '151': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1171 of "parse.y"  */
+/* Line 1173 of "parse.y"  */
     { ifndef_ripper(yyval = '!'); },
   '152': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1172 of "parse.y"  */
+/* Line 1174 of "parse.y"  */
     { ifndef_ripper(yyval = '~'); },
   '153': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1173 of "parse.y"  */
+/* Line 1175 of "parse.y"  */
     { ifndef_ripper(yyval = tUPLUS); },
   '154': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1174 of "parse.y"  */
+/* Line 1176 of "parse.y"  */
     { ifndef_ripper(yyval = tUMINUS); },
   '155': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1175 of "parse.y"  */
+/* Line 1177 of "parse.y"  */
     { ifndef_ripper(yyval = tAREF); },
   '156': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1176 of "parse.y"  */
+/* Line 1178 of "parse.y"  */
     { ifndef_ripper(yyval = tASET); },
   '157': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1177 of "parse.y"  */
+/* Line 1179 of "parse.y"  */
     { ifndef_ripper(yyval = '`'); },
   '199': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1195 of "parse.y"  */
+/* Line 1197 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(3-(3))));
@@ -1478,7 +1480,7 @@ function YYParser (yylexer)
 		    },
   '200': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1204 of "parse.y"  */
+/* Line 1206 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(5-(3))));
@@ -1490,14 +1492,14 @@ function YYParser (yylexer)
 		    },
   '201': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1214 of "parse.y"  */
+/* Line 1216 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(3-(3))));
 			yyval = new_op_assign((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))), (yystack.valueAt(3-(3))));
 		    },
   '202': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1219 of "parse.y"  */
+/* Line 1221 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(5-(3))));
@@ -1509,7 +1511,7 @@ function YYParser (yylexer)
 		    },
   '203': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1229 of "parse.y"  */
+/* Line 1231 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *args;
@@ -1537,28 +1539,28 @@ function YYParser (yylexer)
 		    },
   '204': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1255 of "parse.y"  */
+/* Line 1257 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
   '205': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1260 of "parse.y"  */
+/* Line 1262 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_id2sym('.'), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
   '206': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1265 of "parse.y"  */
+/* Line 1267 of "parse.y"  */
     {
 			value_expr((yystack.valueAt(5-(5))));
 			yyval = new_attr_op_assign((yystack.valueAt(5-(1))), ripper_intern("::"), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
 		    },
   '207': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1270 of "parse.y"  */
+/* Line 1272 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_COLON2((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))));
@@ -1570,7 +1572,7 @@ function YYParser (yylexer)
 		    },
   '208': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1280 of "parse.y"  */
+/* Line 1282 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_COLON3((yystack.valueAt(4-(2))));
@@ -1582,7 +1584,7 @@ function YYParser (yylexer)
 		    },
   '209': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1290 of "parse.y"  */
+/* Line 1292 of "parse.y"  */
     {
 		    /*%%%*/
 			rb_backref_error((yystack.valueAt(3-(1))));
@@ -1595,7 +1597,7 @@ function YYParser (yylexer)
 		    },
   '210': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1301 of "parse.y"  */
+/* Line 1303 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(3-(1))));
@@ -1611,7 +1613,7 @@ function YYParser (yylexer)
 		    },
   '211': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1315 of "parse.y"  */
+/* Line 1317 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(3-(1))));
@@ -1627,7 +1629,7 @@ function YYParser (yylexer)
 		    },
   '212': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1329 of "parse.y"  */
+/* Line 1331 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '+', (yystack.valueAt(3-(3))));
@@ -1637,7 +1639,7 @@ function YYParser (yylexer)
 		    },
   '213': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1337 of "parse.y"  */
+/* Line 1339 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '-', (yystack.valueAt(3-(3))));
@@ -1647,7 +1649,7 @@ function YYParser (yylexer)
 		    },
   '214': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1345 of "parse.y"  */
+/* Line 1347 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '*', (yystack.valueAt(3-(3))));
@@ -1657,7 +1659,7 @@ function YYParser (yylexer)
 		    },
   '215': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1353 of "parse.y"  */
+/* Line 1355 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '/', (yystack.valueAt(3-(3))));
@@ -1667,7 +1669,7 @@ function YYParser (yylexer)
 		    },
   '216': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1361 of "parse.y"  */
+/* Line 1363 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '%', (yystack.valueAt(3-(3))));
@@ -1677,7 +1679,7 @@ function YYParser (yylexer)
 		    },
   '217': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1369 of "parse.y"  */
+/* Line 1371 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tPOW, (yystack.valueAt(3-(3))));
@@ -1687,7 +1689,7 @@ function YYParser (yylexer)
 		    },
   '218': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1377 of "parse.y"  */
+/* Line 1379 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL(call_bin_op((yystack.valueAt(4-(2))), tPOW, (yystack.valueAt(4-(4)))), tUMINUS, 0);
@@ -1698,7 +1700,7 @@ function YYParser (yylexer)
 		    },
   '219': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1386 of "parse.y"  */
+/* Line 1388 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL(call_bin_op((yystack.valueAt(4-(2))), tPOW, (yystack.valueAt(4-(4)))), tUMINUS, 0);
@@ -1709,7 +1711,7 @@ function YYParser (yylexer)
 		    },
   '220': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1395 of "parse.y"  */
+/* Line 1397 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_uni_op((yystack.valueAt(2-(2))), tUPLUS);
@@ -1719,7 +1721,7 @@ function YYParser (yylexer)
 		    },
   '221': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1403 of "parse.y"  */
+/* Line 1405 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_uni_op((yystack.valueAt(2-(2))), tUMINUS);
@@ -1729,7 +1731,7 @@ function YYParser (yylexer)
 		    },
   '222': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1411 of "parse.y"  */
+/* Line 1413 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '|', (yystack.valueAt(3-(3))));
@@ -1739,7 +1741,7 @@ function YYParser (yylexer)
 		    },
   '223': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1419 of "parse.y"  */
+/* Line 1421 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '^', (yystack.valueAt(3-(3))));
@@ -1749,7 +1751,7 @@ function YYParser (yylexer)
 		    },
   '224': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1427 of "parse.y"  */
+/* Line 1429 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '&', (yystack.valueAt(3-(3))));
@@ -1759,7 +1761,7 @@ function YYParser (yylexer)
 		    },
   '225': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1435 of "parse.y"  */
+/* Line 1437 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tCMP, (yystack.valueAt(3-(3))));
@@ -1769,7 +1771,7 @@ function YYParser (yylexer)
 		    },
   '226': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1443 of "parse.y"  */
+/* Line 1445 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '>', (yystack.valueAt(3-(3))));
@@ -1779,7 +1781,7 @@ function YYParser (yylexer)
 		    },
   '227': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1451 of "parse.y"  */
+/* Line 1453 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tGEQ, (yystack.valueAt(3-(3))));
@@ -1789,7 +1791,7 @@ function YYParser (yylexer)
 		    },
   '228': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1459 of "parse.y"  */
+/* Line 1461 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), '<', (yystack.valueAt(3-(3))));
@@ -1799,7 +1801,7 @@ function YYParser (yylexer)
 		    },
   '229': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1467 of "parse.y"  */
+/* Line 1469 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tLEQ, (yystack.valueAt(3-(3))));
@@ -1809,7 +1811,7 @@ function YYParser (yylexer)
 		    },
   '230': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1475 of "parse.y"  */
+/* Line 1477 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tEQ, (yystack.valueAt(3-(3))));
@@ -1819,7 +1821,7 @@ function YYParser (yylexer)
 		    },
   '231': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1483 of "parse.y"  */
+/* Line 1485 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tEQQ, (yystack.valueAt(3-(3))));
@@ -1829,7 +1831,7 @@ function YYParser (yylexer)
 		    },
   '232': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1491 of "parse.y"  */
+/* Line 1493 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tNEQ, (yystack.valueAt(3-(3))));
@@ -1839,7 +1841,7 @@ function YYParser (yylexer)
 		    },
   '233': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1499 of "parse.y"  */
+/* Line 1501 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = match_op((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1852,7 +1854,7 @@ function YYParser (yylexer)
 		    },
   '234': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1510 of "parse.y"  */
+/* Line 1512 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tNMATCH, (yystack.valueAt(3-(3))));
@@ -1862,7 +1864,7 @@ function YYParser (yylexer)
 		    },
   '235': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1518 of "parse.y"  */
+/* Line 1520 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_uni_op(cond((yystack.valueAt(2-(2)))), '!');
@@ -1872,7 +1874,7 @@ function YYParser (yylexer)
 		    },
   '236': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1526 of "parse.y"  */
+/* Line 1528 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_uni_op((yystack.valueAt(2-(2))), '~');
@@ -1882,7 +1884,7 @@ function YYParser (yylexer)
 		    },
   '237': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1534 of "parse.y"  */
+/* Line 1536 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tLSHFT, (yystack.valueAt(3-(3))));
@@ -1892,7 +1894,7 @@ function YYParser (yylexer)
 		    },
   '238': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1542 of "parse.y"  */
+/* Line 1544 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_bin_op((yystack.valueAt(3-(1))), tRSHFT, (yystack.valueAt(3-(3))));
@@ -1902,7 +1904,7 @@ function YYParser (yylexer)
 		    },
   '239': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1550 of "parse.y"  */
+/* Line 1552 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = logop(NODE_AND, (yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1912,7 +1914,7 @@ function YYParser (yylexer)
 		    },
   '240': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1558 of "parse.y"  */
+/* Line 1560 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = logop(NODE_OR, (yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -1922,11 +1924,11 @@ function YYParser (yylexer)
 		    },
   '241': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1565 of "parse.y"  */
+/* Line 1567 of "parse.y"  */
     {in_defined = 1;},
   '242': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1566 of "parse.y"  */
+/* Line 1568 of "parse.y"  */
     {
 		    /*%%%*/
 			in_defined = 0;
@@ -1938,7 +1940,7 @@ function YYParser (yylexer)
 		    },
   '243': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1576 of "parse.y"  */
+/* Line 1578 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(6-(1))));
@@ -1950,13 +1952,13 @@ function YYParser (yylexer)
 		    },
   '244': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1586 of "parse.y"  */
+/* Line 1588 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(1-(1)));
 		    },
   '245': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1592 of "parse.y"  */
+/* Line 1594 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(1-(1))));
@@ -1968,13 +1970,13 @@ function YYParser (yylexer)
 		    },
   '247': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1605 of "parse.y"  */
+/* Line 1607 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(1)));
 		    },
   '248': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1609 of "parse.y"  */
+/* Line 1611 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = arg_append((yystack.valueAt(4-(1))), NEW_HASH((yystack.valueAt(4-(3)))));
@@ -1984,7 +1986,7 @@ function YYParser (yylexer)
 		    },
   '249': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1617 of "parse.y"  */
+/* Line 1619 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIST(NEW_HASH((yystack.valueAt(2-(1)))));
@@ -1994,7 +1996,7 @@ function YYParser (yylexer)
 		    },
   '250': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1627 of "parse.y"  */
+/* Line 1629 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -2004,13 +2006,13 @@ function YYParser (yylexer)
 		    },
   '255': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1643 of "parse.y"  */
+/* Line 1645 of "parse.y"  */
     {
 		      yyval = (yystack.valueAt(2-(1)));
 		    },
   '256': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1647 of "parse.y"  */
+/* Line 1649 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = arg_append((yystack.valueAt(4-(1))), NEW_HASH((yystack.valueAt(4-(3)))));
@@ -2020,7 +2022,7 @@ function YYParser (yylexer)
 		    },
   '257': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1655 of "parse.y"  */
+/* Line 1657 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIST(NEW_HASH((yystack.valueAt(2-(1)))));
@@ -2030,7 +2032,7 @@ function YYParser (yylexer)
 		    },
   '258': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1665 of "parse.y"  */
+/* Line 1667 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(1-(1))));
@@ -2041,7 +2043,7 @@ function YYParser (yylexer)
 		    },
   '259': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1674 of "parse.y"  */
+/* Line 1676 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = arg_blk_pass((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
@@ -2051,7 +2053,7 @@ function YYParser (yylexer)
 		    },
   '260': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1682 of "parse.y"  */
+/* Line 1684 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIST(NEW_HASH((yystack.valueAt(2-(1)))));
@@ -2063,7 +2065,7 @@ function YYParser (yylexer)
 		    },
   '261': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1692 of "parse.y"  */
+/* Line 1694 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = arg_append((yystack.valueAt(4-(1))), NEW_HASH((yystack.valueAt(4-(3)))));
@@ -2074,14 +2076,14 @@ function YYParser (yylexer)
 		    },
   '263': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1709 of "parse.y"  */
+/* Line 1711 of "parse.y"  */
     {
 			yyval = cmdarg_stack;
 			CMDARG_PUSH(1);
 		    },
   '264': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1714 of "parse.y"  */
+/* Line 1716 of "parse.y"  */
     {
 			/* CMDARG_POP() */
 			cmdarg_stack = (yystack.valueAt(2-(1)));
@@ -2089,7 +2091,7 @@ function YYParser (yylexer)
 		    },
   '265': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1722 of "parse.y"  */
+/* Line 1724 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_BLOCK_PASS((yystack.valueAt(2-(2))));
@@ -2099,19 +2101,19 @@ function YYParser (yylexer)
 		    },
   '266': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1732 of "parse.y"  */
+/* Line 1734 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    },
   '267': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1736 of "parse.y"  */
+/* Line 1738 of "parse.y"  */
     {
 			yyval = 0;
 		    },
   '268': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1742 of "parse.y"  */
+/* Line 1744 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIST((yystack.valueAt(1-(1))));
@@ -2121,7 +2123,7 @@ function YYParser (yylexer)
 		    },
   '269': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1750 of "parse.y"  */
+/* Line 1752 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_SPLAT((yystack.valueAt(2-(2))));
@@ -2131,7 +2133,7 @@ function YYParser (yylexer)
 		    },
   '270': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1758 of "parse.y"  */
+/* Line 1760 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *n1;
@@ -2147,7 +2149,7 @@ function YYParser (yylexer)
 		    },
   '271': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1772 of "parse.y"  */
+/* Line 1774 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *n1;
@@ -2163,7 +2165,7 @@ function YYParser (yylexer)
 		    },
   '272': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1788 of "parse.y"  */
+/* Line 1790 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *n1;
@@ -2179,7 +2181,7 @@ function YYParser (yylexer)
 		    },
   '273': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1802 of "parse.y"  */
+/* Line 1804 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *n1;
@@ -2196,7 +2198,7 @@ function YYParser (yylexer)
 		    },
   '274': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1817 of "parse.y"  */
+/* Line 1819 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_SPLAT((yystack.valueAt(2-(2))));
@@ -2206,7 +2208,7 @@ function YYParser (yylexer)
 		    },
   '285': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1837 of "parse.y"  */
+/* Line 1839 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_FCALL((yystack.valueAt(1-(1))), 0);
@@ -2216,7 +2218,7 @@ function YYParser (yylexer)
 		    },
   '286': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1845 of "parse.y"  */
+/* Line 1847 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = cmdarg_stack;
 			cmdarg_stack = 0;
@@ -2227,7 +2229,7 @@ function YYParser (yylexer)
 		    },
   '287': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1855 of "parse.y"  */
+/* Line 1857 of "parse.y"  */
     {
 			cmdarg_stack = (yystack.valueAt(4-(1)));
 		    /*%%%*/
@@ -2247,11 +2249,11 @@ function YYParser (yylexer)
 		    },
   '288': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1872 of "parse.y"  */
+/* Line 1874 of "parse.y"  */
     {lex_state = EXPR_ENDARG;},
   '289': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1873 of "parse.y"  */
+/* Line 1875 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -2261,11 +2263,11 @@ function YYParser (yylexer)
 		    },
   '290': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1880 of "parse.y"  */
+/* Line 1882 of "parse.y"  */
     {lex_state = EXPR_ENDARG;},
   '291': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1881 of "parse.y"  */
+/* Line 1883 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(4-(2)));
@@ -2275,7 +2277,7 @@ function YYParser (yylexer)
 		    },
   '292': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1889 of "parse.y"  */
+/* Line 1891 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -2285,7 +2287,7 @@ function YYParser (yylexer)
 		    },
   '293': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1897 of "parse.y"  */
+/* Line 1899 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_COLON2((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -2295,7 +2297,7 @@ function YYParser (yylexer)
 		    },
   '294': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1905 of "parse.y"  */
+/* Line 1907 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_COLON3((yystack.valueAt(2-(2))));
@@ -2305,7 +2307,7 @@ function YYParser (yylexer)
 		    },
   '295': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1913 of "parse.y"  */
+/* Line 1915 of "parse.y"  */
     {
 		    /*%%%*/
 			if ((yystack.valueAt(3-(2))) == 0) {
@@ -2320,7 +2322,7 @@ function YYParser (yylexer)
 		    },
   '296': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1926 of "parse.y"  */
+/* Line 1928 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_HASH((yystack.valueAt(3-(2))));
@@ -2330,7 +2332,7 @@ function YYParser (yylexer)
 		    },
   '297': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1934 of "parse.y"  */
+/* Line 1936 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_RETURN(0);
@@ -2340,7 +2342,7 @@ function YYParser (yylexer)
 		    },
   '298': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1942 of "parse.y"  */
+/* Line 1944 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = new_yield((yystack.valueAt(4-(3))));
@@ -2350,7 +2352,7 @@ function YYParser (yylexer)
 		    },
   '299': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1950 of "parse.y"  */
+/* Line 1952 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_YIELD(0);
@@ -2360,7 +2362,7 @@ function YYParser (yylexer)
 		    },
   '300': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1958 of "parse.y"  */
+/* Line 1960 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_YIELD(0);
@@ -2370,11 +2372,11 @@ function YYParser (yylexer)
 		    },
   '301': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1965 of "parse.y"  */
+/* Line 1967 of "parse.y"  */
     {in_defined = 1;},
   '302': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1966 of "parse.y"  */
+/* Line 1968 of "parse.y"  */
     {
 		    /*%%%*/
 			in_defined = 0;
@@ -2386,7 +2388,7 @@ function YYParser (yylexer)
 		    },
   '303': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1976 of "parse.y"  */
+/* Line 1978 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_uni_op(cond((yystack.valueAt(4-(3)))), '!');
@@ -2396,7 +2398,7 @@ function YYParser (yylexer)
 		    },
   '304': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1984 of "parse.y"  */
+/* Line 1986 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = call_uni_op(cond(NEW_NIL()), '!');
@@ -2406,7 +2408,7 @@ function YYParser (yylexer)
 		    },
   '305': function ()
     /* Line 211 of lalr1.js  */
-/* Line 1992 of "parse.y"  */
+/* Line 1994 of "parse.y"  */
     {
 		    /*%%%*/
 			(yystack.valueAt(2-(2)))->nd_iter = (yystack.valueAt(2-(1)));
@@ -2418,7 +2420,7 @@ function YYParser (yylexer)
 		    },
   '307': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2003 of "parse.y"  */
+/* Line 2005 of "parse.y"  */
     {
 		    /*%%%*/
 			block_dup_check((yystack.valueAt(2-(1)))->nd_args, (yystack.valueAt(2-(2))));
@@ -2430,13 +2432,13 @@ function YYParser (yylexer)
 		    },
   '308': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2013 of "parse.y"  */
+/* Line 2015 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    },
   '309': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2020 of "parse.y"  */
+/* Line 2022 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_IF(cond((yystack.valueAt(6-(2)))), (yystack.valueAt(6-(4))), (yystack.valueAt(6-(5))));
@@ -2447,7 +2449,7 @@ function YYParser (yylexer)
 		    },
   '310': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2032 of "parse.y"  */
+/* Line 2034 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_UNLESS(cond((yystack.valueAt(6-(2)))), (yystack.valueAt(6-(4))), (yystack.valueAt(6-(5))));
@@ -2458,15 +2460,15 @@ function YYParser (yylexer)
 		    },
   '311': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2040 of "parse.y"  */
+/* Line 2042 of "parse.y"  */
     {COND_PUSH(1);},
   '312': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2040 of "parse.y"  */
+/* Line 2042 of "parse.y"  */
     {COND_POP();},
   '313': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2043 of "parse.y"  */
+/* Line 2045 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_WHILE(cond((yystack.valueAt(7-(3)))), (yystack.valueAt(7-(6))), 1);
@@ -2477,15 +2479,15 @@ function YYParser (yylexer)
 		    },
   '314': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2051 of "parse.y"  */
+/* Line 2053 of "parse.y"  */
     {COND_PUSH(1);},
   '315': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2051 of "parse.y"  */
+/* Line 2053 of "parse.y"  */
     {COND_POP();},
   '316': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2054 of "parse.y"  */
+/* Line 2056 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_UNTIL(cond((yystack.valueAt(7-(3)))), (yystack.valueAt(7-(6))), 1);
@@ -2496,7 +2498,7 @@ function YYParser (yylexer)
 		    },
   '317': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2065 of "parse.y"  */
+/* Line 2067 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CASE((yystack.valueAt(5-(2))), (yystack.valueAt(5-(4))));
@@ -2507,7 +2509,7 @@ function YYParser (yylexer)
 		    },
   '318': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2074 of "parse.y"  */
+/* Line 2076 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CASE(0, (yystack.valueAt(4-(3))));
@@ -2517,15 +2519,15 @@ function YYParser (yylexer)
 		    },
   '319': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2082 of "parse.y"  */
+/* Line 2084 of "parse.y"  */
     {COND_PUSH(1);},
   '320': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2084 of "parse.y"  */
+/* Line 2086 of "parse.y"  */
     {COND_POP();},
   '321': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2087 of "parse.y"  */
+/* Line 2089 of "parse.y"  */
     {
 		    /*%%%*/
 			/*
@@ -2588,7 +2590,7 @@ function YYParser (yylexer)
 		    },
   '322': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2148 of "parse.y"  */
+/* Line 2150 of "parse.y"  */
     {
 			if (in_def || in_single)
 			    yyerror("class definition in method body");
@@ -2600,7 +2602,7 @@ function YYParser (yylexer)
 		    },
   '323': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2159 of "parse.y"  */
+/* Line 2161 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CLASS((yystack.valueAt(6-(2))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(3))));
@@ -2612,14 +2614,14 @@ function YYParser (yylexer)
 		    },
   '324': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2169 of "parse.y"  */
+/* Line 2171 of "parse.y"  */
     {
 			yyval = in_def;
 			in_def = 0;
 		    },
   '325': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2174 of "parse.y"  */
+/* Line 2176 of "parse.y"  */
     {
 			yyval = in_single;
 			in_single = 0;
@@ -2627,7 +2629,7 @@ function YYParser (yylexer)
 		    },
   '326': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2181 of "parse.y"  */
+/* Line 2183 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_SCLASS((yystack.valueAt(8-(3))), (yystack.valueAt(8-(7))));
@@ -2641,7 +2643,7 @@ function YYParser (yylexer)
 		    },
   '327': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2193 of "parse.y"  */
+/* Line 2195 of "parse.y"  */
     {
 			if (in_def || in_single)
 			    yyerror("module definition in method body");
@@ -2653,7 +2655,7 @@ function YYParser (yylexer)
 		    },
   '328': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2204 of "parse.y"  */
+/* Line 2206 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MODULE((yystack.valueAt(5-(2))), (yystack.valueAt(5-(4))));
@@ -2665,7 +2667,7 @@ function YYParser (yylexer)
 		    },
   '329': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2214 of "parse.y"  */
+/* Line 2216 of "parse.y"  */
     {
 			yyval = cur_mid;
 			cur_mid = (yystack.valueAt(2-(2)));
@@ -2674,7 +2676,7 @@ function YYParser (yylexer)
 		    },
   '330': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2223 of "parse.y"  */
+/* Line 2225 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *body = remove_begin((yystack.valueAt(6-(5))));
@@ -2690,11 +2692,11 @@ function YYParser (yylexer)
 		    },
   '331': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2236 of "parse.y"  */
+/* Line 2238 of "parse.y"  */
     {lex_state = EXPR_FNAME;},
   '332': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2237 of "parse.y"  */
+/* Line 2239 of "parse.y"  */
     {
 			in_single++;
 			lex_state = EXPR_ENDFN; /* force for args */
@@ -2702,7 +2704,7 @@ function YYParser (yylexer)
 		    },
   '333': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2245 of "parse.y"  */
+/* Line 2247 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *body = remove_begin((yystack.valueAt(9-(8))));
@@ -2717,7 +2719,7 @@ function YYParser (yylexer)
 		    },
   '334': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2258 of "parse.y"  */
+/* Line 2260 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_BREAK(0);
@@ -2727,7 +2729,7 @@ function YYParser (yylexer)
 		    },
   '335': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2266 of "parse.y"  */
+/* Line 2268 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_NEXT(0);
@@ -2737,7 +2739,7 @@ function YYParser (yylexer)
 		    },
   '336': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2274 of "parse.y"  */
+/* Line 2276 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_REDO();
@@ -2747,7 +2749,7 @@ function YYParser (yylexer)
 		    },
   '337': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2282 of "parse.y"  */
+/* Line 2284 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_RETRY();
@@ -2757,7 +2759,7 @@ function YYParser (yylexer)
 		    },
   '338': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2292 of "parse.y"  */
+/* Line 2294 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(1-(1))));
@@ -2769,61 +2771,61 @@ function YYParser (yylexer)
 		    },
   '339': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2304 of "parse.y"  */
+/* Line 2306 of "parse.y"  */
     {
 			token_info_push("begin");
 		    },
   '340': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2310 of "parse.y"  */
+/* Line 2312 of "parse.y"  */
     {
 			token_info_push("if");
 		    },
   '341': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2316 of "parse.y"  */
+/* Line 2318 of "parse.y"  */
     {
 			token_info_push("unless");
 		    },
   '342': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2322 of "parse.y"  */
+/* Line 2324 of "parse.y"  */
     {
 			token_info_push("while");
 		    },
   '343': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2328 of "parse.y"  */
+/* Line 2330 of "parse.y"  */
     {
 			token_info_push("until");
 		    },
   '344': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2334 of "parse.y"  */
+/* Line 2336 of "parse.y"  */
     {
 			token_info_push("case");
 		    },
   '345': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2340 of "parse.y"  */
+/* Line 2342 of "parse.y"  */
     {
 			token_info_push("for");
 		    },
   '346': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2346 of "parse.y"  */
+/* Line 2348 of "parse.y"  */
     {
 			token_info_push("class");
 		    },
   '347': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2352 of "parse.y"  */
+/* Line 2354 of "parse.y"  */
     {
 			token_info_push("module");
 		    },
   '348': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2358 of "parse.y"  */
+/* Line 2360 of "parse.y"  */
     {
 			token_info_push("def");
 		    /*%%%*/
@@ -2833,13 +2835,13 @@ function YYParser (yylexer)
 		    },
   '349': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2368 of "parse.y"  */
+/* Line 2370 of "parse.y"  */
     {
 			token_info_pop("end");
 		    },
   '356': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2398 of "parse.y"  */
+/* Line 2400 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_IF(cond((yystack.valueAt(5-(2)))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
@@ -2850,7 +2852,7 @@ function YYParser (yylexer)
 		    },
   '358': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2410 of "parse.y"  */
+/* Line 2412 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(2-(2)));
@@ -2860,7 +2862,7 @@ function YYParser (yylexer)
 		    },
   '361': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2424 of "parse.y"  */
+/* Line 2426 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
@@ -2870,7 +2872,7 @@ function YYParser (yylexer)
 		    },
   '362': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2432 of "parse.y"  */
+/* Line 2434 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -2880,7 +2882,7 @@ function YYParser (yylexer)
 		    },
   '363': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2442 of "parse.y"  */
+/* Line 2444 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIST((yystack.valueAt(1-(1))));
@@ -2890,7 +2892,7 @@ function YYParser (yylexer)
 		    },
   '364': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2450 of "parse.y"  */
+/* Line 2452 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -2900,7 +2902,7 @@ function YYParser (yylexer)
 		    },
   '365': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2460 of "parse.y"  */
+/* Line 2462 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN((yystack.valueAt(1-(1))), 0);
@@ -2910,7 +2912,7 @@ function YYParser (yylexer)
 		    },
   '366': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2468 of "parse.y"  */
+/* Line 2470 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(4-(4))), 0);
 		    /*%%%*/
@@ -2921,7 +2923,7 @@ function YYParser (yylexer)
 		    },
   '367': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2477 of "parse.y"  */
+/* Line 2479 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(6-(4))), 0);
 		    /*%%%*/
@@ -2932,7 +2934,7 @@ function YYParser (yylexer)
 		    },
   '368': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2486 of "parse.y"  */
+/* Line 2488 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN((yystack.valueAt(3-(1))), -1);
@@ -2942,7 +2944,7 @@ function YYParser (yylexer)
 		    },
   '369': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2494 of "parse.y"  */
+/* Line 2496 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN((yystack.valueAt(5-(1))), NEW_POSTARG(-1, (yystack.valueAt(5-(5)))));
@@ -2952,7 +2954,7 @@ function YYParser (yylexer)
 		    },
   '370': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2502 of "parse.y"  */
+/* Line 2504 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(2-(2))), 0);
 		    /*%%%*/
@@ -2963,7 +2965,7 @@ function YYParser (yylexer)
 		    },
   '371': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2511 of "parse.y"  */
+/* Line 2513 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(4-(2))), 0);
 		    /*%%%*/
@@ -2977,7 +2979,7 @@ function YYParser (yylexer)
 		    },
   '372': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2523 of "parse.y"  */
+/* Line 2525 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN(0, -1);
@@ -2987,7 +2989,7 @@ function YYParser (yylexer)
 		    },
   '373': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2531 of "parse.y"  */
+/* Line 2533 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_MASGN(0, NEW_POSTARG(-1, (yystack.valueAt(3-(3)))));
@@ -2997,73 +2999,73 @@ function YYParser (yylexer)
 		    },
   '374': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2542 of "parse.y"  */
+/* Line 2544 of "parse.y"  */
     {
 			yyval = new_args_tail((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
   '375': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2546 of "parse.y"  */
+/* Line 2548 of "parse.y"  */
     {
 			yyval = new_args_tail((yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    },
   '376': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2550 of "parse.y"  */
+/* Line 2552 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, (yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    },
   '377': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2554 of "parse.y"  */
+/* Line 2556 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    },
   '378': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2560 of "parse.y"  */
+/* Line 2562 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    },
   '379': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2564 of "parse.y"  */
+/* Line 2566 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
 		    },
   '380': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2570 of "parse.y"  */
+/* Line 2572 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), Qnone, (yystack.valueAt(6-(6))));
 		    },
   '381': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2574 of "parse.y"  */
+/* Line 2576 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(8-(1))), (yystack.valueAt(8-(3))), (yystack.valueAt(8-(5))), (yystack.valueAt(8-(7))), (yystack.valueAt(8-(8))));
 		    },
   '382': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2578 of "parse.y"  */
+/* Line 2580 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, Qnone, (yystack.valueAt(4-(4))));
 		    },
   '383': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2582 of "parse.y"  */
+/* Line 2584 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), Qnone, (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
   '384': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2586 of "parse.y"  */
+/* Line 2588 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    },
   '385': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2590 of "parse.y"  */
+/* Line 2592 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(2-(1))), Qnone, 1, Qnone, new_args_tail(Qnone, Qnone, Qnone));
 		    /*%%%*/
@@ -3073,67 +3075,67 @@ function YYParser (yylexer)
 		    },
   '386': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2598 of "parse.y"  */
+/* Line 2600 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), Qnone, (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
   '387': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2602 of "parse.y"  */
+/* Line 2604 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(2-(1))), Qnone, Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    },
   '388': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2606 of "parse.y"  */
+/* Line 2608 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    },
   '389': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2610 of "parse.y"  */
+/* Line 2612 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
   '390': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2614 of "parse.y"  */
+/* Line 2616 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(2-(1))), Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    },
   '391': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2618 of "parse.y"  */
+/* Line 2620 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
   '392': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2622 of "parse.y"  */
+/* Line 2624 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, (yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    },
   '393': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2626 of "parse.y"  */
+/* Line 2628 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
   '394': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2630 of "parse.y"  */
+/* Line 2632 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    },
   '396': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2637 of "parse.y"  */
+/* Line 2639 of "parse.y"  */
     {
 			command_start = TRUE;
 		    },
   '397': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2643 of "parse.y"  */
+/* Line 2645 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3144,7 +3146,7 @@ function YYParser (yylexer)
 		    },
   '398': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2652 of "parse.y"  */
+/* Line 2654 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3155,7 +3157,7 @@ function YYParser (yylexer)
 		    },
   '399': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2661 of "parse.y"  */
+/* Line 2663 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(4-(2)));
@@ -3165,13 +3167,13 @@ function YYParser (yylexer)
 		    },
   '400': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2672 of "parse.y"  */
+/* Line 2674 of "parse.y"  */
     {
 		      yyval = 0;
 		    },
   '401': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2676 of "parse.y"  */
+/* Line 2678 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3181,7 +3183,7 @@ function YYParser (yylexer)
 		    },
   '404': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2702 of "parse.y"  */
+/* Line 2704 of "parse.y"  */
     {
 			new_bv(get_id((yystack.valueAt(1-(1)))));
 		    /*%%%*/
@@ -3191,26 +3193,26 @@ function YYParser (yylexer)
 		    },
   '405': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2710 of "parse.y"  */
+/* Line 2712 of "parse.y"  */
     {
 			yyval = 0;
 		    },
   '406': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2715 of "parse.y"  */
+/* Line 2717 of "parse.y"  */
     {
 			yyval = dyna_push();
 		    },
   '407': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2718 of "parse.y"  */
+/* Line 2720 of "parse.y"  */
     {
 			yyval = lpar_beg;
 			lpar_beg = ++paren_nest;
 		    },
   '408': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2724 of "parse.y"  */
+/* Line 2726 of "parse.y"  */
     {
 			lpar_beg = (yystack.valueAt(4-(2)));
 		    /*%%%*/
@@ -3222,7 +3224,7 @@ function YYParser (yylexer)
 		    },
   '409': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2736 of "parse.y"  */
+/* Line 2738 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(4-(2)));
@@ -3232,7 +3234,7 @@ function YYParser (yylexer)
 		    },
   '410': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2744 of "parse.y"  */
+/* Line 2746 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(1-(1)));
@@ -3242,19 +3244,19 @@ function YYParser (yylexer)
 		    },
   '411': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2754 of "parse.y"  */
+/* Line 2756 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(3-(2)));
 		    },
   '412': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2758 of "parse.y"  */
+/* Line 2760 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(3-(2)));
 		    },
   '413': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2764 of "parse.y"  */
+/* Line 2766 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = dyna_push();
 		    /*%%%*/
@@ -3263,7 +3265,7 @@ function YYParser (yylexer)
 		    },
   '414': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2773 of "parse.y"  */
+/* Line 2775 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
@@ -3275,7 +3277,7 @@ function YYParser (yylexer)
 		    },
   '415': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2785 of "parse.y"  */
+/* Line 2787 of "parse.y"  */
     {
 		    /*%%%*/
 			if (nd_type((yystack.valueAt(2-(1)))) == NODE_YIELD) {
@@ -3293,7 +3295,7 @@ function YYParser (yylexer)
 		    },
   '416': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2801 of "parse.y"  */
+/* Line 2803 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
@@ -3304,7 +3306,7 @@ function YYParser (yylexer)
 		    },
   '417': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2810 of "parse.y"  */
+/* Line 2812 of "parse.y"  */
     {
 		    /*%%%*/
 			block_dup_check((yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
@@ -3318,7 +3320,7 @@ function YYParser (yylexer)
 		    },
   '418': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2822 of "parse.y"  */
+/* Line 2824 of "parse.y"  */
     {
 		    /*%%%*/
 			block_dup_check((yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
@@ -3332,7 +3334,7 @@ function YYParser (yylexer)
 		    },
   '419': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2836 of "parse.y"  */
+/* Line 2838 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(2-(1)));
@@ -3343,7 +3345,7 @@ function YYParser (yylexer)
 		    },
   '420': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2845 of "parse.y"  */
+/* Line 2847 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = ruby_sourceline;
@@ -3351,7 +3353,7 @@ function YYParser (yylexer)
 		    },
   '421': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2851 of "parse.y"  */
+/* Line 2853 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(5))));
@@ -3363,7 +3365,7 @@ function YYParser (yylexer)
 		    },
   '422': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2861 of "parse.y"  */
+/* Line 2863 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = ruby_sourceline;
@@ -3371,7 +3373,7 @@ function YYParser (yylexer)
 		    },
   '423': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2867 of "parse.y"  */
+/* Line 2869 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(5-(1))), (yystack.valueAt(5-(3))), (yystack.valueAt(5-(5))));
@@ -3383,7 +3385,7 @@ function YYParser (yylexer)
 		    },
   '424': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2877 of "parse.y"  */
+/* Line 2879 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))), 0);
@@ -3393,7 +3395,7 @@ function YYParser (yylexer)
 		    },
   '425': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2885 of "parse.y"  */
+/* Line 2887 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = ruby_sourceline;
@@ -3401,7 +3403,7 @@ function YYParser (yylexer)
 		    },
   '426': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2891 of "parse.y"  */
+/* Line 2893 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(4-(1))), rb_intern("call"), (yystack.valueAt(4-(4))));
@@ -3414,7 +3416,7 @@ function YYParser (yylexer)
 		    },
   '427': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2902 of "parse.y"  */
+/* Line 2904 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = ruby_sourceline;
@@ -3422,7 +3424,7 @@ function YYParser (yylexer)
 		    },
   '428': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2908 of "parse.y"  */
+/* Line 2910 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CALL((yystack.valueAt(4-(1))), rb_intern("call"), (yystack.valueAt(4-(4))));
@@ -3435,7 +3437,7 @@ function YYParser (yylexer)
 		    },
   '429': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2919 of "parse.y"  */
+/* Line 2921 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_SUPER((yystack.valueAt(2-(2))));
@@ -3445,7 +3447,7 @@ function YYParser (yylexer)
 		    },
   '430': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2927 of "parse.y"  */
+/* Line 2929 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ZSUPER();
@@ -3455,7 +3457,7 @@ function YYParser (yylexer)
 		    },
   '431': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2935 of "parse.y"  */
+/* Line 2937 of "parse.y"  */
     {
 		    /*%%%*/
 			if ((yystack.valueAt(4-(1))) && nd_type((yystack.valueAt(4-(1)))) == NODE_SELF)
@@ -3469,7 +3471,7 @@ function YYParser (yylexer)
 		    },
   '432': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2949 of "parse.y"  */
+/* Line 2951 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = dyna_push();
 		    /*%%%*/
@@ -3479,7 +3481,7 @@ function YYParser (yylexer)
 		    },
   '433': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2958 of "parse.y"  */
+/* Line 2960 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
@@ -3491,7 +3493,7 @@ function YYParser (yylexer)
 		    },
   '434': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2968 of "parse.y"  */
+/* Line 2970 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = dyna_push();
 		    /*%%%*/
@@ -3501,7 +3503,7 @@ function YYParser (yylexer)
 		    },
   '435': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2977 of "parse.y"  */
+/* Line 2979 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ITER((yystack.valueAt(5-(3))),(yystack.valueAt(5-(4))));
@@ -3513,7 +3515,7 @@ function YYParser (yylexer)
 		    },
   '436': function ()
     /* Line 211 of lalr1.js  */
-/* Line 2991 of "parse.y"  */
+/* Line 2993 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_WHEN((yystack.valueAt(5-(2))), (yystack.valueAt(5-(4))), (yystack.valueAt(5-(5))));
@@ -3523,7 +3525,7 @@ function YYParser (yylexer)
 		    },
   '439': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3007 of "parse.y"  */
+/* Line 3009 of "parse.y"  */
     {
 		    /*%%%*/
 			if ((yystack.valueAt(6-(3)))) {
@@ -3542,7 +3544,7 @@ function YYParser (yylexer)
 		    },
   '441': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3027 of "parse.y"  */
+/* Line 3029 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIST((yystack.valueAt(1-(1))));
@@ -3552,7 +3554,7 @@ function YYParser (yylexer)
 		    },
   '442': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3035 of "parse.y"  */
+/* Line 3037 of "parse.y"  */
     {
 		    /*%%%*/
 			if (!(yyval = splat_array((yystack.valueAt(1-(1)))))) yyval = (yystack.valueAt(1-(1)));
@@ -3562,13 +3564,13 @@ function YYParser (yylexer)
 		    },
   '444': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3046 of "parse.y"  */
+/* Line 3048 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    },
   '446': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3053 of "parse.y"  */
+/* Line 3055 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(2-(2)));
@@ -3578,7 +3580,7 @@ function YYParser (yylexer)
 		    },
   '449': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3065 of "parse.y"  */
+/* Line 3067 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_LIT(ID2SYM((yystack.valueAt(1-(1)))));
@@ -3588,7 +3590,7 @@ function YYParser (yylexer)
 		    },
   '451': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3076 of "parse.y"  */
+/* Line 3078 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *node = (yystack.valueAt(1-(1)));
@@ -3605,7 +3607,7 @@ function YYParser (yylexer)
 		    },
   '454': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3095 of "parse.y"  */
+/* Line 3097 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
@@ -3615,7 +3617,7 @@ function YYParser (yylexer)
 		    },
   '455': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3105 of "parse.y"  */
+/* Line 3107 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -3625,7 +3627,7 @@ function YYParser (yylexer)
 		    },
   '456': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3115 of "parse.y"  */
+/* Line 3117 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *node = (yystack.valueAt(3-(2)));
@@ -3652,7 +3654,7 @@ function YYParser (yylexer)
 		    },
   '457': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3142 of "parse.y"  */
+/* Line 3144 of "parse.y"  */
     {
 		    /*%%%*/
 			int options = (yystack.valueAt(3-(3)));
@@ -3717,7 +3719,7 @@ function YYParser (yylexer)
 		    },
   '458': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3207 of "parse.y"  */
+/* Line 3209 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ZARRAY();
@@ -3728,7 +3730,7 @@ function YYParser (yylexer)
 		    },
   '459': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3216 of "parse.y"  */
+/* Line 3218 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -3738,7 +3740,7 @@ function YYParser (yylexer)
 		    },
   '460': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3226 of "parse.y"  */
+/* Line 3228 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3748,7 +3750,7 @@ function YYParser (yylexer)
 		    },
   '461': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3234 of "parse.y"  */
+/* Line 3236 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_append((yystack.valueAt(3-(1))), evstr2dstr((yystack.valueAt(3-(2)))));
@@ -3758,7 +3760,7 @@ function YYParser (yylexer)
 		    },
   '463': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3252 of "parse.y"  */
+/* Line 3254 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
@@ -3768,7 +3770,7 @@ function YYParser (yylexer)
 		    },
   '464': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3262 of "parse.y"  */
+/* Line 3264 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ZARRAY();
@@ -3779,7 +3781,7 @@ function YYParser (yylexer)
 		    },
   '465': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3271 of "parse.y"  */
+/* Line 3273 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -3789,7 +3791,7 @@ function YYParser (yylexer)
 		    },
   '466': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3281 of "parse.y"  */
+/* Line 3283 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3799,7 +3801,7 @@ function YYParser (yylexer)
 		    },
   '467': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3289 of "parse.y"  */
+/* Line 3291 of "parse.y"  */
     {
 		    /*%%%*/
 			(yystack.valueAt(3-(2))) = evstr2dstr((yystack.valueAt(3-(2))));
@@ -3811,7 +3813,7 @@ function YYParser (yylexer)
 		    },
   '468': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3301 of "parse.y"  */
+/* Line 3303 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ZARRAY();
@@ -3822,7 +3824,7 @@ function YYParser (yylexer)
 		    },
   '469': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3310 of "parse.y"  */
+/* Line 3312 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -3832,7 +3834,7 @@ function YYParser (yylexer)
 		    },
   '470': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3320 of "parse.y"  */
+/* Line 3322 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_ZARRAY();
@@ -3843,7 +3845,7 @@ function YYParser (yylexer)
 		    },
   '471': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3329 of "parse.y"  */
+/* Line 3331 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -3853,7 +3855,7 @@ function YYParser (yylexer)
 		    },
   '472': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3339 of "parse.y"  */
+/* Line 3341 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3863,7 +3865,7 @@ function YYParser (yylexer)
 		    },
   '473': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3347 of "parse.y"  */
+/* Line 3349 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_append((yystack.valueAt(3-(1))), (yystack.valueAt(3-(2))));
@@ -3873,7 +3875,7 @@ function YYParser (yylexer)
 		    },
   '474': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3357 of "parse.y"  */
+/* Line 3359 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3883,7 +3885,7 @@ function YYParser (yylexer)
 		    },
   '475': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3365 of "parse.y"  */
+/* Line 3367 of "parse.y"  */
     {
 		    /*%%%*/
 			VALUE lit;
@@ -3897,7 +3899,7 @@ function YYParser (yylexer)
 		    },
   '476': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3379 of "parse.y"  */
+/* Line 3381 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3907,7 +3909,7 @@ function YYParser (yylexer)
 		    },
   '477': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3387 of "parse.y"  */
+/* Line 3389 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
@@ -3917,7 +3919,7 @@ function YYParser (yylexer)
 		    },
   '478': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3397 of "parse.y"  */
+/* Line 3399 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3927,7 +3929,7 @@ function YYParser (yylexer)
 		    },
   '479': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3405 of "parse.y"  */
+/* Line 3407 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = literal_concat((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
@@ -3937,7 +3939,7 @@ function YYParser (yylexer)
 		    },
   '480': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3415 of "parse.y"  */
+/* Line 3417 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -3947,7 +3949,7 @@ function YYParser (yylexer)
 		    },
   '481': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3423 of "parse.y"  */
+/* Line 3425 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *head = (yystack.valueAt(2-(1))), *tail = (yystack.valueAt(2-(2)));
@@ -3976,7 +3978,7 @@ function YYParser (yylexer)
 		    },
   '483': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3453 of "parse.y"  */
+/* Line 3455 of "parse.y"  */
     {
 			yyval = lex_strterm;
 			lex_strterm = 0;
@@ -3984,7 +3986,7 @@ function YYParser (yylexer)
 		    },
   '484': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3459 of "parse.y"  */
+/* Line 3461 of "parse.y"  */
     {
 		    /*%%%*/
 			lex_strterm = (yystack.valueAt(3-(2)));
@@ -3996,7 +3998,7 @@ function YYParser (yylexer)
 		    },
   '485': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3469 of "parse.y"  */
+/* Line 3471 of "parse.y"  */
     {
 			(yystack.valueAt(1-(1))) = cond_stack;
 			yyval = cmdarg_stack;
@@ -4005,7 +4007,7 @@ function YYParser (yylexer)
 		    },
   '486': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3475 of "parse.y"  */
+/* Line 3477 of "parse.y"  */
     {
 			yyval = lex_strterm;
 			lex_strterm = 0;
@@ -4013,14 +4015,14 @@ function YYParser (yylexer)
 		    },
   '487': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3480 of "parse.y"  */
+/* Line 3482 of "parse.y"  */
     {
 			yyval = brace_nest;
 			brace_nest = 0;
 		    },
   '488': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3485 of "parse.y"  */
+/* Line 3487 of "parse.y"  */
     {
 			cond_stack = (yystack.valueAt(6-(1)));
 			cmdarg_stack = (yystack.valueAt(6-(2)));
@@ -4035,7 +4037,7 @@ function YYParser (yylexer)
 		    },
   '489': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3500 of "parse.y"  */
+/* Line 3502 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_GVAR((yystack.valueAt(1-(1))));
@@ -4045,7 +4047,7 @@ function YYParser (yylexer)
 		    },
   '490': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3508 of "parse.y"  */
+/* Line 3510 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_IVAR((yystack.valueAt(1-(1))));
@@ -4055,7 +4057,7 @@ function YYParser (yylexer)
 		    },
   '491': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3516 of "parse.y"  */
+/* Line 3518 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = NEW_CVAR((yystack.valueAt(1-(1))));
@@ -4065,7 +4067,7 @@ function YYParser (yylexer)
 		    },
   '493': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3527 of "parse.y"  */
+/* Line 3529 of "parse.y"  */
     {
 			lex_state = EXPR_END;
 		    /*%%%*/
@@ -4076,7 +4078,7 @@ function YYParser (yylexer)
 		    },
   '498': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3544 of "parse.y"  */
+/* Line 3546 of "parse.y"  */
     {
 			lex_state = EXPR_END;
 		    /*%%%*/
@@ -4087,7 +4089,7 @@ function YYParser (yylexer)
 		    },
   '501': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3557 of "parse.y"  */
+/* Line 3559 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = negate_lit((yystack.valueAt(2-(2))));
@@ -4097,7 +4099,7 @@ function YYParser (yylexer)
 		    },
   '502': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3565 of "parse.y"  */
+/* Line 3567 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = negate_lit((yystack.valueAt(2-(2))));
@@ -4107,35 +4109,35 @@ function YYParser (yylexer)
 		    },
   '508': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3581 of "parse.y"  */
+/* Line 3583 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_nil);},
   '509': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3582 of "parse.y"  */
+/* Line 3584 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_self);},
   '510': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3583 of "parse.y"  */
+/* Line 3585 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_true);},
   '511': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3584 of "parse.y"  */
+/* Line 3586 of "parse.y"  */
     {ifndef_ripper(yyval = keyword_false);},
   '512': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3585 of "parse.y"  */
+/* Line 3587 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__FILE__);},
   '513': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3586 of "parse.y"  */
+/* Line 3588 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__LINE__);},
   '514': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3587 of "parse.y"  */
+/* Line 3589 of "parse.y"  */
     {ifndef_ripper(yyval = keyword__ENCODING__);},
   '515': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3591 of "parse.y"  */
+/* Line 3593 of "parse.y"  */
     {
 		    /*%%%*/
 			if (!(yyval = gettable((yystack.valueAt(1-(1)))))) yyval = NEW_BEGIN(0);
@@ -4150,7 +4152,7 @@ function YYParser (yylexer)
 		    },
   '516': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3604 of "parse.y"  */
+/* Line 3606 of "parse.y"  */
     {
 		    /*%%%*/
 			if (!(yyval = gettable((yystack.valueAt(1-(1)))))) yyval = NEW_BEGIN(0);
@@ -4160,7 +4162,7 @@ function YYParser (yylexer)
 		    },
   '517': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3614 of "parse.y"  */
+/* Line 3616 of "parse.y"  */
     {
 			yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
@@ -4170,7 +4172,7 @@ function YYParser (yylexer)
 		    },
   '518': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3622 of "parse.y"  */
+/* Line 3624 of "parse.y"  */
     {
 		        yyval = assignable((yystack.valueAt(1-(1))), 0);
 		    /*%%%*/
@@ -4180,7 +4182,7 @@ function YYParser (yylexer)
 		    },
   '521': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3636 of "parse.y"  */
+/* Line 3638 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -4190,20 +4192,20 @@ function YYParser (yylexer)
 		    },
   '522': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3644 of "parse.y"  */
+/* Line 3646 of "parse.y"  */
     {
 			lex_state = EXPR_BEG;
 			command_start = TRUE;
 		    },
   '523': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3649 of "parse.y"  */
+/* Line 3651 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(4-(3)));
 		    },
   '524': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3653 of "parse.y"  */
+/* Line 3655 of "parse.y"  */
     {
 		    /*%%%*/
 			yyerrok;
@@ -4215,7 +4217,7 @@ function YYParser (yylexer)
 		    },
   '525': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3665 of "parse.y"  */
+/* Line 3667 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(2)));
@@ -4227,7 +4229,7 @@ function YYParser (yylexer)
 		    },
   '526': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3675 of "parse.y"  */
+/* Line 3677 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(1)));
 			lex_state = EXPR_BEG;
@@ -4235,134 +4237,134 @@ function YYParser (yylexer)
 		    },
   '527': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3683 of "parse.y"  */
+/* Line 3685 of "parse.y"  */
     {
 			yyval = new_args_tail((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
   '528': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3687 of "parse.y"  */
+/* Line 3689 of "parse.y"  */
     {
 			yyval = new_args_tail((yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    },
   '529': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3691 of "parse.y"  */
+/* Line 3693 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, (yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
 		    },
   '530': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3695 of "parse.y"  */
+/* Line 3697 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    },
   '531': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3701 of "parse.y"  */
+/* Line 3703 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    },
   '532': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3705 of "parse.y"  */
+/* Line 3707 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
 		    },
   '533': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3711 of "parse.y"  */
+/* Line 3713 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), Qnone, (yystack.valueAt(6-(6))));
 		    },
   '534': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3715 of "parse.y"  */
+/* Line 3717 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(8-(1))), (yystack.valueAt(8-(3))), (yystack.valueAt(8-(5))), (yystack.valueAt(8-(7))), (yystack.valueAt(8-(8))));
 		    },
   '535': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3719 of "parse.y"  */
+/* Line 3721 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, Qnone, (yystack.valueAt(4-(4))));
 		    },
   '536': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3723 of "parse.y"  */
+/* Line 3725 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), Qnone, (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
   '537': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3727 of "parse.y"  */
+/* Line 3729 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    },
   '538': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3731 of "parse.y"  */
+/* Line 3733 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(6-(1))), Qnone, (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
   '539': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3735 of "parse.y"  */
+/* Line 3737 of "parse.y"  */
     {
 			yyval = new_args((yystack.valueAt(2-(1))), Qnone, Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    },
   '540': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3739 of "parse.y"  */
+/* Line 3741 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), Qnone, (yystack.valueAt(4-(4))));
 		    },
   '541': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3743 of "parse.y"  */
+/* Line 3745 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(6-(1))), (yystack.valueAt(6-(3))), (yystack.valueAt(6-(5))), (yystack.valueAt(6-(6))));
 		    },
   '542': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3747 of "parse.y"  */
+/* Line 3749 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(2-(1))), Qnone, Qnone, (yystack.valueAt(2-(2))));
 		    },
   '543': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3751 of "parse.y"  */
+/* Line 3753 of "parse.y"  */
     {
 			yyval = new_args(Qnone, (yystack.valueAt(4-(1))), Qnone, (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
   '544': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3755 of "parse.y"  */
+/* Line 3757 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, (yystack.valueAt(2-(1))), Qnone, (yystack.valueAt(2-(2))));
 		    },
   '545': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3759 of "parse.y"  */
+/* Line 3761 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, (yystack.valueAt(4-(1))), (yystack.valueAt(4-(3))), (yystack.valueAt(4-(4))));
 		    },
   '546': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3763 of "parse.y"  */
+/* Line 3765 of "parse.y"  */
     {
 			yyval = new_args(Qnone, Qnone, Qnone, Qnone, (yystack.valueAt(1-(1))));
 		    },
   '547': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3767 of "parse.y"  */
+/* Line 3769 of "parse.y"  */
     {
 			yyval = new_args_tail(Qnone, Qnone, Qnone);
 			yyval = new_args(Qnone, Qnone, Qnone, Qnone, yyval);
 		    },
   '548': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3774 of "parse.y"  */
+/* Line 3776 of "parse.y"  */
     {
 		    /*%%%*/
 			yyerror("formal argument cannot be a constant");
@@ -4373,7 +4375,7 @@ function YYParser (yylexer)
 		    },
   '549': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3783 of "parse.y"  */
+/* Line 3785 of "parse.y"  */
     {
 		    /*%%%*/
 			yyerror("formal argument cannot be an instance variable");
@@ -4384,7 +4386,7 @@ function YYParser (yylexer)
 		    },
   '550': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3792 of "parse.y"  */
+/* Line 3794 of "parse.y"  */
     {
 		    /*%%%*/
 			yyerror("formal argument cannot be a global variable");
@@ -4395,7 +4397,7 @@ function YYParser (yylexer)
 		    },
   '551': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3801 of "parse.y"  */
+/* Line 3803 of "parse.y"  */
     {
 		    /*%%%*/
 			yyerror("formal argument cannot be a class variable");
@@ -4406,14 +4408,14 @@ function YYParser (yylexer)
 		    },
   '553': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3813 of "parse.y"  */
+/* Line 3815 of "parse.y"  */
     {
 			formal_argument(get_id((yystack.valueAt(1-(1)))));
 			yyval = (yystack.valueAt(1-(1)));
 		    },
   '554': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3820 of "parse.y"  */
+/* Line 3822 of "parse.y"  */
     {
 			arg_var(get_id((yystack.valueAt(1-(1)))));
 		    /*%%%*/
@@ -4424,7 +4426,7 @@ function YYParser (yylexer)
 		    },
   '555': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3829 of "parse.y"  */
+/* Line 3831 of "parse.y"  */
     {
 			ID tid = internal_id();
 			arg_var(tid);
@@ -4443,7 +4445,7 @@ function YYParser (yylexer)
 		    },
   '557': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3855 of "parse.y"  */
+/* Line 3857 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(3-(1)));
@@ -4456,7 +4458,7 @@ function YYParser (yylexer)
 		    },
   '558': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3868 of "parse.y"  */
+/* Line 3870 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id((yystack.valueAt(2-(1))))));
 			yyval = assignable((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
@@ -4468,7 +4470,7 @@ function YYParser (yylexer)
 		    },
   '559': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3880 of "parse.y"  */
+/* Line 3882 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id((yystack.valueAt(2-(1))))));
 			yyval = assignable((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
@@ -4480,7 +4482,7 @@ function YYParser (yylexer)
 		    },
   '560': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3892 of "parse.y"  */
+/* Line 3894 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(1-(1)));
@@ -4490,7 +4492,7 @@ function YYParser (yylexer)
 		    },
   '561': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3900 of "parse.y"  */
+/* Line 3902 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *kws = (yystack.valueAt(3-(1)));
@@ -4506,7 +4508,7 @@ function YYParser (yylexer)
 		    },
   '562': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3917 of "parse.y"  */
+/* Line 3919 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(1-(1)));
@@ -4516,7 +4518,7 @@ function YYParser (yylexer)
 		    },
   '563': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3925 of "parse.y"  */
+/* Line 3927 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *kws = (yystack.valueAt(3-(1)));
@@ -4532,20 +4534,20 @@ function YYParser (yylexer)
 		    },
   '566': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3945 of "parse.y"  */
+/* Line 3947 of "parse.y"  */
     {
 			shadowing_lvar(get_id((yystack.valueAt(2-(2)))));
 			yyval = (yystack.valueAt(2-(2)));
 		    },
   '567': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3950 of "parse.y"  */
+/* Line 3952 of "parse.y"  */
     {
 			yyval = internal_id();
 		    },
   '568': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3956 of "parse.y"  */
+/* Line 3958 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id((yystack.valueAt(3-(1))))));
 			yyval = assignable((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -4557,7 +4559,7 @@ function YYParser (yylexer)
 		    },
   '569': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3968 of "parse.y"  */
+/* Line 3970 of "parse.y"  */
     {
 			arg_var(formal_argument(get_id((yystack.valueAt(3-(1))))));
 			yyval = assignable((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -4569,7 +4571,7 @@ function YYParser (yylexer)
 		    },
   '570': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3980 of "parse.y"  */
+/* Line 3982 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(1-(1)));
@@ -4579,7 +4581,7 @@ function YYParser (yylexer)
 		    },
   '571': function ()
     /* Line 211 of lalr1.js  */
-/* Line 3988 of "parse.y"  */
+/* Line 3990 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *opts = (yystack.valueAt(3-(1)));
@@ -4595,7 +4597,7 @@ function YYParser (yylexer)
 		    },
   '572': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4004 of "parse.y"  */
+/* Line 4006 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(1-(1)));
@@ -4605,7 +4607,7 @@ function YYParser (yylexer)
 		    },
   '573': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4012 of "parse.y"  */
+/* Line 4014 of "parse.y"  */
     {
 		    /*%%%*/
 			NODE *opts = (yystack.valueAt(3-(1)));
@@ -4621,7 +4623,7 @@ function YYParser (yylexer)
 		    },
   '576': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4032 of "parse.y"  */
+/* Line 4034 of "parse.y"  */
     {
 		    /*%%%*/
 			if (!is_local_id((yystack.valueAt(2-(2)))))
@@ -4636,7 +4638,7 @@ function YYParser (yylexer)
 		    },
   '577': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4045 of "parse.y"  */
+/* Line 4047 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = internal_id();
@@ -4647,7 +4649,7 @@ function YYParser (yylexer)
 		    },
   '580': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4060 of "parse.y"  */
+/* Line 4062 of "parse.y"  */
     {
 		    /*%%%*/
 			if (!is_local_id((yystack.valueAt(2-(2)))))
@@ -4664,13 +4666,13 @@ function YYParser (yylexer)
 		    },
   '581': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4077 of "parse.y"  */
+/* Line 4079 of "parse.y"  */
     {
 			yyval = (yystack.valueAt(2-(2)));
 		    },
   '582': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4081 of "parse.y"  */
+/* Line 4083 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -4680,7 +4682,7 @@ function YYParser (yylexer)
 		    },
   '583': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4091 of "parse.y"  */
+/* Line 4093 of "parse.y"  */
     {
 		    /*%%%*/
 			value_expr((yystack.valueAt(1-(1))));
@@ -4692,11 +4694,11 @@ function YYParser (yylexer)
 		    },
   '584': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4100 of "parse.y"  */
+/* Line 4102 of "parse.y"  */
     {lex_state = EXPR_BEG;},
   '585': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4101 of "parse.y"  */
+/* Line 4103 of "parse.y"  */
     {
 		    /*%%%*/
 			if ((yystack.valueAt(4-(3))) == 0) {
@@ -4725,7 +4727,7 @@ function YYParser (yylexer)
 		    },
   '587': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4131 of "parse.y"  */
+/* Line 4133 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = (yystack.valueAt(2-(1)));
@@ -4735,7 +4737,7 @@ function YYParser (yylexer)
 		    },
   '589': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4148 of "parse.y"  */
+/* Line 4150 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_concat((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
@@ -4745,7 +4747,7 @@ function YYParser (yylexer)
 		    },
   '590': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4158 of "parse.y"  */
+/* Line 4160 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_append(NEW_LIST((yystack.valueAt(3-(1)))), (yystack.valueAt(3-(3))));
@@ -4755,7 +4757,7 @@ function YYParser (yylexer)
 		    },
   '591': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4166 of "parse.y"  */
+/* Line 4168 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_append(NEW_LIST(NEW_LIT(ID2SYM((yystack.valueAt(2-(1)))))), (yystack.valueAt(2-(2))));
@@ -4765,7 +4767,7 @@ function YYParser (yylexer)
 		    },
   '592': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4174 of "parse.y"  */
+/* Line 4176 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = list_append(NEW_LIST(0), (yystack.valueAt(2-(2))));
@@ -4775,15 +4777,15 @@ function YYParser (yylexer)
 		    },
   '614': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4232 of "parse.y"  */
+/* Line 4234 of "parse.y"  */
     {yyerrok;},
   '617': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4237 of "parse.y"  */
+/* Line 4239 of "parse.y"  */
     {yyerrok;},
   '618': function ()
     /* Line 211 of lalr1.js  */
-/* Line 4241 of "parse.y"  */
+/* Line 4243 of "parse.y"  */
     {
 		    /*%%%*/
 			yyval = 0;
@@ -8486,68 +8488,68 @@ function YYParser (yylexer)
   var yyrline_ = this.yyrline_ =
   [
     //]
-         0,   111,   111,   111,   142,   153,   162,   170,   178,   184,
-     186,   185,   206,   239,   250,   259,   267,   275,   281,   286,
-     285,   306,   306,   314,   322,   333,   343,   351,   360,   369,
-     382,   395,   404,   416,   417,   427,   432,   453,   458,   463,
-     473,   478,   488,   497,   506,   515,   518,   527,   539,   540,
-     548,   556,   564,   572,   575,   587,   588,   591,   592,   604,
-     603,   625,   635,   644,   657,   666,   678,   687,   699,   708,
-     717,   725,   733,   743,   744,   754,   755,   765,   773,   781,
-     789,   798,   806,   815,   823,   832,   840,   851,   852,   862,
-     870,   880,   888,   898,   902,   906,   914,   922,   930,   938,
-     950,   960,   972,   981,   990,   998,  1006,  1014,  1022,  1035,
-    1048,  1059,  1067,  1070,  1078,  1086,  1096,  1097,  1098,  1099,
-    1104,  1115,  1116,  1119,  1127,  1130,  1138,  1138,  1148,  1149,
-    1150,  1151,  1152,  1153,  1154,  1155,  1156,  1157,  1158,  1159,
-    1160,  1161,  1162,  1163,  1164,  1165,  1166,  1167,  1168,  1169,
-    1170,  1171,  1172,  1173,  1174,  1175,  1176,  1177,  1180,  1180,
-    1180,  1181,  1181,  1182,  1182,  1182,  1183,  1183,  1183,  1183,
-    1184,  1184,  1184,  1184,  1185,  1185,  1185,  1186,  1186,  1186,
-    1186,  1187,  1187,  1187,  1187,  1188,  1188,  1188,  1188,  1189,
-    1189,  1189,  1189,  1190,  1190,  1190,  1190,  1191,  1191,  1194,
-    1203,  1213,  1218,  1228,  1254,  1259,  1264,  1269,  1279,  1289,
-    1300,  1314,  1328,  1336,  1344,  1352,  1360,  1368,  1376,  1385,
-    1394,  1402,  1410,  1418,  1426,  1434,  1442,  1450,  1458,  1466,
-    1474,  1482,  1490,  1498,  1509,  1517,  1525,  1533,  1541,  1549,
-    1557,  1565,  1565,  1575,  1585,  1591,  1603,  1604,  1608,  1616,
-    1626,  1636,  1637,  1640,  1641,  1642,  1646,  1654,  1664,  1673,
-    1681,  1691,  1700,  1709,  1709,  1721,  1731,  1735,  1741,  1749,
-    1757,  1771,  1787,  1801,  1816,  1826,  1827,  1828,  1829,  1830,
-    1831,  1832,  1833,  1834,  1835,  1836,  1845,  1844,  1872,  1872,
-    1880,  1880,  1888,  1896,  1904,  1912,  1925,  1933,  1941,  1949,
-    1957,  1965,  1965,  1975,  1983,  1991,  2001,  2002,  2012,  2016,
-    2028,  2040,  2040,  2040,  2051,  2051,  2051,  2062,  2073,  2082,
-    2084,  2081,  2148,  2147,  2169,  2174,  2168,  2193,  2192,  2214,
-    2213,  2236,  2237,  2236,  2257,  2265,  2273,  2281,  2291,  2303,
-    2309,  2315,  2321,  2327,  2333,  2339,  2345,  2351,  2357,  2367,
-    2373,  2378,  2379,  2386,  2391,  2394,  2395,  2408,  2409,  2419,
-    2420,  2423,  2431,  2441,  2449,  2459,  2467,  2476,  2485,  2493,
-    2501,  2510,  2522,  2530,  2541,  2545,  2549,  2553,  2559,  2564,
-    2569,  2573,  2577,  2581,  2585,  2589,  2597,  2601,  2605,  2609,
-    2613,  2617,  2621,  2625,  2629,  2635,  2636,  2642,  2651,  2660,
-    2671,  2675,  2685,  2692,  2701,  2709,  2715,  2718,  2715,  2735,
-    2743,  2753,  2757,  2764,  2763,  2784,  2800,  2809,  2821,  2835,
-    2845,  2844,  2861,  2860,  2876,  2885,  2884,  2902,  2901,  2918,
-    2926,  2934,  2949,  2948,  2968,  2967,  2988,  3000,  3001,  3004,
-    3023,  3026,  3034,  3042,  3045,  3049,  3052,  3060,  3063,  3064,
-    3072,  3075,  3092,  3093,  3094,  3104,  3114,  3141,  3206,  3215,
-    3226,  3233,  3243,  3251,  3261,  3270,  3281,  3288,  3300,  3309,
-    3319,  3328,  3339,  3346,  3357,  3364,  3379,  3386,  3397,  3404,
-    3415,  3422,  3451,  3453,  3452,  3469,  3475,  3480,  3468,  3499,
-    3507,  3515,  3523,  3526,  3537,  3538,  3539,  3540,  3543,  3554,
-    3555,  3556,  3564,  3574,  3575,  3576,  3577,  3578,  3581,  3582,
-    3583,  3584,  3585,  3586,  3587,  3590,  3603,  3613,  3621,  3631,
-    3632,  3635,  3644,  3643,  3652,  3664,  3674,  3682,  3686,  3690,
-    3694,  3700,  3705,  3710,  3714,  3718,  3722,  3726,  3730,  3734,
-    3738,  3742,  3746,  3750,  3754,  3758,  3762,  3767,  3773,  3782,
-    3791,  3800,  3811,  3812,  3819,  3828,  3847,  3854,  3867,  3879,
-    3891,  3899,  3916,  3924,  3940,  3941,  3944,  3949,  3955,  3967,
-    3979,  3987,  4003,  4011,  4027,  4028,  4031,  4044,  4055,  4056,
-    4059,  4076,  4080,  4090,  4100,  4100,  4129,  4130,  4140,  4147,
-    4157,  4165,  4173,  4185,  4186,  4187,  4190,  4191,  4192,  4193,
-    4196,  4197,  4198,  4201,  4206,  4213,  4214,  4217,  4218,  4221,
-    4224,  4227,  4228,  4229,  4232,  4233,  4236,  4237,  4241
+         0,   113,   113,   113,   144,   155,   164,   172,   180,   186,
+     188,   187,   208,   241,   252,   261,   269,   277,   283,   288,
+     287,   308,   308,   316,   324,   335,   345,   353,   362,   371,
+     384,   397,   406,   418,   419,   429,   434,   455,   460,   465,
+     475,   480,   490,   499,   508,   517,   520,   529,   541,   542,
+     550,   558,   566,   574,   577,   589,   590,   593,   594,   606,
+     605,   627,   637,   646,   659,   668,   680,   689,   701,   710,
+     719,   727,   735,   745,   746,   756,   757,   767,   775,   783,
+     791,   800,   808,   817,   825,   834,   842,   853,   854,   864,
+     872,   882,   890,   900,   904,   908,   916,   924,   932,   940,
+     952,   962,   974,   983,   992,  1000,  1008,  1016,  1024,  1037,
+    1050,  1061,  1069,  1072,  1080,  1088,  1098,  1099,  1100,  1101,
+    1106,  1117,  1118,  1121,  1129,  1132,  1140,  1140,  1150,  1151,
+    1152,  1153,  1154,  1155,  1156,  1157,  1158,  1159,  1160,  1161,
+    1162,  1163,  1164,  1165,  1166,  1167,  1168,  1169,  1170,  1171,
+    1172,  1173,  1174,  1175,  1176,  1177,  1178,  1179,  1182,  1182,
+    1182,  1183,  1183,  1184,  1184,  1184,  1185,  1185,  1185,  1185,
+    1186,  1186,  1186,  1186,  1187,  1187,  1187,  1188,  1188,  1188,
+    1188,  1189,  1189,  1189,  1189,  1190,  1190,  1190,  1190,  1191,
+    1191,  1191,  1191,  1192,  1192,  1192,  1192,  1193,  1193,  1196,
+    1205,  1215,  1220,  1230,  1256,  1261,  1266,  1271,  1281,  1291,
+    1302,  1316,  1330,  1338,  1346,  1354,  1362,  1370,  1378,  1387,
+    1396,  1404,  1412,  1420,  1428,  1436,  1444,  1452,  1460,  1468,
+    1476,  1484,  1492,  1500,  1511,  1519,  1527,  1535,  1543,  1551,
+    1559,  1567,  1567,  1577,  1587,  1593,  1605,  1606,  1610,  1618,
+    1628,  1638,  1639,  1642,  1643,  1644,  1648,  1656,  1666,  1675,
+    1683,  1693,  1702,  1711,  1711,  1723,  1733,  1737,  1743,  1751,
+    1759,  1773,  1789,  1803,  1818,  1828,  1829,  1830,  1831,  1832,
+    1833,  1834,  1835,  1836,  1837,  1838,  1847,  1846,  1874,  1874,
+    1882,  1882,  1890,  1898,  1906,  1914,  1927,  1935,  1943,  1951,
+    1959,  1967,  1967,  1977,  1985,  1993,  2003,  2004,  2014,  2018,
+    2030,  2042,  2042,  2042,  2053,  2053,  2053,  2064,  2075,  2084,
+    2086,  2083,  2150,  2149,  2171,  2176,  2170,  2195,  2194,  2216,
+    2215,  2238,  2239,  2238,  2259,  2267,  2275,  2283,  2293,  2305,
+    2311,  2317,  2323,  2329,  2335,  2341,  2347,  2353,  2359,  2369,
+    2375,  2380,  2381,  2388,  2393,  2396,  2397,  2410,  2411,  2421,
+    2422,  2425,  2433,  2443,  2451,  2461,  2469,  2478,  2487,  2495,
+    2503,  2512,  2524,  2532,  2543,  2547,  2551,  2555,  2561,  2566,
+    2571,  2575,  2579,  2583,  2587,  2591,  2599,  2603,  2607,  2611,
+    2615,  2619,  2623,  2627,  2631,  2637,  2638,  2644,  2653,  2662,
+    2673,  2677,  2687,  2694,  2703,  2711,  2717,  2720,  2717,  2737,
+    2745,  2755,  2759,  2766,  2765,  2786,  2802,  2811,  2823,  2837,
+    2847,  2846,  2863,  2862,  2878,  2887,  2886,  2904,  2903,  2920,
+    2928,  2936,  2951,  2950,  2970,  2969,  2990,  3002,  3003,  3006,
+    3025,  3028,  3036,  3044,  3047,  3051,  3054,  3062,  3065,  3066,
+    3074,  3077,  3094,  3095,  3096,  3106,  3116,  3143,  3208,  3217,
+    3228,  3235,  3245,  3253,  3263,  3272,  3283,  3290,  3302,  3311,
+    3321,  3330,  3341,  3348,  3359,  3366,  3381,  3388,  3399,  3406,
+    3417,  3424,  3453,  3455,  3454,  3471,  3477,  3482,  3470,  3501,
+    3509,  3517,  3525,  3528,  3539,  3540,  3541,  3542,  3545,  3556,
+    3557,  3558,  3566,  3576,  3577,  3578,  3579,  3580,  3583,  3584,
+    3585,  3586,  3587,  3588,  3589,  3592,  3605,  3615,  3623,  3633,
+    3634,  3637,  3646,  3645,  3654,  3666,  3676,  3684,  3688,  3692,
+    3696,  3702,  3707,  3712,  3716,  3720,  3724,  3728,  3732,  3736,
+    3740,  3744,  3748,  3752,  3756,  3760,  3764,  3769,  3775,  3784,
+    3793,  3802,  3813,  3814,  3821,  3830,  3849,  3856,  3869,  3881,
+    3893,  3901,  3918,  3926,  3942,  3943,  3946,  3951,  3957,  3969,
+    3981,  3989,  4005,  4013,  4029,  4030,  4033,  4046,  4057,  4058,
+    4061,  4078,  4082,  4092,  4102,  4102,  4131,  4132,  4142,  4149,
+    4159,  4167,  4175,  4187,  4188,  4189,  4192,  4193,  4194,  4195,
+    4198,  4199,  4200,  4203,  4208,  4215,  4216,  4219,  4220,  4223,
+    4226,  4229,  4230,  4231,  4234,  4235,  4238,  4239,  4243
     //[
   ];
 
@@ -8940,10 +8942,17 @@ var
   tLAST_TOKEN = 386;
 
 /* Line 912 of lalr1.js  */
-/* Line 4250 of "parse.y"  */
+/* Line 4252 of "parse.y"  */
 
 
-load('lexer.js')
+var YYLexer = load('lexer.js');
+
+var lexer = new YYLexer(read('ruby.rb'));
+
+var parser = new YYParser(lexer)
+parser.enableDebug()
+
+print(parser.parse())
 
 
 })(); // end of epilogue namespace
