@@ -1636,291 +1636,81 @@ function YYParser (yylexer)
     {},
   '554': function ()
     
-    {
-			arg_var(get_id((yystack.valueAt(1-(1)))));
-		    /*%%%*/
-			yyval = NEW_ARGS_AUX((yystack.valueAt(1-(1))), 1);
-		    /*%
-			$$ = get_value($1);
-		    %*/
-		    },
+    {},
   '555': function ()
     
-    {
-			ID tid = internal_id();
-			arg_var(tid);
-		    /*%%%*/
-			if (dyna_in_block()) {
-			    (yystack.valueAt(3-(2)))->nd_value = NEW_DVAR(tid);
-			}
-			else {
-			    (yystack.valueAt(3-(2)))->nd_value = NEW_LVAR(tid);
-			}
-			yyval = NEW_ARGS_AUX(tid, 1);
-			yyval->nd_next = (yystack.valueAt(3-(2)));
-		    /*%
-			$$ = dispatch1(mlhs_paren, $2);
-		    %*/
-		    },
+    {},
   '557': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(3-(1)));
-			yyval->nd_plen++;
-			yyval->nd_next = block_append(yyval->nd_next, (yystack.valueAt(3-(3)))->nd_next);
-			rb_gc_force_recycle((VALUE)(yystack.valueAt(3-(3))));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
   '558': function ()
     
-    {
-			arg_var(formal_argument(get_id((yystack.valueAt(2-(1))))));
-			yyval = assignable((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
-		    /*%%%*/
-			yyval = NEW_KW_ARG(0, yyval);
-		    /*%
-			$$ = rb_assoc_new($$, $2);
-		    %*/
-		    },
+    {},
   '559': function ()
     
-    {
-			arg_var(formal_argument(get_id((yystack.valueAt(2-(1))))));
-			yyval = assignable((yystack.valueAt(2-(1))), (yystack.valueAt(2-(2))));
-		    /*%%%*/
-			yyval = NEW_KW_ARG(0, yyval);
-		    /*%
-			$$ = rb_assoc_new($$, $2);
-		    %*/
-		    },
+    {},
   '560': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(1-(1)));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
   '561': function ()
     
-    {
-		    /*%%%*/
-			NODE *kws = (yystack.valueAt(3-(1)));
-
-			while (kws->nd_next) {
-			    kws = kws->nd_next;
-			}
-			kws->nd_next = (yystack.valueAt(3-(3)));
-			yyval = (yystack.valueAt(3-(1)));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
   '562': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(1-(1)));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
   '563': function ()
     
-    {
-		    /*%%%*/
-			NODE *kws = (yystack.valueAt(3-(1)));
-
-			while (kws->nd_next) {
-			    kws = kws->nd_next;
-			}
-			kws->nd_next = (yystack.valueAt(3-(3)));
-			yyval = (yystack.valueAt(3-(1)));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
   '566': function ()
     
-    {
-			shadowing_lvar(get_id((yystack.valueAt(2-(2)))));
-			yyval = (yystack.valueAt(2-(2)));
-		    },
+    {},
   '567': function ()
     
-    {
-			yyval = internal_id();
-		    },
+    {},
   '568': function ()
     
-    {
-			arg_var(formal_argument(get_id((yystack.valueAt(3-(1))))));
-			yyval = assignable((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
-		    /*%%%*/
-			yyval = NEW_OPT_ARG(0, yyval);
-		    /*%
-			$$ = rb_assoc_new($$, $3);
-		    %*/
-		    },
+    {},
   '569': function ()
     
-    {
-			arg_var(formal_argument(get_id((yystack.valueAt(3-(1))))));
-			yyval = assignable((yystack.valueAt(3-(1))), (yystack.valueAt(3-(3))));
-		    /*%%%*/
-			yyval = NEW_OPT_ARG(0, yyval);
-		    /*%
-			$$ = rb_assoc_new($$, $3);
-		    %*/
-		    },
+    {},
   '570': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(1-(1)));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
   '571': function ()
     
-    {
-		    /*%%%*/
-			NODE *opts = (yystack.valueAt(3-(1)));
-
-			while (opts->nd_next) {
-			    opts = opts->nd_next;
-			}
-			opts->nd_next = (yystack.valueAt(3-(3)));
-			yyval = (yystack.valueAt(3-(1)));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
   '572': function ()
     
-    {
-		    /*%%%*/
-			yyval = (yystack.valueAt(1-(1)));
-		    /*%
-			$$ = rb_ary_new3(1, $1);
-		    %*/
-		    },
+    {},
   '573': function ()
     
-    {
-		    /*%%%*/
-			NODE *opts = (yystack.valueAt(3-(1)));
-
-			while (opts->nd_next) {
-			    opts = opts->nd_next;
-			}
-			opts->nd_next = (yystack.valueAt(3-(3)));
-			yyval = (yystack.valueAt(3-(1)));
-		    /*%
-			$$ = rb_ary_push($1, $3);
-		    %*/
-		    },
+    {},
   '576': function ()
     
-    {
-		    /*%%%*/
-			if (!is_local_id((yystack.valueAt(2-(2)))))
-			    yyerror("rest argument must be local variable");
-		    /*% %*/
-			arg_var(shadowing_lvar(get_id((yystack.valueAt(2-(2))))));
-		    /*%%%*/
-			yyval = (yystack.valueAt(2-(2)));
-		    /*%
-			$$ = dispatch1(rest_param, $2);
-		    %*/
-		    },
+    {},
   '577': function ()
     
-    {
-		    /*%%%*/
-			yyval = internal_id();
-			arg_var(yyval);
-		    /*%
-			$$ = dispatch1(rest_param, Qnil);
-		    %*/
-		    },
+    {},
   '580': function ()
     
-    {
-		    /*%%%*/
-			if (!is_local_id((yystack.valueAt(2-(2)))))
-			    yyerror("block argument must be local variable");
-			else if (!dyna_in_block() && local_id((yystack.valueAt(2-(2)))))
-			    yyerror("duplicated block argument name");
-		    /*% %*/
-			arg_var(shadowing_lvar(get_id((yystack.valueAt(2-(2))))));
-		    /*%%%*/
-			yyval = (yystack.valueAt(2-(2)));
-		    /*%
-			$$ = dispatch1(blockarg, $2);
-		    %*/
-		    },
+    {},
   '581': function ()
     
-    {
-			yyval = (yystack.valueAt(2-(2)));
-		    },
+    {},
   '582': function ()
     
-    {
-		    /*%%%*/
-			yyval = 0;
-		    /*%
-			$$ = Qundef;
-		    %*/
-		    },
+    {},
   '583': function ()
     
-    {
-		    /*%%%*/
-			value_expr((yystack.valueAt(1-(1))));
-			yyval = (yystack.valueAt(1-(1)));
-		        if (!yyval) yyval = NEW_NIL();
-		    /*%
-			$$ = $1;
-		    %*/
-		    },
+    {},
   '584': function ()
     
-    {yylexer.state = EXPR_BEG;},
+    {
+		  yylexer.state = EXPR_BEG;
+		},
   '585': function ()
     
-    {
-		    /*%%%*/
-			if ((yystack.valueAt(4-(3))) == 0) {
-			    yyerror("can't define singleton method for ().");
-			}
-			else {
-			    switch (nd_type((yystack.valueAt(4-(3))))) {
-			      case NODE_STR:
-			      case NODE_DSTR:
-			      case NODE_XSTR:
-			      case NODE_DXSTR:
-			      case NODE_DREGX:
-			      case NODE_LIT:
-			      case NODE_ARRAY:
-			      case NODE_ZARRAY:
-				yyerror("can't define singleton method for literals");
-			      default:
-				value_expr((yystack.valueAt(4-(3))));
-				break;
-			    }
-			}
-			yyval = (yystack.valueAt(4-(3)));
-		    /*%
-			$$ = dispatch1(paren, $3);
-		    %*/
-		    },
+    {},
   '587': function ()
     
     {
@@ -5731,13 +5521,13 @@ function YYParser (yylexer)
     1569,  1572,  1575,  1574,  1581,  1585,  1590,  1597,  1599,  1601,
     1603,  1607,  1610,  1613,  1615,  1617,  1619,  1621,  1623,  1625,
     1627,  1629,  1631,  1633,  1635,  1637,  1639,  1642,  1645,  1647,
-    1649,  1651,  1655,  1656,  1660,  1669,  1688,  1695,  1708,  1720,
-    1732,  1740,  1757,  1765,  1781,  1782,  1785,  1790,  1796,  1808,
-    1820,  1828,  1844,  1852,  1868,  1869,  1872,  1885,  1896,  1897,
-    1900,  1917,  1921,  1931,  1941,  1941,  1970,  1971,  1981,  1988,
-    1998,  2006,  2014,  2026,  2027,  2028,  2031,  2032,  2033,  2034,
-    2037,  2038,  2039,  2042,  2047,  2054,  2055,  2058,  2059,  2062,
-    2065,  2068,  2069,  2070,  2073,  2074,  2077,  2078,  2082
+    1649,  1651,  1655,  1656,  1660,  1662,  1666,  1667,  1671,  1675,
+    1679,  1681,  1686,  1688,  1692,  1693,  1696,  1698,  1702,  1706,
+    1710,  1712,  1716,  1718,  1722,  1723,  1726,  1728,  1732,  1733,
+    1736,  1740,  1742,  1746,  1749,  1748,  1756,  1757,  1767,  1774,
+    1784,  1792,  1800,  1812,  1813,  1814,  1817,  1818,  1819,  1820,
+    1823,  1824,  1825,  1828,  1833,  1840,  1841,  1844,  1845,  1848,
+    1851,  1854,  1855,  1856,  1859,  1860,  1863,  1864,  1868
     //[
   ];
 
