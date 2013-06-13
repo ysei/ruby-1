@@ -209,7 +209,7 @@ function YYParser (yylexer)
       '2': function ()
     
     {
-      yylexer.state = EXPR_BEG;
+      yylexer.lex_state = EXPR_BEG;
     },
   '3': function ()
     
@@ -267,7 +267,7 @@ function YYParser (yylexer)
   '21': function ()
     
     {
-      yylexer.state = EXPR_FNAME;
+      yylexer.lex_state = EXPR_FNAME;
     },
   '22': function ()
     
@@ -526,12 +526,12 @@ function YYParser (yylexer)
   '119': function ()
     
     {
-      yylexer.state = EXPR_ENDFN;
+      yylexer.lex_state = EXPR_ENDFN;
     },
   '120': function ()
     
     {
-      yylexer.state = EXPR_ENDFN;
+      yylexer.lex_state = EXPR_ENDFN;
     },
   '123': function ()
     
@@ -542,7 +542,7 @@ function YYParser (yylexer)
   '126': function ()
     
     {
-      yylexer.state = EXPR_FNAME;
+      yylexer.lex_state = EXPR_FNAME;
     },
   '127': function ()
     
@@ -872,7 +872,7 @@ function YYParser (yylexer)
   '288': function ()
     
     {
-		  yylexer.state = EXPR_ENDARG;
+		  yylexer.lex_state = EXPR_ENDARG;
 		},
   '289': function ()
     
@@ -880,7 +880,7 @@ function YYParser (yylexer)
   '290': function ()
     
     {
-		  yylexer.state = EXPR_ENDARG;
+		  yylexer.lex_state = EXPR_ENDARG;
 		},
   '291': function ()
     
@@ -1028,12 +1028,12 @@ function YYParser (yylexer)
   '331': function ()
     
     {
-      yylexer.state = EXPR_FNAME;
+      yylexer.lex_state = EXPR_FNAME;
     },
   '332': function ()
     
     {
-      yylexer.state = EXPR_ENDFN; /* force for args */
+      yylexer.lex_state = EXPR_ENDFN; /* force for args */
     },
   '333': function ()
     
@@ -1449,7 +1449,7 @@ function YYParser (yylexer)
     {
 			yyval = yylexer.strterm;
 			yylexer.strterm = 0;
-			yylexer.state = EXPR_BEG;
+			yylexer.lex_state = EXPR_BEG;
 		    },
   '484': function ()
     
@@ -1470,7 +1470,7 @@ function YYParser (yylexer)
     {
 			yyval = yylexer.strterm;
 			yylexer.strterm = null;
-			yylexer.state = EXPR_BEG;
+			yylexer.lex_state = EXPR_BEG;
 		    },
   '487': function ()
     
@@ -1498,12 +1498,12 @@ function YYParser (yylexer)
   '493': function ()
     
     {
-			yylexer.state = EXPR_END;
+			yylexer.lex_state = EXPR_END;
 		    },
   '498': function ()
     
     {
-			yylexer.state = EXPR_END;
+			yylexer.lex_state = EXPR_END;
 		    },
   '501': function ()
     
@@ -1553,7 +1553,7 @@ function YYParser (yylexer)
   '522': function ()
     
     {
-			yylexer.state = EXPR_BEG;
+			yylexer.lex_state = EXPR_BEG;
 			yylexer.command_start = TRUE;
 		    },
   '523': function ()
@@ -1565,13 +1565,13 @@ function YYParser (yylexer)
   '525': function ()
     
     {
-			yylexer.state = EXPR_BEG;
+			yylexer.lex_state = EXPR_BEG;
 			yylexer.command_start = TRUE;
 		    },
   '526': function ()
     
     {
-			yylexer.state = EXPR_BEG;
+			yylexer.lex_state = EXPR_BEG;
 			yylexer.command_start = TRUE;
 		    },
   '527': function ()
@@ -1724,7 +1724,7 @@ function YYParser (yylexer)
   '584': function ()
     
     {
-		  yylexer.state = EXPR_BEG;
+		  yylexer.lex_state = EXPR_BEG;
 		},
   '585': function ()
     
@@ -5918,7 +5918,7 @@ lexer.eofp = false;
 // the string to be parsed in the nex lex() call
 lexer.strterm = null;
 // the main point of interaction with the parser out there
-lexer.state = 0;
+lexer.lex_state = 0;
 // to store the main state
 lexer.last_state = 0;
 // have the lexer seen a space somewhere before the current char
@@ -5941,10 +5941,10 @@ lexer.cmdarg_stack = 0;
 
 // all lexer states codes had been moved to parse.y prologue
 
-// the shortcut for checking `lexer.state` over and over again
+// the shortcut for checking `lexer.lex_state` over and over again
 function IS_lex_state (ls)
 {
-  return lexer.state & ls;
+  return lexer.lex_state & ls;
 }
 function IS_lex_state_for (state, ls)
 {
@@ -6009,9 +6009,9 @@ lexer.CMDARG_P = function ()
 
 
 // few more shortcuts
-function IS_ARG () { return lexer.state & EXPR_ARG_ANY }
-function IS_END () { return lexer.state & EXPR_END_ANY }
-function IS_BEG () { return lexer.state & EXPR_BEG_ANY }
+function IS_ARG () { return lexer.lex_state & EXPR_ARG_ANY }
+function IS_END () { return lexer.lex_state & EXPR_END_ANY }
+function IS_BEG () { return lexer.lex_state & EXPR_BEG_ANY }
 
 function ISSPACE (c)
 {
@@ -6296,7 +6296,7 @@ this.yylex = function yylex ()
       if (token == tSTRING_END)
       {
         lexer.strterm = null;
-        lexer.state = EXPR_END;
+        lexer.lex_state = EXPR_END;
       }
     }
     else
@@ -6316,7 +6316,7 @@ this.yylex = function yylex ()
   
   retry: for (;;)
   {
-  lexer.last_state = lexer.state;
+  lexer.last_state = lexer.lex_state;
   the_giant_switch:
   switch (c = nextc())
   {
@@ -6384,7 +6384,7 @@ this.yylex = function yylex ()
       }
       // lands: break after_backslash_n;
       lexer.command_start = true;
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       return '\n';
     }
   
@@ -6396,7 +6396,7 @@ this.yylex = function yylex ()
         if ((c = nextc()) == '=')
         {
           // set_yylval_id(tPOW); TODO
-          lexer.state = EXPR_BEG;
+          lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
         pushback(c);
@@ -6420,7 +6420,7 @@ this.yylex = function yylex ()
         if (c == '=')
         {
           // set_yylval_id('*'); TODO
-          lexer.state = EXPR_BEG;
+          lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
         pushback(c);
@@ -6439,7 +6439,7 @@ this.yylex = function yylex ()
           token = $('*');
         }
       }
-      lexer.state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       return token;
     }
     
@@ -6448,7 +6448,7 @@ this.yylex = function yylex ()
       c = nextc();
       if (IS_AFTER_OPERATOR())
       {
-        lexer.state = EXPR_ARG;
+        lexer.lex_state = EXPR_ARG;
         if (c == '@')
         {
           return $('!');
@@ -6456,7 +6456,7 @@ this.yylex = function yylex ()
       }
       else
       {
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
       }
       if (c == '=')
       {
@@ -6474,7 +6474,7 @@ this.yylex = function yylex ()
     {
       // TODO: skip embedded rd document */
 
-      lexer.state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       if ((c = nextc()) == '=')
       {
         if ((c = nextc()) == '=')
@@ -6498,7 +6498,7 @@ this.yylex = function yylex ()
     
     case '<':
     {
-      lexer.last_state = lexer.state;
+      lexer.last_state = lexer.lex_state;
       c = nextc();
       if (c == '<' &&
           !IS_lex_state(EXPR_DOT | EXPR_CLASS) &&
@@ -6510,13 +6510,13 @@ this.yylex = function yylex ()
       }
       if (IS_AFTER_OPERATOR())
       {
-        lexer.state = EXPR_ARG;
+        lexer.lex_state = EXPR_ARG;
       }
       else
       {
         if (IS_lex_state(EXPR_CLASS))
           lexer.command_start = true;
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
       }
       if (c == '=')
       {
@@ -6532,7 +6532,7 @@ this.yylex = function yylex ()
         if ((c = nextc()) == '=')
         {
           // set_yylval_id(tLSHFT); TODO
-          lexer.state = EXPR_BEG;
+          lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
         pushback(c);
@@ -6545,7 +6545,7 @@ this.yylex = function yylex ()
     
     case '>':
     {
-      lexer.state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       if ((c = nextc()) == '=')
       {
         return tGEQ;
@@ -6555,7 +6555,7 @@ this.yylex = function yylex ()
         if ((c = nextc()) == '=')
         {
           // set_yylval_id(tRSHFT); TODO
-          lexer.state = EXPR_BEG;
+          lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
         pushback(c);
@@ -6575,15 +6575,15 @@ this.yylex = function yylex ()
     {
       if (IS_lex_state(EXPR_FNAME))
       {
-        lexer.state = EXPR_ENDFN;
+        lexer.lex_state = EXPR_ENDFN;
         return c;
       }
       if (IS_lex_state(EXPR_DOT))
       {
         if (cmd_state)
-          lexer.state = EXPR_CMDARG;
+          lexer.lex_state = EXPR_CMDARG;
         else
-          lexer.state = EXPR_ARG;
+          lexer.lex_state = EXPR_ARG;
         return c;
       }
       lexer.strterm = NEW_STRTERM(str_xquote, '`', '');
@@ -6601,7 +6601,7 @@ this.yylex = function yylex ()
       // trying to catch ternary operator
       if (IS_END())
       {
-        lexer.state = EXPR_VALUE;
+        lexer.lex_state = EXPR_VALUE;
         return $('?');
       }
       c = nextc();
@@ -6642,7 +6642,7 @@ this.yylex = function yylex ()
           }
         }
         pushback(c);
-        lexer.state = EXPR_VALUE;
+        lexer.lex_state = EXPR_VALUE;
         return $('?');
       }
       
@@ -6684,7 +6684,7 @@ this.yylex = function yylex ()
       }
       tokfix();
       // set_yylval_str(STR_NEW3(tok(), toklen(), enc, 0)); TODO
-      lexer.state = EXPR_END;
+      lexer.lex_state = EXPR_END;
       return tCHAR;
     }
     
@@ -6692,11 +6692,11 @@ this.yylex = function yylex ()
     {
       if ((c = nextc()) == '&')
       {
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         if ((c = nextc()) == '=')
         {
           // set_yylval_id(tANDOP); TODO
-          lexer.state = EXPR_BEG;
+          lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
         pushback(c);
@@ -6705,7 +6705,7 @@ this.yylex = function yylex ()
       else if (c == '=')
       {
         // set_yylval_id('&'); TODO
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
       pushback(c);
@@ -6723,7 +6723,7 @@ this.yylex = function yylex ()
         warn_balanced("&", "argument prefix", c);
         c = '&';
       }
-      lexer.state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       return c;
     }
     
@@ -6731,11 +6731,11 @@ this.yylex = function yylex ()
     {
       if ((c = nextc()) == '|')
       {
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         if ((c = nextc()) == '=')
         {
           // set_yylval_id(tOROP); TODO
-          lexer.state = EXPR_BEG;
+          lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
         pushback(c);
@@ -6744,10 +6744,10 @@ this.yylex = function yylex ()
       if (c == '=')
       {
         // set_yylval_id('|'); TODO
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
-      lexer.state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       pushback(c);
       return $('|');
     }
@@ -6757,7 +6757,7 @@ this.yylex = function yylex ()
       c = nextc();
       if (IS_AFTER_OPERATOR())
       {
-        lexer.state = EXPR_ARG;
+        lexer.lex_state = EXPR_ARG;
         if (c == '@')
         {
           return tUPLUS;
@@ -6768,12 +6768,12 @@ this.yylex = function yylex ()
       if (c == '=')
       {
         // set_yylval_id('+'); TODO
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
       if (IS_BEG() || (IS_SPCARG(c) && arg_ambiguous()))
       {
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         pushback(c);
         if (c != '' && ISDIGIT(c))
         {
@@ -6782,7 +6782,7 @@ this.yylex = function yylex ()
         }
         return tUPLUS;
       }
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       pushback(c);
       warn_balanced("+", "unary operator", c);
       return $('+');
@@ -6793,7 +6793,7 @@ this.yylex = function yylex ()
       c = nextc();
       if (IS_AFTER_OPERATOR())
       {
-        lexer.state = EXPR_ARG;
+        lexer.lex_state = EXPR_ARG;
         if (c == '@')
         {
           return tUMINUS;
@@ -6804,17 +6804,17 @@ this.yylex = function yylex ()
       if (c == '=')
       {
         // set_yylval_id('-'); TODO
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
       if (c == '>')
       {
-        lexer.state = EXPR_ENDFN;
+        lexer.lex_state = EXPR_ENDFN;
         return tLAMBDA;
       }
       if (IS_BEG() || (IS_SPCARG(c) && arg_ambiguous()))
       {
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         pushback(c);
         if (c != '' && ISDIGIT(c))
         {
@@ -6822,7 +6822,7 @@ this.yylex = function yylex ()
         }
         return tUMINUS;
       }
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       pushback(c);
       warn_balanced("-", "unary operator", c);
       return '-';
@@ -6830,7 +6830,7 @@ this.yylex = function yylex ()
     
     case '.':
     {
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       if ((c = nextc()) == '.')
       {
         if ((c = nextc()) == '.')
@@ -6845,7 +6845,7 @@ this.yylex = function yylex ()
       {
         yyerror("no .<digit> floating literal anymore; put 0 before dot");
       }
-      lexer.state = EXPR_DOT;
+      lexer.lex_state = EXPR_DOT;
       return '.';
     }
     
@@ -6871,9 +6871,9 @@ this.yylex = function yylex ()
       lexer.COND_LEXPOP();
       lexer.CMDARG_LEXPOP();
       if (c == ')')
-        lexer.state = EXPR_ENDFN;
+        lexer.lex_state = EXPR_ENDFN;
       else
-        lexer.state = EXPR_ENDARG;
+        lexer.lex_state = EXPR_ENDARG;
       if (c == '}')
       {
         if (!lexer.brace_nest--)
@@ -6889,17 +6889,17 @@ this.yylex = function yylex ()
       {
         if (IS_BEG() || IS_lex_state(EXPR_CLASS) || IS_SPCARG(''))
         {
-          lexer.state = EXPR_BEG;
+          lexer.lex_state = EXPR_BEG;
           return tCOLON3;
         }
-        lexer.state = EXPR_DOT;
+        lexer.lex_state = EXPR_DOT;
         return tCOLON2;
       }
       if (IS_END() || ISSPACE(c))
       {
         pushback(c);
         warn_balanced(":", "symbol literal", c);
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         return $(':');
       }
       switch (c)
@@ -6914,7 +6914,7 @@ this.yylex = function yylex ()
           pushback(c);
           break;
       }
-      lexer.state = EXPR_FNAME;
+      lexer.lex_state = EXPR_FNAME;
       return tSYMBEG;
     }
     
@@ -6928,7 +6928,7 @@ this.yylex = function yylex ()
       if ((c = nextc()) == '=')
       {
         // set_yylval_id('/'); TODO
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
       pushback(c);
@@ -6938,7 +6938,7 @@ this.yylex = function yylex ()
         lexer.strterm = NEW_STRTERM(str_regexp, '/', '');
         return tREGEXP_BEG;
       }
-      lexer.state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       warn_balanced("/", "regexp literal", c);
       return $('/');
     }
@@ -6948,24 +6948,24 @@ this.yylex = function yylex ()
       if ((c = nextc()) == '=')
       {
         // set_yylval_id('^'); TODO
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
-      lexer.state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       pushback(c);
       return $('^');
     }
     
     case ';':
     {
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       lexer.command_start = true;
       return $(';');
     }
     
     case ',':
     {
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       return $(',');
     }
     
@@ -6977,11 +6977,11 @@ this.yylex = function yylex ()
         {
           pushback(c);
         }
-        lexer.state = EXPR_ARG;
+        lexer.lex_state = EXPR_ARG;
       }
       else
       {
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
       }
       return $('~');
     }
@@ -7000,7 +7000,7 @@ this.yylex = function yylex ()
       lexer.paren_nest++;
       lexer.COND_PUSH(0);
       lexer.CMDARG_PUSH(0);
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       return t;
     }
     
@@ -7010,7 +7010,7 @@ this.yylex = function yylex ()
       lexer.paren_nest++;
       if (IS_AFTER_OPERATOR())
       {
-        lexer.state = EXPR_ARG;
+        lexer.lex_state = EXPR_ARG;
         if ((c = nextc()) == ']')
         {
           if ((c = nextc()) == '=')
@@ -7031,7 +7031,7 @@ this.yylex = function yylex ()
       {
         t = tLBRACK;
       }
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       lexer.COND_PUSH(0);
       lexer.CMDARG_PUSH(0);
       return t;
@@ -7043,7 +7043,7 @@ this.yylex = function yylex ()
       ++lexer.brace_nest;
       if (lexer.lpar_beg && lexer.lpar_beg == lexer.paren_nest)
       {
-        lexer.state = EXPR_BEG;
+        lexer.lex_state = EXPR_BEG;
         lexer.lpar_beg = 0;
         --lexer.paren_nest;
         lexer.COND_PUSH(0);
@@ -7058,7 +7058,7 @@ this.yylex = function yylex ()
         t = tLBRACE;            /* hash */
       lexer.COND_PUSH(0);
       lexer.CMDARG_PUSH(0);
-      lexer.state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
       if (t != tLBRACE)
         lexer.command_start = true;
       return t;
@@ -7423,7 +7423,7 @@ function start_num (c)
       seen_e = false,
       nondigit = '';
   
-  lexer.state = EXPR_END;
+  lexer.lex_state = EXPR_END;
   newtok();
   if (c == '-' || c == '+')
   {
