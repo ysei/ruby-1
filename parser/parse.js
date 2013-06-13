@@ -37,6 +37,142 @@
 ;(function(){ // start of the parser namespase
 /* First part of user declarations.  */
 
+// Tokens.
+// Token numbers, to be returned by the scanner.
+var
+  END_OF_INPUT = 0,
+  keyword_class = 258,
+  keyword_module = 259,
+  keyword_def = 260,
+  keyword_undef = 261,
+  keyword_begin = 262,
+  keyword_rescue = 263,
+  keyword_ensure = 264,
+  keyword_end = 265,
+  keyword_if = 266,
+  keyword_unless = 267,
+  keyword_then = 268,
+  keyword_elsif = 269,
+  keyword_else = 270,
+  keyword_case = 271,
+  keyword_when = 272,
+  keyword_while = 273,
+  keyword_until = 274,
+  keyword_for = 275,
+  keyword_break = 276,
+  keyword_next = 277,
+  keyword_redo = 278,
+  keyword_retry = 279,
+  keyword_in = 280,
+  keyword_do = 281,
+  keyword_do_cond = 282,
+  keyword_do_block = 283,
+  keyword_do_LAMBDA = 284,
+  keyword_return = 285,
+  keyword_yield = 286,
+  keyword_super = 287,
+  keyword_self = 288,
+  keyword_nil = 289,
+  keyword_true = 290,
+  keyword_false = 291,
+  keyword_and = 292,
+  keyword_or = 293,
+  keyword_not = 294,
+  modifier_if = 295,
+  modifier_unless = 296,
+  modifier_while = 297,
+  modifier_until = 298,
+  modifier_rescue = 299,
+  keyword_alias = 300,
+  keyword_defined = 301,
+  keyword_BEGIN = 302,
+  keyword_END = 303,
+  keyword__LINE__ = 304,
+  keyword__FILE__ = 305,
+  keyword__ENCODING__ = 306,
+  tIDENTIFIER = 307,
+  tFID = 308,
+  tGVAR = 309,
+  tIVAR = 310,
+  tCONSTANT = 311,
+  tCVAR = 312,
+  tLABEL = 313,
+  tINTEGER = 314,
+  tFLOAT = 315,
+  tSTRING_CONTENT = 316,
+  tCHAR = 317,
+  tNTH_REF = 318,
+  tBACK_REF = 319,
+  tREGEXP_END = 320,
+  tUPLUS = 321,
+  RUBY_TOKEN_UPLUS = 322,
+  tUMINUS = 323,
+  RUBY_TOKEN_UMINUS = 324,
+  tPOW = 325,
+  RUBY_TOKEN_POW = 326,
+  tCMP = 327,
+  RUBY_TOKEN_CMP = 328,
+  tEQ = 329,
+  RUBY_TOKEN_EQ = 330,
+  tEQQ = 331,
+  RUBY_TOKEN_EQQ = 332,
+  tNEQ = 333,
+  RUBY_TOKEN_NEQ = 334,
+  tGEQ = 335,
+  RUBY_TOKEN_GEQ = 336,
+  tLEQ = 337,
+  RUBY_TOKEN_LEQ = 338,
+  tANDOP = 339,
+  tOROP = 340,
+  tMATCH = 341,
+  RUBY_TOKEN_MATCH = 342,
+  tNMATCH = 343,
+  RUBY_TOKEN_NMATCH = 344,
+  tDOT2 = 345,
+  RUBY_TOKEN_DOT2 = 346,
+  tDOT3 = 347,
+  RUBY_TOKEN_DOT3 = 348,
+  tAREF = 349,
+  RUBY_TOKEN_AREF = 350,
+  tASET = 351,
+  RUBY_TOKEN_ASET = 352,
+  tLSHFT = 353,
+  RUBY_TOKEN_LSHFT = 354,
+  tRSHFT = 355,
+  RUBY_TOKEN_RSHFT = 356,
+  tCOLON2 = 357,
+  tCOLON3 = 358,
+  tOP_ASGN = 359,
+  tASSOC = 360,
+  tLPAREN = 361,
+  tLPAREN_ARG = 362,
+  tRPAREN = 363,
+  tLBRACK = 364,
+  tLBRACE = 365,
+  tLBRACE_ARG = 366,
+  tSTAR = 367,
+  tDSTAR = 368,
+  tAMPER = 369,
+  tLAMBDA = 370,
+  tSYMBEG = 371,
+  tSTRING_BEG = 372,
+  tXSTRING_BEG = 373,
+  tREGEXP_BEG = 374,
+  tWORDS_BEG = 375,
+  tQWORDS_BEG = 376,
+  tSYMBOLS_BEG = 377,
+  tQSYMBOLS_BEG = 378,
+  tSTRING_DBEG = 379,
+  tSTRING_DEND = 380,
+  tSTRING_DVAR = 381,
+  tSTRING_END = 382,
+  tLAMBEG = 383,
+  tLOWEST = 384,
+  tUMINUS_NUM = 385,
+  tLAST_TOKEN = 386;
+
+
+
 
 "use strict";
 
@@ -194,6 +330,7 @@ function YYParser (yylexer)
   var yyntokens_ = this.yyntokens_ = 159;
   
   var yyerrstatus_ = 0;
+  function yyerrok () {yyerrstatus_ = 0;}
   
   // Return whether error recovery is being done.
   // In this state, the parser reads token until it reaches a known state,
@@ -1746,10 +1883,10 @@ function YYParser (yylexer)
     {},
   '614': function ()
     
-    {yyerrok;},
+    {yyerrok();},
   '617': function ()
     
-    {yyerrok;},
+    {yyerrok();},
   '618': function ()
     
     {}
@@ -5767,140 +5904,6 @@ YYParser.bisonSkeleton = "./lalr1.js";
 
 ;(function(){ // epilogue namespace
 
-// Tokens.
-// Token numbers, to be returned by the scanner.
-var
-  END_OF_INPUT = 0,
-  keyword_class = 258,
-  keyword_module = 259,
-  keyword_def = 260,
-  keyword_undef = 261,
-  keyword_begin = 262,
-  keyword_rescue = 263,
-  keyword_ensure = 264,
-  keyword_end = 265,
-  keyword_if = 266,
-  keyword_unless = 267,
-  keyword_then = 268,
-  keyword_elsif = 269,
-  keyword_else = 270,
-  keyword_case = 271,
-  keyword_when = 272,
-  keyword_while = 273,
-  keyword_until = 274,
-  keyword_for = 275,
-  keyword_break = 276,
-  keyword_next = 277,
-  keyword_redo = 278,
-  keyword_retry = 279,
-  keyword_in = 280,
-  keyword_do = 281,
-  keyword_do_cond = 282,
-  keyword_do_block = 283,
-  keyword_do_LAMBDA = 284,
-  keyword_return = 285,
-  keyword_yield = 286,
-  keyword_super = 287,
-  keyword_self = 288,
-  keyword_nil = 289,
-  keyword_true = 290,
-  keyword_false = 291,
-  keyword_and = 292,
-  keyword_or = 293,
-  keyword_not = 294,
-  modifier_if = 295,
-  modifier_unless = 296,
-  modifier_while = 297,
-  modifier_until = 298,
-  modifier_rescue = 299,
-  keyword_alias = 300,
-  keyword_defined = 301,
-  keyword_BEGIN = 302,
-  keyword_END = 303,
-  keyword__LINE__ = 304,
-  keyword__FILE__ = 305,
-  keyword__ENCODING__ = 306,
-  tIDENTIFIER = 307,
-  tFID = 308,
-  tGVAR = 309,
-  tIVAR = 310,
-  tCONSTANT = 311,
-  tCVAR = 312,
-  tLABEL = 313,
-  tINTEGER = 314,
-  tFLOAT = 315,
-  tSTRING_CONTENT = 316,
-  tCHAR = 317,
-  tNTH_REF = 318,
-  tBACK_REF = 319,
-  tREGEXP_END = 320,
-  tUPLUS = 321,
-  RUBY_TOKEN_UPLUS = 322,
-  tUMINUS = 323,
-  RUBY_TOKEN_UMINUS = 324,
-  tPOW = 325,
-  RUBY_TOKEN_POW = 326,
-  tCMP = 327,
-  RUBY_TOKEN_CMP = 328,
-  tEQ = 329,
-  RUBY_TOKEN_EQ = 330,
-  tEQQ = 331,
-  RUBY_TOKEN_EQQ = 332,
-  tNEQ = 333,
-  RUBY_TOKEN_NEQ = 334,
-  tGEQ = 335,
-  RUBY_TOKEN_GEQ = 336,
-  tLEQ = 337,
-  RUBY_TOKEN_LEQ = 338,
-  tANDOP = 339,
-  tOROP = 340,
-  tMATCH = 341,
-  RUBY_TOKEN_MATCH = 342,
-  tNMATCH = 343,
-  RUBY_TOKEN_NMATCH = 344,
-  tDOT2 = 345,
-  RUBY_TOKEN_DOT2 = 346,
-  tDOT3 = 347,
-  RUBY_TOKEN_DOT3 = 348,
-  tAREF = 349,
-  RUBY_TOKEN_AREF = 350,
-  tASET = 351,
-  RUBY_TOKEN_ASET = 352,
-  tLSHFT = 353,
-  RUBY_TOKEN_LSHFT = 354,
-  tRSHFT = 355,
-  RUBY_TOKEN_RSHFT = 356,
-  tCOLON2 = 357,
-  tCOLON3 = 358,
-  tOP_ASGN = 359,
-  tASSOC = 360,
-  tLPAREN = 361,
-  tLPAREN_ARG = 362,
-  tRPAREN = 363,
-  tLBRACK = 364,
-  tLBRACE = 365,
-  tLBRACE_ARG = 366,
-  tSTAR = 367,
-  tDSTAR = 368,
-  tAMPER = 369,
-  tLAMBDA = 370,
-  tSYMBEG = 371,
-  tSTRING_BEG = 372,
-  tXSTRING_BEG = 373,
-  tREGEXP_BEG = 374,
-  tWORDS_BEG = 375,
-  tQWORDS_BEG = 376,
-  tSYMBOLS_BEG = 377,
-  tQSYMBOLS_BEG = 378,
-  tSTRING_DBEG = 379,
-  tSTRING_DEND = 380,
-  tSTRING_DVAR = 381,
-  tSTRING_END = 382,
-  tLAMBEG = 383,
-  tLOWEST = 384,
-  tUMINUS_NUM = 385,
-  tLAST_TOKEN = 386;
-
 
 
 
@@ -5925,6 +5928,7 @@ lexer.last_state = 0;
 lexer.space_seen = false;
 // have no idea TODO
 lexer.command_start = false;
+lexer.cmd_state = false;
 // have no idea TODO
 lexer.cond_stack = 0;
 // have no idea TODO
@@ -6012,24 +6016,13 @@ lexer.CMDARG_P = function ()
 function IS_ARG () { return lexer.lex_state & EXPR_ARG_ANY }
 function IS_END () { return lexer.lex_state & EXPR_END_ANY }
 function IS_BEG () { return lexer.lex_state & EXPR_BEG_ANY }
-
-function ISSPACE (c)
+function IS_LABEL_POSSIBLE ()
 {
-  return (
-    // the most common checked first
-    c === ' '  || c === '\n' || c === '\t' ||
-    c === '\f' || c === '\v'
-  )
+  return (IS_lex_state(EXPR_BEG) && !lexer.cmd_state) || IS_ARG();
 }
-// our own modification, does not match `\n`
-// used to avoid crossing end of line on white space search
-function ISSPACE_NOT_N (c)
+function IS_LABEL_SUFFIX (n)
 {
-  return (
-    // the most common checked first
-    c === ' '  || c === '\t' ||
-    c === '\f' || c === '\v'
-  )
+  return peek_n(':', n) && !peek_n(':', n + 1);
 }
 
 // em…
@@ -6087,6 +6080,29 @@ var str_dsym = STR_FUNC_SYMBOL | STR_FUNC_EXPAND;
 
 
 // here go all $strem related functions
+
+function ISUPPER (c)
+{
+  return 'A' <= c && c <= 'Z';
+}
+function ISSPACE (c)
+{
+  return (
+    // the most common checked first
+    c === ' '  || c === '\n' || c === '\t' ||
+    c === '\f' || c === '\v'
+  )
+}
+// our own modification, does not match `\n`
+// used to avoid crossing end of line on white space search
+function ISSPACE_NOT_N (c)
+{
+  return (
+    // the most common checked first
+    c === ' '  || c === '\t' ||
+    c === '\f' || c === '\v'
+  )
+}
 
 var $streamLength = $stream.length;
 var $pos = 0;
@@ -6311,7 +6327,7 @@ this.yylex = function yylex ()
     return token;
   }
   
-  var cmd_state = lexer.command_start;
+  lexer.cmd_state = lexer.command_start;
   lexer.command_start = false;
   
   retry: for (;;)
@@ -6369,7 +6385,7 @@ this.yylex = function yylex ()
             {
               pushback(c);
               pushback('.');
-              continue retry;
+              continue retry; // was: goto retry;
             }
           }
           default:
@@ -6580,7 +6596,7 @@ this.yylex = function yylex ()
       }
       if (IS_lex_state(EXPR_DOT))
       {
-        if (cmd_state)
+        if (lexer.cmd_state)
           lexer.lex_state = EXPR_CMDARG;
         else
           lexer.lex_state = EXPR_ARG;
@@ -7064,6 +7080,19 @@ this.yylex = function yylex ()
       return t;
     }
     
+    case '\\':
+    {
+      c = nextc();
+      if (c == '\n')
+      {
+        lexer.space_seen = true;
+        // skip \\n
+        continue retry; // was: goto retry;
+      }
+      pushback(c);
+      return $('\\');
+    }
+    
     // add before here :)
     
     default:
@@ -7071,7 +7100,7 @@ this.yylex = function yylex ()
       if (!parser_is_identchar(c))
       {
         compile_error("Invalid char `"+c+"' in expression");
-        continue retry;
+        continue retry; // was: goto retry;
       }
 
       newtok();
@@ -7086,7 +7115,7 @@ this.yylex = function yylex ()
     c = nextc();
   }
   while (parser_is_identchar(c));
-  switch (c)
+  switch (tok()[0])
   {
     case '@':
     case '$':
@@ -7104,8 +7133,147 @@ this.yylex = function yylex ()
   }
   tokfix();
   
+  {
+    var result = 0;
+
+    lexer.last_state = lexer.lex_state;
+    switch (tok()[0])
+    {
+      case '$':
+        lexer.lex_state = EXPR_END;
+        result = tGVAR;
+        break;
+      case '@':
+        lexer.lex_state = EXPR_END;
+        if (tok()[1] == '@')
+          result = tCVAR;
+        else
+          result = tIVAR;
+        break;
+
+      default:
+        if (toklast() == '!' || toklast() == '?')
+        {
+          result = tFID;
+        }
+        else
+        {
+          if (IS_lex_state(EXPR_FNAME))
+          {
+            if ((c = nextc()) == '=' && !peek('~') && !peek('>') &&
+                (!peek('=') || (peek_n('>', 1))))
+            {
+              result = tIDENTIFIER;
+              tokadd(c);
+              tokfix();
+            }
+            else
+            {
+              pushback(c);
+            }
+          }
+          if (result == 0 && ISUPPER(tok()[0]))
+          {
+            result = tCONSTANT;
+          }
+          else
+          {
+            result = tIDENTIFIER;
+          }
+        }
+
+        if (IS_LABEL_POSSIBLE())
+        {
+          if (IS_LABEL_SUFFIX(0))
+          {
+            lexer.lex_state = EXPR_BEG;
+            nextc();
+            // set_yylval_name(TOK_INTERN(!ENC_SINGLE(mb))); TODO
+            return tLABEL;
+          }
+        }
+        if (!IS_lex_state(EXPR_DOT))
+        {
+          // const struct kwtable *kw;
+
+          // See if it is a reserved word.
+          var kw = rb_reserved_word[tok()];
+          if (kw)
+          {
+            var state = lexer.lex_state;
+            lexer.lex_state = kw.state;
+            if (state == EXPR_FNAME)
+            {
+              // set_yylval_name(rb_intern(kw->name)); TODO
+              return kw.id0;
+            }
+            if (lexer.lex_state == EXPR_BEG)
+            {
+              lexer.command_start = true;
+            }
+            if (kw.id0 == keyword_do)
+            {
+              if (lexer.lpar_beg && lexer.lpar_beg == lexer.paren_nest)
+              {
+                lexer.lpar_beg = 0;
+                --lexer.paren_nest;
+                return keyword_do_LAMBDA;
+              }
+              if (lexer.COND_P())
+                return keyword_do_cond;
+              if (lexer.CMDARG_P() && state != EXPR_CMDARG)
+                return keyword_do_block;
+              if (state & (EXPR_BEG | EXPR_ENDARG))
+                return keyword_do_block;
+              return keyword_do;
+            }
+            if (state & (EXPR_BEG | EXPR_VALUE))
+              return kw.id0;
+            else
+            {
+              if (kw.id0 != kw.id1)
+                lexer.lex_state = EXPR_BEG;
+              return kw.id1;
+            }
+          }
+        }
+
+        if (IS_lex_state(EXPR_BEG_ANY | EXPR_ARG_ANY | EXPR_DOT))
+        {
+          if (lexer.cmd_state)
+          {
+            lexer.lex_state = EXPR_CMDARG;
+          }
+          else
+          {
+            lexer.lex_state = EXPR_ARG;
+          }
+        }
+        else if (lexer.lex_state == EXPR_FNAME)
+        {
+          lexer.lex_state = EXPR_ENDFN;
+        }
+        else
+        {
+          lexer.lex_state = EXPR_END;
+        }
+    }
+    {
+      // just take a plain string for now,
+      // do not convert to a symbol, leave it to JS engine
+      var ident = tok();
+
+      // set_yylval_name(ident); TODO
+      if (!IS_lex_state_for(lexer.last_state, EXPR_DOT | EXPR_FNAME) &&
+          is_local_id(ident) && lvar_defined(ident))
+      {
+        lexer.lex_state = EXPR_END;
+      }
+    }
+    return result;
+  }
   
-  return c == '' ? 0 : 9999 // EOF or $undefined
+  // return c == '' ? 0 : 9999 // EOF or $undefined
   
   } // retry for loop
 }
@@ -7539,7 +7707,63 @@ function start_num (c)
 }
 
 
+// struct kwtable {const char *name; int id[2]; enum lex_state_e state;};
 
+function is_local_id (ident)
+{
+  // TODO :)
+  return true;
+}
+function lvar_defined (ident)
+{
+  // TODO :)
+  return true;
+}
+
+var rb_reserved_word =
+{
+'__ENCODING__': {id0: keyword__ENCODING__, id1: keyword__ENCODING__, state: EXPR_END},
+'__LINE__': {id0: keyword__LINE__, id1: keyword__LINE__, state: EXPR_END},
+'__FILE__': {id0: keyword__FILE__, id1: keyword__FILE__, state: EXPR_END},
+'BEGIN': {id0: keyword_BEGIN, id1: keyword_BEGIN, state: EXPR_END},
+'END': {id0: keyword_END, id1: keyword_END, state: EXPR_END},
+'alias': {id0: keyword_alias, id1: keyword_alias, state: EXPR_FNAME},
+'and': {id0: keyword_and, id1: keyword_and, state: EXPR_VALUE},
+'begin': {id0: keyword_begin, id1: keyword_begin, state: EXPR_BEG},
+'break': {id0: keyword_break, id1: keyword_break, state: EXPR_MID},
+'case': {id0: keyword_case, id1: keyword_case, state: EXPR_VALUE},
+'class': {id0: keyword_class, id1: keyword_class, state: EXPR_CLASS},
+'def': {id0: keyword_def, id1: keyword_def, state: EXPR_FNAME},
+'defined?': {id0: keyword_defined, id1: keyword_defined, state: EXPR_ARG},
+'do': {id0: keyword_do, id1: keyword_do, state: EXPR_BEG},
+'else': {id0: keyword_else, id1: keyword_else, state: EXPR_BEG},
+'elsif': {id0: keyword_elsif, id1: keyword_elsif, state: EXPR_VALUE},
+'end': {id0: keyword_end, id1: keyword_end, state: EXPR_END},
+'ensure': {id0: keyword_ensure, id1: keyword_ensure, state: EXPR_BEG},
+'false': {id0: keyword_false, id1: keyword_false, state: EXPR_END},
+'for': {id0: keyword_for, id1: keyword_for, state: EXPR_VALUE},
+'if': {id0: keyword_if, id1: modifier_if, state: EXPR_VALUE},
+'in': {id0: keyword_in, id1: keyword_in, state: EXPR_VALUE},
+'module': {id0: keyword_module, id1: keyword_module, state: EXPR_VALUE},
+'next': {id0: keyword_next, id1: keyword_next, state: EXPR_MID},
+'nil': {id0: keyword_nil, id1: keyword_nil, state: EXPR_END},
+'not': {id0: keyword_not, id1: keyword_not, state: EXPR_ARG},
+'or': {id0: keyword_or, id1: keyword_or, state: EXPR_VALUE},
+'redo': {id0: keyword_redo, id1: keyword_redo, state: EXPR_END},
+'rescue': {id0: keyword_rescue, id1: modifier_rescue, state: EXPR_MID},
+'retry': {id0: keyword_retry, id1: keyword_retry, state: EXPR_END},
+'return': {id0: keyword_return, id1: keyword_return, state: EXPR_MID},
+'self': {id0: keyword_self, id1: keyword_self, state: EXPR_END},
+'super': {id0: keyword_super, id1: keyword_super, state: EXPR_ARG},
+'then': {id0: keyword_then, id1: keyword_then, state: EXPR_BEG},
+'true': {id0: keyword_true, id1: keyword_true, state: EXPR_END},
+'undef': {id0: keyword_undef, id1: keyword_undef, state: EXPR_FNAME},
+'unless': {id0: keyword_unless, id1: modifier_unless, state: EXPR_VALUE},
+'until': {id0: keyword_until, id1: modifier_until, state: EXPR_VALUE},
+'when': {id0: keyword_when, id1: keyword_when, state: EXPR_VALUE},
+'while': {id0: keyword_while, id1: modifier_while, state: EXPR_VALUE},
+'yield': {id0: keyword_yield, id1: keyword_yield, state: EXPR_ARG}
+};
 
 function debug (msg)
 {
