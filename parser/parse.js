@@ -239,9 +239,9 @@ Location.prototype.toString = function () {
 
 function YYStack ()
 {
-  var stateStack = [];
-  var locStack = [];
-  var valueStack = [];
+  var stateStack = this.stateStack = [];
+  var locStack = this.locStack = [];
+  var valueStack = this.valueStack = [];
 
   this.push = function push (state, value, location)
   {
@@ -505,7 +505,7 @@ function YYParser (yylexer)
     
     {
       // touching this alters the parse.output
-      (yystack.valueAt(5-(2)));
+      yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
     },
   '61': function ()
     
@@ -958,7 +958,7 @@ function YYParser (yylexer)
     
     {
       // CMDARG_POP()
-      yylexer.cmdarg_stack = (yystack.valueAt(2-(1)));
+      yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
     },
   '265': function ()
     
@@ -996,15 +996,15 @@ function YYParser (yylexer)
   '286': function ()
     
     {
-		      (yystack.valueAt(1-(1))) = yylexer.cmdarg_stack;
+		      yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = yylexer.cmdarg_stack;
 		      yylexer.cmdarg_stack = 0;
 		    },
   '287': function ()
     
     {
-		      yylexer.cmdarg_stack = (yystack.valueAt(4-(1)));
+		      yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
 		      // touching this alters the parse.output
-          (yystack.valueAt(4-(2)));
+          yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
 		    },
   '288': function ()
     
@@ -1128,7 +1128,7 @@ function YYParser (yylexer)
     
     {
 		      // touching this alters the parse.output
-			    (yystack.valueAt(6-(4)));
+			    yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
 		    },
   '324': function ()
     
@@ -1140,8 +1140,8 @@ function YYParser (yylexer)
     
     {
 		      // touching this alters the parse.output
-		      (yystack.valueAt(8-(4)));
-			    (yystack.valueAt(8-(6)));
+		      yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
+			    yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
 		    },
   '327': function ()
     
@@ -1150,7 +1150,7 @@ function YYParser (yylexer)
     
     {
 		      // touching this alters the parse.output
-			    (yystack.valueAt(5-(3)));
+			    yystack.valueStack[yystack.valueStack.length-1-((5-(3)))];
 		    },
   '329': function ()
     
@@ -1159,8 +1159,8 @@ function YYParser (yylexer)
     
     {
 		      // touching this alters the parse.output
-			    (yystack.valueAt(6-(1)));
-			    (yystack.valueAt(6-(3)));
+			    yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+			    yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
 		    },
   '331': function ()
     
@@ -1369,9 +1369,9 @@ function YYParser (yylexer)
   '408': function ()
     
     {
-          yylexer.lpar_beg = (yystack.valueAt(4-(2)));
+          yylexer.lpar_beg = yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
           // touching this alters the parse.output
-          (yystack.valueAt(4-(1)));
+          yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
 		    },
   '409': function ()
     
@@ -1392,8 +1392,8 @@ function YYParser (yylexer)
     
     {
 	      // touching this alters the parse.output
-        (yystack.valueAt(5-(2)));
-			  (yystack.valueAt(5-(1)));
+        yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+			  yystack.valueStack[yystack.valueStack.length-1-((5-(1)))];
 		    },
   '415': function ()
     
@@ -1417,7 +1417,7 @@ function YYParser (yylexer)
     
     {
 		      // touching this alters the parse.output
-			    (yystack.valueAt(5-(4)));
+			    yystack.valueStack[yystack.valueStack.length-1-((5-(4)))];
 		    },
   '422': function ()
     
@@ -1426,7 +1426,7 @@ function YYParser (yylexer)
     
     {
 		      // touching this alters the parse.output
-			    (yystack.valueAt(5-(4)))
+			    yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]
 		    },
   '424': function ()
     
@@ -1438,7 +1438,7 @@ function YYParser (yylexer)
     
     {
           // touching this alters the parse.output
-          nd_set_line(yyval, (yystack.valueAt(4-(3))));
+          nd_set_line(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
 		    },
   '427': function ()
     
@@ -1447,7 +1447,7 @@ function YYParser (yylexer)
     
     {
           // touching this alters the parse.output
-          (yystack.valueAt(4-(3)));
+          yystack.valueStack[yystack.valueStack.length-1-((4-(3)))];
 		    },
   '429': function ()
     
@@ -1465,7 +1465,7 @@ function YYParser (yylexer)
     
     {
 		      // touching this alters the parse.output
-          (yystack.valueAt(5-(2)));
+          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
 		    },
   '434': function ()
     
@@ -1474,7 +1474,7 @@ function YYParser (yylexer)
     
     {
           // touching this alters the parse.output
-          (yystack.valueAt(5-(2)));
+          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
 		    },
   '436': function ()
     
@@ -1592,12 +1592,12 @@ function YYParser (yylexer)
     
     {
 		    /*%%%*/
-			yylexer.strterm = (yystack.valueAt(3-(2)));
+			yylexer.strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
 		    },
   '485': function ()
     
     {
-          (yystack.valueAt(1-(1))) = yylexer.cond_stack;
+          yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = yylexer.cond_stack;
           yyval = yylexer.cmdarg_stack;
           yylexer.cond_stack = 0;
           yylexer.cmdarg_stack = 0;
@@ -1618,10 +1618,10 @@ function YYParser (yylexer)
   '488': function ()
     
     {
-          yylexer.cond_stack = (yystack.valueAt(6-(1)));
-          yylexer.cmdarg_stack = (yystack.valueAt(6-(2)));
-          yylexer.strterm = (yystack.valueAt(6-(3)));
-          yylexer.brace_nest = (yystack.valueAt(6-(4)));
+          yylexer.cond_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+          yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
+          yylexer.strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+          yylexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
 		    },
   '489': function ()
     
@@ -5730,7 +5730,7 @@ YYParser.prototype =
       this.debug_symbol_print(
         "   $" + (yyi + 1) + " =",
         this.yyrhs_[this.yyprhs_[yyrule] + yyi],
-        (yystack.valueAt(yynrhs-(yyi + 1))),
+        yystack.valueStack[yystack.valueStack.length-1-((yynrhs-(yyi + 1)))],
         yystack.locationAt(yynrhs-(yyi + 1))
       );
     }
