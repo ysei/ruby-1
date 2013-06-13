@@ -5582,6 +5582,7 @@ function YYParser (yylexer)
   ];
 
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
+  // TODO: hide this table under #if DEBUG
   var yyrline_ = this.yyrline_ =
   [
     //]
@@ -5881,18 +5882,18 @@ YYParser.prototype =
 
   debug_stack_print: function debug_stack_print ()
   {
-    print("Stack now");
+    puts("Stack now");
 
     var yystack = this.yystack
     for (var i = 0, ih = yystack.height(); i <= ih; i++)
     {
-      print(' ' + yystack.stateAt(i));
+      puts(' ' + yystack.stateAt(i));
     }
   },
 
   debug_puts: function debug_puts (message)
   {
-    print(message);
+    puts(message);
   }
 }
 
@@ -7773,14 +7774,14 @@ var rb_reserved_word =
 
 function debug (msg)
 {
-  print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-  print(msg)
-  print(
+  puts('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+  puts(msg)
+  puts(
     $stream.substring($pos - 25, $pos) +
     '>>here<<' +
     $stream.substring($pos, $pos + 25)
   )
-  print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+  puts('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 }
 function warning (msg) { debug('WARNING: ' + msg) }
 function compile_error (msg) { debug('COMPILE ERROR: ' + msg) }
@@ -7793,14 +7794,17 @@ return Lexer;
 
 })();
 
-var lexer = new YYLexer(read('ruby.rb'));
+global.parse = function (text)
+{
+  var lexer = new YYLexer(text);
 
-yyerror = function (msg) { lexer.yyerror(msg); }
+  yyerror = function (msg) { lexer.yyerror(msg); }
 
-var parser = new YYParser(lexer)
-parser.enableDebug()
+  var parser = new YYParser(lexer);
+  parser.enableDebug();
 
-print(parser.parse())
+  return parser.parse();
+}
 
 
 })(); // end of epilogue namespace
