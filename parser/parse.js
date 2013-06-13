@@ -813,12 +813,15 @@ function YYParser (yylexer)
     {},
   '263': function ()
     
-    {},
+    {
+      yyval = yylexer.cmdarg_stack;
+      yylexer.CMDARG_PUSH(1);
+    },
   '264': function ()
     
     {
-      // touching this alters the parse.output
-      (yystack.valueAt(2-(1)));
+      // CMDARG_POP()
+      yylexer.cmdarg_stack = (yystack.valueAt(2-(1)));
     },
   '265': function ()
     
@@ -855,10 +858,14 @@ function YYParser (yylexer)
     {},
   '286': function ()
     
-    {},
+    {
+		      (yystack.valueAt(1-(1))) = yylexer.cmdarg_stack;
+		      yylexer.cmdarg_stack = 0;
+		    },
   '287': function ()
     
     {
+		      yylexer.cmdarg_stack = (yystack.valueAt(4-(1)));
 		      // touching this alters the parse.output
           (yystack.valueAt(4-(2)));
 		    },
@@ -1218,12 +1225,15 @@ function YYParser (yylexer)
     {},
   '407': function ()
     
-    {},
+    {
+		      yyval = yylexer.lpar_beg;
+		      yylexer.lpar_beg = ++yylexer.paren_nest;
+		    },
   '408': function ()
     
     {
+          yylexer.lpar_beg = (yystack.valueAt(4-(2)));
           // touching this alters the parse.output
-          (yystack.valueAt(4-(2)));
           (yystack.valueAt(4-(1)));
 		    },
   '409': function ()
@@ -1450,6 +1460,10 @@ function YYParser (yylexer)
   '485': function ()
     
     {
+          (yystack.valueAt(1-(1))) = yylexer.cond_stack;
+          yyval = yylexer.cmdarg_stack;
+          yylexer.cond_stack = 0;
+          yylexer.cmdarg_stack = 0;
 		    },
   '486': function ()
     
@@ -1467,10 +1481,10 @@ function YYParser (yylexer)
   '488': function ()
     
     {
-			yylexer.cond_stack = (yystack.valueAt(6-(1)));
-			yylexer.cmdarg_stack = (yystack.valueAt(6-(2)));
-			yylexer.strterm = (yystack.valueAt(6-(3)));
-			yylexer.brace_nest = (yystack.valueAt(6-(4)));
+          yylexer.cond_stack = (yystack.valueAt(6-(1)));
+          yylexer.cmdarg_stack = (yystack.valueAt(6-(2)));
+          yylexer.strterm = (yystack.valueAt(6-(3)));
+          yylexer.brace_nest = (yystack.valueAt(6-(4)));
 		    },
   '489': function ()
     
@@ -5460,42 +5474,42 @@ function YYParser (yylexer)
      751,   754,   757,   760,   763,   766,   769,   772,   775,   778,
      781,   784,   784,   787,   790,   796,   800,   801,   803,   805,
      809,   813,   814,   817,   818,   819,   821,   823,   827,   829,
-     831,   833,   835,   840,   840,   848,   852,   854,   858,   860,
-     862,   864,   868,   870,   872,   876,   877,   878,   879,   880,
-     881,   882,   883,   884,   885,   886,   889,   888,   897,   896,
-     903,   902,   908,   910,   912,   914,   916,   918,   920,   922,
-     924,   926,   926,   928,   930,   932,   934,   935,   937,   939,
-     944,   950,   954,   949,   961,   965,   960,   971,   975,   978,
-     982,   977,   989,   988,   997,   999,   996,  1008,  1007,  1016,
-    1015,  1027,  1031,  1026,  1038,  1040,  1042,  1044,  1048,  1052,
-    1056,  1060,  1064,  1068,  1072,  1076,  1080,  1084,  1088,  1092,
-    1096,  1097,  1098,  1101,  1102,  1105,  1106,  1112,  1113,  1117,
-    1118,  1121,  1123,  1127,  1129,  1133,  1135,  1137,  1139,  1141,
-    1143,  1145,  1147,  1149,  1154,  1156,  1158,  1160,  1164,  1167,
-    1170,  1172,  1174,  1176,  1178,  1180,  1182,  1184,  1186,  1188,
-    1190,  1192,  1194,  1196,  1198,  1202,  1203,  1209,  1211,  1213,
-    1218,  1220,  1224,  1225,  1228,  1230,  1234,  1235,  1234,  1245,
-    1247,  1251,  1253,  1258,  1257,  1269,  1271,  1273,  1275,  1279,
-    1282,  1281,  1289,  1288,  1295,  1298,  1297,  1305,  1304,  1311,
-    1313,  1315,  1320,  1319,  1328,  1327,  1337,  1343,  1344,  1347,
-    1351,  1354,  1356,  1358,  1361,  1363,  1366,  1368,  1371,  1372,
-    1374,  1377,  1381,  1382,  1383,  1387,  1391,  1395,  1399,  1401,
-    1406,  1407,  1411,  1412,  1416,  1418,  1423,  1424,  1428,  1430,
-    1434,  1436,  1441,  1442,  1447,  1448,  1453,  1454,  1459,  1460,
-    1465,  1466,  1470,  1472,  1471,  1483,  1485,  1490,  1482,  1503,
-    1505,  1507,  1509,  1512,  1518,  1519,  1520,  1521,  1524,  1530,
-    1531,  1532,  1535,  1540,  1541,  1542,  1543,  1544,  1547,  1548,
-    1549,  1550,  1551,  1552,  1553,  1556,  1559,  1563,  1565,  1569,
-    1570,  1573,  1576,  1575,  1582,  1586,  1591,  1598,  1600,  1602,
-    1604,  1608,  1611,  1614,  1616,  1618,  1620,  1622,  1624,  1626,
-    1628,  1630,  1632,  1634,  1636,  1638,  1640,  1643,  1646,  1648,
-    1650,  1652,  1656,  1657,  1661,  1663,  1667,  1668,  1672,  1676,
-    1680,  1682,  1687,  1689,  1693,  1694,  1697,  1699,  1703,  1707,
-    1711,  1713,  1717,  1719,  1723,  1724,  1727,  1729,  1733,  1734,
-    1737,  1741,  1743,  1747,  1750,  1749,  1757,  1758,  1762,  1763,
-    1767,  1769,  1771,  1777,  1778,  1779,  1782,  1783,  1784,  1785,
-    1788,  1789,  1790,  1793,  1794,  1797,  1798,  1801,  1802,  1805,
-    1808,  1811,  1812,  1813,  1816,  1817,  1820,  1821,  1825
+     831,   833,   835,   840,   840,   851,   855,   857,   861,   863,
+     865,   867,   871,   873,   875,   879,   880,   881,   882,   883,
+     884,   885,   886,   887,   888,   889,   892,   891,   904,   903,
+     910,   909,   915,   917,   919,   921,   923,   925,   927,   929,
+     931,   933,   933,   935,   937,   939,   941,   942,   944,   946,
+     951,   957,   961,   956,   968,   972,   967,   978,   982,   985,
+     989,   984,   996,   995,  1004,  1006,  1003,  1015,  1014,  1023,
+    1022,  1034,  1038,  1033,  1045,  1047,  1049,  1051,  1055,  1059,
+    1063,  1067,  1071,  1075,  1079,  1083,  1087,  1091,  1095,  1099,
+    1103,  1104,  1105,  1108,  1109,  1112,  1113,  1119,  1120,  1124,
+    1125,  1128,  1130,  1134,  1136,  1140,  1142,  1144,  1146,  1148,
+    1150,  1152,  1154,  1156,  1161,  1163,  1165,  1167,  1171,  1174,
+    1177,  1179,  1181,  1183,  1185,  1187,  1189,  1191,  1193,  1195,
+    1197,  1199,  1201,  1203,  1205,  1209,  1210,  1216,  1218,  1220,
+    1225,  1227,  1231,  1232,  1235,  1237,  1241,  1242,  1241,  1255,
+    1257,  1261,  1263,  1268,  1267,  1279,  1281,  1283,  1285,  1289,
+    1292,  1291,  1299,  1298,  1305,  1308,  1307,  1315,  1314,  1321,
+    1323,  1325,  1330,  1329,  1338,  1337,  1347,  1353,  1354,  1357,
+    1361,  1364,  1366,  1368,  1371,  1373,  1376,  1378,  1381,  1382,
+    1384,  1387,  1391,  1392,  1393,  1397,  1401,  1405,  1409,  1411,
+    1416,  1417,  1421,  1422,  1426,  1428,  1433,  1434,  1438,  1440,
+    1444,  1446,  1451,  1452,  1457,  1458,  1463,  1464,  1469,  1470,
+    1475,  1476,  1480,  1482,  1481,  1493,  1499,  1504,  1492,  1517,
+    1519,  1521,  1523,  1526,  1532,  1533,  1534,  1535,  1538,  1544,
+    1545,  1546,  1549,  1554,  1555,  1556,  1557,  1558,  1561,  1562,
+    1563,  1564,  1565,  1566,  1567,  1570,  1573,  1577,  1579,  1583,
+    1584,  1587,  1590,  1589,  1596,  1600,  1605,  1612,  1614,  1616,
+    1618,  1622,  1625,  1628,  1630,  1632,  1634,  1636,  1638,  1640,
+    1642,  1644,  1646,  1648,  1650,  1652,  1654,  1657,  1660,  1662,
+    1664,  1666,  1670,  1671,  1675,  1677,  1681,  1682,  1686,  1690,
+    1694,  1696,  1701,  1703,  1707,  1708,  1711,  1713,  1717,  1721,
+    1725,  1727,  1731,  1733,  1737,  1738,  1741,  1743,  1747,  1748,
+    1751,  1755,  1757,  1761,  1764,  1763,  1771,  1772,  1776,  1777,
+    1781,  1783,  1785,  1791,  1792,  1793,  1796,  1797,  1798,  1799,
+    1802,  1803,  1804,  1807,  1808,  1811,  1812,  1815,  1816,  1819,
+    1822,  1825,  1826,  1827,  1830,  1831,  1834,  1835,  1839
     //[
   ];
 
@@ -5911,15 +5925,80 @@ lexer.command_start = false;
 lexer.cond_stack = 0;
 // have no idea TODO
 lexer.cmdarg_stack = 0;
+// controls level of nesting in `()` or `[]`
+lexer.paren_nest = 0;
+lexer.lpar_beg = 0;
+// controls level of nesting in `{}`
+lexer.brace_nest = 0;
+// controls the nesting of states of condition-ness and cmdarg-ness
+lexer.cond_stack = 0;
+lexer.cmdarg_stack = 0;
 
 
-// all lexer states had been moved to parse.y prologue
+// all lexer states codes had been moved to parse.y prologue
 
 // the shortcut for checking `lexer.state` over and over again
 function IS_lex_state (state)
 {
   return lexer.state & state
 }
+
+
+// interface to lexer.cond_stack
+// void
+lexer.COND_PUSH = function (n)
+{
+  // was: ((cond_stack) = ((cond_stack)<<1)|(( n)&1))
+  lexer.cond_stack = (lexer.cond_stack << 1) | (n & 1);
+}
+// void
+lexer.COND_POP = function ()
+{
+  // was: ((cond_stack) = (cond_stack) >> 1)
+  lexer.cond_stack >>= 1;
+}
+// void
+lexer.COND_LEXPOP = function ()
+{
+  // was: ((cond_stack) = ((cond_stack) >> 1) | ((cond_stack) & 1))
+  var stack = lexer.cond_stack;
+  lexer.cond_stack = (stack >> 1) | (stack & 1);
+}
+// int
+lexer.COND_P = function ()
+{
+  // was: ((cond_stack)&1)
+  return lexer.cond_stack & 1;
+}
+
+// interface to lexer.cmdarg_stack
+// void
+lexer.CMDARG_PUSH = function (n)
+{
+  // was: ((cmdarg_stack) = ((cmdarg_stack)<<1)|(( n)&1))
+  lexer.cmdarg_stack = (lexer.cmdarg_stack << 1) | (n & 1);
+}
+// void
+lexer.CMDARG_POP = function ()
+{
+  // was: ((cmdarg_stack) = (cmdarg_stack) >> 1)
+  lexer.cmdarg_stack >>= 1;
+}
+// void
+lexer.CMDARG_LEXPOP = function ()
+{
+  // was: ((cmdarg_stack) = ((cmdarg_stack) >> 1) | ((cmdarg_stack) & 1))
+  var stack = lexer.cmdarg_stack;
+  lexer.cmdarg_stack = (stack >> 1) | (stack & 1);
+}
+// int
+lexer.CMDARG_P = function ()
+{
+  // was: ((cmdarg_stack)&1)
+  return lexer.cmdarg_stack & 1;
+}
+
+
 
 // few more shortcuts
 function IS_ARG () { return lexer.state & EXPR_ARG_ANY }
@@ -6234,9 +6313,7 @@ this.yylex = function yylex ()
     }
     case '\n':
     {
-      if (IS_lex_state(
-          EXPR_BEG | EXPR_VALUE | EXPR_CLASS | EXPR_FNAME | EXPR_DOT
-      ))
+      if (IS_lex_state(EXPR_BEG | EXPR_VALUE | EXPR_CLASS | EXPR_FNAME | EXPR_DOT))
       {
         continue retry;
       }
@@ -6749,6 +6826,25 @@ this.yylex = function yylex ()
     case '9':
     {
       return start_num(c);
+    }
+    
+    case ')':
+    case ']':
+      lexer.paren_nest--;
+    case '}':
+    {
+      lexer.COND_LEXPOP();
+      lexer.CMDARG_LEXPOP();
+      if (c == ')')
+        lexer.state = EXPR_ENDFN;
+      else
+        lexer.state = EXPR_ENDARG;
+      if (c == '}')
+      {
+        if (!lexer.brace_nest--)
+          c = tSTRING_DEND;
+      }
+      return c;
     }
     
     // add before here :)
