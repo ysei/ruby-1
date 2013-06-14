@@ -1381,7 +1381,7 @@ function YYParser (yylexer)
   '396': function ()
     
     {
-			yylexer.command_start = TRUE;
+			yylexer.command_start = true;
 		    },
   '397': function ()
     
@@ -1631,15 +1631,15 @@ function YYParser (yylexer)
   '483': function ()
     
     {
-			yyval = yylexer.strterm;
-			yylexer.strterm = 0;
+			yyval = yylexer.lex_strterm;
+			yylexer.lex_strterm = 0;
 			yylexer.lex_state = EXPR_BEG;
 		    },
   '484': function ()
     
     {
 		    /*%%%*/
-			yylexer.strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
+			yylexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
 		    },
   '485': function ()
     
@@ -1652,8 +1652,8 @@ function YYParser (yylexer)
   '486': function ()
     
     {
-			yyval = yylexer.strterm;
-			yylexer.strterm = null;
+			yyval = yylexer.lex_strterm;
+			yylexer.lex_strterm = null;
 			yylexer.lex_state = EXPR_BEG;
 		    },
   '487': function ()
@@ -1667,7 +1667,7 @@ function YYParser (yylexer)
     {
           yylexer.cond_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
           yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
-          yylexer.strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+          yylexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
           yylexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
 		    },
   '489': function ()
@@ -1738,7 +1738,7 @@ function YYParser (yylexer)
     
     {
 			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = TRUE;
+			yylexer.command_start = true;
 		    },
   '523': function ()
     
@@ -1752,13 +1752,13 @@ function YYParser (yylexer)
     
     {
 			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = TRUE;
+			yylexer.command_start = true;
 		    },
   '526': function ()
     
     {
 			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = TRUE;
+			yylexer.command_start = true;
 		    },
   '527': function ()
     
@@ -6014,7 +6014,7 @@ var lexer = this;
 // the end of stream had been reached
 lexer.eofp = false;
 // the string to be parsed in the nex lex() call
-lexer.strterm = null;
+lexer.lex_strterm = null;
 // the main point of interaction with the parser out there
 lexer.lex_state = 0;
 // to store the main state
@@ -6412,24 +6412,24 @@ this.yylex = function yylex ()
   lexer.space_seen = false;
   
   if (false) // TODO
-  // if (lexer.strterm)
+  // if (lexer.lex_strterm)
   {
     var token = 0;
-    if (lexer.strterm.type == 'NODE_HEREDOC')
+    if (lexer.lex_strterm.type == 'NODE_HEREDOC')
     {
-      token = here_document(lexer.strterm);
+      token = here_document(lexer.lex_strterm);
       if (token == tSTRING_END)
       {
-        lexer.strterm = null;
+        lexer.lex_strterm = null;
         lexer.lex_state = EXPR_END;
       }
     }
     else
     {
-      token = parse_string(lexer.strterm);
+      token = parse_string(lexer.lex_strterm);
       if (token == tSTRING_END || token == tREGEXP_END)
       {
-        lexer.strterm = null;
+        lexer.lex_strterm = null;
         lex_state = EXPR_END;
       }
     }
@@ -6692,7 +6692,7 @@ this.yylex = function yylex ()
     
     case '"':
     {
-      lexer.strterm = NEW_STRTERM(str_dquote, '"', '')
+      lexer.lex_strterm = NEW_STRTERM(str_dquote, '"', '')
       return tSTRING_BEG;
     }
     
@@ -6711,13 +6711,13 @@ this.yylex = function yylex ()
           lexer.lex_state = EXPR_ARG;
         return $(c);
       }
-      lexer.strterm = NEW_STRTERM(str_xquote, '`', '');
+      lexer.lex_strterm = NEW_STRTERM(str_xquote, '`', '');
       return tXSTRING_BEG;
     }
     
     case '\'':
     {
-      lexer.strterm = NEW_STRTERM(str_squote, '\'', '');
+      lexer.lex_strterm = NEW_STRTERM(str_squote, '\'', '');
       return tSTRING_BEG;
     }
     
@@ -7032,10 +7032,10 @@ this.yylex = function yylex ()
       switch (c)
       {
         case '\'':
-          lexer.strterm = NEW_STRTERM(str_ssym, c, '');
+          lexer.lex_strterm = NEW_STRTERM(str_ssym, c, '');
           break;
         case '"':
-          lexer.strterm = NEW_STRTERM(str_dsym, c, '');
+          lexer.lex_strterm = NEW_STRTERM(str_dsym, c, '');
           break;
         default:
           pushback(c);
@@ -7049,7 +7049,7 @@ this.yylex = function yylex ()
     {
       if (IS_lex_state(EXPR_BEG_ANY))
       {
-        lexer.strterm = NEW_STRTERM(str_regexp, '/', '');
+        lexer.lex_strterm = NEW_STRTERM(str_regexp, '/', '');
         return tREGEXP_BEG;
       }
       if ((c = nextc()) == '=')
@@ -7062,7 +7062,7 @@ this.yylex = function yylex ()
       if (IS_SPCARG(c))
       {
         arg_ambiguous();
-        lexer.strterm = NEW_STRTERM(str_regexp, '/', '');
+        lexer.lex_strterm = NEW_STRTERM(str_regexp, '/', '');
         return tREGEXP_BEG;
       }
       lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
@@ -7202,6 +7202,130 @@ this.yylex = function yylex ()
       }
       pushback(c);
       return $('\\');
+    }
+    
+    case '%':
+    {
+      if (IS_lex_state(EXPR_BEG_ANY))
+      {
+        var term = '';
+        var paren = '';
+
+        c = nextc();
+      quotation:
+        if (c == '' || !ISALNUM(c))
+        {
+          term = c;
+          c = 'Q';
+        }
+        else
+        {
+          term = nextc();
+          if (ISALNUM(term) || !ISASCII(term))
+          {
+            yyerror("unknown type of %string");
+            return 0;
+          }
+        }
+        if (c == '' || term == '')
+        {
+          compile_error("unterminated quoted string meets end of file");
+          return 0;
+        }
+        paren = term;
+        if (term == '(')
+          term = ')';
+        else if (term == '[')
+          term = ']';
+        else if (term == '{')
+          term = '}';
+        else if (term == '<')
+          term = '>';
+        else
+          paren = '';
+
+        switch (c)
+        {
+          case 'Q':
+            lexer.lex_strterm = NEW_STRTERM(str_dquote, term, paren);
+            return tSTRING_BEG;
+
+          case 'q':
+            lex_strterm = NEW_STRTERM(str_squote, term, paren);
+            return tSTRING_BEG;
+
+          case 'W':
+            lex_strterm = NEW_STRTERM(str_dword, term, paren);
+            do
+            {
+              c = nextc();
+            }
+            while (ISSPACE(c));
+            pushback(c);
+            return tWORDS_BEG;
+
+          case 'w':
+            lex_strterm = NEW_STRTERM(str_sword, term, paren);
+            do
+            {
+              c = nextc();
+            }
+            while (ISSPACE(c));
+            pushback(c);
+            return tQWORDS_BEG;
+
+          case 'I':
+            lex_strterm = NEW_STRTERM(str_dword, term, paren);
+            do
+            {
+              c = nextc();
+            }
+            while (ISSPACE(c));
+            pushback(c);
+            return tSYMBOLS_BEG;
+
+          case 'i':
+            lex_strterm = NEW_STRTERM(str_sword, term, paren);
+            do
+            {
+              c = nextc();
+            }
+            while (ISSPACE(c));
+            pushback(c);
+            return tQSYMBOLS_BEG;
+
+          case 'x':
+            lex_strterm = NEW_STRTERM(str_xquote, term, paren);
+            return tXSTRING_BEG;
+
+          case 'r':
+            lex_strterm = NEW_STRTERM(str_regexp, term, paren);
+            return tREGEXP_BEG;
+
+          case 's':
+            lex_strterm = NEW_STRTERM(str_ssym, term, paren);
+            lex_state = EXPR_FNAME;
+            return tSYMBEG;
+
+          default:
+            yyerror("unknown type of %string");
+            return 0;
+        }
+      }
+      if ((c = nextc()) == '=')
+      {
+        set_yylval_id('%');
+        lex_state = EXPR_BEG;
+        return tOP_ASGN;
+      }
+      if (IS_SPCARG(c))
+      {
+        goto quotation;
+      }
+      lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      pushback(c);
+      warn_balanced("%%", "string literal");
+      return '%';
     }
     
     // add before here :)
@@ -7459,7 +7583,7 @@ function heredoc_identifier ()
 
   tokfix();
   lex_goto_eol();
-  lexer.strterm = NEW_HEREDOCTERM(func, tok());
+  lexer.lex_strterm = NEW_HEREDOCTERM(func, tok());
   return term == '`' ? tXSTRING_BEG : tSTRING_BEG;
 }
 
@@ -7468,18 +7592,18 @@ function here_document_error (eos)
   // was: error:
     compile_error("can't find string \""+eos+"\" anywhere before EOF");
   // was: restore:
-    heredoc_restore(lexer.strterm);
-    lexer.strterm = null;
+    heredoc_restore(lexer.lex_strterm);
+    lexer.lex_strterm = null;
     return 0;
 }
 function here_document (here)
 {
   // instead of repeating the work just check the flag
-  if (lexer.strterm.heredoc_end_found_last_time)
+  if (lexer.lex_strterm.heredoc_end_found_last_time)
   {
     // was: dispatch_heredoc_end(); a noop out of ripper
-    heredoc_restore(lexer.strterm);
-    return tSTRING_END; // will erase `lexer.strterm`
+    heredoc_restore(lexer.lex_strterm);
+    return tSTRING_END; // will erase `lexer.lex_strterm`
   }
 
   // we're at the heredoc content start
@@ -7512,8 +7636,8 @@ function here_document (here)
         if (match_end !== -1)
         {
           end = $pos;
-          lexer.strterm.heredoc_end_found_last_time = true;
-          lexer.strterm.pos_after_eos = match_end;
+          lexer.lex_strterm.heredoc_end_found_last_time = true;
+          lexer.lex_strterm.pos_after_eos = match_end;
           break scaning; // the heredoc body
         }
         continue scaning; // the heredoc body
@@ -7563,7 +7687,7 @@ function here_document (here)
   //   str = STR_NEW3(tok(), toklen(), enc, func);
   // }
   // was: dispatch_heredoc_end(); a noop out of ripper
-  heredoc_restore(lexer.strterm);
+  heredoc_restore(lexer.lex_strterm);
   // lex_strterm = NEW_STRTERM(-1, 0, 0);
   // set_yylval_str(str); TODO:
   return tSTRING_CONTENT;
