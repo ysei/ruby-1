@@ -34,7 +34,7 @@
 
 
 
-;(function(){ // start of the parser namespase
+;(function(){ // start of the whole parser+lexer namespase
 /* First part of user declarations.  */
 
 // Tokens.
@@ -217,6 +217,7 @@ var yyerror;
  * @author Java skeleton ported by Peter Leonov.
  */
 
+var YYParser = (function(){ // start of the Parser very own namespase
 
 /**
 * A class defining a pair of positions.  Positions, defined by the
@@ -5903,6 +5904,10 @@ YYParser.bisonVersion = "2.7.12-4996";
 // Name of the skeleton that generated this parser.
 YYParser.bisonSkeleton = "./lalr1.js";
 
+return YYParser;
+
+})(); // end of the Parser very own namespase
+
 ;(function(){ // epilogue namespace
 
 
@@ -7809,5 +7814,5 @@ global.parse = function (text)
 
 })(); // end of epilogue namespace
 
-}).call(this); // end of the parser namespase
+}).call(this); // start of the whole parser+lexer namespase
 
