@@ -295,6 +295,9 @@ function YYStack ()
 // Instantiates the Bison-generated parser.
 function YYParser (yylexer)
 {
+  // self
+  var yyparser = this;
+  
   // The scanner that will supply tokens to the parser.
   this.yylexer = yylexer;
 
@@ -441,7 +444,10 @@ function YYParser (yylexer)
     {},
   '32': function ()
     
-    {},
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        rb_warn("END in method; use at_exit");
+    },
   '34': function ()
     
     {},
@@ -615,10 +621,16 @@ function YYParser (yylexer)
     {},
   '99': function ()
     
-    {},
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        yyerror("dynamic constant assignment");
+    },
   '100': function ()
     
-    {},
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        yyerror("dynamic constant assignment");
+    },
   '101': function ()
     
     {},
@@ -642,16 +654,24 @@ function YYParser (yylexer)
     {},
   '108': function ()
     
-    {},
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        yyerror("dynamic constant assignment");
+    },
   '109': function ()
     
-    {},
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        yyerror("dynamic constant assignment");
+    },
   '110': function ()
     
     {},
   '111': function ()
     
-    {},
+    {
+      yyerror("class/module name must be CONSTANT");
+    },
   '113': function ()
     
     {},
@@ -903,10 +923,12 @@ function YYParser (yylexer)
     {},
   '241': function ()
     
-    {in_defined = 1;},
+    { yylexer.in_defined = true;},
   '242': function ()
     
-    {},
+    {
+      yylexer.in_defined = false;
+    },
   '243': function ()
     
     {},
@@ -1052,10 +1074,12 @@ function YYParser (yylexer)
     {},
   '301': function ()
     
-    {in_defined = 1;},
+    { yylexer.in_defined = true;},
   '302': function ()
     
-    {},
+    {
+		      yylexer.in_defined = false;
+		    },
   '303': function ()
     
     {},
@@ -1124,7 +1148,11 @@ function YYParser (yylexer)
     {},
   '322': function ()
     
-    {},
+    {
+          if (in_def || yylexer.in_single)
+            yyerror("class definition in method body");
+    			
+		    },
   '323': function ()
     
     {
@@ -1133,20 +1161,29 @@ function YYParser (yylexer)
 		    },
   '324': function ()
     
-    {},
+    {
+          yyval = yylexer.in_def;
+          yylexer.in_def = 0;
+		    },
   '325': function ()
     
-    {},
+    {
+		      yyval = yylexer.in_single;
+		      yylexer.in_single = 0;
+		    },
   '326': function ()
     
     {
-		      // touching this alters the parse.output
-		      yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
-			    yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
+          yylexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
+          yylexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
 		    },
   '327': function ()
     
-    {},
+    {
+          if (yylexer.in_def || yylexer.in_single)
+            yyerror("module definition in method body");
+    			
+		    },
   '328': function ()
     
     {
@@ -1155,12 +1192,15 @@ function YYParser (yylexer)
 		    },
   '329': function ()
     
-    {},
+    {
+		      yylexer.in_def++;
+		    },
   '330': function ()
     
     {
 		      // touching this alters the parse.output
 			    yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+			    yylexer.in_def--;
 			    yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
 		    },
   '331': function ()
@@ -1171,11 +1211,14 @@ function YYParser (yylexer)
   '332': function ()
     
     {
+      yylexer.in_single++;
       yylexer.lex_state = EXPR_ENDFN; /* force for args */
     },
   '333': function ()
     
-    {},
+    {
+      yylexer.in_single--;
+    },
   '334': function ()
     
     {},
@@ -1699,7 +1742,9 @@ function YYParser (yylexer)
     {},
   '524': function ()
     
-    {},
+    {
+		      yyerrok();
+		    },
   '525': function ()
     
     {
@@ -1777,16 +1822,24 @@ function YYParser (yylexer)
     {},
   '548': function ()
     
-    {},
+    {
+		      yyerror("formal argument cannot be a constant");
+		    },
   '549': function ()
     
-    {},
+    {
+		      yyerror("formal argument cannot be an instance variable");
+		    },
   '550': function ()
     
-    {},
+    {
+		      yyerror("formal argument cannot be a global variable");
+		    },
   '551': function ()
     
-    {},
+    {
+		      yyerror("formal argument cannot be a class variable");
+		    },
   '553': function ()
     
     {},
@@ -1843,13 +1896,23 @@ function YYParser (yylexer)
     {},
   '576': function ()
     
-    {},
+    {
+          if (!is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
+            yyerror("rest argument must be local variable");
+    			
+		    },
   '577': function ()
     
     {},
   '580': function ()
     
-    {},
+    {
+		      if (!is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+            yyerror("block argument must be local variable");
+    			else if (!dyna_in_block() && local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+            yyerror("duplicated block argument name");
+    			
+		    },
   '581': function ()
     
     {},
@@ -1866,7 +1929,27 @@ function YYParser (yylexer)
 		},
   '585': function ()
     
-    {},
+    {
+          if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == 0) {
+            yyerror("can't define singleton method for ().");
+          }
+          else {
+            switch (nd_type(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])) { // TODO
+              case NODE_STR:
+              case NODE_DSTR:
+              case NODE_XSTR:
+              case NODE_DXSTR:
+              case NODE_DREGX:
+              case NODE_LIT:
+              case NODE_ARRAY:
+              case NODE_ZARRAY:
+                yyerror("can't define singleton method for literals");
+              default:
+                value_expr(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]); // TODO
+                break;
+            }
+          }
+		    },
   '587': function ()
     
     {},
@@ -2121,7 +2204,8 @@ function YYParser (yylexer)
           ++yynerrs_;
           if (yychar == yyempty_)
             yytoken = yyempty_;
-          this.yyerror(yylloc, this.yysyntax_error(yystate, yytoken));
+          // this.yyerror(yylloc, this.yysyntax_error(yystate, yytoken));
+          yyerror(this.yysyntax_error(yystate, yytoken));
         }
 
         yyerrloc = yylloc;
@@ -5590,65 +5674,65 @@ function YYParser (yylexer)
          0,   145,   145,   145,   154,   160,   163,   166,   169,   175,
      178,   177,   185,   194,   200,   203,   206,   209,   215,   219,
      218,   229,   228,   235,   238,   241,   246,   249,   252,   255,
-     258,   261,   264,   267,   269,   272,   275,   278,   281,   284,
-     287,   290,   293,   296,   299,   302,   307,   310,   317,   319,
-     321,   324,   327,   330,   335,   341,   343,   348,   350,   357,
-     356,   367,   373,   376,   379,   382,   385,   388,   391,   394,
-     397,   400,   403,   409,   411,   417,   419,   425,   428,   431,
-     434,   437,   440,   443,   446,   449,   451,   457,   459,   465,
-     468,   474,   477,   483,   486,   489,   492,   495,   498,   501,
-     504,   507,   513,   516,   519,   522,   525,   528,   531,   534,
-     537,   543,   546,   551,   554,   557,   563,   565,   567,   569,
-     574,   582,   584,   589,   592,   597,   601,   600,   609,   610,
-     611,   612,   613,   614,   615,   616,   617,   618,   619,   620,
-     621,   622,   623,   624,   625,   626,   627,   628,   629,   630,
-     631,   632,   633,   634,   635,   636,   637,   638,   642,   642,
-     642,   643,   643,   644,   644,   644,   645,   645,   645,   645,
-     646,   646,   646,   646,   647,   647,   647,   648,   648,   648,
-     648,   649,   649,   649,   649,   650,   650,   650,   650,   651,
-     651,   651,   651,   652,   652,   652,   652,   653,   653,   658,
-     661,   664,   667,   670,   673,   676,   679,   682,   685,   688,
-     691,   694,   697,   700,   703,   706,   709,   712,   715,   718,
-     721,   724,   727,   730,   733,   736,   739,   742,   745,   748,
-     751,   754,   757,   760,   763,   766,   769,   772,   775,   778,
-     781,   784,   784,   787,   790,   796,   800,   801,   803,   805,
-     809,   813,   814,   817,   818,   819,   821,   823,   827,   829,
-     831,   833,   835,   840,   840,   851,   855,   857,   861,   863,
-     865,   867,   871,   873,   875,   879,   880,   881,   882,   883,
-     884,   885,   886,   887,   888,   889,   892,   891,   904,   903,
-     910,   909,   915,   917,   919,   921,   923,   925,   927,   929,
-     931,   933,   933,   935,   937,   939,   941,   942,   944,   946,
-     951,   957,   961,   956,   968,   972,   967,   978,   982,   985,
-     989,   984,   996,   995,  1004,  1006,  1003,  1015,  1014,  1023,
-    1022,  1034,  1038,  1033,  1045,  1047,  1049,  1051,  1055,  1059,
-    1063,  1067,  1071,  1075,  1079,  1083,  1087,  1091,  1095,  1099,
-    1103,  1104,  1105,  1108,  1109,  1112,  1113,  1119,  1120,  1124,
-    1125,  1128,  1130,  1134,  1136,  1140,  1142,  1144,  1146,  1148,
-    1150,  1152,  1154,  1156,  1161,  1163,  1165,  1167,  1171,  1174,
-    1177,  1179,  1181,  1183,  1185,  1187,  1189,  1191,  1193,  1195,
-    1197,  1199,  1201,  1203,  1205,  1209,  1210,  1216,  1218,  1220,
-    1225,  1227,  1231,  1232,  1235,  1237,  1241,  1242,  1241,  1255,
-    1257,  1261,  1263,  1268,  1267,  1279,  1281,  1283,  1285,  1289,
-    1292,  1291,  1299,  1298,  1305,  1308,  1307,  1315,  1314,  1321,
-    1323,  1325,  1330,  1329,  1338,  1337,  1347,  1353,  1354,  1357,
-    1361,  1364,  1366,  1368,  1371,  1373,  1376,  1378,  1381,  1382,
-    1384,  1387,  1391,  1392,  1393,  1397,  1401,  1405,  1409,  1411,
-    1416,  1417,  1421,  1422,  1426,  1428,  1433,  1434,  1438,  1440,
-    1444,  1446,  1451,  1452,  1457,  1458,  1463,  1464,  1469,  1470,
-    1475,  1476,  1480,  1482,  1481,  1493,  1499,  1504,  1492,  1517,
-    1519,  1521,  1523,  1526,  1532,  1533,  1534,  1535,  1538,  1544,
-    1545,  1546,  1549,  1554,  1555,  1556,  1557,  1558,  1561,  1562,
-    1563,  1564,  1565,  1566,  1567,  1570,  1573,  1577,  1579,  1583,
-    1584,  1587,  1590,  1589,  1596,  1600,  1605,  1612,  1614,  1616,
-    1618,  1622,  1625,  1628,  1630,  1632,  1634,  1636,  1638,  1640,
-    1642,  1644,  1646,  1648,  1650,  1652,  1654,  1657,  1660,  1662,
-    1664,  1666,  1670,  1671,  1675,  1677,  1681,  1682,  1686,  1690,
-    1694,  1696,  1701,  1703,  1707,  1708,  1711,  1713,  1717,  1721,
-    1725,  1727,  1731,  1733,  1737,  1738,  1741,  1743,  1747,  1748,
-    1751,  1755,  1757,  1761,  1764,  1763,  1771,  1772,  1776,  1777,
-    1781,  1783,  1785,  1791,  1792,  1793,  1796,  1797,  1798,  1799,
-    1802,  1803,  1804,  1807,  1808,  1811,  1812,  1815,  1816,  1819,
-    1822,  1825,  1826,  1827,  1830,  1831,  1834,  1835,  1839
+     258,   261,   264,   270,   272,   275,   278,   281,   284,   287,
+     290,   293,   296,   299,   302,   305,   310,   313,   320,   322,
+     324,   327,   330,   333,   338,   344,   346,   351,   353,   360,
+     359,   370,   376,   379,   382,   385,   388,   391,   394,   397,
+     400,   403,   406,   412,   414,   420,   422,   428,   431,   434,
+     437,   440,   443,   446,   449,   452,   454,   460,   462,   468,
+     471,   477,   480,   486,   489,   492,   495,   498,   501,   504,
+     510,   516,   522,   525,   528,   531,   534,   537,   540,   546,
+     552,   558,   563,   568,   571,   574,   580,   582,   584,   586,
+     591,   599,   601,   606,   609,   614,   618,   617,   626,   627,
+     628,   629,   630,   631,   632,   633,   634,   635,   636,   637,
+     638,   639,   640,   641,   642,   643,   644,   645,   646,   647,
+     648,   649,   650,   651,   652,   653,   654,   655,   659,   659,
+     659,   660,   660,   661,   661,   661,   662,   662,   662,   662,
+     663,   663,   663,   663,   664,   664,   664,   665,   665,   665,
+     665,   666,   666,   666,   666,   667,   667,   667,   667,   668,
+     668,   668,   668,   669,   669,   669,   669,   670,   670,   675,
+     678,   681,   684,   687,   690,   693,   696,   699,   702,   705,
+     708,   711,   714,   717,   720,   723,   726,   729,   732,   735,
+     738,   741,   744,   747,   750,   753,   756,   759,   762,   765,
+     768,   771,   774,   777,   780,   783,   786,   789,   792,   795,
+     798,   801,   801,   806,   809,   815,   819,   820,   822,   824,
+     828,   832,   833,   836,   837,   838,   840,   842,   846,   848,
+     850,   852,   854,   859,   859,   870,   874,   876,   880,   882,
+     884,   886,   890,   892,   894,   898,   899,   900,   901,   902,
+     903,   904,   905,   906,   907,   908,   911,   910,   923,   922,
+     929,   928,   934,   936,   938,   940,   942,   944,   946,   948,
+     950,   952,   952,   956,   958,   960,   962,   963,   965,   967,
+     972,   978,   982,   977,   989,   993,   988,   999,  1003,  1006,
+    1010,  1005,  1017,  1016,  1029,  1034,  1028,  1045,  1044,  1057,
+    1056,  1071,  1075,  1070,  1085,  1087,  1089,  1091,  1095,  1099,
+    1103,  1107,  1111,  1115,  1119,  1123,  1127,  1131,  1135,  1139,
+    1143,  1144,  1145,  1148,  1149,  1152,  1153,  1159,  1160,  1164,
+    1165,  1168,  1170,  1174,  1176,  1180,  1182,  1184,  1186,  1188,
+    1190,  1192,  1194,  1196,  1201,  1203,  1205,  1207,  1211,  1214,
+    1217,  1219,  1221,  1223,  1225,  1227,  1229,  1231,  1233,  1235,
+    1237,  1239,  1241,  1243,  1245,  1249,  1250,  1256,  1258,  1260,
+    1265,  1267,  1271,  1272,  1275,  1277,  1281,  1282,  1281,  1295,
+    1297,  1301,  1303,  1308,  1307,  1319,  1321,  1323,  1325,  1329,
+    1332,  1331,  1339,  1338,  1345,  1348,  1347,  1355,  1354,  1361,
+    1363,  1365,  1370,  1369,  1378,  1377,  1387,  1393,  1394,  1397,
+    1401,  1404,  1406,  1408,  1411,  1413,  1416,  1418,  1421,  1422,
+    1424,  1427,  1431,  1432,  1433,  1437,  1441,  1445,  1449,  1451,
+    1456,  1457,  1461,  1462,  1466,  1468,  1473,  1474,  1478,  1480,
+    1484,  1486,  1491,  1492,  1497,  1498,  1503,  1504,  1509,  1510,
+    1515,  1516,  1520,  1522,  1521,  1533,  1539,  1544,  1532,  1557,
+    1559,  1561,  1563,  1566,  1572,  1573,  1574,  1575,  1578,  1584,
+    1585,  1586,  1589,  1594,  1595,  1596,  1597,  1598,  1601,  1602,
+    1603,  1604,  1605,  1606,  1607,  1610,  1613,  1617,  1619,  1623,
+    1624,  1627,  1630,  1629,  1636,  1642,  1647,  1654,  1656,  1658,
+    1660,  1664,  1667,  1670,  1672,  1674,  1676,  1678,  1680,  1682,
+    1684,  1686,  1688,  1690,  1692,  1694,  1696,  1699,  1702,  1706,
+    1710,  1714,  1720,  1721,  1725,  1727,  1731,  1732,  1736,  1740,
+    1744,  1746,  1751,  1753,  1757,  1758,  1761,  1763,  1767,  1771,
+    1775,  1777,  1781,  1783,  1787,  1788,  1791,  1797,  1801,  1802,
+    1805,  1815,  1817,  1821,  1824,  1823,  1851,  1852,  1856,  1857,
+    1861,  1863,  1865,  1871,  1872,  1873,  1876,  1877,  1878,  1879,
+    1882,  1883,  1884,  1887,  1888,  1891,  1892,  1895,  1896,  1899,
+    1902,  1905,  1906,  1907,  1910,  1911,  1914,  1915,  1919
     //[
   ];
 
@@ -5712,10 +5796,10 @@ function YYParser (yylexer)
 // rare used functions
 YYParser.prototype =
 {
-  yyerror: function yyerror (location, message)
-  {
-    this.yylexer.yyerror(location, message);
-  },
+  // yyerror: function yyerror (location, message)
+  // {
+  //   this.yylexer.yyerror(location, message);
+  // },
   
   // Report on the debug stream that the rule yyrule is going to be reduced.
   debug_reduce_print: function debug_reduce_print (yyrule)
@@ -5920,7 +6004,7 @@ var YYLexer =
 function Lexer ($stream)
 {
 
-// the lex() method and all public data sit here
+// the yylex() method and all public data sit here
 var lexer = this;
 // the end of stream had been reached
 lexer.eofp = false;
@@ -5947,7 +6031,13 @@ lexer.brace_nest = 0;
 // controls the nesting of states of condition-ness and cmdarg-ness
 lexer.cond_stack = 0;
 lexer.cmdarg_stack = 0;
-
+// how deep in in singleton definition are we?
+lexer.in_single = 0;
+// are we in def …
+lexer.in_def = 0;
+// defined? … has its own roles of lexing
+lexer.in_defined = false;
+// TODO: check out list of stateful variables with the original
 
 // all lexer states codes had been moved to parse.y prologue
 
@@ -7777,15 +7867,20 @@ var rb_reserved_word =
 'yield': {id0: keyword_yield, id1: keyword_yield, state: EXPR_ARG}
 };
 
+lexer.debugPosition = function ()
+{
+  return (
+    $stream.substring($pos - 25, $pos) +
+    '>>here<<' +
+    $stream.substring($pos, $pos + 25)
+  );
+}
+
 function debug (msg)
 {
   puts('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
   puts(msg)
-  puts(
-    $stream.substring($pos - 25, $pos) +
-    '>>here<<' +
-    $stream.substring($pos, $pos + 25)
-  )
+  puts(lexer.debugPosition())
   puts('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 }
 function warning (msg) { debug('WARNING: ' + msg) }
