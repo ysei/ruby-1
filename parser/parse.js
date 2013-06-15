@@ -5812,7 +5812,7 @@ YYParser.prototype =
     var yylno = this.yyrline_[yyrule];
     var yynrhs = this.yyr2_[yyrule];
     // Print the symbols being reduced, and their result.
-    this.debug_print("Reducing stack by rule " + (yyrule - 1) + " (line " + yylno + "), \n");
+    this.debug_print("Reducing stack by rule " + (yyrule - 1) + " (line " + yylno + ");\n");
 
     // The symbols being reduced.
     for (var yyi = 0; yyi < yynrhs; yyi++)
@@ -5834,8 +5834,8 @@ YYParser.prototype =
       + (yytype < this.yyntokens_ ? " token " : " nterm ")
       + this.yytname_[yytype]
       + " ("
-      + yylocationp + ": "
-      + (yyvaluep == null ? "(null)" : yyvaluep)
+      // + yylocationp + ": "
+      // + (yyvaluep == null ? "(null)" : yyvaluep)
       + ")\n"
     );
   },
@@ -8263,8 +8263,11 @@ global.parse = function (text)
 
   var parser = new YYParser(lexer);
   parser.enableDebug();
-
-  return parser.parse();
+  
+  var begin = new Date();
+  var res = parser.parse();
+  print('time: ' + (new Date - begin));
+  return res;
 }
 
 
