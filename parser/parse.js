@@ -1632,7 +1632,7 @@ function YYParser (yylexer)
     
     {
 			yyval = yylexer.lex_strterm;
-			yylexer.lex_strterm = 0;
+			yylexer.lex_strterm = null;
 			yylexer.lex_state = EXPR_BEG;
 		    },
   '484': function ()
@@ -6313,6 +6313,10 @@ function is_bol ()
 {
   return $pos === 0 || $stream[$pos-1] === '\n'
 }
+function is_eol ()
+{
+  return $pos === $streamLength || $stream[$pos] === '\n'
+}
 
 
 // token related stuff
@@ -6358,9 +6362,10 @@ function NEW_STRTERM (func, term, paren)
 {
   return {
     type: 'NODE_STRTERM',
-    func: func,
-    tok: term,
+    nd_func: func,
+    term: term,
     paren: paren,
+    nd_nest: 0, // for tokadd_string() and parse_string()
     pos_after_eos: 0, // to be calculated in `here_document()`
     heredoc_end_found_last_time: false,
     line: 0 // TODO: `ruby_sourceline`
@@ -6371,7 +6376,7 @@ function NEW_HEREDOCTERM (func, term)
 {
   return {
     type: 'NODE_HEREDOC',
-    func: func,
+    nd_func: func,
     tok: term,
     paren: '',
     pos_after_eos: 0, // to be calculated in `here_document()`
@@ -6393,6 +6398,10 @@ function ISDIGIT (c)
 {
   return /^\d$/.test(c);
 }
+function ISALNUM (c)
+{
+  return /^\w$/.test(c);
+}
 
 // TODO: get rid of such a piece of junk :)
 function arg_ambiguous ()
@@ -6411,8 +6420,7 @@ this.yylex = function yylex ()
   var c = '';
   lexer.space_seen = false;
   
-  if (false) // TODO
-  // if (lexer.lex_strterm)
+  if (lexer.lex_strterm)
   {
     var token = 0;
     if (lexer.lex_strterm.type == 'NODE_HEREDOC')
@@ -6430,7 +6438,7 @@ this.yylex = function yylex ()
       if (token == tSTRING_END || token == tREGEXP_END)
       {
         lexer.lex_strterm = null;
-        lex_state = EXPR_END;
+        lexer.lex_state = EXPR_END;
       }
     }
     return token;
@@ -7206,126 +7214,134 @@ this.yylex = function yylex ()
     
     case '%':
     {
-      if (IS_lex_state(EXPR_BEG_ANY))
-      {
-        var term = '';
-        var paren = '';
-
-        c = nextc();
+      var term = '';
+      var paren = '';
+      
       quotation:
-        if (c == '' || !ISALNUM(c))
+      for (;;) // a label
+      {
+        // this label enulating loop expects the lex_state
+        // to be constant within its boudaries
+        if (IS_lex_state(EXPR_BEG_ANY))
         {
-          term = c;
-          c = 'Q';
-        }
-        else
-        {
-          term = nextc();
-          if (ISALNUM(term) || !ISASCII(term))
+          c = nextc();
+          // was: quotation:
+          if (c == '' || !ISALNUM(c))
           {
-            yyerror("unknown type of %string");
+            term = c;
+            c = 'Q';
+          }
+          else
+          {
+            term = nextc();
+            if (ISALNUM(term) || !ISASCII(term))
+            {
+              yyerror("unknown type of %string");
+              return 0;
+            }
+          }
+          if (c == '' || term == '')
+          {
+            compile_error("unterminated quoted string meets end of file");
             return 0;
           }
+          paren = term;
+          if (term == '(')
+            term = ')';
+          else if (term == '[')
+            term = ']';
+          else if (term == '{')
+            term = '}';
+          else if (term == '<')
+            term = '>';
+          else
+            paren = '';
+
+          switch (c)
+          {
+            case 'Q':
+              lexer.lex_strterm = NEW_STRTERM(str_dquote, term, paren);
+              return tSTRING_BEG;
+
+            case 'q':
+              lexer.lex_strterm = NEW_STRTERM(str_squote, term, paren);
+              return tSTRING_BEG;
+
+            case 'W':
+              lexer.lex_strterm = NEW_STRTERM(str_dword, term, paren);
+              do
+              {
+                c = nextc();
+              }
+              while (ISSPACE(c));
+              pushback(c);
+              return tWORDS_BEG;
+
+            case 'w':
+              lexer.lex_strterm = NEW_STRTERM(str_sword, term, paren);
+              do
+              {
+                c = nextc();
+              }
+              while (ISSPACE(c));
+              pushback(c);
+              return tQWORDS_BEG;
+
+            case 'I':
+              lexer.lex_strterm = NEW_STRTERM(str_dword, term, paren);
+              do
+              {
+                c = nextc();
+              }
+              while (ISSPACE(c));
+              pushback(c);
+              return tSYMBOLS_BEG;
+
+            case 'i':
+              lexer.lex_strterm = NEW_STRTERM(str_sword, term, paren);
+              do
+              {
+                c = nextc();
+              }
+              while (ISSPACE(c));
+              pushback(c);
+              return tQSYMBOLS_BEG;
+
+            case 'x':
+              lexer.lex_strterm = NEW_STRTERM(str_xquote, term, paren);
+              return tXSTRING_BEG;
+
+            case 'r':
+              lexer.lex_strterm = NEW_STRTERM(str_regexp, term, paren);
+              return tREGEXP_BEG;
+
+            case 's':
+              lexer.lex_strterm = NEW_STRTERM(str_ssym, term, paren);
+              lexer.lex_state = EXPR_FNAME;
+              return tSYMBEG;
+
+            default:
+              yyerror("unknown type of %string");
+              return 0;
+          }
         }
-        if (c == '' || term == '')
+        if ((c = nextc()) == '=')
         {
-          compile_error("unterminated quoted string meets end of file");
-          return 0;
+          // set_yylval_id('%'); TODO
+          lexer.lex_state = EXPR_BEG;
+          return tOP_ASGN;
         }
-        paren = term;
-        if (term == '(')
-          term = ')';
-        else if (term == '[')
-          term = ']';
-        else if (term == '{')
-          term = '}';
-        else if (term == '<')
-          term = '>';
-        else
-          paren = '';
-
-        switch (c)
+        if (IS_SPCARG(c))
         {
-          case 'Q':
-            lexer.lex_strterm = NEW_STRTERM(str_dquote, term, paren);
-            return tSTRING_BEG;
-
-          case 'q':
-            lex_strterm = NEW_STRTERM(str_squote, term, paren);
-            return tSTRING_BEG;
-
-          case 'W':
-            lex_strterm = NEW_STRTERM(str_dword, term, paren);
-            do
-            {
-              c = nextc();
-            }
-            while (ISSPACE(c));
-            pushback(c);
-            return tWORDS_BEG;
-
-          case 'w':
-            lex_strterm = NEW_STRTERM(str_sword, term, paren);
-            do
-            {
-              c = nextc();
-            }
-            while (ISSPACE(c));
-            pushback(c);
-            return tQWORDS_BEG;
-
-          case 'I':
-            lex_strterm = NEW_STRTERM(str_dword, term, paren);
-            do
-            {
-              c = nextc();
-            }
-            while (ISSPACE(c));
-            pushback(c);
-            return tSYMBOLS_BEG;
-
-          case 'i':
-            lex_strterm = NEW_STRTERM(str_sword, term, paren);
-            do
-            {
-              c = nextc();
-            }
-            while (ISSPACE(c));
-            pushback(c);
-            return tQSYMBOLS_BEG;
-
-          case 'x':
-            lex_strterm = NEW_STRTERM(str_xquote, term, paren);
-            return tXSTRING_BEG;
-
-          case 'r':
-            lex_strterm = NEW_STRTERM(str_regexp, term, paren);
-            return tREGEXP_BEG;
-
-          case 's':
-            lex_strterm = NEW_STRTERM(str_ssym, term, paren);
-            lex_state = EXPR_FNAME;
-            return tSYMBEG;
-
-          default:
-            yyerror("unknown type of %string");
-            return 0;
+          pushback(c); // added to jump to top
+          continue quotation; // was: goto quotation;
         }
-      }
-      if ((c = nextc()) == '=')
-      {
-        set_yylval_id('%');
-        lex_state = EXPR_BEG;
-        return tOP_ASGN;
-      }
-      if (IS_SPCARG(c))
-      {
-        goto quotation;
-      }
-      lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+        break; // the for (;;) label-loop
+      } // for (;;) quotation
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       pushback(c);
-      warn_balanced("%%", "string literal");
-      return '%';
+      warn_balanced("%%", "string literal", c);
+      return $('%');
     }
     
     // add before here :)
@@ -7603,12 +7619,12 @@ function here_document (here)
   {
     // was: dispatch_heredoc_end(); a noop out of ripper
     heredoc_restore(lexer.lex_strterm);
-    return tSTRING_END; // will erase `lexer.lex_strterm`
+    return tSTRING_END; // will set `lexer.lex_strterm` to `null`
   }
 
   // we're at the heredoc content start
-  var func = here.func,
-      eos  = here.tok,
+  var func = here.nd_func,
+      eos  = here.term,
       indent = func & STR_FUNC_INDENT;
 
   var c = ''
@@ -7691,6 +7707,218 @@ function here_document (here)
   // lex_strterm = NEW_STRTERM(-1, 0, 0);
   // set_yylval_str(str); TODO:
   return tSTRING_CONTENT;
+}
+
+function parse_string (quote)
+{
+  var func = quote.nd_func,
+      term = quote.term,
+      paren = quote.paren;
+  
+  var space = false;
+
+  if (func == -1)
+    return tSTRING_END;
+  var c = nextc();
+  if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
+  {
+    do
+    {
+      c = nextc();
+    }
+    while (ISSPACE(c));
+    space = true;
+  }
+  // quote.nd_nest is increased in tokadd_string()
+  // once for every `paren` char met
+  if (c == term && !quote.nd_nest)
+  {
+    if (func & STR_FUNC_QWORDS)
+    {
+      quote.nd_func = -1;
+      return $(' ');
+    }
+    if (!(func & STR_FUNC_REGEXP))
+      return tSTRING_END;
+    // set_yylval_num(regx_options()); TODO
+    return tREGEXP_END;
+  }
+  if (space)
+  {
+    pushback(c);
+    return $(' ');
+  }
+  newtok();
+  if ((func & STR_FUNC_EXPAND) && c == '#')
+  {
+    switch (c = nextc())
+    {
+      case '$':
+      case '@':
+        pushback(c);
+        return tSTRING_DVAR;
+      case '{':
+        lexer.command_start = true;
+        return tSTRING_DBEG;
+    }
+    tokadd('#');
+  }
+  pushback(c);
+  if (tokadd_string(func, term, paren, quote) == '')
+  {
+    // ruby_sourceline = nd_line(quote); TODO
+    if (func & STR_FUNC_REGEXP)
+    {
+      if (lexer.eofp)
+        compile_error("unterminated regexp meets end of file");
+      return tREGEXP_END;
+    }
+    else
+    {
+      if (lexer.eofp)
+        compile_error("unterminated string meets end of file");
+      return tSTRING_END;
+    }
+  }
+
+  tokfix();
+  // set_yylval_str(STR_NEW3(tok(), toklen(), enc, func)); TODO
+
+  return tSTRING_CONTENT;
+}
+
+
+function tokadd_string (func, term, paren, str_term)
+{
+  var c = '';
+  while ((c = nextc()) != '')
+  {
+    if (paren && c == paren)
+    {
+      ++str_term.nd_nest;
+    }
+    else if (c == term)
+    {
+      if (!str_term.nd_nest)
+      {
+        pushback(c);
+        break;
+      }
+      --str_term.nd_nest;
+    }
+    else if ((func & STR_FUNC_EXPAND) && c == '#' && !is_eol())
+    {
+      var c2 = nthchar(0);
+      if (c2 == '$' || c2 == '@' || c2 == '{')
+      {
+        pushback(c);
+        break;
+      }
+    }
+    else if (c == '\\')
+    {
+      c = nextc();
+      switch (c)
+      {
+        case '\n':
+          if (func & STR_FUNC_QWORDS)
+            break;
+          if (func & STR_FUNC_EXPAND)
+            continue;
+          tokadd('\\');
+          break;
+
+        case '\\':
+          if (func & STR_FUNC_ESCAPE)
+            tokadd(c);
+          break;
+
+        case 'u':
+          if ((func & STR_FUNC_EXPAND) == 0)
+          {
+            tokadd('\\');
+            break;
+          }
+          parser_tokadd_utf8(true, !!(func & STR_FUNC_SYMBOL), !!(func & STR_FUNC_REGEXP));
+          continue;
+
+        default:
+          if (c == '')
+            return '';
+          if (!ISASCII(c))
+          {
+            if ((func & STR_FUNC_EXPAND) == 0)
+              tokadd('\\');
+            // was: goto non_ascii;
+            if (tokadd(c) == '')
+              return '';
+            continue;
+          }
+          if (func & STR_FUNC_REGEXP)
+          {
+            if (c == term && !simple_re_meta(c))
+            {
+              tokadd(c);
+              continue;
+            }
+            pushback(c);
+            if ((c = tokadd_escape()) == '') // TODO
+              return '';
+            continue;
+          }
+          else if (func & STR_FUNC_EXPAND)
+          {
+            pushback(c);
+            if (func & STR_FUNC_ESCAPE)
+              tokadd('\\');
+            // TODO:
+            // c = read_escape(0, &enc);
+          }
+          else if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
+          {
+            /* ignore backslashed spaces in %w */
+          }
+          else if (c != term && !(paren && c == paren))
+          {
+            tokadd('\\');
+            pushback(c);
+            continue;
+          }
+      }
+    }
+    else if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
+    {
+      pushback(c);
+      break;
+    }
+    tokadd(c);
+  }
+  return c;
+}
+
+function simple_re_meta (c)
+{
+  // TODO: optimize!
+  switch (c)
+  {
+    case '$':
+    case '*':
+    case '+':
+    case '.':
+    case '?':
+    case '^':
+    case '|':
+    case ')':
+      return true;
+    default:
+      return false;
+  }
+}
+
+
+function tokadd_escape ()
+{
+  // TODO
 }
 
 // checks if the current line matches `/\s*#{eos}\n/`;
@@ -8009,10 +8237,10 @@ lexer.debugPosition = function ()
   );
 }
 
-function debug (msg)
+function debug ()
 {
   puts('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-  puts(msg)
+  puts.apply(null, arguments)
   puts(lexer.debugPosition())
   puts('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 }
