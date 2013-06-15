@@ -8478,7 +8478,7 @@ global.parse = function (text)
   
   var begin = new Date();
   var res = parser.parse();
-  print('time: ' + (new Date - begin));
+  // print('time: ' + (new Date - begin));
   return res;
 }
 
