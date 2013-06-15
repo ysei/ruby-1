@@ -5835,7 +5835,7 @@ YYParser.prototype =
       + this.yytname_[yytype]
       + " ("
       // + yylocationp + ": "
-      // + (yyvaluep == null ? "(null)" : yyvaluep)
+      // + (yyvaluep == null ? "(null)" : JSON.stringify(yyvaluep))
       + ")\n"
     );
   },
@@ -6537,8 +6537,8 @@ this.yylex = function yylex ()
             }
           }
           default:
-            // --ruby_sourceline; TODO
-            // lex_nextline = lex_lastline; TODO
+            --lexer.ruby_sourceline;
+            lex_nextline = lex_lastline;
             
           // EOF no decrement
           case '':
@@ -7806,15 +7806,8 @@ function here_document_restore (eos)
 function here_document (here)
 {
   // we're at the heredoc content start
-  var func = here.nd_func;
-  // instead of repeating the work just check the flag
-  if (func === -1)
-  {
-    heredoc_restore(lexer.lex_strterm);
-    return tSTRING_END; // will set `lexer.lex_strterm` to `null`
-  }
-  
-  var eos = here.term,
+  var func = here.nd_func,
+      eos = here.term,
       indent = !!(func & STR_FUNC_INDENT);
   
   var str = ''; // accumulate string content here
@@ -7828,8 +7821,6 @@ function here_document (here)
   
   if (was_bol() && whole_match_p(eos, indent))
   {
-    here.nd_func = -1; // signal ourself that the end reached
-    
     heredoc_restore(lexer.lex_strterm);
     return tSTRING_END;
   }
@@ -7900,9 +7891,8 @@ function here_document (here)
     while (!whole_match_p(eos, indent));
     // str = STR_NEW3(tok(), toklen(), enc, func); TODO
   }
-  here.nd_func = -1; // signal ourself that the end reached
   heredoc_restore(lexer.lex_strterm);
-  // lex_strterm = NEW_STRTERM(-1, 0, 0);
+  lexer.lex_strterm = NEW_STRTERM(-1, '', '');
   // set_yylval_str(str); TODO:
   return tSTRING_CONTENT;
 }
@@ -8006,7 +7996,7 @@ function tokadd_string (func, term, paren, str_term)
     }
     else if ((func & STR_FUNC_EXPAND) && c == '#' && lex_p < lex_pend)
     {
-      var c2 = nthchar(0);
+      var c2 = lex_pv();
       if (c2 == '$' || c2 == '@' || c2 == '{')
       {
         pushback(c);
@@ -8117,6 +8107,7 @@ function simple_re_meta (c)
 function tokadd_escape ()
 {
   // TODO
+  return 'TODO';
 }
 
 // checks if the current line matches `/^\s*#{eos}\n?$/`;
@@ -8372,12 +8363,12 @@ function start_num (c)
 function is_local_id (ident)
 {
   // TODO :)
-  return true;
+  return false;
 }
 function lvar_defined (ident)
 {
   // TODO :)
-  return true;
+  return false;
 }
 
 var rb_reserved_word =
