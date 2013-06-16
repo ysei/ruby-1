@@ -206,8 +206,6 @@ var EXPR_ARG_ANY = EXPR_ARG | EXPR_CMDARG;
 var EXPR_END_ANY = EXPR_END | EXPR_ENDARG | EXPR_ENDFN;
 
 
-var yyerror;
-
 
 
 /**
@@ -374,7 +372,7 @@ function YYParser (yylexer)
   '19': function ()
     
     {
-      yyerror("BEGIN is permitted only at toplevel");
+      yylexer.yyerror("BEGIN is permitted only at toplevel");
     },
   '20': function ()
     
@@ -396,7 +394,7 @@ function YYParser (yylexer)
   '25': function ()
     
     {
-      yyerror("can't make alias for the number variables");
+      yylexer.yyerror("can't make alias for the number variables");
     },
   '26': function ()
     
@@ -597,13 +595,13 @@ function YYParser (yylexer)
     
     {
       if (yylexer.in_def || yylexer.in_single)
-        yyerror("dynamic constant assignment");
+        yylexer.yyerror("dynamic constant assignment");
     },
   '100': function ()
     
     {
       if (yylexer.in_def || yylexer.in_single)
-        yyerror("dynamic constant assignment");
+        yylexer.yyerror("dynamic constant assignment");
     },
   '101': function ()
     
@@ -630,13 +628,13 @@ function YYParser (yylexer)
     
     {
       if (yylexer.in_def || yylexer.in_single)
-        yyerror("dynamic constant assignment");
+        yylexer.yyerror("dynamic constant assignment");
     },
   '109': function ()
     
     {
       if (yylexer.in_def || yylexer.in_single)
-        yyerror("dynamic constant assignment");
+        yylexer.yyerror("dynamic constant assignment");
     },
   '110': function ()
     
@@ -644,7 +642,7 @@ function YYParser (yylexer)
   '111': function ()
     
     {
-      yyerror("class/module name must be CONSTANT");
+      yylexer.yyerror("class/module name must be CONSTANT");
     },
   '113': function ()
     
@@ -1124,7 +1122,7 @@ function YYParser (yylexer)
     
     {
           if (yylexer.in_def || yylexer.in_single)
-            yyerror("class definition in method body");
+            yylexer.yyerror("class definition in method body");
     			
 		    },
   '323': function ()
@@ -1155,7 +1153,7 @@ function YYParser (yylexer)
     
     {
           if (yylexer.in_def || yylexer.in_single)
-            yyerror("module definition in method body");
+            yylexer.yyerror("module definition in method body");
     			
 		    },
   '328': function ()
@@ -1800,22 +1798,22 @@ function YYParser (yylexer)
   '548': function ()
     
     {
-		      yyerror("formal argument cannot be a constant");
+		      yylexer.yyerror("formal argument cannot be a constant");
 		    },
   '549': function ()
     
     {
-		      yyerror("formal argument cannot be an instance variable");
+		      yylexer.yyerror("formal argument cannot be an instance variable");
 		    },
   '550': function ()
     
     {
-		      yyerror("formal argument cannot be a global variable");
+		      yylexer.yyerror("formal argument cannot be a global variable");
 		    },
   '551': function ()
     
     {
-		      yyerror("formal argument cannot be a class variable");
+		      yylexer.yyerror("formal argument cannot be a class variable");
 		    },
   '553': function ()
     
@@ -1875,7 +1873,7 @@ function YYParser (yylexer)
     
     {
           if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
-            yyerror("rest argument must be local variable");
+            yylexer.yyerror("rest argument must be local variable");
     			
 		    },
   '577': function ()
@@ -1885,9 +1883,9 @@ function YYParser (yylexer)
     
     {
 		      if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
-            yyerror("block argument must be local variable");
+            yylexer.yyerror("block argument must be local variable");
     			else if (!dyna_in_block() && local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
-            yyerror("duplicated block argument name");
+            yylexer.yyerror("duplicated block argument name");
     			
 		    },
   '581': function ()
@@ -1908,7 +1906,7 @@ function YYParser (yylexer)
     
     {
           if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == 0) {
-            yyerror("can't define singleton method for ().");
+            yylexer.yyerror("can't define singleton method for ().");
           }
           else {
             switch (nd_type(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])) { // TODO
@@ -1920,7 +1918,7 @@ function YYParser (yylexer)
               case NODE_LIT:
               case NODE_ARRAY:
               case NODE_ZARRAY:
-                yyerror("can't define singleton method for literals");
+                yylexer.yyerror("can't define singleton method for literals");
               default:
                 value_expr(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]); // TODO
                 break;
@@ -2171,7 +2169,7 @@ function YYParser (yylexer)
           ++yynerrs_;
           if (yychar == yyempty_)
             yytoken = yyempty_;
-          yyerror(this.yysyntax_error(yystate, yytoken));
+          yylexer.yyerror(this.yysyntax_error(yystate, yytoken));
         }
 
         if (yyerrstatus_ == 3)
@@ -5611,68 +5609,68 @@ function YYParser (yylexer)
   var yyrline_ = this.yyrline_ =
   [
     //]
-         0,   145,   145,   145,   154,   160,   163,   166,   169,   175,
-     178,   177,   185,   194,   200,   203,   206,   209,   215,   219,
-     218,   229,   228,   235,   238,   241,   246,   249,   252,   255,
-     258,   261,   264,   270,   272,   275,   278,   281,   284,   287,
-     290,   293,   296,   299,   302,   305,   310,   313,   320,   322,
-     324,   327,   330,   333,   338,   344,   346,   351,   353,   360,
-     359,   370,   376,   379,   382,   385,   388,   391,   394,   397,
-     400,   403,   406,   412,   414,   420,   422,   428,   431,   434,
-     437,   440,   443,   446,   449,   452,   454,   460,   462,   468,
-     471,   477,   480,   486,   489,   492,   495,   498,   501,   504,
-     510,   516,   522,   525,   528,   531,   534,   537,   540,   546,
-     552,   558,   563,   568,   571,   574,   580,   582,   584,   586,
-     591,   599,   601,   606,   609,   614,   618,   617,   626,   627,
-     628,   629,   630,   631,   632,   633,   634,   635,   636,   637,
-     638,   639,   640,   641,   642,   643,   644,   645,   646,   647,
-     648,   649,   650,   651,   652,   653,   654,   655,   659,   659,
-     659,   660,   660,   661,   661,   661,   662,   662,   662,   662,
-     663,   663,   663,   663,   664,   664,   664,   665,   665,   665,
-     665,   666,   666,   666,   666,   667,   667,   667,   667,   668,
-     668,   668,   668,   669,   669,   669,   669,   670,   670,   675,
-     678,   681,   684,   687,   690,   693,   696,   699,   702,   705,
-     708,   711,   714,   717,   720,   723,   726,   729,   732,   735,
-     738,   741,   744,   747,   750,   753,   756,   759,   762,   765,
-     768,   771,   774,   777,   780,   783,   786,   789,   792,   795,
-     798,   801,   801,   806,   809,   815,   819,   820,   822,   824,
-     828,   832,   833,   836,   837,   838,   840,   842,   846,   848,
-     850,   852,   854,   859,   859,   870,   874,   876,   880,   882,
-     884,   886,   890,   892,   894,   898,   899,   900,   901,   902,
-     903,   904,   905,   906,   907,   908,   911,   910,   923,   922,
-     929,   928,   934,   936,   938,   940,   942,   944,   946,   948,
-     950,   952,   952,   956,   958,   960,   962,   963,   965,   967,
-     972,   978,   982,   977,   989,   993,   988,   999,  1003,  1006,
-    1010,  1005,  1017,  1016,  1029,  1034,  1028,  1045,  1044,  1057,
-    1056,  1074,  1078,  1073,  1088,  1090,  1092,  1094,  1098,  1102,
-    1106,  1110,  1114,  1118,  1122,  1126,  1130,  1134,  1138,  1142,
-    1146,  1147,  1148,  1151,  1152,  1155,  1156,  1162,  1163,  1167,
-    1168,  1171,  1173,  1177,  1179,  1183,  1185,  1187,  1189,  1191,
-    1193,  1195,  1197,  1199,  1204,  1206,  1208,  1210,  1214,  1217,
-    1220,  1222,  1224,  1226,  1228,  1230,  1232,  1234,  1236,  1238,
-    1240,  1242,  1244,  1246,  1248,  1252,  1253,  1259,  1261,  1263,
-    1268,  1270,  1274,  1275,  1278,  1280,  1284,  1285,  1284,  1298,
-    1300,  1304,  1306,  1311,  1310,  1322,  1324,  1326,  1328,  1332,
-    1335,  1334,  1342,  1341,  1348,  1351,  1350,  1358,  1357,  1364,
-    1366,  1368,  1373,  1372,  1381,  1380,  1390,  1396,  1397,  1400,
-    1404,  1407,  1409,  1411,  1414,  1416,  1419,  1421,  1424,  1425,
-    1427,  1430,  1434,  1435,  1436,  1440,  1444,  1448,  1452,  1454,
-    1459,  1460,  1464,  1465,  1469,  1471,  1476,  1477,  1481,  1483,
-    1487,  1489,  1494,  1495,  1500,  1501,  1506,  1507,  1512,  1513,
-    1518,  1519,  1523,  1525,  1524,  1536,  1542,  1547,  1535,  1560,
-    1562,  1564,  1566,  1569,  1575,  1576,  1577,  1578,  1581,  1587,
-    1588,  1589,  1592,  1597,  1598,  1599,  1600,  1601,  1604,  1605,
-    1606,  1607,  1608,  1609,  1610,  1613,  1616,  1620,  1622,  1626,
-    1627,  1630,  1633,  1632,  1639,  1645,  1650,  1657,  1659,  1661,
-    1663,  1667,  1670,  1673,  1675,  1677,  1679,  1681,  1683,  1685,
-    1687,  1689,  1691,  1693,  1695,  1697,  1699,  1702,  1705,  1709,
-    1713,  1717,  1723,  1724,  1728,  1730,  1734,  1735,  1739,  1743,
-    1747,  1749,  1754,  1756,  1760,  1761,  1764,  1766,  1770,  1774,
-    1778,  1780,  1784,  1786,  1790,  1791,  1794,  1800,  1804,  1805,
-    1808,  1818,  1820,  1824,  1827,  1826,  1854,  1855,  1859,  1860,
-    1864,  1866,  1868,  1874,  1875,  1876,  1879,  1880,  1881,  1882,
-    1885,  1886,  1887,  1890,  1891,  1894,  1895,  1898,  1899,  1902,
-    1905,  1908,  1909,  1910,  1913,  1914,  1917,  1918,  1922
+         0,   143,   143,   143,   152,   158,   161,   164,   167,   173,
+     176,   175,   183,   192,   198,   201,   204,   207,   213,   217,
+     216,   227,   226,   233,   236,   239,   244,   247,   250,   253,
+     256,   259,   262,   268,   270,   273,   276,   279,   282,   285,
+     288,   291,   294,   297,   300,   303,   308,   311,   318,   320,
+     322,   325,   328,   331,   336,   342,   344,   349,   351,   358,
+     357,   368,   374,   377,   380,   383,   386,   389,   392,   395,
+     398,   401,   404,   410,   412,   418,   420,   426,   429,   432,
+     435,   438,   441,   444,   447,   450,   452,   458,   460,   466,
+     469,   475,   478,   484,   487,   490,   493,   496,   499,   502,
+     508,   514,   520,   523,   526,   529,   532,   535,   538,   544,
+     550,   556,   561,   566,   569,   572,   578,   580,   582,   584,
+     589,   597,   599,   604,   607,   612,   616,   615,   624,   625,
+     626,   627,   628,   629,   630,   631,   632,   633,   634,   635,
+     636,   637,   638,   639,   640,   641,   642,   643,   644,   645,
+     646,   647,   648,   649,   650,   651,   652,   653,   657,   657,
+     657,   658,   658,   659,   659,   659,   660,   660,   660,   660,
+     661,   661,   661,   661,   662,   662,   662,   663,   663,   663,
+     663,   664,   664,   664,   664,   665,   665,   665,   665,   666,
+     666,   666,   666,   667,   667,   667,   667,   668,   668,   673,
+     676,   679,   682,   685,   688,   691,   694,   697,   700,   703,
+     706,   709,   712,   715,   718,   721,   724,   727,   730,   733,
+     736,   739,   742,   745,   748,   751,   754,   757,   760,   763,
+     766,   769,   772,   775,   778,   781,   784,   787,   790,   793,
+     796,   799,   799,   804,   807,   813,   817,   818,   820,   822,
+     826,   830,   831,   834,   835,   836,   838,   840,   844,   846,
+     848,   850,   852,   857,   857,   868,   872,   874,   878,   880,
+     882,   884,   888,   890,   892,   896,   897,   898,   899,   900,
+     901,   902,   903,   904,   905,   906,   909,   908,   921,   920,
+     927,   926,   932,   934,   936,   938,   940,   942,   944,   946,
+     948,   950,   950,   954,   956,   958,   960,   961,   963,   965,
+     970,   976,   980,   975,   987,   991,   986,   997,  1001,  1004,
+    1008,  1003,  1015,  1014,  1027,  1032,  1026,  1043,  1042,  1055,
+    1054,  1072,  1076,  1071,  1086,  1088,  1090,  1092,  1096,  1100,
+    1104,  1108,  1112,  1116,  1120,  1124,  1128,  1132,  1136,  1140,
+    1144,  1145,  1146,  1149,  1150,  1153,  1154,  1160,  1161,  1165,
+    1166,  1169,  1171,  1175,  1177,  1181,  1183,  1185,  1187,  1189,
+    1191,  1193,  1195,  1197,  1202,  1204,  1206,  1208,  1212,  1215,
+    1218,  1220,  1222,  1224,  1226,  1228,  1230,  1232,  1234,  1236,
+    1238,  1240,  1242,  1244,  1246,  1250,  1251,  1257,  1259,  1261,
+    1266,  1268,  1272,  1273,  1276,  1278,  1282,  1283,  1282,  1296,
+    1298,  1302,  1304,  1309,  1308,  1320,  1322,  1324,  1326,  1330,
+    1333,  1332,  1340,  1339,  1346,  1349,  1348,  1356,  1355,  1362,
+    1364,  1366,  1371,  1370,  1379,  1378,  1388,  1394,  1395,  1398,
+    1402,  1405,  1407,  1409,  1412,  1414,  1417,  1419,  1422,  1423,
+    1425,  1428,  1432,  1433,  1434,  1438,  1442,  1446,  1450,  1452,
+    1457,  1458,  1462,  1463,  1467,  1469,  1474,  1475,  1479,  1481,
+    1485,  1487,  1492,  1493,  1498,  1499,  1504,  1505,  1510,  1511,
+    1516,  1517,  1521,  1523,  1522,  1534,  1540,  1545,  1533,  1558,
+    1560,  1562,  1564,  1567,  1573,  1574,  1575,  1576,  1579,  1585,
+    1586,  1587,  1590,  1595,  1596,  1597,  1598,  1599,  1602,  1603,
+    1604,  1605,  1606,  1607,  1608,  1611,  1614,  1618,  1620,  1624,
+    1625,  1628,  1631,  1630,  1637,  1643,  1648,  1655,  1657,  1659,
+    1661,  1665,  1668,  1671,  1673,  1675,  1677,  1679,  1681,  1683,
+    1685,  1687,  1689,  1691,  1693,  1695,  1697,  1700,  1703,  1707,
+    1711,  1715,  1721,  1722,  1726,  1728,  1732,  1733,  1737,  1741,
+    1745,  1747,  1752,  1754,  1758,  1759,  1762,  1764,  1768,  1772,
+    1776,  1778,  1782,  1784,  1788,  1789,  1792,  1798,  1802,  1803,
+    1806,  1816,  1818,  1822,  1825,  1824,  1852,  1853,  1857,  1858,
+    1862,  1864,  1866,  1872,  1873,  1874,  1877,  1878,  1879,  1880,
+    1883,  1884,  1885,  1888,  1889,  1892,  1893,  1896,  1897,  1900,
+    1903,  1906,  1907,  1908,  1911,  1912,  1915,  1916,  1920
     //[
   ];
 
@@ -5942,12 +5940,16 @@ var YYLexer =
 
 // at first, read this: http://whitequark.org/blog/2013/04/01/ruby-hacking-guide-ch-11-finite-state-lexer/
 
-// $stream: plain old JS string with ruby source code
-function Lexer ($stream)
+function Lexer ()
 {
-
 // the yylex() method and all public data sit here
 var lexer = this;
+
+// $text: plain old JS string with ruby source code,
+// to be set later in `setText()`
+var $text = '';
+lexer.setText = function (text) { $text = text; }
+
 // the end of stream had been reached
 lexer.eofp = false;
 // the string to be parsed in the nex lex() call
@@ -5990,9 +5992,13 @@ lexer.ruby__end__seen = false;
 // parser needs access to the line number,
 // AFAICT, parser never changes it, only sets nd_line on nodes
 lexer.ruby_sourceline = 0;
+// file name for meningfull error reporting
+lexer.filename = '(eval)';
 // parser doesn't touch it, but what is it?
 lexer.heredoc_end = 0;
 lexer.line_count = 0;
+// errors count
+lexer.nerr = 0;
 // TODO: check out list of stateful variables with the original
 
 // all lexer states codes had been moved to parse.y prologue
@@ -6161,31 +6167,35 @@ var lex_pbeg = 0, // lex_pbeg never changes
     lex_p = 0,
     lex_pend = 0;
 
-var $stream_pos = 0;
+var $text_pos = 0;
 // returns empty line as EOF
 function lex_getline ()
 {
-  var i = $stream.indexOf('\n', $stream_pos);
+  var i = $text.indexOf('\n', $text_pos);
   // didn't get any more newlines
   if (i === -1)
   {
     // the rest of the line
     // e.g. match the `$`
-    i = $stream.length;
+    i = $text.length;
   }
   else
   {
     i++; // include the `\n` char
   }
   
-  var line = $stream.substring($stream_pos, i);
-  $stream_pos = i;
+  var line = $text.substring($text_pos, i);
+  $text_pos = i;
   return line;
 }
 
 
 var lex_nextline = '',
     lex_lastline = '';
+
+// lex_lastline reader for error reporting
+lexer.get_lex_lastline = function () { return lex_lastline; }
+
 function nextc ()
 {
   if (lex_p == lex_pend)
@@ -6263,12 +6273,12 @@ function match_grex (rex)
   // check if the rex is in proper form
   if (!rex.global)
   {
-    yyerror('match_grex() allows only global regexps: `…|/g`');
+    lexer.yyerror('match_grex() allows only global regexps: `…|/g`');
     throw 'DEBUG';
   }
   if (rex.source.substr(-1) != '|')
   {
-    yyerror('match_grex() need trailing empty string match: `…|/g`');
+    lexer.yyerror('match_grex() need trailing empty string match: `…|/g`');
     throw 'DEBUG';
   }
   rex.lastIndex = lex_p;
@@ -6307,7 +6317,7 @@ var $tokenbuf = '',
     
 function newtok ()
 {
-  $tok_start = $stream_pos;
+  $tok_start = $text_pos;
   $tokenbuf = '';
 }
 function tokadd (c)
@@ -6318,7 +6328,7 @@ function tokadd (c)
 
 function tokfix ()
 {
-  $tok_end = $stream_pos;
+  $tok_end = $text_pos;
   /* was: tokenbuf[tokidx]='\0'*/
 }
 function tok () { return $tokenbuf; }
@@ -6967,7 +6977,7 @@ this.yylex = function yylex ()
       pushback(c);
       if (c != '' && ISDIGIT(c))
       {
-        yyerror("no .<digit> floating literal anymore; put 0 before dot");
+        lexer.yyerror("no .<digit> floating literal anymore; put 0 before dot");
       }
       lexer.lex_state = EXPR_DOT;
       return $('.');
@@ -7227,7 +7237,7 @@ this.yylex = function yylex ()
             term = nextc();
             if (ISALNUM(term) || !ISASCII(term))
             {
-              yyerror("unknown type of %string");
+              lexer.yyerror("unknown type of %string");
               return 0;
             }
           }
@@ -7312,7 +7322,7 @@ this.yylex = function yylex ()
               return tSYMBEG;
 
             default:
-              yyerror("unknown type of %string");
+              lexer.yyerror("unknown type of %string");
               return 0;
           }
         }
@@ -7731,7 +7741,7 @@ function heredoc_identifier ()
       }
       return 0;
     }
-    // TODO: create token with $stream.substring(start, end)
+    // TODO: create token with $text.substring(start, end)
     newtok();
     term = '"';
     func |= str_dquote;
@@ -8100,7 +8110,7 @@ var ESCAPE_CONTROL = 1,
 
 function read_escape_eof ()
 {
-  yyerror("Invalid escape character syntax");
+  lexer.yyerror("Invalid escape character syntax");
   return '\0';
 }
 function read_escape (flags)
@@ -8152,7 +8162,7 @@ function read_escape (flags)
       var hex = match_grex(/[0-9a-fA-F]{1,2}|/g)[0];
       if (!hex)
       {
-        yyerror("invalid hex escape");
+        lexer.yyerror("invalid hex escape");
         return '';
       }
       lex_p += hex.length;
@@ -8265,14 +8275,14 @@ function parser_tokadd_utf8 (string_literal, symbol_literal, regexp_literal)
       var hex = match_grex(/[0-9a-fA-F]{1,6}|/g)[0];
       if (hex == '')
       {
-        yyerror("invalid Unicode escape");
+        lexer.yyerror("invalid Unicode escape");
         return '';
       }
       var codepoint = parseInt(hex, 16);
       var the_char = $$(codepoint);
       if (codepoint > 0x10ffff)
       {
-        yyerror("invalid Unicode codepoint "+codepoint+" (too large)");
+        lexer.yyerror("invalid Unicode codepoint "+codepoint+" (too large)");
         return '';
       }
       
@@ -8295,7 +8305,7 @@ function parser_tokadd_utf8 (string_literal, symbol_literal, regexp_literal)
 
     if (c !== '}')
     {
-      yyerror("unterminated Unicode escape");
+      lexer.yyerror("unterminated Unicode escape");
       return '';
     }
 
@@ -8314,7 +8324,7 @@ function parser_tokadd_utf8 (string_literal, symbol_literal, regexp_literal)
     var hex = match_grex(/[0-9a-fA-F]{4}|/g)[0];
     if (hex === '')
     {
-      yyerror("invalid Unicode escape");
+      lexer.yyerror("invalid Unicode escape");
       return '';
     }
     var codepoint = parseInt(hex, 16);
@@ -8373,15 +8383,14 @@ function start_num (c)
   var decimal = m[0];
   if (!drex)
   {
-    yyerror("broken decimal number");
+    lexer.yyerror("broken decimal number");
     return tINTEGER;
   }
   lex_p += decimal.length;
-  var nondigit = match_grex(/\w+|/g)[0];
+  var nondigit = match_grex(/\w|/g)[0];
   if (nondigit)
   {
-    yyerror("trailing `"+nondigit+"' in number");
-    return tINTEGER;
+    lexer.yyerror("trailing `"+nondigit+"' in number");
   }
 
   if (m[1]) // matched (\.\d+(?:_\d+)*)
@@ -8497,9 +8506,29 @@ function print_error ()
   puts('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 }
 function warning (msg) { print_error('WARNING: ' + msg) }
-function compile_error (msg) { print_error('COMPILE ERROR: ' + msg) }
-function yyerror (msg) { print_error('YYERROR: ' + msg) }
-this.yyerror = yyerror;
+
+function compile_error (msg)
+{
+  lexer.nerr++;
+  
+  puts
+  (
+    lexer.filename +
+    ':' + 
+    lexer.ruby_sourceline +
+    ': ' +
+    msg
+  );
+}
+
+lexer.yyerror = function yyerror (msg)
+{
+  compile_error(msg);
+  var arrow = [];
+  arrow[lex_p] = '^';
+  puts(lexer.get_lex_lastline());
+  puts(arrow.join(' '));
+}
 
 } // function Lexer
 
@@ -8509,9 +8538,9 @@ return Lexer;
 
 global.parse = function (text)
 {
-  var lexer = new YYLexer(text);
-
-  yyerror = function (msg) { lexer.yyerror(msg); }
+  var lexer = new YYLexer();
+  lexer.filename = 'ruby.rb';
+  lexer.setText(text);
 
   var parser = new YYParser(lexer);
   
