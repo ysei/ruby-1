@@ -219,35 +219,14 @@ var yyerror;
 
 var YYParser = (function(){ // start of the Parser very own namespase
 
-/**
-* A class defining a pair of positions.  Positions, defined by the
-* <code>Position</code> class, denote a point in the input.
-* Locations represent a part of the input through the beginning
-* and ending positions.  */
-function Location (begin, end) {
-  /** The first, inclusive, position in the range.  */
-  this.begin = begin;
-  this.end = end;
-}
-
-Location.prototype.toString = function () {
-  if (this.begin === this.end)
-    return "" + this.begin;
-
-  return this.begin + "-" + this.end;
-}
-
-
 function YYStack ()
 {
   var stateStack = this.stateStack = [];
-  var locStack = this.locStack = [];
   var valueStack = this.valueStack = [];
 
-  this.push = function push (state, value, location)
+  this.push = function push (state, value)
   {
     stateStack.push(state);
-    locStack.push(location);
     valueStack.push(value);
   }
 
@@ -257,18 +236,12 @@ function YYStack ()
       return;
 
     valueStack.length -= num;
-    locStack.length -= num;
     stateStack.length -= num; // TODO: original code lacks this line
   }
 
   this.stateAt = function stateAt (i)
   {
     return stateStack[stateStack.length-1 - i];
-  }
-
-  this.locationAt = function locationAt (i)
-  {
-    return locStack[locStack.length-1 - i];
   }
 
   this.valueAt = function valueAt (i)
@@ -280,15 +253,6 @@ function YYStack ()
   this.height = function height ()
   {
     return stateStack.length-1;
-  }
-
-  this.locationFromNthItemToCurrent = function locationFromNthItemToCurrent (n)
-  {
-    if (n > 0)
-      return new Location(this.locationAt(n-1).begin, this.locationAt(0).end);
-    
-    var end = this.locationAt(0).end
-    return new Location(end, end);
   }
 }
 
@@ -1991,8 +1955,6 @@ function YYParser (yylexer)
 
   function yyaction (yyn, yylen)
   {
-    var yyloc = yystack.locationFromNthItemToCurrent(yylen);
-
     /* If YYLEN is nonzero, implement the default value of the action:
        `$$ = $1'.  Otherwise, use the top of the stack.
 
@@ -2011,7 +1973,7 @@ function YYParser (yylexer)
     if (actionClosure)
       actionClosure(yystack)
 
-    debug_symbol_print("-> $$ =", yyr1_[yyn], yyval, yyloc);
+    debug_symbol_print("-> $$ =", yyr1_[yyn], yyval);
 
     yystack.pop(yylen);
     yylen = 0;
@@ -2025,7 +1987,7 @@ function YYParser (yylexer)
     else
       yystate = yydefgoto_[yyn - yyntokens_];
 
-    yystack.push(yystate, yyval, yyloc);
+    yystack.push(yystate, yyval);
     // was: usless: return YYNEWSTATE;
   }
 
@@ -2052,14 +2014,6 @@ function YYParser (yylexer)
 
     /* Error handling.  */
     var yynerrs_ = 0;
-    // The location where the error started.
-    var yyerrloc = null;
-
-    // Location of the lookahead.
-    var yylloc = new Location(null, null);
-
-    // @$.
-    var yyloc;
 
     // Semantic value of the lookahead.
     var yylval = null;
@@ -2069,7 +2023,7 @@ function YYParser (yylexer)
 
 
     // Initialize the stack.
-    yystack.push(yystate, yylval, yylloc);
+    yystack.push(yystate, yylval);
 
     var label = YYNEWSTATE;
     goto_loop: for (;;)
@@ -2103,7 +2057,6 @@ function YYParser (yylexer)
           debug_print("Reading a token: ");
           yychar = yylexer.yylex();
 
-          yylloc = new Location(yylexer.getStartPos(), yylexer.getEndPos());
           yylval = yylexer.getLVal();
         }
 
@@ -2121,7 +2074,7 @@ function YYParser (yylexer)
           else
             yytoken = yyundef_token_;
 
-          debug_symbol_print("Next token is", yytoken, yylval, yylloc);
+          debug_symbol_print("Next token is", yytoken, yylval);
         }
 
         // If the proper action on seeing token YYTOKEN
@@ -2155,7 +2108,7 @@ function YYParser (yylexer)
         else
         {
           // Shift the lookahead token.
-          debug_symbol_print("Shifting", yytoken, yylval, yylloc);
+          debug_symbol_print("Shifting", yytoken, yylval);
 
           // Discard the token being shifted.
           yychar = yyempty_;
@@ -2166,7 +2119,7 @@ function YYParser (yylexer)
             --yyerrstatus_;
 
           yystate = yyn;
-          yystack.push(yystate, yylval, yylloc);
+          yystack.push(yystate, yylval);
 
           //goto
           label = YYNEWSTATE;
@@ -2218,11 +2171,9 @@ function YYParser (yylexer)
           ++yynerrs_;
           if (yychar == yyempty_)
             yytoken = yyempty_;
-          // this.yyerror(yylloc, this.yysyntax_error(yystate, yytoken));
           yyerror(this.yysyntax_error(yystate, yytoken));
         }
 
-        yyerrloc = yylloc;
         if (yyerrstatus_ == 3)
         {
           // If just tried and failed to reuse lookahead token
@@ -2250,7 +2201,6 @@ function YYParser (yylexer)
       //-------------------------------------------------/
       case YYERROR:
 
-        yyerrloc = yystack.locationAt(yylen - 1);
         // Do not reclaim the symbols of the rule
         // which action triggered this YYERROR.
         yystack.pop(yylen);
@@ -2287,24 +2237,17 @@ function YYParser (yylexer)
             return false;
           }
 
-          yyerrloc = yystack.locationAt(0);
           yystack.pop(1);
           yystate = yystack.stateAt(0);
           debug_stack_print(yystack);
         }
 
 
-        // Muck with the stack to setup for yylloc.
-        yystack.push(0, null, yylloc);
-        yystack.push(0, null, yyerrloc);
-        yyloc = yystack.locationFromNthItemToCurrent(2);
-        yystack.pop(2);
-
         // Shift the error token.
-        debug_symbol_print("Shifting", yystos_[yyn], yylval, yyloc);
+        debug_symbol_print("Shifting", yystos_[yyn], yylval);
 
         yystate = yyn;
-        yystack.push(yyn, yylval, yyloc);
+        yystack.push(yyn, yylval);
         // goto
         label = YYNEWSTATE;
         continue goto_loop;
@@ -5793,11 +5736,6 @@ function YYParser (yylexer)
 // rare used functions
 YYParser.prototype =
 {
-  // yyerror: function yyerror (location, message)
-  // {
-  //   this.yylexer.yyerror(location, message);
-  // },
-  
   // Report on the debug stream that the rule yyrule is going to be reduced.
 
   debug_reduce_print: function debug_reduce_print (yyrule)
@@ -5818,13 +5756,12 @@ YYParser.prototype =
       this.debug_symbol_print(
         "   $" + (yyi + 1) + " =",
         this.yyrhs_[this.yyprhs_[yyrule] + yyi],
-        yystack.valueStack[yystack.valueStack.length-1-((yynrhs-(yyi + 1)))],
-        yystack.locationAt(yynrhs-(yyi + 1))
+        yystack.valueStack[yystack.valueStack.length-1-((yynrhs-(yyi + 1)))]
       );
     }
   },
 
-  debug_symbol_print: function debug_symbol_print (message, yytype, yyvaluep, yylocationp)
+  debug_symbol_print: function debug_symbol_print (message, yytype, yyvaluep)
   {
     this.debug_print
     (
@@ -5832,7 +5769,6 @@ YYParser.prototype =
       + (yytype < this.yyntokens_ ? " token " : " nterm ")
       + this.yytname_[yytype]
       + " ("
-      // + yylocationp + ": "
       // + (yyvaluep == null ? "(null)" : JSON.stringify(yyvaluep))
       + ")\n"
     );
@@ -6362,7 +6298,6 @@ function newtok ()
 {
   $tok_start = $stream_pos;
   $tokenbuf = '';
-  return $tokenbuf;
 }
 function tokadd (c)
 {
@@ -6384,8 +6319,6 @@ function toklast ()
 }
 
 // TODO
-this.getStartPos = function () { return $tok_start; }
-this.getEndPos = function () { return $tok_end; }
 this.getLVal = function () { return $tokenbuf; }
 
 
@@ -8405,8 +8338,9 @@ function start_num (c)
   }
   if (c == '0')
   {
-    // TODO
-    warning('0-leading digits to be supported soon');
+    // if (match_grex(/[xX0-9bBdD_oO]/g))
+    if (!peek('.'))
+      warning('0-leading digits to be supported soon');
   }
 
   scan_loop:
