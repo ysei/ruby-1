@@ -304,11 +304,21 @@ function YYParser (yylexer)
   // True if verbose error messages are enabled.
   this.errorVerbose = true;
 
-  // Token returned by the scanner to signal the end of its input.
-  var EOF = 0;
+
+  var debug_reduce_print = this.debug_reduce_print.bind(this);
+  var debug_symbol_print = this.debug_symbol_print.bind(this);
+  var debug_stack_print  = this.debug_stack_print.bind(this);
+  var debug_print        = this.debug_print.bind(this);
+
+
+
+
+
 
   
 
+  // Token returned by the scanner to signal the end of its input.
+  var EOF = 0;
 
   // Returned by a Bison action in order to stop the parsing process
   // and return success (<tt>true</tt>).
@@ -2001,7 +2011,7 @@ function YYParser (yylexer)
     if (actionClosure)
       actionClosure(yystack)
 
-    debug_symbol_print("-> $$ =", yyr1_[yyn], yyval, yyloc); // TODO: step into
+    debug_symbol_print("-> $$ =", yyr1_[yyn], yyval, yyloc);
 
     yystack.pop(yylen);
     yylen = 0;
@@ -2319,22 +2329,6 @@ function YYParser (yylexer)
     // won't reach here
     return false
   }
-
-
-  // enabling debug will switch these functions to the usefull variants
-  function debug_reduce_print (yyn) {}
-  function debug_symbol_print (message, yytype, yyvaluep, yylocationp) {}
-  function debug_stack_print (yystack) {}
-  function debug_print (message) {}
-
-  this.enableDebug = function enableDebug ()
-  {
-    debug_reduce_print = this.debug_reduce_print.bind(this)
-    debug_symbol_print = this.debug_symbol_print.bind(this)
-    debug_stack_print  = this.debug_stack_print.bind(this)
-    debug_print        = this.debug_print.bind(this)
-  }
-
 
   // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing STATE-NUM.
   var yypact_ninf_ = this.yypact_ninf_ = -821;
@@ -5671,7 +5665,6 @@ function YYParser (yylexer)
   ];
 
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-  // TODO: hide this table under #if DEBUG
   var yyrline_ = this.yyrline_ =
   [
     //]
@@ -5806,10 +5799,15 @@ YYParser.prototype =
   // },
   
   // Report on the debug stream that the rule yyrule is going to be reduced.
+
   debug_reduce_print: function debug_reduce_print (yyrule)
   {
     var yystack = this.yystack;
+
     var yylno = this.yyrline_[yyrule];
+
+
+
     var yynrhs = this.yyr2_[yyrule];
     // Print the symbols being reduced, and their result.
     this.debug_print("Reducing stack by rule " + (yyrule - 1) + " (line " + yylno + "):\n");
@@ -5839,6 +5837,24 @@ YYParser.prototype =
       + ")\n"
     );
   },
+
+  debug_stack_print: function debug_stack_print ()
+  {
+    var yystack = this.yystack,
+      ary = [];
+    for (var i = 0, ih = yystack.height(); i <= ih; i++)
+    {
+      ary.push(yystack.stateAt(i));
+    }
+    
+    puts("Stack now " + ary.reverse().join(' '));
+  },
+
+  debug_print: function debug_print (message)
+  {
+    write(message);
+  },
+
 
   // Generate an error message.
   yysyntax_error: function yysyntax_error (yystate, tok)
@@ -5967,23 +5983,6 @@ YYParser.prototype =
 
       return yystr;
     }
-  },
-
-  debug_stack_print: function debug_stack_print ()
-  {
-    var yystack = this.yystack,
-      ary = [];
-    for (var i = 0, ih = yystack.height(); i <= ih; i++)
-    {
-      ary.push(yystack.stateAt(i));
-    }
-    
-    puts("Stack now " + ary.reverse().join(' '));
-  },
-
-  debug_print: function debug_print (message)
-  {
-    write(message);
   }
 }
 
@@ -8630,7 +8629,6 @@ global.parse = function (text)
   yyerror = function (msg) { lexer.yyerror(msg); }
 
   var parser = new YYParser(lexer);
-  parser.enableDebug();
   
   var begin = new Date();
   var res = parser.parse();
