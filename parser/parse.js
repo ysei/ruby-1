@@ -1149,7 +1149,7 @@ function YYParser (yylexer)
   '322': function ()
     
     {
-          if (in_def || yylexer.in_single)
+          if (yylexer.in_def || yylexer.in_single)
             yyerror("class definition in method body");
     			
 		    },
@@ -1900,7 +1900,7 @@ function YYParser (yylexer)
   '576': function ()
     
     {
-          if (!is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
+          if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
             yyerror("rest argument must be local variable");
     			
 		    },
@@ -1910,7 +1910,7 @@ function YYParser (yylexer)
   '580': function ()
     
     {
-		      if (!is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+		      if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
             yyerror("block argument must be local variable");
     			else if (!dyna_in_block() && local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
             yyerror("duplicated block argument name");
@@ -6396,10 +6396,10 @@ function NEW_STRTERM (func, term, paren)
     nd_func: func,
     nd_orig: '', // stub
     nd_nth: 0, // stub
-    term: term,
-    paren: paren,
+    nd_line: lexer.ruby_sourceline,
     nd_nest: 0, // for tokadd_string() and parse_string()
-    line: 0 // TODO: `ruby_sourceline`
+    term: term,
+    paren: paren
   };
 }
 // our addition
@@ -6410,9 +6410,10 @@ function NEW_HEREDOCTERM (func, term)
     nd_func: func,
     nd_orig: lex_lastline,
     nd_nth: lex_p,
+    nd_line: lexer.ruby_sourceline,
+    nd_nest: 0,
     term: term,
-    paren: '',
-    line: 0 // TODO: `ruby_sourceline`
+    paren: ''
   };
 }
 
@@ -7954,7 +7955,7 @@ function parse_string (quote)
   pushback(c);
   if (tokadd_string(func, term, paren, quote) == '')
   {
-    // ruby_sourceline = nd_line(quote); TODO
+    lexer.ruby_sourceline = quote.nd_line;
     if (func & STR_FUNC_REGEXP)
     {
       if (lexer.eofp)
@@ -8365,6 +8366,7 @@ function is_local_id (ident)
   // TODO :)
   return false;
 }
+lexer.is_local_id = is_local_id;
 function lvar_defined (ident)
 {
   // TODO :)
