@@ -6335,10 +6335,14 @@ function pushback (c)
 {
   if (c == '')
   {
+    if (lex_p != lex_pend)
+      throw 'lexer error: pushing back wrong EOF char';
     return;
   }
   
   lex_p--;
+  if (lex_lastline[lex_p] != c)
+    throw 'lexer error: pushing back wrong "'+c+'" char';
 }
 
 // was begin af a line (`^` in terms of regexps) before last `nextc()`,
