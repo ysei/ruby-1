@@ -6028,9 +6028,11 @@ lexer.space_seen = false;
 lexer.command_start = false;
 // temp var for command_start during single run of `yylex`
 lexer.cmd_state = false;
-// have no idea TODO
+// used in `COND_*` macro-methods,
+// another spot of interlacing parser and lexer
 lexer.cond_stack = 0;
-// have no idea TODO
+// used in `CMDARG_*` macro-methods,
+// another spot of interlacing parser and lexer
 lexer.cmdarg_stack = 0;
 // controls level of nesting in `()` or `[]`
 lexer.paren_nest = 0;
@@ -6333,14 +6335,10 @@ function pushback (c)
 {
   if (c == '')
   {
-    if (lex_p != lex_pend)
-      throw 'lexer error: pushing back wrong EOF char'; // TODO
     return;
   }
   
   lex_p--;
-  if (lex_lastline[lex_p] != c)
-    throw 'lexer error: pushing back wrong "'+c+'" char'; // TODO
 }
 
 // was begin af a line (`^` in terms of regexps) before last `nextc()`,
