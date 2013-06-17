@@ -6295,6 +6295,27 @@ function match_grex (rex)
   // there is always a match or an empty string in [0]
   return rex.exec(lex_lastline);
 }
+// the same as `match_grex()` but does'n return the match,
+// treats the empty match as a `false`
+function test_grex (rex)
+{
+  // check if the rex is in proper form
+  if (!rex.global)
+  {
+    lexer.yyerror('test_grex() allows only global regexps: `…|/g`');
+    throw 'DEBUG';
+  }
+  if (rex.source.substr(-1) != '|')
+  {
+    lexer.yyerror('test_grex() need trailing empty string match: `…|/g`');
+    throw 'DEBUG';
+  }
+  rex.lastIndex = lex_p;
+  // there is always a match for an empty string
+  rex.test(lex_lastline);
+  // and on the actual match there coud be a change in `lastIndex`
+  return rex.lastIndex != lex_p;
+}
 // step back for one character and check
 // if the current character is equal to `c`
 function pushback (c)
@@ -6334,6 +6355,10 @@ function tokadd (c)
 {
   $tokenbuf += c;
   return c;
+}
+function tokcopy (n)
+{
+  $tokenbuf += $text.substring($text_pos - n, $text_pos);
 }
 
 function tokfix ()
@@ -7776,6 +7801,7 @@ function heredoc_identifier ()
       return 0;
     }
     // TODO: create token with $text.substring(start, end)
+    // TODO: or remove all the function with a regexp ;)
     newtok();
     term = '"';
     func |= str_dquote;
@@ -8003,7 +8029,9 @@ function tokadd_string (func, term, paren, str_term)
       var c2 = lex_pv();
       if (c2 == '$' || c2 == '@' || c2 == '{')
       {
+        // push the '#' back
         pushback(c);
+        // and leave it for the caller to process
         break;
       }
     }
@@ -8054,7 +8082,7 @@ function tokadd_string (func, term, paren, str_term)
               continue;
             }
             pushback(c);
-            if ((c = tokadd_escape()) == '')
+            if (!tokadd_escape()) // useless `c = ` was here
               return '';
             continue;
           }
@@ -8107,10 +8135,89 @@ function simple_re_meta (c)
 }
 
 
+function tokadd_escape_eof ()
+{
+  lexer.yyerror("Invalid escape character syntax");
+}
+// return `true` on success and `false` on failure,
+// it is quite different from original source,
+// however the returning value is a flag only there too;
 function tokadd_escape ()
 {
-  // TODO
-  return 'TODO';
+  var c = '';
+  var flags = 0;
+
+  switch (c = nextc())
+  {
+    case '\n':
+      return true;                 /* just ignore */
+
+    case '0':
+    case '1':
+    case '2':
+    case '3':                  /* octal constant */
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    {
+      // was: scan_oct(lex_p, 3, &numlen);
+      
+      // we're here: "\|012",
+      // so just match one or two more digits
+      var oct = match_grex(/[0-7]{1,2}|/g);
+      if (!oct)
+      {
+        // was: goto eof;
+        tokadd_escape_eof();
+        return false;
+      }
+      lex_p += oct.length;
+      tokadd('\\' + c + oct);
+    }
+    return true;
+
+    case 'x':                  /* hex constant */
+      {
+        // was: tok_hex(&numlen);
+        
+        // we're here: "\x|AB",
+        // so just match one or two more digits
+        var hex = match_grex(/[0-9a-fA-F]{1,2}|/g);
+        if (!hex)
+        {
+          yyerror("invalid hex escape");
+          return false;
+        }
+        lex_p += hex.length;
+        tokadd('\\x' + hex);
+      }
+      return true;
+    
+    case '':
+      tokadd_escape_eof();
+      return false;
+    
+    case 'c':
+      tokadd("\\c");
+      return true;
+    
+    case 'M':
+    case 'C':
+      lexer.yyerror("JavaScript doesn't support `\\"+c+"-' in regexp");
+      if ((c = nextc()) != '-')
+      {
+        pushback(c);
+        tokadd_escape_eof();
+        return false;
+      }
+      tokcopy(3); // add though
+      return true;
+    
+    default:
+      tokadd("\\"+c);
+  }
+  return true;
 }
 
 // checks if the current line matches `/^\s*#{eos}\n?$/`;
@@ -8393,6 +8500,7 @@ function start_num (c)
   newtok();
   if (c == '0')
   {
+    // TODO: implement all the bestiary
     if (match_grex(/0[xX0-9bBdD_oO]|/g)[0])
       warning('0-leading digits to be supported soon');
   }
@@ -8412,7 +8520,7 @@ function start_num (c)
   //   [eE][+\-]?\d+(_\d+)*      e000_000_000…
   // 
   // so we could parse: `10_0.0_0e+0_0` as `100.0`
-  var drex = /\d+(?:_\d+)*(\.\d+(?:_\d+)*)?(?:[eE][+\-]?\d+(?:_\d+)*)?|/g;
+  var drex = /\d+(?:_\d+)*(?:(\.)\d+(?:_\d+)*)?(?:([eE])[+\-]?\d+(?:_\d+)*)?(\w)?|/g;
   var m = match_grex(drex);
   var decimal = m[0];
   if (!drex)
@@ -8421,13 +8529,17 @@ function start_num (c)
     return tINTEGER;
   }
   lex_p += decimal.length;
-  var nondigit = match_grex(/\w|/g)[0];
+  var nondigit = m[3];
   if (nondigit)
   {
+    if (peek('.'))
+      lex_p++;
+    else
+      lex_p--;
     lexer.yyerror("trailing `"+nondigit+"' in number");
   }
 
-  if (m[1]) // matched (\.\d+(?:_\d+)*)
+  if (m[1] || m[2]) // matched `.` or `e`
   {
     // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
     return tFLOAT;
@@ -8558,9 +8670,18 @@ function compile_error (msg)
 lexer.yyerror = function yyerror (msg)
 {
   compile_error(msg);
+
+  // to clean up \n \t and others
+  var line = lexer.get_lex_lastline();
+  var begin = line.substring(0, lex_p)
+                  .replace(/[\n\r]+/g, '')
+                  .replace(/\s+/g, ' ');
+  var end =   line.substring(lex_p)
+                  .replace(/[\n\r]+/g, '')
+                  .replace(/\s+/g, ' ');
   var arrow = [];
-  arrow[lex_p] = '^';
-  puts(lexer.get_lex_lastline());
+  arrow[begin.length] = '^';
+  puts(begin + end);
   puts(arrow.join(' '));
 }
 
