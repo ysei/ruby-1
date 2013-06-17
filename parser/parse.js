@@ -317,1677 +317,6 @@ function YYParser (yylexer)
   }
 
   var yyval, yystack;
-  var actionsTable =
-  {
-      '2': function ()
-    
-    {
-      yylexer.lex_state = EXPR_BEG;
-    },
-  '3': function ()
-    
-    {},
-  '4': function ()
-    
-    {},
-  '5': function ()
-    
-    {},
-  '6': function ()
-    
-    {},
-  '7': function ()
-    
-    {},
-  '8': function ()
-    
-    {},
-  '10': function ()
-    
-    {},
-  '11': function ()
-    
-    {},
-  '12': function ()
-    
-    {},
-  '13': function ()
-    
-    {},
-  '14': function ()
-    
-    {},
-  '15': function ()
-    
-    {},
-  '16': function ()
-    
-    {},
-  '17': function ()
-    
-    {},
-  '18': function ()
-    
-    {},
-  '19': function ()
-    
-    {
-      yylexer.yyerror("BEGIN is permitted only at toplevel");
-    },
-  '20': function ()
-    
-    {},
-  '21': function ()
-    
-    {
-      yylexer.lex_state = EXPR_FNAME;
-    },
-  '22': function ()
-    
-    {},
-  '23': function ()
-    
-    {},
-  '24': function ()
-    
-    {},
-  '25': function ()
-    
-    {
-      yylexer.yyerror("can't make alias for the number variables");
-    },
-  '26': function ()
-    
-    {},
-  '27': function ()
-    
-    {},
-  '28': function ()
-    
-    {},
-  '29': function ()
-    
-    {},
-  '30': function ()
-    
-    {},
-  '31': function ()
-    
-    {},
-  '32': function ()
-    
-    {
-      if (yylexer.in_def || yylexer.in_single)
-        rb_warn("END in method; use at_exit");
-    },
-  '34': function ()
-    
-    {},
-  '35': function ()
-    
-    {},
-  '36': function ()
-    
-    {},
-  '37': function ()
-    
-    {},
-  '38': function ()
-    
-    {},
-  '39': function ()
-    
-    {},
-  '40': function ()
-    
-    {},
-  '41': function ()
-    
-    {},
-  '42': function ()
-    
-    {},
-  '43': function ()
-    
-    {},
-  '44': function ()
-    
-    {},
-  '46': function ()
-    
-    {},
-  '47': function ()
-    
-    {},
-  '49': function ()
-    
-    {},
-  '50': function ()
-    
-    {},
-  '51': function ()
-    
-    {},
-  '52': function ()
-    
-    {},
-  '54': function ()
-    
-    {},
-  '58': function ()
-    
-    {},
-  '59': function ()
-    
-    {},
-  '60': function ()
-    
-    {
-      // touching this alters the parse.output
-      yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-    },
-  '61': function ()
-    
-    {},
-  '62': function ()
-    
-    {},
-  '63': function ()
-    
-    {},
-  '64': function ()
-    
-    {},
-  '65': function ()
-    
-    {},
-  '66': function ()
-    
-    {},
-  '67': function ()
-    
-    {},
-  '68': function ()
-    
-    {},
-  '69': function ()
-    
-    {},
-  '70': function ()
-    
-    {},
-  '71': function ()
-    
-    {},
-  '72': function ()
-    
-    {},
-  '74': function ()
-    
-    {},
-  '76': function ()
-    
-    {},
-  '77': function ()
-    
-    {},
-  '78': function ()
-    
-    {},
-  '79': function ()
-    
-    {},
-  '80': function ()
-    
-    {},
-  '81': function ()
-    
-    {},
-  '82': function ()
-    
-    {},
-  '83': function ()
-    
-    {},
-  '84': function ()
-    
-    {},
-  '85': function ()
-    
-    {},
-  '86': function ()
-    
-    {},
-  '88': function ()
-    
-    {},
-  '89': function ()
-    
-    {},
-  '90': function ()
-    
-    {},
-  '91': function ()
-    
-    {},
-  '92': function ()
-    
-    {},
-  '93': function ()
-    
-    {},
-  '94': function ()
-    
-    {},
-  '95': function ()
-    
-    {},
-  '96': function ()
-    
-    {},
-  '97': function ()
-    
-    {},
-  '98': function ()
-    
-    {},
-  '99': function ()
-    
-    {
-      if (yylexer.in_def || yylexer.in_single)
-        yylexer.yyerror("dynamic constant assignment");
-    },
-  '100': function ()
-    
-    {
-      if (yylexer.in_def || yylexer.in_single)
-        yylexer.yyerror("dynamic constant assignment");
-    },
-  '101': function ()
-    
-    {},
-  '102': function ()
-    
-    {},
-  '103': function ()
-    
-    {},
-  '104': function ()
-    
-    {},
-  '105': function ()
-    
-    {},
-  '106': function ()
-    
-    {},
-  '107': function ()
-    
-    {},
-  '108': function ()
-    
-    {
-      if (yylexer.in_def || yylexer.in_single)
-        yylexer.yyerror("dynamic constant assignment");
-    },
-  '109': function ()
-    
-    {
-      if (yylexer.in_def || yylexer.in_single)
-        yylexer.yyerror("dynamic constant assignment");
-    },
-  '110': function ()
-    
-    {},
-  '111': function ()
-    
-    {
-      yylexer.yyerror("class/module name must be CONSTANT");
-    },
-  '113': function ()
-    
-    {},
-  '114': function ()
-    
-    {},
-  '115': function ()
-    
-    {},
-  '119': function ()
-    
-    {
-      yylexer.lex_state = EXPR_ENDFN;
-    },
-  '120': function ()
-    
-    {
-      yylexer.lex_state = EXPR_ENDFN;
-    },
-  '123': function ()
-    
-    {},
-  '125': function ()
-    
-    {},
-  '126': function ()
-    
-    {
-      yylexer.lex_state = EXPR_FNAME;
-    },
-  '127': function ()
-    
-    {},
-  '128': function ()
-    
-    {},
-  '129': function ()
-    
-    {},
-  '130': function ()
-    
-    {},
-  '131': function ()
-    
-    {},
-  '132': function ()
-    
-    {},
-  '133': function ()
-    
-    {},
-  '134': function ()
-    
-    {},
-  '135': function ()
-    
-    {},
-  '136': function ()
-    
-    {},
-  '137': function ()
-    
-    {},
-  '138': function ()
-    
-    {},
-  '139': function ()
-    
-    {},
-  '140': function ()
-    
-    {},
-  '141': function ()
-    
-    {},
-  '142': function ()
-    
-    {},
-  '143': function ()
-    
-    {},
-  '144': function ()
-    
-    {},
-  '145': function ()
-    
-    {},
-  '146': function ()
-    
-    {},
-  '147': function ()
-    
-    {},
-  '148': function ()
-    
-    {},
-  '149': function ()
-    
-    {},
-  '150': function ()
-    
-    {},
-  '151': function ()
-    
-    {},
-  '152': function ()
-    
-    {},
-  '153': function ()
-    
-    {},
-  '154': function ()
-    
-    {},
-  '155': function ()
-    
-    {},
-  '156': function ()
-    
-    {},
-  '157': function ()
-    
-    {},
-  '199': function ()
-    
-    {},
-  '200': function ()
-    
-    {},
-  '201': function ()
-    
-    {},
-  '202': function ()
-    
-    {},
-  '203': function ()
-    
-    {},
-  '204': function ()
-    
-    {},
-  '205': function ()
-    
-    {},
-  '206': function ()
-    
-    {},
-  '207': function ()
-    
-    {},
-  '208': function ()
-    
-    {},
-  '209': function ()
-    
-    {},
-  '210': function ()
-    
-    {},
-  '211': function ()
-    
-    {},
-  '212': function ()
-    
-    {},
-  '213': function ()
-    
-    {},
-  '214': function ()
-    
-    {},
-  '215': function ()
-    
-    {},
-  '216': function ()
-    
-    {},
-  '217': function ()
-    
-    {},
-  '218': function ()
-    
-    {},
-  '219': function ()
-    
-    {},
-  '220': function ()
-    
-    {},
-  '221': function ()
-    
-    {},
-  '222': function ()
-    
-    {},
-  '223': function ()
-    
-    {},
-  '224': function ()
-    
-    {},
-  '225': function ()
-    
-    {},
-  '226': function ()
-    
-    {},
-  '227': function ()
-    
-    {},
-  '228': function ()
-    
-    {},
-  '229': function ()
-    
-    {},
-  '230': function ()
-    
-    {},
-  '231': function ()
-    
-    {},
-  '232': function ()
-    
-    {},
-  '233': function ()
-    
-    {},
-  '234': function ()
-    
-    {},
-  '235': function ()
-    
-    {},
-  '236': function ()
-    
-    {},
-  '237': function ()
-    
-    {},
-  '238': function ()
-    
-    {},
-  '239': function ()
-    
-    {},
-  '240': function ()
-    
-    {},
-  '241': function ()
-    
-    { yylexer.in_defined = true;},
-  '242': function ()
-    
-    {
-      yylexer.in_defined = false;
-    },
-  '243': function ()
-    
-    {},
-  '244': function ()
-    
-    {},
-  '245': function ()
-    
-    {},
-  '247': function ()
-    
-    {},
-  '248': function ()
-    
-    {},
-  '249': function ()
-    
-    {},
-  '250': function ()
-    
-    {},
-  '255': function ()
-    
-    {},
-  '256': function ()
-    
-    {},
-  '257': function ()
-    
-    {},
-  '258': function ()
-    
-    {},
-  '259': function ()
-    
-    {},
-  '260': function ()
-    
-    {},
-  '261': function ()
-    
-    {},
-  '263': function ()
-    
-    {
-      yyval = yylexer.cmdarg_stack;
-      yylexer.CMDARG_PUSH(1);
-    },
-  '264': function ()
-    
-    {
-      // CMDARG_POP()
-      yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
-    },
-  '265': function ()
-    
-    {},
-  '266': function ()
-    
-    {},
-  '267': function ()
-    
-    {},
-  '268': function ()
-    
-    {},
-  '269': function ()
-    
-    {},
-  '270': function ()
-    
-    {},
-  '271': function ()
-    
-    {},
-  '272': function ()
-    
-    {},
-  '273': function ()
-    
-    {},
-  '274': function ()
-    
-    {},
-  '285': function ()
-    
-    {},
-  '286': function ()
-    
-    {
-		      yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = yylexer.cmdarg_stack;
-		      yylexer.cmdarg_stack = 0;
-		    },
-  '287': function ()
-    
-    {
-		      yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
-		      // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
-		    },
-  '288': function ()
-    
-    {
-		  yylexer.lex_state = EXPR_ENDARG;
-		},
-  '289': function ()
-    
-    {},
-  '290': function ()
-    
-    {
-		  yylexer.lex_state = EXPR_ENDARG;
-		},
-  '291': function ()
-    
-    {},
-  '292': function ()
-    
-    {},
-  '293': function ()
-    
-    {},
-  '294': function ()
-    
-    {},
-  '295': function ()
-    
-    {},
-  '296': function ()
-    
-    {},
-  '297': function ()
-    
-    {},
-  '298': function ()
-    
-    {},
-  '299': function ()
-    
-    {},
-  '300': function ()
-    
-    {},
-  '301': function ()
-    
-    { yylexer.in_defined = true;},
-  '302': function ()
-    
-    {
-		      yylexer.in_defined = false;
-		    },
-  '303': function ()
-    
-    {},
-  '304': function ()
-    
-    {},
-  '305': function ()
-    
-    {},
-  '307': function ()
-    
-    {},
-  '308': function ()
-    
-    {},
-  '309': function ()
-    
-    {},
-  '310': function ()
-    
-    {},
-  '311': function ()
-    
-    {
-		    yylexer.COND_PUSH(1);
-		  },
-  '312': function ()
-    
-    {
-		    yylexer.COND_POP();
-		  },
-  '313': function ()
-    
-    {},
-  '314': function ()
-    
-    {
-		  yylexer.COND_PUSH(1);
-		},
-  '315': function ()
-    
-    {
-		  yylexer.COND_POP();
-		},
-  '316': function ()
-    
-    {},
-  '317': function ()
-    
-    {},
-  '318': function ()
-    
-    {},
-  '319': function ()
-    
-    {
-		    yylexer.COND_PUSH(1);
-		  },
-  '320': function ()
-    
-    {
-		    yylexer.COND_POP();
-		  },
-  '321': function ()
-    
-    {},
-  '322': function ()
-    
-    {
-          if (yylexer.in_def || yylexer.in_single)
-            yylexer.yyerror("class definition in method body");
-    			
-		    },
-  '323': function ()
-    
-    {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
-		    },
-  '324': function ()
-    
-    {
-          yyval = yylexer.in_def;
-          yylexer.in_def = 0;
-		    },
-  '325': function ()
-    
-    {
-		      yyval = yylexer.in_single;
-		      yylexer.in_single = 0;
-		    },
-  '326': function ()
-    
-    {
-          yylexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
-          yylexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
-		    },
-  '327': function ()
-    
-    {
-          if (yylexer.in_def || yylexer.in_single)
-            yylexer.yyerror("module definition in method body");
-    			
-		    },
-  '328': function ()
-    
-    {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((5-(3)))];
-		    },
-  '329': function ()
-    
-    {
-		      yyval = yylexer.cur_mid; // TODO
-    			yylexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
-    			
-		      yylexer.in_def++;
-		    },
-  '330': function ()
-    
-    {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
-			    yylexer.in_def--;
-			    yylexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
-		    },
-  '331': function ()
-    
-    {
-      yylexer.lex_state = EXPR_FNAME;
-    },
-  '332': function ()
-    
-    {
-      yylexer.in_single++;
-      yylexer.lex_state = EXPR_ENDFN; /* force for args */
-    },
-  '333': function ()
-    
-    {
-      yylexer.in_single--;
-    },
-  '334': function ()
-    
-    {},
-  '335': function ()
-    
-    {},
-  '336': function ()
-    
-    {},
-  '337': function ()
-    
-    {},
-  '338': function ()
-    
-    {},
-  '339': function ()
-    
-    {},
-  '340': function ()
-    
-    {},
-  '341': function ()
-    
-    {},
-  '342': function ()
-    
-    {},
-  '343': function ()
-    
-    {},
-  '344': function ()
-    
-    {},
-  '345': function ()
-    
-    {},
-  '346': function ()
-    
-    {},
-  '347': function ()
-    
-    {},
-  '348': function ()
-    
-    {},
-  '349': function ()
-    
-    {},
-  '356': function ()
-    
-    {},
-  '358': function ()
-    
-    {},
-  '361': function ()
-    
-    {},
-  '362': function ()
-    
-    {},
-  '363': function ()
-    
-    {},
-  '364': function ()
-    
-    {},
-  '365': function ()
-    
-    {},
-  '366': function ()
-    
-    {},
-  '367': function ()
-    
-    {},
-  '368': function ()
-    
-    {},
-  '369': function ()
-    
-    {},
-  '370': function ()
-    
-    {},
-  '371': function ()
-    
-    {},
-  '372': function ()
-    
-    {},
-  '373': function ()
-    
-    {},
-  '374': function ()
-    
-    {},
-  '375': function ()
-    
-    {},
-  '376': function ()
-    
-    {},
-  '377': function ()
-    
-    {},
-  '378': function ()
-    
-    {},
-  '379': function ()
-    
-    {},
-  '380': function ()
-    
-    {},
-  '381': function ()
-    
-    {},
-  '382': function ()
-    
-    {},
-  '383': function ()
-    
-    {},
-  '384': function ()
-    
-    {},
-  '385': function ()
-    
-    {},
-  '386': function ()
-    
-    {},
-  '387': function ()
-    
-    {},
-  '388': function ()
-    
-    {},
-  '389': function ()
-    
-    {},
-  '390': function ()
-    
-    {},
-  '391': function ()
-    
-    {},
-  '392': function ()
-    
-    {},
-  '393': function ()
-    
-    {},
-  '394': function ()
-    
-    {},
-  '396': function ()
-    
-    {
-			yylexer.command_start = true;
-		    },
-  '397': function ()
-    
-    {},
-  '398': function ()
-    
-    {},
-  '399': function ()
-    
-    {},
-  '400': function ()
-    
-    {},
-  '401': function ()
-    
-    {},
-  '404': function ()
-    
-    {},
-  '405': function ()
-    
-    {},
-  '406': function ()
-    
-    {},
-  '407': function ()
-    
-    {
-		      yyval = yylexer.lpar_beg;
-		      yylexer.lpar_beg = ++yylexer.paren_nest;
-		    },
-  '408': function ()
-    
-    {
-          yylexer.lpar_beg = yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
-          // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
-		    },
-  '409': function ()
-    
-    {},
-  '410': function ()
-    
-    {},
-  '411': function ()
-    
-    {},
-  '412': function ()
-    
-    {},
-  '413': function ()
-    
-    {},
-  '414': function ()
-    
-    {
-	      // touching this alters the parse.output
-        yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-			  yystack.valueStack[yystack.valueStack.length-1-((5-(1)))];
-		    },
-  '415': function ()
-    
-    {},
-  '416': function ()
-    
-    {},
-  '417': function ()
-    
-    {},
-  '418': function ()
-    
-    {},
-  '419': function ()
-    
-    {},
-  '420': function ()
-    
-    {},
-  '421': function ()
-    
-    {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((5-(4)))];
-		    },
-  '422': function ()
-    
-    {},
-  '423': function ()
-    
-    {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]
-		    },
-  '424': function ()
-    
-    {},
-  '425': function ()
-    
-    {},
-  '426': function ()
-    
-    {
-          // touching this alters the parse.output
-          nd_set_line(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
-		    },
-  '427': function ()
-    
-    {},
-  '428': function ()
-    
-    {
-          // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((4-(3)))];
-		    },
-  '429': function ()
-    
-    {},
-  '430': function ()
-    
-    {},
-  '431': function ()
-    
-    {},
-  '432': function ()
-    
-    {},
-  '433': function ()
-    
-    {
-		      // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-		    },
-  '434': function ()
-    
-    {},
-  '435': function ()
-    
-    {
-          // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-		    },
-  '436': function ()
-    
-    {},
-  '439': function ()
-    
-    {},
-  '441': function ()
-    
-    {},
-  '442': function ()
-    
-    {},
-  '444': function ()
-    
-    {},
-  '446': function ()
-    
-    {},
-  '449': function ()
-    
-    {},
-  '451': function ()
-    
-    {},
-  '454': function ()
-    
-    {},
-  '455': function ()
-    
-    {},
-  '456': function ()
-    
-    {},
-  '457': function ()
-    
-    {},
-  '458': function ()
-    
-    {},
-  '459': function ()
-    
-    {},
-  '460': function ()
-    
-    {},
-  '461': function ()
-    
-    {},
-  '463': function ()
-    
-    {},
-  '464': function ()
-    
-    {},
-  '465': function ()
-    
-    {},
-  '466': function ()
-    
-    {},
-  '467': function ()
-    
-    {},
-  '468': function ()
-    
-    {},
-  '469': function ()
-    
-    {},
-  '470': function ()
-    
-    {},
-  '471': function ()
-    
-    {},
-  '472': function ()
-    
-    {},
-  '473': function ()
-    
-    {},
-  '474': function ()
-    
-    {},
-  '475': function ()
-    
-    {},
-  '476': function ()
-    
-    {},
-  '477': function ()
-    
-    {},
-  '478': function ()
-    
-    {},
-  '479': function ()
-    
-    {},
-  '480': function ()
-    
-    {},
-  '481': function ()
-    
-    {},
-  '483': function ()
-    
-    {
-			yyval = yylexer.lex_strterm;
-			yylexer.lex_strterm = null;
-			yylexer.lex_state = EXPR_BEG;
-		    },
-  '484': function ()
-    
-    {
-		    /*%%%*/
-			yylexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
-		    },
-  '485': function ()
-    
-    {
-          yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = yylexer.cond_stack;
-          yyval = yylexer.cmdarg_stack;
-          yylexer.cond_stack = 0;
-          yylexer.cmdarg_stack = 0;
-		    },
-  '486': function ()
-    
-    {
-			yyval = yylexer.lex_strterm;
-			yylexer.lex_strterm = null;
-			yylexer.lex_state = EXPR_BEG;
-		    },
-  '487': function ()
-    
-    {
-			yyval = yylexer.brace_nest;
-			yylexer.brace_nest = 0;
-		    },
-  '488': function ()
-    
-    {
-          yylexer.cond_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
-          yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
-          yylexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
-          yylexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
-		    },
-  '489': function ()
-    
-    {},
-  '490': function ()
-    
-    {},
-  '491': function ()
-    
-    {},
-  '493': function ()
-    
-    {
-			yylexer.lex_state = EXPR_END;
-		    },
-  '498': function ()
-    
-    {
-			yylexer.lex_state = EXPR_END;
-		    },
-  '501': function ()
-    
-    {
-		    },
-  '502': function ()
-    
-    {
-		    },
-  '508': function ()
-    
-    {},
-  '509': function ()
-    
-    {yyval = keyword_self;},
-  '510': function ()
-    
-    {yyval = keyword_true;},
-  '511': function ()
-    
-    {yyval = keyword_false;},
-  '512': function ()
-    
-    {yyval = keyword__FILE__;},
-  '513': function ()
-    
-    {yyval = keyword__LINE__;},
-  '514': function ()
-    
-    {yyval = keyword__ENCODING__;},
-  '515': function ()
-    
-    {
-		    },
-  '516': function ()
-    
-    {},
-  '517': function ()
-    
-    {},
-  '518': function ()
-    
-    {},
-  '521': function ()
-    
-    {},
-  '522': function ()
-    
-    {
-			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = true;
-		    },
-  '523': function ()
-    
-    {},
-  '524': function ()
-    
-    {
-		      yyerrok();
-		    },
-  '525': function ()
-    
-    {
-			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = true;
-		    },
-  '526': function ()
-    
-    {
-			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = true;
-		    },
-  '527': function ()
-    
-    {},
-  '528': function ()
-    
-    {},
-  '529': function ()
-    
-    {},
-  '530': function ()
-    
-    {},
-  '531': function ()
-    
-    {},
-  '532': function ()
-    
-    {},
-  '533': function ()
-    
-    {},
-  '534': function ()
-    
-    {},
-  '535': function ()
-    
-    {},
-  '536': function ()
-    
-    {},
-  '537': function ()
-    
-    {},
-  '538': function ()
-    
-    {},
-  '539': function ()
-    
-    {},
-  '540': function ()
-    
-    {},
-  '541': function ()
-    
-    {},
-  '542': function ()
-    
-    {},
-  '543': function ()
-    
-    {},
-  '544': function ()
-    
-    {},
-  '545': function ()
-    
-    {},
-  '546': function ()
-    
-    {},
-  '547': function ()
-    
-    {},
-  '548': function ()
-    
-    {
-		      yylexer.yyerror("formal argument cannot be a constant");
-		    },
-  '549': function ()
-    
-    {
-		      yylexer.yyerror("formal argument cannot be an instance variable");
-		    },
-  '550': function ()
-    
-    {
-		      yylexer.yyerror("formal argument cannot be a global variable");
-		    },
-  '551': function ()
-    
-    {
-		      yylexer.yyerror("formal argument cannot be a class variable");
-		    },
-  '553': function ()
-    
-    {},
-  '554': function ()
-    
-    {},
-  '555': function ()
-    
-    {},
-  '557': function ()
-    
-    {},
-  '558': function ()
-    
-    {},
-  '559': function ()
-    
-    {},
-  '560': function ()
-    
-    {},
-  '561': function ()
-    
-    {},
-  '562': function ()
-    
-    {},
-  '563': function ()
-    
-    {},
-  '566': function ()
-    
-    {},
-  '567': function ()
-    
-    {},
-  '568': function ()
-    
-    {},
-  '569': function ()
-    
-    {},
-  '570': function ()
-    
-    {},
-  '571': function ()
-    
-    {},
-  '572': function ()
-    
-    {},
-  '573': function ()
-    
-    {},
-  '576': function ()
-    
-    {
-          if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
-            yylexer.yyerror("rest argument must be local variable");
-    			
-		    },
-  '577': function ()
-    
-    {},
-  '580': function ()
-    
-    {
-		      if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
-            yylexer.yyerror("block argument must be local variable");
-    			else if (!dyna_in_block() && local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
-            yylexer.yyerror("duplicated block argument name");
-    			
-		    },
-  '581': function ()
-    
-    {},
-  '582': function ()
-    
-    {},
-  '583': function ()
-    
-    {},
-  '584': function ()
-    
-    {
-		  yylexer.lex_state = EXPR_BEG;
-		},
-  '585': function ()
-    
-    {
-          if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == 0) {
-            yylexer.yyerror("can't define singleton method for ().");
-          }
-          else {
-            switch (nd_type(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])) { // TODO
-              case NODE_STR:
-              case NODE_DSTR:
-              case NODE_XSTR:
-              case NODE_DXSTR:
-              case NODE_DREGX:
-              case NODE_LIT:
-              case NODE_ARRAY:
-              case NODE_ZARRAY:
-                yylexer.yyerror("can't define singleton method for literals");
-              default:
-                value_expr(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]); // TODO
-                break;
-            }
-          }
-		    },
-  '587': function ()
-    
-    {},
-  '589': function ()
-    
-    {},
-  '590': function ()
-    
-    {},
-  '591': function ()
-    
-    {},
-  '592': function ()
-    
-    {},
-  '614': function ()
-    
-    {yyerrok();},
-  '617': function ()
-    
-    {yyerrok();},
-  '618': function ()
-    
-    {}
-  }
-
-  function yyaction (yyn, yylen)
-  {
-    /* If YYLEN is nonzero, implement the default value of the action:
-       `$$ = $1'.  Otherwise, use the top of the stack.
-
-       Otherwise, the following line sets YYVAL to garbage.
-       This behavior is undocumented and Bison
-       users should not rely upon it.  */
-    // var yyval; moved up in scope chain to share with actions
-    if (yylen > 0)
-      yyval = yystack.valueAt(yylen - 1);
-    else
-      yyval = yystack.valueAt(0);
-
-    debug_reduce_print(yyn);
-
-    var actionClosure = actionsTable[yyn]
-    if (actionClosure)
-      actionClosure(yystack)
-
-    debug_symbol_print("-> $$ =", yyr1_[yyn], yyval);
-
-    yystack.pop(yylen);
-    yylen = 0;
-    debug_stack_print(yystack);
-
-    // Shift the result of the reduction.
-    yyn = yyr1_[yyn];
-    var yystate = yypgoto_[yyn - yyntokens_] + yystack.stateAt(0);
-    if (0 <= yystate && yystate <= yylast_ && yycheck_[yystate] == yystack.stateAt(0))
-      yystate = yytable_[yystate];
-    else
-      yystate = yydefgoto_[yyn - yyntokens_];
-
-    yystack.push(yystate, yyval);
-    // was: usless: return YYNEWSTATE;
-  }
 
   /**
    * Parse input from the scanner that was specified at object construction
@@ -2023,6 +352,8 @@ function YYParser (yylexer)
     // Initialize the stack.
     yystack.push(yystate, yylval);
 
+    // have tried: recursive closures, breaking blocks - switch is faster,
+    // next step: asm.js for the whole `parse()` function
     var label = YYNEWSTATE;
     goto_loop: for (;;)
     switch (label)
@@ -2232,7 +563,8 @@ function YYParser (yylexer)
           // Pop the current state because it cannot handle the error token.
           if (yystack.height() == 0)
           {
-            return false;
+            label = YYABORT;
+            continue goto_loop;
           }
 
           yystack.pop(1);
@@ -2260,6 +592,10 @@ function YYParser (yylexer)
       // Abort.               |
       //---------------------/
       case YYABORT:
+        // debug_symbol_print("Error: popping", yystos_[yyn], yylval);
+        // yystack.pop(1);
+        // yystate = yystack.stateAt(0);
+        // debug_stack_print(yystack);
         return false;
 
       default:
@@ -2269,6 +605,1681 @@ function YYParser (yylexer)
 
     // won't reach here
     return false
+  }
+
+  var actionsTable; // defined lated in tables section
+
+  function yyaction (yyn, yylen)
+  {
+    /* If YYLEN is nonzero, implement the default value of the action:
+       `$$ = $1'.  Otherwise, use the top of the stack.
+
+       Otherwise, the following line sets YYVAL to garbage.
+       This behavior is undocumented and Bison
+       users should not rely upon it.  */
+    // var yyval; moved up in scope chain to share with actions
+    if (yylen > 0)
+      yyval = yystack.valueAt(yylen - 1);
+    else
+      yyval = yystack.valueAt(0);
+
+    debug_reduce_print(yyn);
+
+    var actionClosure = actionsTable[yyn]
+    if (actionClosure)
+      actionClosure(yystack)
+
+    debug_symbol_print("-> $$ =", yyr1_[yyn], yyval);
+
+    yystack.pop(yylen);
+    yylen = 0;
+    debug_stack_print(yystack);
+
+    // Shift the result of the reduction.
+    yyn = yyr1_[yyn];
+    var yystate = yypgoto_[yyn - yyntokens_] + yystack.stateAt(0);
+    if (0 <= yystate && yystate <= yylast_ && yycheck_[yystate] == yystack.stateAt(0))
+      yystate = yytable_[yystate];
+    else
+      yystate = yydefgoto_[yyn - yyntokens_];
+
+    yystack.push(yystate, yyval);
+    // was: usless: return YYNEWSTATE;
+  }
+
+  // declared erlier, before `action()`
+  actionsTable =
+  {
+      2: function ()
+    
+    {
+      yylexer.lex_state = EXPR_BEG;
+    },
+  3: function ()
+    
+    {},
+  4: function ()
+    
+    {},
+  5: function ()
+    
+    {},
+  6: function ()
+    
+    {},
+  7: function ()
+    
+    {},
+  8: function ()
+    
+    {},
+  10: function ()
+    
+    {},
+  11: function ()
+    
+    {},
+  12: function ()
+    
+    {},
+  13: function ()
+    
+    {},
+  14: function ()
+    
+    {},
+  15: function ()
+    
+    {},
+  16: function ()
+    
+    {},
+  17: function ()
+    
+    {},
+  18: function ()
+    
+    {},
+  19: function ()
+    
+    {
+      yylexer.yyerror("BEGIN is permitted only at toplevel");
+    },
+  20: function ()
+    
+    {},
+  21: function ()
+    
+    {
+      yylexer.lex_state = EXPR_FNAME;
+    },
+  22: function ()
+    
+    {},
+  23: function ()
+    
+    {},
+  24: function ()
+    
+    {},
+  25: function ()
+    
+    {
+      yylexer.yyerror("can't make alias for the number variables");
+    },
+  26: function ()
+    
+    {},
+  27: function ()
+    
+    {},
+  28: function ()
+    
+    {},
+  29: function ()
+    
+    {},
+  30: function ()
+    
+    {},
+  31: function ()
+    
+    {},
+  32: function ()
+    
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        rb_warn("END in method; use at_exit");
+    },
+  34: function ()
+    
+    {},
+  35: function ()
+    
+    {},
+  36: function ()
+    
+    {},
+  37: function ()
+    
+    {},
+  38: function ()
+    
+    {},
+  39: function ()
+    
+    {},
+  40: function ()
+    
+    {},
+  41: function ()
+    
+    {},
+  42: function ()
+    
+    {},
+  43: function ()
+    
+    {},
+  44: function ()
+    
+    {},
+  46: function ()
+    
+    {},
+  47: function ()
+    
+    {},
+  49: function ()
+    
+    {},
+  50: function ()
+    
+    {},
+  51: function ()
+    
+    {},
+  52: function ()
+    
+    {},
+  54: function ()
+    
+    {},
+  58: function ()
+    
+    {},
+  59: function ()
+    
+    {},
+  60: function ()
+    
+    {
+      // touching this alters the parse.output
+      yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+    },
+  61: function ()
+    
+    {},
+  62: function ()
+    
+    {},
+  63: function ()
+    
+    {},
+  64: function ()
+    
+    {},
+  65: function ()
+    
+    {},
+  66: function ()
+    
+    {},
+  67: function ()
+    
+    {},
+  68: function ()
+    
+    {},
+  69: function ()
+    
+    {},
+  70: function ()
+    
+    {},
+  71: function ()
+    
+    {},
+  72: function ()
+    
+    {},
+  74: function ()
+    
+    {},
+  76: function ()
+    
+    {},
+  77: function ()
+    
+    {},
+  78: function ()
+    
+    {},
+  79: function ()
+    
+    {},
+  80: function ()
+    
+    {},
+  81: function ()
+    
+    {},
+  82: function ()
+    
+    {},
+  83: function ()
+    
+    {},
+  84: function ()
+    
+    {},
+  85: function ()
+    
+    {},
+  86: function ()
+    
+    {},
+  88: function ()
+    
+    {},
+  89: function ()
+    
+    {},
+  90: function ()
+    
+    {},
+  91: function ()
+    
+    {},
+  92: function ()
+    
+    {},
+  93: function ()
+    
+    {},
+  94: function ()
+    
+    {},
+  95: function ()
+    
+    {},
+  96: function ()
+    
+    {},
+  97: function ()
+    
+    {},
+  98: function ()
+    
+    {},
+  99: function ()
+    
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        yylexer.yyerror("dynamic constant assignment");
+    },
+  100: function ()
+    
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        yylexer.yyerror("dynamic constant assignment");
+    },
+  101: function ()
+    
+    {},
+  102: function ()
+    
+    {},
+  103: function ()
+    
+    {},
+  104: function ()
+    
+    {},
+  105: function ()
+    
+    {},
+  106: function ()
+    
+    {},
+  107: function ()
+    
+    {},
+  108: function ()
+    
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        yylexer.yyerror("dynamic constant assignment");
+    },
+  109: function ()
+    
+    {
+      if (yylexer.in_def || yylexer.in_single)
+        yylexer.yyerror("dynamic constant assignment");
+    },
+  110: function ()
+    
+    {},
+  111: function ()
+    
+    {
+      yylexer.yyerror("class/module name must be CONSTANT");
+    },
+  113: function ()
+    
+    {},
+  114: function ()
+    
+    {},
+  115: function ()
+    
+    {},
+  119: function ()
+    
+    {
+      yylexer.lex_state = EXPR_ENDFN;
+    },
+  120: function ()
+    
+    {
+      yylexer.lex_state = EXPR_ENDFN;
+    },
+  123: function ()
+    
+    {},
+  125: function ()
+    
+    {},
+  126: function ()
+    
+    {
+      yylexer.lex_state = EXPR_FNAME;
+    },
+  127: function ()
+    
+    {},
+  128: function ()
+    
+    {},
+  129: function ()
+    
+    {},
+  130: function ()
+    
+    {},
+  131: function ()
+    
+    {},
+  132: function ()
+    
+    {},
+  133: function ()
+    
+    {},
+  134: function ()
+    
+    {},
+  135: function ()
+    
+    {},
+  136: function ()
+    
+    {},
+  137: function ()
+    
+    {},
+  138: function ()
+    
+    {},
+  139: function ()
+    
+    {},
+  140: function ()
+    
+    {},
+  141: function ()
+    
+    {},
+  142: function ()
+    
+    {},
+  143: function ()
+    
+    {},
+  144: function ()
+    
+    {},
+  145: function ()
+    
+    {},
+  146: function ()
+    
+    {},
+  147: function ()
+    
+    {},
+  148: function ()
+    
+    {},
+  149: function ()
+    
+    {},
+  150: function ()
+    
+    {},
+  151: function ()
+    
+    {},
+  152: function ()
+    
+    {},
+  153: function ()
+    
+    {},
+  154: function ()
+    
+    {},
+  155: function ()
+    
+    {},
+  156: function ()
+    
+    {},
+  157: function ()
+    
+    {},
+  199: function ()
+    
+    {},
+  200: function ()
+    
+    {},
+  201: function ()
+    
+    {},
+  202: function ()
+    
+    {},
+  203: function ()
+    
+    {},
+  204: function ()
+    
+    {},
+  205: function ()
+    
+    {},
+  206: function ()
+    
+    {},
+  207: function ()
+    
+    {},
+  208: function ()
+    
+    {},
+  209: function ()
+    
+    {},
+  210: function ()
+    
+    {},
+  211: function ()
+    
+    {},
+  212: function ()
+    
+    {},
+  213: function ()
+    
+    {},
+  214: function ()
+    
+    {},
+  215: function ()
+    
+    {},
+  216: function ()
+    
+    {},
+  217: function ()
+    
+    {},
+  218: function ()
+    
+    {},
+  219: function ()
+    
+    {},
+  220: function ()
+    
+    {},
+  221: function ()
+    
+    {},
+  222: function ()
+    
+    {},
+  223: function ()
+    
+    {},
+  224: function ()
+    
+    {},
+  225: function ()
+    
+    {},
+  226: function ()
+    
+    {},
+  227: function ()
+    
+    {},
+  228: function ()
+    
+    {},
+  229: function ()
+    
+    {},
+  230: function ()
+    
+    {},
+  231: function ()
+    
+    {},
+  232: function ()
+    
+    {},
+  233: function ()
+    
+    {},
+  234: function ()
+    
+    {},
+  235: function ()
+    
+    {},
+  236: function ()
+    
+    {},
+  237: function ()
+    
+    {},
+  238: function ()
+    
+    {},
+  239: function ()
+    
+    {},
+  240: function ()
+    
+    {},
+  241: function ()
+    
+    { yylexer.in_defined = true;},
+  242: function ()
+    
+    {
+      yylexer.in_defined = false;
+    },
+  243: function ()
+    
+    {},
+  244: function ()
+    
+    {},
+  245: function ()
+    
+    {},
+  247: function ()
+    
+    {},
+  248: function ()
+    
+    {},
+  249: function ()
+    
+    {},
+  250: function ()
+    
+    {},
+  255: function ()
+    
+    {},
+  256: function ()
+    
+    {},
+  257: function ()
+    
+    {},
+  258: function ()
+    
+    {},
+  259: function ()
+    
+    {},
+  260: function ()
+    
+    {},
+  261: function ()
+    
+    {},
+  263: function ()
+    
+    {
+      yyval = yylexer.cmdarg_stack;
+      yylexer.CMDARG_PUSH(1);
+    },
+  264: function ()
+    
+    {
+      // CMDARG_POP()
+      yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
+    },
+  265: function ()
+    
+    {},
+  266: function ()
+    
+    {},
+  267: function ()
+    
+    {},
+  268: function ()
+    
+    {},
+  269: function ()
+    
+    {},
+  270: function ()
+    
+    {},
+  271: function ()
+    
+    {},
+  272: function ()
+    
+    {},
+  273: function ()
+    
+    {},
+  274: function ()
+    
+    {},
+  285: function ()
+    
+    {},
+  286: function ()
+    
+    {
+		      yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = yylexer.cmdarg_stack;
+		      yylexer.cmdarg_stack = 0;
+		    },
+  287: function ()
+    
+    {
+		      yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
+		      // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
+		    },
+  288: function ()
+    
+    {
+		  yylexer.lex_state = EXPR_ENDARG;
+		},
+  289: function ()
+    
+    {},
+  290: function ()
+    
+    {
+		  yylexer.lex_state = EXPR_ENDARG;
+		},
+  291: function ()
+    
+    {},
+  292: function ()
+    
+    {},
+  293: function ()
+    
+    {},
+  294: function ()
+    
+    {},
+  295: function ()
+    
+    {},
+  296: function ()
+    
+    {},
+  297: function ()
+    
+    {},
+  298: function ()
+    
+    {},
+  299: function ()
+    
+    {},
+  300: function ()
+    
+    {},
+  301: function ()
+    
+    { yylexer.in_defined = true;},
+  302: function ()
+    
+    {
+		      yylexer.in_defined = false;
+		    },
+  303: function ()
+    
+    {},
+  304: function ()
+    
+    {},
+  305: function ()
+    
+    {},
+  307: function ()
+    
+    {},
+  308: function ()
+    
+    {},
+  309: function ()
+    
+    {},
+  310: function ()
+    
+    {},
+  311: function ()
+    
+    {
+		    yylexer.COND_PUSH(1);
+		  },
+  312: function ()
+    
+    {
+		    yylexer.COND_POP();
+		  },
+  313: function ()
+    
+    {},
+  314: function ()
+    
+    {
+		  yylexer.COND_PUSH(1);
+		},
+  315: function ()
+    
+    {
+		  yylexer.COND_POP();
+		},
+  316: function ()
+    
+    {},
+  317: function ()
+    
+    {},
+  318: function ()
+    
+    {},
+  319: function ()
+    
+    {
+		    yylexer.COND_PUSH(1);
+		  },
+  320: function ()
+    
+    {
+		    yylexer.COND_POP();
+		  },
+  321: function ()
+    
+    {},
+  322: function ()
+    
+    {
+          if (yylexer.in_def || yylexer.in_single)
+            yylexer.yyerror("class definition in method body");
+    			
+		    },
+  323: function ()
+    
+    {
+		      // touching this alters the parse.output
+			    yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
+		    },
+  324: function ()
+    
+    {
+          yyval = yylexer.in_def;
+          yylexer.in_def = 0;
+		    },
+  325: function ()
+    
+    {
+		      yyval = yylexer.in_single;
+		      yylexer.in_single = 0;
+		    },
+  326: function ()
+    
+    {
+          yylexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
+          yylexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
+		    },
+  327: function ()
+    
+    {
+          if (yylexer.in_def || yylexer.in_single)
+            yylexer.yyerror("module definition in method body");
+    			
+		    },
+  328: function ()
+    
+    {
+		      // touching this alters the parse.output
+			    yystack.valueStack[yystack.valueStack.length-1-((5-(3)))];
+		    },
+  329: function ()
+    
+    {
+		      yyval = yylexer.cur_mid; // TODO
+    			yylexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
+    			
+		      yylexer.in_def++;
+		    },
+  330: function ()
+    
+    {
+		      // touching this alters the parse.output
+			    yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+			    yylexer.in_def--;
+			    yylexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+		    },
+  331: function ()
+    
+    {
+      yylexer.lex_state = EXPR_FNAME;
+    },
+  332: function ()
+    
+    {
+      yylexer.in_single++;
+      yylexer.lex_state = EXPR_ENDFN; /* force for args */
+    },
+  333: function ()
+    
+    {
+      yylexer.in_single--;
+    },
+  334: function ()
+    
+    {},
+  335: function ()
+    
+    {},
+  336: function ()
+    
+    {},
+  337: function ()
+    
+    {},
+  338: function ()
+    
+    {},
+  339: function ()
+    
+    {},
+  340: function ()
+    
+    {},
+  341: function ()
+    
+    {},
+  342: function ()
+    
+    {},
+  343: function ()
+    
+    {},
+  344: function ()
+    
+    {},
+  345: function ()
+    
+    {},
+  346: function ()
+    
+    {},
+  347: function ()
+    
+    {},
+  348: function ()
+    
+    {},
+  349: function ()
+    
+    {},
+  356: function ()
+    
+    {},
+  358: function ()
+    
+    {},
+  361: function ()
+    
+    {},
+  362: function ()
+    
+    {},
+  363: function ()
+    
+    {},
+  364: function ()
+    
+    {},
+  365: function ()
+    
+    {},
+  366: function ()
+    
+    {},
+  367: function ()
+    
+    {},
+  368: function ()
+    
+    {},
+  369: function ()
+    
+    {},
+  370: function ()
+    
+    {},
+  371: function ()
+    
+    {},
+  372: function ()
+    
+    {},
+  373: function ()
+    
+    {},
+  374: function ()
+    
+    {},
+  375: function ()
+    
+    {},
+  376: function ()
+    
+    {},
+  377: function ()
+    
+    {},
+  378: function ()
+    
+    {},
+  379: function ()
+    
+    {},
+  380: function ()
+    
+    {},
+  381: function ()
+    
+    {},
+  382: function ()
+    
+    {},
+  383: function ()
+    
+    {},
+  384: function ()
+    
+    {},
+  385: function ()
+    
+    {},
+  386: function ()
+    
+    {},
+  387: function ()
+    
+    {},
+  388: function ()
+    
+    {},
+  389: function ()
+    
+    {},
+  390: function ()
+    
+    {},
+  391: function ()
+    
+    {},
+  392: function ()
+    
+    {},
+  393: function ()
+    
+    {},
+  394: function ()
+    
+    {},
+  396: function ()
+    
+    {
+			yylexer.command_start = true;
+		    },
+  397: function ()
+    
+    {},
+  398: function ()
+    
+    {},
+  399: function ()
+    
+    {},
+  400: function ()
+    
+    {},
+  401: function ()
+    
+    {},
+  404: function ()
+    
+    {},
+  405: function ()
+    
+    {},
+  406: function ()
+    
+    {},
+  407: function ()
+    
+    {
+		      yyval = yylexer.lpar_beg;
+		      yylexer.lpar_beg = ++yylexer.paren_nest;
+		    },
+  408: function ()
+    
+    {
+          yylexer.lpar_beg = yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
+          // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
+		    },
+  409: function ()
+    
+    {},
+  410: function ()
+    
+    {},
+  411: function ()
+    
+    {},
+  412: function ()
+    
+    {},
+  413: function ()
+    
+    {},
+  414: function ()
+    
+    {
+	      // touching this alters the parse.output
+        yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+			  yystack.valueStack[yystack.valueStack.length-1-((5-(1)))];
+		    },
+  415: function ()
+    
+    {},
+  416: function ()
+    
+    {},
+  417: function ()
+    
+    {},
+  418: function ()
+    
+    {},
+  419: function ()
+    
+    {},
+  420: function ()
+    
+    {},
+  421: function ()
+    
+    {
+		      // touching this alters the parse.output
+			    yystack.valueStack[yystack.valueStack.length-1-((5-(4)))];
+		    },
+  422: function ()
+    
+    {},
+  423: function ()
+    
+    {
+		      // touching this alters the parse.output
+			    yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]
+		    },
+  424: function ()
+    
+    {},
+  425: function ()
+    
+    {},
+  426: function ()
+    
+    {
+          // touching this alters the parse.output
+          nd_set_line(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
+		    },
+  427: function ()
+    
+    {},
+  428: function ()
+    
+    {
+          // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((4-(3)))];
+		    },
+  429: function ()
+    
+    {},
+  430: function ()
+    
+    {},
+  431: function ()
+    
+    {},
+  432: function ()
+    
+    {},
+  433: function ()
+    
+    {
+		      // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+		    },
+  434: function ()
+    
+    {},
+  435: function ()
+    
+    {
+          // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+		    },
+  436: function ()
+    
+    {},
+  439: function ()
+    
+    {},
+  441: function ()
+    
+    {},
+  442: function ()
+    
+    {},
+  444: function ()
+    
+    {},
+  446: function ()
+    
+    {},
+  449: function ()
+    
+    {},
+  451: function ()
+    
+    {},
+  454: function ()
+    
+    {},
+  455: function ()
+    
+    {},
+  456: function ()
+    
+    {},
+  457: function ()
+    
+    {},
+  458: function ()
+    
+    {},
+  459: function ()
+    
+    {},
+  460: function ()
+    
+    {},
+  461: function ()
+    
+    {},
+  463: function ()
+    
+    {},
+  464: function ()
+    
+    {},
+  465: function ()
+    
+    {},
+  466: function ()
+    
+    {},
+  467: function ()
+    
+    {},
+  468: function ()
+    
+    {},
+  469: function ()
+    
+    {},
+  470: function ()
+    
+    {},
+  471: function ()
+    
+    {},
+  472: function ()
+    
+    {},
+  473: function ()
+    
+    {},
+  474: function ()
+    
+    {},
+  475: function ()
+    
+    {},
+  476: function ()
+    
+    {},
+  477: function ()
+    
+    {},
+  478: function ()
+    
+    {},
+  479: function ()
+    
+    {},
+  480: function ()
+    
+    {},
+  481: function ()
+    
+    {},
+  483: function ()
+    
+    {
+			yyval = yylexer.lex_strterm;
+			yylexer.lex_strterm = null;
+			yylexer.lex_state = EXPR_BEG;
+		    },
+  484: function ()
+    
+    {
+		    /*%%%*/
+			yylexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
+		    },
+  485: function ()
+    
+    {
+          yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = yylexer.cond_stack;
+          yyval = yylexer.cmdarg_stack;
+          yylexer.cond_stack = 0;
+          yylexer.cmdarg_stack = 0;
+		    },
+  486: function ()
+    
+    {
+			yyval = yylexer.lex_strterm;
+			yylexer.lex_strterm = null;
+			yylexer.lex_state = EXPR_BEG;
+		    },
+  487: function ()
+    
+    {
+			yyval = yylexer.brace_nest;
+			yylexer.brace_nest = 0;
+		    },
+  488: function ()
+    
+    {
+          yylexer.cond_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+          yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
+          yylexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+          yylexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
+		    },
+  489: function ()
+    
+    {},
+  490: function ()
+    
+    {},
+  491: function ()
+    
+    {},
+  493: function ()
+    
+    {
+			yylexer.lex_state = EXPR_END;
+		    },
+  498: function ()
+    
+    {
+			yylexer.lex_state = EXPR_END;
+		    },
+  501: function ()
+    
+    {
+		    },
+  502: function ()
+    
+    {
+		    },
+  508: function ()
+    
+    {},
+  509: function ()
+    
+    {yyval = keyword_self;},
+  510: function ()
+    
+    {yyval = keyword_true;},
+  511: function ()
+    
+    {yyval = keyword_false;},
+  512: function ()
+    
+    {yyval = keyword__FILE__;},
+  513: function ()
+    
+    {yyval = keyword__LINE__;},
+  514: function ()
+    
+    {yyval = keyword__ENCODING__;},
+  515: function ()
+    
+    {
+		    },
+  516: function ()
+    
+    {},
+  517: function ()
+    
+    {},
+  518: function ()
+    
+    {},
+  521: function ()
+    
+    {},
+  522: function ()
+    
+    {
+			yylexer.lex_state = EXPR_BEG;
+			yylexer.command_start = true;
+		    },
+  523: function ()
+    
+    {},
+  524: function ()
+    
+    {
+		      yyerrok();
+		    },
+  525: function ()
+    
+    {
+			yylexer.lex_state = EXPR_BEG;
+			yylexer.command_start = true;
+		    },
+  526: function ()
+    
+    {
+			yylexer.lex_state = EXPR_BEG;
+			yylexer.command_start = true;
+		    },
+  527: function ()
+    
+    {},
+  528: function ()
+    
+    {},
+  529: function ()
+    
+    {},
+  530: function ()
+    
+    {},
+  531: function ()
+    
+    {},
+  532: function ()
+    
+    {},
+  533: function ()
+    
+    {},
+  534: function ()
+    
+    {},
+  535: function ()
+    
+    {},
+  536: function ()
+    
+    {},
+  537: function ()
+    
+    {},
+  538: function ()
+    
+    {},
+  539: function ()
+    
+    {},
+  540: function ()
+    
+    {},
+  541: function ()
+    
+    {},
+  542: function ()
+    
+    {},
+  543: function ()
+    
+    {},
+  544: function ()
+    
+    {},
+  545: function ()
+    
+    {},
+  546: function ()
+    
+    {},
+  547: function ()
+    
+    {},
+  548: function ()
+    
+    {
+		      yylexer.yyerror("formal argument cannot be a constant");
+		    },
+  549: function ()
+    
+    {
+		      yylexer.yyerror("formal argument cannot be an instance variable");
+		    },
+  550: function ()
+    
+    {
+		      yylexer.yyerror("formal argument cannot be a global variable");
+		    },
+  551: function ()
+    
+    {
+		      yylexer.yyerror("formal argument cannot be a class variable");
+		    },
+  553: function ()
+    
+    {},
+  554: function ()
+    
+    {},
+  555: function ()
+    
+    {},
+  557: function ()
+    
+    {},
+  558: function ()
+    
+    {},
+  559: function ()
+    
+    {},
+  560: function ()
+    
+    {},
+  561: function ()
+    
+    {},
+  562: function ()
+    
+    {},
+  563: function ()
+    
+    {},
+  566: function ()
+    
+    {},
+  567: function ()
+    
+    {},
+  568: function ()
+    
+    {},
+  569: function ()
+    
+    {},
+  570: function ()
+    
+    {},
+  571: function ()
+    
+    {},
+  572: function ()
+    
+    {},
+  573: function ()
+    
+    {},
+  576: function ()
+    
+    {
+          if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
+            yylexer.yyerror("rest argument must be local variable");
+    			
+		    },
+  577: function ()
+    
+    {},
+  580: function ()
+    
+    {
+		      if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+            yylexer.yyerror("block argument must be local variable");
+    			else if (!dyna_in_block() && local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+            yylexer.yyerror("duplicated block argument name");
+    			
+		    },
+  581: function ()
+    
+    {},
+  582: function ()
+    
+    {},
+  583: function ()
+    
+    {},
+  584: function ()
+    
+    {
+		  yylexer.lex_state = EXPR_BEG;
+		},
+  585: function ()
+    
+    {
+          if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == 0) {
+            yylexer.yyerror("can't define singleton method for ().");
+          }
+          else {
+            switch (nd_type(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])) { // TODO
+              case NODE_STR:
+              case NODE_DSTR:
+              case NODE_XSTR:
+              case NODE_DXSTR:
+              case NODE_DREGX:
+              case NODE_LIT:
+              case NODE_ARRAY:
+              case NODE_ZARRAY:
+                yylexer.yyerror("can't define singleton method for literals");
+              default:
+                value_expr(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]); // TODO
+                break;
+            }
+          }
+		    },
+  587: function ()
+    
+    {},
+  589: function ()
+    
+    {},
+  590: function ()
+    
+    {},
+  591: function ()
+    
+    {},
+  592: function ()
+    
+    {},
+  614: function ()
+    
+    {yyerrok();},
+  617: function ()
+    
+    {yyerrok();},
+  618: function ()
+    
+    {}
   }
 
   // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing STATE-NUM.
@@ -5774,14 +5785,7 @@ YYParser.prototype =
 
   debug_stack_print: function debug_stack_print ()
   {
-    var yystack = this.yystack,
-      ary = [];
-    for (var i = 0, ih = yystack.height(); i <= ih; i++)
-    {
-      ary.push(yystack.stateAt(i));
-    }
-    
-    puts("Stack now " + ary.reverse().join(' '));
+    puts("Stack now " + this.yystack.stateStack.join(' '));
   },
 
   debug_print: function debug_print (message)
@@ -6251,6 +6255,12 @@ function lex_pv ()
 {
   return lex_lastline[lex_p];
 }
+// emulation of `strncmp(lex_p, "begin", 5)`,
+// but you better use a precompiled regexp if `str` is a constant
+function strncmp_lex_p (str)
+{
+  return $test.substring(lex_p, lex_p + str.length) == str;
+}
 
 // forecast, if the nextc() will return character `c`
 function peek (c)
@@ -6466,7 +6476,7 @@ this.yylex = function yylex ()
     case ' ':
     case '\t':
     case '\f':
-    case '\r': // TODO: cream on `\r` everywhere, or clear it out
+    case '\r': // TODO: scream on `\r` everywhere, or clear it out
     case '\v':    // '\13'
     {
       lexer.space_seen = true;
@@ -6605,7 +6615,31 @@ this.yylex = function yylex ()
     
     case '=':
     {
-      // TODO: skip embedded rd document */
+      if (was_bol())
+      {
+        /* skip embedded rd document */
+        if (match_grex(/begin[\n \t]|/g)[0])
+        {
+          for (;;)
+          {
+            lex_goto_eol();
+            c = nextc();
+            if (c == '')
+            {
+              compile_error("embedded document meets end of file");
+              return 0;
+            }
+            if (c != '=')
+              continue;
+            if (match_grex(/end(?:[\n \t]|$)|/gm)[0])
+            {
+              break;
+            }
+          }
+          lex_goto_eol();
+          continue retry; // was: goto retry;
+        }
+      }
 
       lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
       if ((c = nextc()) == '=')
@@ -8510,11 +8544,11 @@ function warning (msg) { print_error('WARNING: ' + msg) }
 function compile_error (msg)
 {
   lexer.nerr++;
-  
+
   puts
   (
     lexer.filename +
-    ':' + 
+    ':' +
     lexer.ruby_sourceline +
     ': ' +
     msg
