@@ -6189,6 +6189,10 @@ function ISDIGIT (c)
 {
   return /^\d$/.test(c);
 }
+function ISXDIGIT (c)
+{
+  return /^[0-9a-fA-F]/.test(c);
+}
 function ISALNUM (c)
 {
   return /^\w$/.test(c);
@@ -6725,11 +6729,10 @@ this.yylex = function yylex ()
         pushback(c); // pushing back char after `+`
         if (c != '' && ISDIGIT(c))
         {
-          // c = '+';
-          // return start_num(c); // was: goto start_num;
-          tokadd(c);
+          c = '+';
           return start_num(c); // was: goto start_num;
         }
+        
         return tUPLUS;
       }
       lexer.lex_state = EXPR_BEG;
@@ -6810,7 +6813,6 @@ this.yylex = function yylex ()
     case '8':
     case '9':
     {
-      pushback(c);
       return start_num(c);
     }
     
@@ -7558,7 +7560,6 @@ function heredoc_identifier ()
       return 0;
     }
     // TODO: create token with $text.substring(start, end)
-    // TODO: or remove all the function with a regexp ;)
     newtok();
     term = '"';
     func |= str_dquote;
@@ -7874,7 +7875,6 @@ function tokadd_string (func, term, paren, str_term)
 
 function simple_re_meta (c)
 {
-  // TODO: optimize!
   switch (c)
   {
     case '$':
@@ -7978,6 +7978,7 @@ function tokadd_escape ()
 }
 
 // checks if the current line matches `/^\s*#{eos}\n?$/`;
+var whole_match_p_rexcache = {};
 function whole_match_p (eos, indent)
 {
   if (!indent)
@@ -7985,8 +7986,15 @@ function whole_match_p (eos, indent)
     return lex_lastline == eos + '\n' || lex_lastline == eos;
   }
   
-  // `eos` is an identifier and doesn't need to be escaped
-  var rex = new RegExp('^[ \\t]*' + eos + '$', 'm'); // TODO: cache
+  // here there are all with indentation enabled!
+  var rex = whole_match_p_rexcache[eos];
+  if (!rex)
+  {
+    // `eos` is an identifier and doesn't need to be escaped
+    rex = new RegExp('^[ \\t]*' + eos + '$', 'm');
+    whole_match_p_rexcache[eos] = rex;
+  }
+  
   return rex.test(lex_lastline);
 }
 
@@ -8244,72 +8252,312 @@ function parser_tokadd_utf8 (string_literal, symbol_literal, regexp_literal)
 
 // here `c` matches [0-9],
 // `c` is the first char of the future number,
-// as of Ruby 2.0 we don't expect to be called from leading '-' match,
-// the `c` has been pushed back by caller
+// as of Ruby 2.0 we don't expect to be called from leading '-' match
 function start_num (c)
 {
   var is_float = false,
       seen_point = false,
       seen_e = false,
       nondigit = '';
-  
+
   lexer.lex_state = EXPR_END;
   newtok();
-  // `c` has been pushed back by the caller
-  if (c == '0')
+  if (c == '-' || c == '+')
   {
-    // hex
-    
-    
-    // TODO: implement all the bestiary
-    if (match_grex(/0[xX0-9bBdD_oO]|/g)[0])
-      warning('0-leading digits to be supported soon');
+    tokadd(c);
+    c = nextc();
   }
   
-  // as far as we know the first char is a digit, there is no need
-  // for any `\d[\d_]*` trickery to avoid error with leading `_` char.
-  // that means:
-  // 
-  //   \d+(_\d+)*                 000_000_000…
-  // 
-  // optionally followed by:
-  // 
-  //   \.\d+(?:_\d+)*            .000_000_000…
-  // 
-  // optionally followed by:
-  // 
-  //   [eE][+\-]?\d+(_\d+)*      e000_000_000…
-  // 
-  // so we could parse: `10_0.0_0e+0_0` as `100.0`
-  var drex = /\d+(?:_\d+)*(?:(\.)\d+(?:_\d+)*)?(?:([eE])[+\-]?\d+(?:_\d+)*)?(\w)?|/g;
-  var m = match_grex(drex);
-  var decimal = m[0];
-  if (!drex)
+  goto_trailing_uc: {
+  goto_decode_num: {
+  goto_invalid_octal: {
+  
+  if (c == '0')
   {
-    lexer.yyerror("broken decimal number");
-    return tINTEGER;
-  }
-  lex_p += decimal.length;
-  var nondigit = m[3];
-  if (nondigit)
-  {
-    if (peek('.'))
-      lex_p++;
+    var start = toklen();
+    c = nextc();
+    if (c == 'x' || c == 'X')
+    {
+      /* hexadecimal */
+      c = nextc();
+      if (c != '' && ISXDIGIT(c))
+      {
+        do
+        {
+          if (c == '_')
+          {
+            if (nondigit)
+              break;
+            nondigit = c;
+            continue;
+          }
+          if (!ISXDIGIT(c))
+            break;
+          nondigit = '';
+          tokadd(c);
+        }
+        while ((c = nextc()) != '');
+      }
+      pushback(c);
+      tokfix();
+      if (toklen() == start)
+      {
+        lexer.yyerror("numeric literal without digits");
+        return 0;
+      }
+      else if (nondigit)
+        break goto_trailing_uc; // was: goto trailing_uc;
+      // set_yylval_literal(rb_cstr_to_inum(tok(), 16, FALSE)); TODO
+      return tINTEGER;
+    }
+    if (c == 'b' || c == 'B')
+    {
+      /* binary */
+      c = nextc();
+      if (c == '0' || c == '1')
+      {
+        do
+        {
+          if (c == '_')
+          {
+            if (nondigit)
+              break;
+            nondigit = c;
+            continue;
+          }
+          if (c != '0' && c != '1')
+            break;
+          nondigit = '';
+          tokadd(c);
+        }
+        while ((c = nextc()) != '');
+      }
+      pushback(c);
+      tokfix();
+      if (toklen() == start)
+      {
+        lexer.yyerror("numeric literal without digits");
+        return 0;
+      }
+      else if (nondigit)
+        break goto_trailing_uc; // was: goto trailing_uc;
+      // set_yylval_literal(rb_cstr_to_inum(tok(), 2, FALSE)); TODO
+      return tINTEGER;
+    }
+    if (c == 'd' || c == 'D')
+    {
+      /* decimal */
+      c = nextc();
+      if (c != '' && ISDIGIT(c))
+      {
+        do
+        {
+          if (c == '_')
+          {
+            if (nondigit)
+              break;
+            nondigit = c;
+            continue;
+          }
+          if (!ISDIGIT(c))
+            break;
+          nondigit = '';
+          tokadd(c);
+        }
+        while ((c = nextc()) != '');
+      }
+      pushback(c);
+      tokfix();
+      if (toklen() == start)
+      {
+        lexer.yyerror("numeric literal without digits");
+        return 0;
+      }
+      else if (nondigit)
+        break goto_trailing_uc; // was: goto trailing_uc;
+      // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
+      return tINTEGER;
+    }
+    // was: if (c == '_')
+    // was: {
+    // was:   /* 0_0 */
+    // was:   goto octal_number;
+    // was: }
+    // and moved after the next if block
+    if (c == 'o' || c == 'O')
+    {
+      /* prefixed octal */
+      c = nextc();
+      if (c == '' || c == '_' || !ISDIGIT(c))
+      {
+        lexer.yyerror("numeric literal without digits");
+        return 0;
+      }
+    }
+    if ((c >= '0' && c <= '7') || c == '_')
+    {
+      /* octal */
+      // was:  octal_number:
+      do
+      {
+        if (c == '_')
+        {
+          if (nondigit)
+            break;
+          nondigit = c;
+          continue;
+        }
+        if (c < '0' || c > '9')
+          break;
+        if (c > '7')
+        {
+          lexer.yyerror("Invalid octal digit");
+          break goto_invalid_octal; // was: goto invalid_octal;
+        }
+        nondigit = '';
+        tokadd(c);
+      }
+      while ((c = nextc()) != '');
+      if (toklen() > start)
+      {
+        pushback(c);
+        tokfix();
+        if (nondigit)
+          break goto_trailing_uc; // was: goto trailing_uc;
+        // set_yylval_literal(rb_cstr_to_inum(tok(), 8, FALSE)); TODO
+        return tINTEGER;
+      }
+      if (nondigit)
+      {
+        pushback(c);
+        break goto_trailing_uc; // was: goto trailing_uc;
+      }
+    }
+    if (c > '7' && c <= '9')
+    {
+      // was: invalid_octal:
+      lexer.yyerror("Invalid octal digit");
+    }
+    else if (c == '.' || c == 'e' || c == 'E')
+    {
+      tokadd('0');
+    }
     else
-      lex_p--;
+    {
+      pushback(c);
+      // set_yylval_literal(INT2FIX(0)); TODO
+      return tINTEGER;
+    }
+  } // c == '0'
+
+  } // goto_invalid_octal
+
+  for (;;)
+  {
+    switch (c)
+    {
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        nondigit = '';
+        tokadd(c);
+        break;
+
+      case '.':
+        if (nondigit)
+          break goto_trailing_uc; // was: goto trailing_uc;
+        if (seen_point || seen_e)
+        {
+          break goto_decode_num; // was: goto decode_num;
+        }
+        else
+        {
+          var c0 = nextc();
+          if (c0 == '' || !ISDIGIT(c0))
+          {
+            pushback(c0);
+            break goto_decode_num; // was: goto decode_num;
+          }
+          c = c0;
+        }
+        tokadd('.');
+        tokadd(c);
+        is_float = true;
+        seen_point = true;
+        nondigit = '';
+        break;
+
+      case 'e':
+      case 'E':
+        if (nondigit)
+        {
+          pushback(c);
+          c = nondigit;
+          break goto_decode_num; // was: goto decode_num;
+        }
+        if (seen_e)
+        {
+          break goto_decode_num; // was: goto decode_num;
+        }
+        tokadd(c);
+        seen_e = true;
+        is_float = true;
+        nondigit = c;
+        c = nextc();
+        if (c != '-' && c != '+')
+          continue;
+        tokadd(c);
+        nondigit = c;
+        break;
+
+      case '_':          /* `_' in number just ignored */
+        if (nondigit)
+          break goto_decode_num; // was: goto decode_num;
+        nondigit = c;
+        break;
+
+      default:
+        break goto_decode_num; // was: goto decode_num;
+    }
+    c = nextc();
+  } // decimal for
+
+  } // goto_decode_num
+  
+  // was: decode_num:
+  pushback(c);
+  
+  } // goto_trailing_uc:
+  
+  if (nondigit) // always true after `break goto_trailing_uc;`
+  {
+    // was: trailing_uc:
     lexer.yyerror("trailing `"+nondigit+"' in number");
   }
-
-  if (m[1] || m[2]) // matched `.` or `e`
+  tokfix();
+  if (is_float)
   {
-    // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
+    var d = parseInt(tok(), 10);
+    // if (errno == ERANGE)
+    // {
+    //   rb_warningS("Float %s out of range", tok());
+    //   errno = 0;
+    // }
+    // set_yylval_literal(DBL2NUM(d)); TODO
     return tFLOAT;
   }
-  else
-  {
-    // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
-    return tINTEGER;
-  }
+  // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
+  return tINTEGER;
+
+  // why are we so certain about returning `tFLOAT` or `tINTEGER`?
+  // because we have got here meating a digit :)
 }
 
 
