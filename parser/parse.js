@@ -238,13 +238,13 @@ function YYStack ()
 }
 
 // Instantiates the Bison-generated parser.
-function YYParser (yylexer)
+function YYParser (lexer)
 {
   // self
   var yyparser = this;
   
   // The scanner that will supply tokens to the parser.
-  this.yylexer = yylexer;
+  this.lexer = lexer;
 
   // True if verbose error messages are enabled.
   this.errorVerbose = true;
@@ -367,9 +367,9 @@ function YYParser (yylexer)
         if (yychar == yyempty_)
         {
           debug_print("Reading a token: ");
-          yychar = yylexer.yylex();
+          yychar = lexer.yylex();
 
-          yylval = yylexer.getLVal();
+          yylval = lexer.getLVal();
         }
 
 
@@ -483,7 +483,7 @@ function YYParser (yylexer)
           ++yynerrs_;
           if (yychar == yyempty_)
             yytoken = yyempty_;
-          yylexer.yyerror(this.yysyntax_error(yystate, yytoken));
+          lexer.yyerror(this.yysyntax_error(yystate, yytoken));
         }
 
         if (yyerrstatus_ == 3)
@@ -636,7 +636,7 @@ function YYParser (yylexer)
       2: function ()
     
     {
-      yylexer.lex_state = EXPR_BEG;
+      lexer.lex_state = EXPR_BEG;
     },
   3: function ()
     
@@ -686,7 +686,7 @@ function YYParser (yylexer)
   19: function ()
     
     {
-      yylexer.yyerror("BEGIN is permitted only at toplevel");
+      lexer.yyerror("BEGIN is permitted only at toplevel");
     },
   20: function ()
     
@@ -694,7 +694,7 @@ function YYParser (yylexer)
   21: function ()
     
     {
-      yylexer.lex_state = EXPR_FNAME;
+      lexer.lex_state = EXPR_FNAME;
     },
   22: function ()
     
@@ -708,7 +708,7 @@ function YYParser (yylexer)
   25: function ()
     
     {
-      yylexer.yyerror("can't make alias for the number variables");
+      lexer.yyerror("can't make alias for the number variables");
     },
   26: function ()
     
@@ -731,7 +731,7 @@ function YYParser (yylexer)
   32: function ()
     
     {
-      if (yylexer.in_def || yylexer.in_single)
+      if (lexer.in_def || lexer.in_single)
         rb_warn("END in method; use at_exit");
     },
   34: function ()
@@ -908,14 +908,14 @@ function YYParser (yylexer)
   99: function ()
     
     {
-      if (yylexer.in_def || yylexer.in_single)
-        yylexer.yyerror("dynamic constant assignment");
+      if (lexer.in_def || lexer.in_single)
+        lexer.yyerror("dynamic constant assignment");
     },
   100: function ()
     
     {
-      if (yylexer.in_def || yylexer.in_single)
-        yylexer.yyerror("dynamic constant assignment");
+      if (lexer.in_def || lexer.in_single)
+        lexer.yyerror("dynamic constant assignment");
     },
   101: function ()
     
@@ -941,14 +941,14 @@ function YYParser (yylexer)
   108: function ()
     
     {
-      if (yylexer.in_def || yylexer.in_single)
-        yylexer.yyerror("dynamic constant assignment");
+      if (lexer.in_def || lexer.in_single)
+        lexer.yyerror("dynamic constant assignment");
     },
   109: function ()
     
     {
-      if (yylexer.in_def || yylexer.in_single)
-        yylexer.yyerror("dynamic constant assignment");
+      if (lexer.in_def || lexer.in_single)
+        lexer.yyerror("dynamic constant assignment");
     },
   110: function ()
     
@@ -956,7 +956,7 @@ function YYParser (yylexer)
   111: function ()
     
     {
-      yylexer.yyerror("class/module name must be CONSTANT");
+      lexer.yyerror("class/module name must be CONSTANT");
     },
   113: function ()
     
@@ -970,12 +970,12 @@ function YYParser (yylexer)
   119: function ()
     
     {
-      yylexer.lex_state = EXPR_ENDFN;
+      lexer.lex_state = EXPR_ENDFN;
     },
   120: function ()
     
     {
-      yylexer.lex_state = EXPR_ENDFN;
+      lexer.lex_state = EXPR_ENDFN;
     },
   123: function ()
     
@@ -986,7 +986,7 @@ function YYParser (yylexer)
   126: function ()
     
     {
-      yylexer.lex_state = EXPR_FNAME;
+      lexer.lex_state = EXPR_FNAME;
     },
   127: function ()
     
@@ -1209,11 +1209,11 @@ function YYParser (yylexer)
     {},
   241: function ()
     
-    { yylexer.in_defined = true;},
+    { lexer.in_defined = true;},
   242: function ()
     
     {
-      yylexer.in_defined = false;
+      lexer.in_defined = false;
     },
   243: function ()
     
@@ -1260,14 +1260,14 @@ function YYParser (yylexer)
   263: function ()
     
     {
-      yyval = yylexer.cmdarg_stack;
-      yylexer.CMDARG_PUSH(1);
+      yyval = lexer.cmdarg_stack;
+      lexer.CMDARG_PUSH(1);
     },
   264: function ()
     
     {
       // CMDARG_POP()
-      yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
+      lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
     },
   265: function ()
     
@@ -1305,20 +1305,20 @@ function YYParser (yylexer)
   286: function ()
     
     {
-		      yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = yylexer.cmdarg_stack;
-		      yylexer.cmdarg_stack = 0;
+		      yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = lexer.cmdarg_stack;
+		      lexer.cmdarg_stack = 0;
 		    },
   287: function ()
     
     {
-		      yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
+		      lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
 		      // touching this alters the parse.output
           yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
 		    },
   288: function ()
     
     {
-		  yylexer.lex_state = EXPR_ENDARG;
+		  lexer.lex_state = EXPR_ENDARG;
 		},
   289: function ()
     
@@ -1326,7 +1326,7 @@ function YYParser (yylexer)
   290: function ()
     
     {
-		  yylexer.lex_state = EXPR_ENDARG;
+		  lexer.lex_state = EXPR_ENDARG;
 		},
   291: function ()
     
@@ -1360,11 +1360,11 @@ function YYParser (yylexer)
     {},
   301: function ()
     
-    { yylexer.in_defined = true;},
+    { lexer.in_defined = true;},
   302: function ()
     
     {
-		      yylexer.in_defined = false;
+		      lexer.in_defined = false;
 		    },
   303: function ()
     
@@ -1390,12 +1390,12 @@ function YYParser (yylexer)
   311: function ()
     
     {
-		    yylexer.COND_PUSH(1);
+		    lexer.COND_PUSH(1);
 		  },
   312: function ()
     
     {
-		    yylexer.COND_POP();
+		    lexer.COND_POP();
 		  },
   313: function ()
     
@@ -1403,12 +1403,12 @@ function YYParser (yylexer)
   314: function ()
     
     {
-		  yylexer.COND_PUSH(1);
+		  lexer.COND_PUSH(1);
 		},
   315: function ()
     
     {
-		  yylexer.COND_POP();
+		  lexer.COND_POP();
 		},
   316: function ()
     
@@ -1422,12 +1422,12 @@ function YYParser (yylexer)
   319: function ()
     
     {
-		    yylexer.COND_PUSH(1);
+		    lexer.COND_PUSH(1);
 		  },
   320: function ()
     
     {
-		    yylexer.COND_POP();
+		    lexer.COND_POP();
 		  },
   321: function ()
     
@@ -1435,8 +1435,8 @@ function YYParser (yylexer)
   322: function ()
     
     {
-          if (yylexer.in_def || yylexer.in_single)
-            yylexer.yyerror("class definition in method body");
+          if (lexer.in_def || lexer.in_single)
+            lexer.yyerror("class definition in method body");
     			
 		    },
   323: function ()
@@ -1448,26 +1448,26 @@ function YYParser (yylexer)
   324: function ()
     
     {
-          yyval = yylexer.in_def;
-          yylexer.in_def = 0;
+          yyval = lexer.in_def;
+          lexer.in_def = 0;
 		    },
   325: function ()
     
     {
-		      yyval = yylexer.in_single;
-		      yylexer.in_single = 0;
+		      yyval = lexer.in_single;
+		      lexer.in_single = 0;
 		    },
   326: function ()
     
     {
-          yylexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
-          yylexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
+          lexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
+          lexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
 		    },
   327: function ()
     
     {
-          if (yylexer.in_def || yylexer.in_single)
-            yylexer.yyerror("module definition in method body");
+          if (lexer.in_def || lexer.in_single)
+            lexer.yyerror("module definition in method body");
     			
 		    },
   328: function ()
@@ -1479,34 +1479,34 @@ function YYParser (yylexer)
   329: function ()
     
     {
-		      yyval = yylexer.cur_mid; // TODO
-    			yylexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
+		      yyval = lexer.cur_mid; // TODO
+    			lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
     			
-		      yylexer.in_def++;
+		      lexer.in_def++;
 		    },
   330: function ()
     
     {
 		      // touching this alters the parse.output
 			    yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
-			    yylexer.in_def--;
-			    yylexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+			    lexer.in_def--;
+			    lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
 		    },
   331: function ()
     
     {
-      yylexer.lex_state = EXPR_FNAME;
+      lexer.lex_state = EXPR_FNAME;
     },
   332: function ()
     
     {
-      yylexer.in_single++;
-      yylexer.lex_state = EXPR_ENDFN; /* force for args */
+      lexer.in_single++;
+      lexer.lex_state = EXPR_ENDFN; /* force for args */
     },
   333: function ()
     
     {
-      yylexer.in_single--;
+      lexer.in_single--;
     },
   334: function ()
     
@@ -1667,7 +1667,7 @@ function YYParser (yylexer)
   396: function ()
     
     {
-			yylexer.command_start = true;
+			lexer.command_start = true;
 		    },
   397: function ()
     
@@ -1696,13 +1696,13 @@ function YYParser (yylexer)
   407: function ()
     
     {
-		      yyval = yylexer.lpar_beg;
-		      yylexer.lpar_beg = ++yylexer.paren_nest;
+		      yyval = lexer.lpar_beg;
+		      lexer.lpar_beg = ++lexer.paren_nest;
 		    },
   408: function ()
     
     {
-          yylexer.lpar_beg = yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
+          lexer.lpar_beg = yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
           // touching this alters the parse.output
           yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
 		    },
@@ -1917,44 +1917,44 @@ function YYParser (yylexer)
   483: function ()
     
     {
-			yyval = yylexer.lex_strterm;
-			yylexer.lex_strterm = null;
-			yylexer.lex_state = EXPR_BEG;
+			yyval = lexer.lex_strterm;
+			lexer.lex_strterm = null;
+			lexer.lex_state = EXPR_BEG;
 		    },
   484: function ()
     
     {
 		    /*%%%*/
-			yylexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
+			lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
 		    },
   485: function ()
     
     {
-          yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = yylexer.cond_stack;
-          yyval = yylexer.cmdarg_stack;
-          yylexer.cond_stack = 0;
-          yylexer.cmdarg_stack = 0;
+          yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = lexer.cond_stack;
+          yyval = lexer.cmdarg_stack;
+          lexer.cond_stack = 0;
+          lexer.cmdarg_stack = 0;
 		    },
   486: function ()
     
     {
-			yyval = yylexer.lex_strterm;
-			yylexer.lex_strterm = null;
-			yylexer.lex_state = EXPR_BEG;
+			yyval = lexer.lex_strterm;
+			lexer.lex_strterm = null;
+			lexer.lex_state = EXPR_BEG;
 		    },
   487: function ()
     
     {
-			yyval = yylexer.brace_nest;
-			yylexer.brace_nest = 0;
+			yyval = lexer.brace_nest;
+			lexer.brace_nest = 0;
 		    },
   488: function ()
     
     {
-          yylexer.cond_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
-          yylexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
-          yylexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
-          yylexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
+          lexer.cond_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+          lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
+          lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+          lexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
 		    },
   489: function ()
     
@@ -1968,12 +1968,12 @@ function YYParser (yylexer)
   493: function ()
     
     {
-			yylexer.lex_state = EXPR_END;
+			lexer.lex_state = EXPR_END;
 		    },
   498: function ()
     
     {
-			yylexer.lex_state = EXPR_END;
+			lexer.lex_state = EXPR_END;
 		    },
   501: function ()
     
@@ -2023,8 +2023,8 @@ function YYParser (yylexer)
   522: function ()
     
     {
-			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = true;
+			lexer.lex_state = EXPR_BEG;
+			lexer.command_start = true;
 		    },
   523: function ()
     
@@ -2037,14 +2037,14 @@ function YYParser (yylexer)
   525: function ()
     
     {
-			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = true;
+			lexer.lex_state = EXPR_BEG;
+			lexer.command_start = true;
 		    },
   526: function ()
     
     {
-			yylexer.lex_state = EXPR_BEG;
-			yylexer.command_start = true;
+			lexer.lex_state = EXPR_BEG;
+			lexer.command_start = true;
 		    },
   527: function ()
     
@@ -2112,22 +2112,22 @@ function YYParser (yylexer)
   548: function ()
     
     {
-		      yylexer.yyerror("formal argument cannot be a constant");
+		      lexer.yyerror("formal argument cannot be a constant");
 		    },
   549: function ()
     
     {
-		      yylexer.yyerror("formal argument cannot be an instance variable");
+		      lexer.yyerror("formal argument cannot be an instance variable");
 		    },
   550: function ()
     
     {
-		      yylexer.yyerror("formal argument cannot be a global variable");
+		      lexer.yyerror("formal argument cannot be a global variable");
 		    },
   551: function ()
     
     {
-		      yylexer.yyerror("formal argument cannot be a class variable");
+		      lexer.yyerror("formal argument cannot be a class variable");
 		    },
   553: function ()
     
@@ -2186,8 +2186,8 @@ function YYParser (yylexer)
   576: function ()
     
     {
-          if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
-            yylexer.yyerror("rest argument must be local variable");
+          if (!lexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
+            lexer.yyerror("rest argument must be local variable");
     			
 		    },
   577: function ()
@@ -2196,10 +2196,10 @@ function YYParser (yylexer)
   580: function ()
     
     {
-		      if (!yylexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
-            yylexer.yyerror("block argument must be local variable");
-    			else if (!yylexer.dyna_in_block() && yylexer.local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
-            yylexer.yyerror("duplicated block argument name");
+		      if (!lexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+            lexer.yyerror("block argument must be local variable");
+    			else if (!lexer.dyna_in_block() && lexer.local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+            lexer.yyerror("duplicated block argument name");
     			
 		    },
   581: function ()
@@ -2214,13 +2214,13 @@ function YYParser (yylexer)
   584: function ()
     
     {
-		  yylexer.lex_state = EXPR_BEG;
+		  lexer.lex_state = EXPR_BEG;
 		},
   585: function ()
     
     {
           if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == 0) {
-            yylexer.yyerror("can't define singleton method for ().");
+            lexer.yyerror("can't define singleton method for ().");
           }
           else {
             switch (nd_type(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])) { // TODO
@@ -2232,7 +2232,7 @@ function YYParser (yylexer)
               case NODE_LIT:
               case NODE_ARRAY:
               case NODE_ZARRAY:
-                yylexer.yyerror("can't define singleton method for literals");
+                lexer.yyerror("can't define singleton method for literals");
               default:
                 value_expr(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]); // TODO
                 break;
