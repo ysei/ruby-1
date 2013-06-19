@@ -34,6 +34,11 @@
 
 
 
+
+"use strict";
+
+
+
 ;(function(){ // start of the whole parser+lexer namespase
 /* First part of user declarations.  */
 
@@ -154,12 +159,20 @@ var
   tUMINUS_NUM = 368,
   tLAST_TOKEN = 369;
 
+// here goes all the lexer code that depends on token numbers
+/* "%code lexer" blocks.  */
 
 
 
-"use strict";
+// here we know all the token numbers as a list of constant variables
+// 
+//   var END_OF_INPUT = 0;
+//   var keyword_class = 258;
+//   var keyword_module = 259;
+// 
+// and so on.
 
-// lexer states from lexer.js
+// expose the constant to outer world (e.g. parser)
 
 // ignore newline, +/- is a sign.
 var EXPR_BEG    = 1 << 0;
@@ -189,6 +202,3010 @@ var EXPR_ARG_ANY = EXPR_ARG | EXPR_CMDARG;
 var EXPR_END_ANY = EXPR_END | EXPR_ENDARG | EXPR_ENDFN;
 
 
+// $text: plain old JS string with ruby source code,
+function YYLexer ($text)
+{
+// the yylex() method and all public data sit here
+var lexer = this;
+
+// the end of stream had been reached
+lexer.eofp = false;
+// the string to be parsed in the nex lex() call
+lexer.lex_strterm = null;
+// the main point of interaction with the parser out there
+lexer.lex_state = 0;
+// to store the main state
+lexer.last_state = 0;
+// have the lexer seen a space somewhere before the current char
+lexer.space_seen = false;
+// parser and lexer set this for lexer,
+// becomes `true` after `\n`, `;` or `(` is met
+lexer.command_start = false;
+// temp var for command_start during single run of `yylex`
+lexer.cmd_state = false;
+// used in `COND_*` macro-methods,
+// another spot of interlacing parser and lexer
+lexer.cond_stack = 0;
+// used in `CMDARG_*` macro-methods,
+// another spot of interlacing parser and lexer
+lexer.cmdarg_stack = 0;
+// controls level of nesting in `()` or `[]`
+lexer.paren_nest = 0;
+lexer.lpar_beg = 0;
+// controls level of nesting in `{}`
+lexer.brace_nest = 0;
+// controls the nesting of states of condition-ness and cmdarg-ness
+lexer.cond_stack = 0;
+lexer.cmdarg_stack = 0;
+// how deep in in singleton definition are we?
+lexer.in_single = 0;
+// are we in def …
+lexer.in_def = 0;
+// current method id/name (while in def …)
+lexer.cur_mid = '';
+// defined? … has its own roles of lexing
+lexer.in_defined = false;
+// have we seen `__END__` already in lexer?
+lexer.ruby__end__seen = false;
+// parser needs access to the line number,
+// AFAICT, parser never changes it, only sets nd_line on nodes
+lexer.ruby_sourceline = 0;
+// file name for meningfull error reporting
+lexer.filename = '(eval)';
+// parser doesn't touch it, but what is it?
+lexer.heredoc_end = 0;
+lexer.line_count = 0;
+// errors count
+lexer.nerr = 0;
+// TODO: check out list of stateful variables with the original
+
+// all lexer states codes had been moved to parse.y prologue
+
+// the shortcut for checking `lexer.lex_state` over and over again
+function IS_lex_state (ls)
+{
+  return lexer.lex_state & ls;
+}
+function IS_lex_state_for (state, ls)
+{
+  return state & ls;
+}
+
+// interface to lexer.cond_stack
+// void
+lexer.COND_PUSH = function (n)
+{
+  // was: BITSTACK_PUSH(cond_stack, n)
+  lexer.cond_stack = (lexer.cond_stack << 1) | (n & 1);
+}
+// void
+lexer.COND_POP = function ()
+{
+  // was: BITSTACK_POP(cond_stack)
+  lexer.cond_stack >>= 1;
+}
+// void
+lexer.COND_LEXPOP = function ()
+{
+  // was: BITSTACK_LEXPOP(cond_stack)
+  var stack = lexer.cond_stack;
+  lexer.cond_stack = (stack >> 1) | (stack & 1);
+}
+// int
+lexer.COND_P = function ()
+{
+  // was: BITSTACK_SET_P(cond_stack)
+  return lexer.cond_stack & 1;
+}
+
+// interface to lexer.cmdarg_stack
+// void
+lexer.CMDARG_PUSH = function (n)
+{
+  // was: BITSTACK_PUSH(cmdarg_stack, n)
+  lexer.cmdarg_stack = (lexer.cmdarg_stack << 1) | (n & 1);
+}
+// void
+lexer.CMDARG_POP = function ()
+{
+  // was: BITSTACK_POP(cmdarg_stack)
+  lexer.cmdarg_stack >>= 1;
+}
+// void
+lexer.CMDARG_LEXPOP = function ()
+{
+  // was: BITSTACK_LEXPOP(cmdarg_stack)
+  var stack = lexer.cmdarg_stack;
+  lexer.cmdarg_stack = (stack >> 1) | (stack & 1);
+}
+// int
+lexer.CMDARG_P = function ()
+{
+  // was: BITSTACK_SET_P(cmdarg_stack)
+  return lexer.cmdarg_stack & 1;
+}
+
+
+
+// few more shortcuts
+function IS_ARG () { return lexer.lex_state & EXPR_ARG_ANY }
+function IS_END () { return lexer.lex_state & EXPR_END_ANY }
+function IS_BEG () { return lexer.lex_state & EXPR_BEG_ANY }
+function IS_LABEL_POSSIBLE ()
+{
+  return (IS_lex_state(EXPR_BEG) && !lexer.cmd_state) || IS_ARG();
+}
+function IS_LABEL_SUFFIX (n)
+{
+  return peek_n(':', n) && !peek_n(':', n + 1);
+}
+
+// em…
+function IS_SPCARG (c)
+{
+  return IS_ARG() &&
+         lexer.space_seen &&
+         !ISSPACE(c);
+}
+
+function IS_AFTER_OPERATOR () { return IS_lex_state(EXPR_FNAME | EXPR_DOT) }
+
+function ambiguous_operator (op, syn)
+{
+  warn("`"+op+"' after local variable is interpreted as binary operator");
+  warn("even though it seems like "+syn);
+}
+// very specific warning function :)
+function warn_balanced (op, syn, c)
+{
+    if
+    (
+      !IS_lex_state_for
+      (
+        lexer.last_state,
+        EXPR_CLASS | EXPR_DOT | EXPR_FNAME | EXPR_ENDFN | EXPR_ENDARG
+      )
+      && lexer.space_seen
+      && !ISSPACE(c)
+    )
+    {
+      ambiguous_operator(op, syn);
+    }
+}
+
+var STR_FUNC_ESCAPE = 0x01;
+var STR_FUNC_EXPAND = 0x02;
+var STR_FUNC_REGEXP = 0x04;
+var STR_FUNC_QWORDS = 0x08;
+var STR_FUNC_SYMBOL = 0x10;
+var STR_FUNC_INDENT = 0x20;
+
+// enum string_type
+var str_squote = 0;
+var str_dquote = STR_FUNC_EXPAND;
+var str_xquote = STR_FUNC_EXPAND;
+var str_regexp = STR_FUNC_REGEXP | STR_FUNC_ESCAPE | STR_FUNC_EXPAND;
+var str_sword = STR_FUNC_QWORDS;
+var str_dword = STR_FUNC_QWORDS | STR_FUNC_EXPAND;
+var str_ssym = STR_FUNC_SYMBOL;
+var str_dsym = STR_FUNC_SYMBOL | STR_FUNC_EXPAND;
+
+
+
+
+
+// here go all $strem related functions
+
+function ISUPPER (c)
+{
+  return 'A' <= c && c <= 'Z';
+}
+function ISSPACE (c)
+{
+  return (
+    // the most common checked first
+    c === ' '  || c === '\n' || c === '\t' ||
+    c === '\f' || c === '\v'
+  )
+}
+// our own modification, does not match `\n`
+// used to avoid crossing end of line on white space search
+function ISSPACE_NOT_N (c)
+{
+  return (
+    // the most common checked first
+    c === ' '  || c === '\t' ||
+    c === '\f' || c === '\v'
+  )
+}
+
+
+var lex_pbeg = 0, // lex_pbeg never changes
+    lex_p = 0,
+    lex_pend = 0;
+
+var $text_pos = 0;
+// returns empty line as EOF
+function lex_getline ()
+{
+  var i = $text.indexOf('\n', $text_pos);
+  // didn't get any more newlines
+  if (i === -1)
+  {
+    // the rest of the line
+    // e.g. match the `$`
+    i = $text.length;
+  }
+  else
+  {
+    i++; // include the `\n` char
+  }
+  
+  var line = $text.substring($text_pos, i);
+  $text_pos = i;
+  return line;
+}
+
+
+var lex_nextline = '',
+    lex_lastline = '';
+
+// lex_lastline reader for error reporting
+lexer.get_lex_lastline = function () { return lex_lastline; }
+
+function nextc ()
+{
+  if (lex_p == lex_pend)
+  {
+    var v = lex_nextline;
+    lex_nextline = '';
+    if (!v)
+    {
+      if (lexer.eofp)
+        return '';
+
+      if (!(v = lex_getline()))
+      {
+        lexer.eofp = true;
+        lex_goto_eol();
+        return '';
+      }
+    }
+    {
+      if (lexer.heredoc_end > 0)
+      {
+        lexer.ruby_sourceline = lexer.heredoc_end;
+        lexer.heredoc_end = 0;
+      }
+      lexer.ruby_sourceline++;
+      lexer.line_count++;
+      lex_pbeg = lex_p = 0;
+      lex_pend = v.length;
+      lex_lastline = v;
+    }
+  }
+  
+  return lex_lastline[lex_p++];
+}
+// jump right to the end of current buffered line,
+// here: "abc\n|" or here "abc|"
+function lex_goto_eol ()
+{
+  lex_p = lex_pend;
+}
+function lex_eol_p ()
+{
+  return lex_p >= lex_pend;
+}
+
+// just an emulation of lex_p[i] from C
+function nthchar (i)
+{
+  return lex_lastline[lex_p+i];
+}
+// just an emulation of *lex_p from C
+function lex_pv ()
+{
+  return lex_lastline[lex_p];
+}
+// emulation of `strncmp(lex_p, "begin", 5)`,
+// but you better use a precompiled regexp if `str` is a constant
+function strncmp_lex_p (str)
+{
+  return $test.substring(lex_p, lex_p + str.length) == str;
+}
+
+// forecast, if the nextc() will return character `c`
+function peek (c)
+{
+  return lex_p < lex_pend && c === lex_lastline[lex_p];
+}
+
+// forecast, if the nextc() will return character `c`
+// after n calls
+function peek_n (c, n)
+{
+  var pos = lex_p + n;
+  return pos < lex_pend && c === lex_lastline[pos];
+}
+
+// expects rex in this form: `/blablabla|/g`
+// that means `blablabla` or empty string (to prevent deep search)
+function match_grex (rex)
+{
+  // check if the rex is in proper form
+  if (!rex.global)
+  {
+    lexer.yyerror('match_grex() allows only global regexps: `…|/g`');
+    throw 'DEBUG';
+  }
+  if (rex.source.substr(-1) != '|')
+  {
+    lexer.yyerror('match_grex() need trailing empty string match: `…|/g`');
+    throw 'DEBUG';
+  }
+  rex.lastIndex = lex_p;
+  // there is always a match or an empty string in [0]
+  return rex.exec(lex_lastline);
+}
+// the same as `match_grex()` but does'n return the match,
+// treats the empty match as a `false`
+function test_grex (rex)
+{
+  // check if the rex is in proper form
+  if (!rex.global)
+  {
+    lexer.yyerror('test_grex() allows only global regexps: `…|/g`');
+    throw 'DEBUG';
+  }
+  if (rex.source.substr(-1) != '|')
+  {
+    lexer.yyerror('test_grex() need trailing empty string match: `…|/g`');
+    throw 'DEBUG';
+  }
+  rex.lastIndex = lex_p;
+  // there is always a match for an empty string
+  rex.test(lex_lastline);
+  // and on the actual match there coud be a change in `lastIndex`
+  return rex.lastIndex != lex_p;
+}
+// step back for one character and check
+// if the current character is equal to `c`
+function pushback (c)
+{
+  if (c == '')
+  {
+    if (lex_p != lex_pend)
+      throw 'lexer error: pushing back wrong EOF char';
+    return;
+  }
+  
+  lex_p--;
+  if (lex_lastline[lex_p] != c)
+    throw 'lexer error: pushing back wrong "'+c+'" char';
+}
+
+// was begin af a line (`^` in terms of regexps) before last `nextc()`,
+// that true if we're here "a|bc" of here "abc\na|bc"
+function was_bol ()
+{
+  return lex_p === /*lex_pbeg +*/ 1; // lex_pbeg never changes
+}
+
+
+// token related stuff
+
+var $tokenbuf = '',
+    $tok_start = 0,
+    $tok_end = 0;
+    
+function newtok ()
+{
+  $tok_start = $text_pos;
+  $tokenbuf = '';
+}
+function tokadd (c)
+{
+  $tokenbuf += c;
+  return c;
+}
+function tokcopy (n)
+{
+  $tokenbuf += $text.substring($text_pos - n, $text_pos);
+}
+
+function tokfix ()
+{
+  $tok_end = $text_pos;
+  /* was: tokenbuf[tokidx]='\0'*/
+}
+function tok () { return $tokenbuf; }
+function toklen () { return $tokenbuf.length; }
+function toklast ()
+{
+  return $tokenbuf.substr(-1)
+  // was: tokidx>0?tokenbuf[tokidx-1]:0)
+}
+
+// TODO
+this.getLVal = function () { return $tokenbuf; }
+
+
+
+// other stuff
+
+function parser_is_identchar (c)
+{
+  return !lexer.eofp && is_identchar(c);
+  
+}
+function is_identchar (c)
+{
+  // \w = [A-Za-z0-9_] = (isalnum(c) || c == '_')
+  return /^\w/.test(c) || !ISASCII(c);
+}
+
+function NEW_STRTERM (func, term, paren)
+{
+  return {
+    type: 'NODE_STRTERM',
+    nd_func: func,
+    nd_orig: '', // stub
+    nd_nth: 0, // stub
+    nd_line: lexer.ruby_sourceline,
+    nd_nest: 0, // for tokadd_string() and parse_string()
+    term: term,
+    paren: paren
+  };
+}
+// our addition
+function NEW_HEREDOCTERM (func, term)
+{
+  return {
+    type: 'NODE_HEREDOC',
+    nd_func: func,
+    nd_orig: lex_lastline,
+    nd_nth: lex_p,
+    nd_line: lexer.ruby_sourceline,
+    nd_nest: 0,
+    term: term,
+    paren: ''
+  };
+}
+
+// char to code shortcut
+function $ (c) { return c.charCodeAt(0) }
+function $$ (code) { return String.fromCharCode(code) }
+
+function ISASCII (c)
+{
+  return $(c) < 128;
+}
+
+function ISDIGIT (c)
+{
+  return /^\d$/.test(c);
+}
+function ISXDIGIT (c)
+{
+  return /^[0-9a-fA-F]/.test(c);
+}
+function ISALNUM (c)
+{
+  return /^\w$/.test(c);
+}
+
+// TODO: get rid of such a piece of junk :)
+function arg_ambiguous ()
+{
+  warn("ambiguous first argument; put parentheses or even spaces");
+  return true;
+}
+
+
+
+
+
+
+this.yylex = function yylex ()
+{
+  var c = '';
+  lexer.space_seen = false;
+  
+  if (lexer.lex_strterm)
+  {
+    var token = 0;
+    if (lexer.lex_strterm.type == 'NODE_HEREDOC')
+    {
+      token = here_document(lexer.lex_strterm);
+      if (token == tSTRING_END)
+      {
+        lexer.lex_strterm = null;
+        lexer.lex_state = EXPR_END;
+      }
+    }
+    else
+    {
+      token = parse_string(lexer.lex_strterm);
+      if (token == tSTRING_END || token == tREGEXP_END)
+      {
+        lexer.lex_strterm = null;
+        lexer.lex_state = EXPR_END;
+      }
+    }
+    return token;
+  }
+  
+  lexer.cmd_state = lexer.command_start;
+  lexer.command_start = false;
+  
+  retry: for (;;)
+  {
+  lexer.last_state = lexer.lex_state;
+  the_giant_switch:
+  switch (c = nextc())
+  {
+    // different signs of the input end
+    case '\0':    // NUL
+    case '\x04':  // ^D
+    case '\x1a':  // ^Z
+    case '':      // end of script.
+    {
+      return 0;
+    }
+    
+    // white spaces
+    case ' ':
+    case '\t':
+    case '\f':
+    case '\r': // TODO: scream on `\r` everywhere, or clear it out
+    case '\v':    // '\13'
+    {
+      lexer.space_seen = true;
+      continue retry;
+    }
+    
+    // it's a comment
+    case '#':
+    {
+      lex_goto_eol();
+      // fall throug to '\n'
+    }
+    case '\n':
+    {
+      if (IS_lex_state(EXPR_BEG | EXPR_VALUE | EXPR_CLASS | EXPR_FNAME | EXPR_DOT))
+      {
+        continue retry;
+      }
+      after_backslash_n: while ((c = nextc()))
+      {
+        switch (c)
+        {
+          case ' ':
+          case '\t':
+          case '\f':
+          case '\r':
+          case '\v':    // '\13'
+            lexer.space_seen = true;
+            break;
+          case '.':
+          {
+            if ((c = nextc()) != '.')
+            {
+              pushback(c);
+              pushback('.');
+              continue retry; // was: goto retry;
+            }
+          }
+          default:
+            --lexer.ruby_sourceline;
+            lex_nextline = lex_lastline;
+            
+          // EOF no decrement
+          case '':
+            lex_goto_eol();
+            break after_backslash_n;
+        }
+      }
+      // lands: break after_backslash_n;
+      lexer.command_start = true;
+      lexer.lex_state = EXPR_BEG;
+      return $('\n');
+    }
+  
+    case '*':
+    {
+      var token = 0
+      if ((c = nextc()) == '*')
+      {
+        if ((c = nextc()) == '=')
+        {
+          // set_yylval_id(tPOW); TODO
+          lexer.lex_state = EXPR_BEG;
+          return tOP_ASGN;
+        }
+        pushback(c);
+        if (IS_SPCARG(c))
+        {
+          warn("`**' interpreted as argument prefix");
+          token = tDSTAR;
+        }
+        else if (IS_BEG())
+        {
+          token = tDSTAR;
+        }
+        else
+        {
+          warn_balanced("**", "argument prefix", c);
+          token = tPOW;
+        }
+      }
+      else
+      {
+        if (c == '=')
+        {
+          // set_yylval_id('*'); TODO
+          lexer.lex_state = EXPR_BEG;
+          return tOP_ASGN;
+        }
+        pushback(c);
+        if (IS_SPCARG(c))
+        {
+          warn("`*' interpreted as argument prefix");
+          token = tSTAR;
+        }
+        else if (IS_BEG())
+        {
+          token = tSTAR;
+        }
+        else
+        {
+          warn_balanced("*", "argument prefix", c);
+          token = $('*');
+        }
+      }
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      return token;
+    }
+    
+    case '!':
+    {
+      c = nextc();
+      if (IS_AFTER_OPERATOR())
+      {
+        lexer.lex_state = EXPR_ARG;
+        if (c == '@')
+        {
+          return $('!');
+        }
+      }
+      else
+      {
+        lexer.lex_state = EXPR_BEG;
+      }
+      if (c == '=')
+      {
+        return tNEQ;
+      }
+      if (c == '~')
+      {
+        return tNMATCH;
+      }
+      pushback(c);
+      return $('!');
+    }
+    
+    case '=':
+    {
+      if (was_bol())
+      {
+        /* skip embedded rd document */
+        if (match_grex(/begin[\n \t]|/g)[0])
+        {
+          for (;;)
+          {
+            lex_goto_eol();
+            c = nextc();
+            if (c == '')
+            {
+              compile_error("embedded document meets end of file");
+              return 0;
+            }
+            if (c != '=')
+              continue;
+            if (match_grex(/end(?:[\n \t]|$)|/gm)[0])
+            {
+              break;
+            }
+          }
+          lex_goto_eol();
+          continue retry; // was: goto retry;
+        }
+      }
+
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      if ((c = nextc()) == '=')
+      {
+        if ((c = nextc()) == '=')
+        {
+          return tEQQ;
+        }
+        pushback(c);
+        return tEQ;
+      }
+      if (c == '~')
+      {
+        return tMATCH;
+      }
+      else if (c == '>')
+      {
+        return tASSOC;
+      }
+      pushback(c);
+      return $('=');
+    }
+    
+    case '<':
+    {
+      lexer.last_state = lexer.lex_state;
+      c = nextc();
+      if (c == '<' &&
+          !IS_lex_state(EXPR_DOT | EXPR_CLASS) &&
+          !IS_END() && (!IS_ARG() || lexer.space_seen))
+      {
+        var token = heredoc_identifier();
+        if (token)
+          return token;
+      }
+      if (IS_AFTER_OPERATOR())
+      {
+        lexer.lex_state = EXPR_ARG;
+      }
+      else
+      {
+        if (IS_lex_state(EXPR_CLASS))
+          lexer.command_start = true;
+        lexer.lex_state = EXPR_BEG;
+      }
+      if (c == '=')
+      {
+        if ((c = nextc()) == '>')
+        {
+          return tCMP;
+        }
+        pushback(c);
+        return tLEQ;
+      }
+      if (c == '<')
+      {
+        if ((c = nextc()) == '=')
+        {
+          // set_yylval_id(tLSHFT); TODO
+          lexer.lex_state = EXPR_BEG;
+          return tOP_ASGN;
+        }
+        pushback(c);
+        warn_balanced("<<", "here document", c);
+        return tLSHFT;
+      }
+      pushback(c);
+      return $('<');
+    }
+    
+    case '>':
+    {
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      if ((c = nextc()) == '=')
+      {
+        return tGEQ;
+      }
+      if (c == '>')
+      {
+        if ((c = nextc()) == '=')
+        {
+          // set_yylval_id(tRSHFT); TODO
+          lexer.lex_state = EXPR_BEG;
+          return tOP_ASGN;
+        }
+        pushback(c);
+        return tRSHFT;
+      }
+      pushback(c);
+      return $('>');
+    }
+    
+    case '"':
+    {
+      lexer.lex_strterm = NEW_STRTERM(str_dquote, '"', '')
+      return tSTRING_BEG;
+    }
+    
+    case '`':
+    {
+      if (IS_lex_state(EXPR_FNAME))
+      {
+        lexer.lex_state = EXPR_ENDFN;
+        return $(c);
+      }
+      if (IS_lex_state(EXPR_DOT))
+      {
+        if (lexer.cmd_state)
+          lexer.lex_state = EXPR_CMDARG;
+        else
+          lexer.lex_state = EXPR_ARG;
+        return $(c);
+      }
+      lexer.lex_strterm = NEW_STRTERM(str_xquote, '`', '');
+      return tXSTRING_BEG;
+    }
+    
+    case '\'':
+    {
+      lexer.lex_strterm = NEW_STRTERM(str_squote, '\'', '');
+      return tSTRING_BEG;
+    }
+    
+    case '?':
+    {
+      // trying to catch ternary operator
+      if (IS_END())
+      {
+        lexer.lex_state = EXPR_VALUE;
+        return $('?');
+      }
+      c = nextc();
+      if (c == '')
+      {
+        compile_error("incomplete character syntax");
+        return 0;
+      }
+      if (ISSPACE(c))
+      {
+        if (!IS_ARG())
+        {
+          var c2 = '';
+          switch (c)
+          {
+            case ' ':
+              c2 = 's';
+              break;
+            case '\n':
+              c2 = 'n';
+              break;
+            case '\t':
+              c2 = 't';
+              break;
+            case '\v':
+              c2 = 'v';
+              break;
+            case '\r':
+              c2 = 'r';
+              break;
+            case '\f':
+              c2 = 'f';
+              break;
+          }
+          if (c2)
+          {
+            warn("invalid character syntax; use ?\\" + c2);
+          }
+        }
+        pushback(c);
+        lexer.lex_state = EXPR_VALUE;
+        return $('?');
+      }
+      newtok();
+      if (!ISASCII(c))
+      {
+        if (tokadd(c) == '')
+          return 0;
+      }
+      else if (is_identchar(c) && lex_p < lex_pend && is_identchar(lex_pv()))
+      {
+        pushback(c);
+        lexer.lex_state = EXPR_VALUE;
+        return $('?');
+      }
+      else if (c == '\\')
+      {
+        if (peek('u'))
+        {
+          nextc();
+          c = parser_tokadd_utf8(false, false, false);
+          tokadd(c);
+        }
+        else if (!lex_eol_p() && !(c = lex_pv(), ISASCII(c)))
+        {
+          nextc();
+          if (tokadd(c) == '')
+            return 0;
+        }
+        else
+        {
+          c = read_escape(0);
+          tokadd(c);
+        }
+      }
+      else
+      {
+        tokadd(c);
+      }
+      tokfix();
+      // set_yylval_str(STR_NEW3(tok(), toklen(), enc, 0)); TODO
+      lexer.lex_state = EXPR_END;
+      return tCHAR;
+    }
+    
+    case '&':
+    {
+      if ((c = nextc()) == '&')
+      {
+        lexer.lex_state = EXPR_BEG;
+        if ((c = nextc()) == '=')
+        {
+          // set_yylval_id(tANDOP); TODO
+          lexer.lex_state = EXPR_BEG;
+          return tOP_ASGN;
+        }
+        pushback(c);
+        return tANDOP;
+      }
+      else if (c == '=')
+      {
+        // set_yylval_id('&'); TODO
+        lexer.lex_state = EXPR_BEG;
+        return tOP_ASGN;
+      }
+      pushback(c);
+      var t = $(c);
+      if (IS_SPCARG(c))
+      {
+        warn("`&' interpreted as argument prefix");
+        t = tAMPER;
+      }
+      else if (IS_BEG())
+      {
+        t = tAMPER;
+      }
+      else
+      {
+        warn_balanced("&", "argument prefix", c);
+        t = $('&');
+      }
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      return t;
+    }
+    
+    case '|':
+    {
+      if ((c = nextc()) == '|')
+      {
+        lexer.lex_state = EXPR_BEG;
+        if ((c = nextc()) == '=')
+        {
+          // set_yylval_id(tOROP); TODO
+          lexer.lex_state = EXPR_BEG;
+          return tOP_ASGN;
+        }
+        pushback(c);
+        return tOROP;
+      }
+      if (c == '=')
+      {
+        // set_yylval_id('|'); TODO
+        lexer.lex_state = EXPR_BEG;
+        return tOP_ASGN;
+      }
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      pushback(c);
+      return $('|');
+    }
+    
+    case '+':
+    {
+      c = nextc();
+      if (IS_AFTER_OPERATOR())
+      {
+        lexer.lex_state = EXPR_ARG;
+        if (c == '@')
+        {
+          return tUPLUS;
+        }
+        pushback(c);
+        return $('+');
+      }
+      if (c == '=')
+      {
+        // set_yylval_id('+'); TODO
+        lexer.lex_state = EXPR_BEG;
+        return tOP_ASGN;
+      }
+      if (IS_BEG() || (IS_SPCARG(c) && arg_ambiguous()))
+      {
+        lexer.lex_state = EXPR_BEG;
+        pushback(c); // pushing back char after `+`
+        if (c != '' && ISDIGIT(c))
+        {
+          c = '+';
+          return start_num(c); // was: goto start_num;
+        }
+        
+        return tUPLUS;
+      }
+      lexer.lex_state = EXPR_BEG;
+      pushback(c);
+      warn_balanced("+", "unary operator", c);
+      return $('+');
+    }
+    
+    case '-':
+    {
+      c = nextc();
+      if (IS_AFTER_OPERATOR())
+      {
+        lexer.lex_state = EXPR_ARG;
+        if (c == '@')
+        {
+          return tUMINUS;
+        }
+        pushback(c);
+        return $('-');
+      }
+      if (c == '=')
+      {
+        // set_yylval_id('-'); TODO
+        lexer.lex_state = EXPR_BEG;
+        return tOP_ASGN;
+      }
+      if (c == '>')
+      {
+        lexer.lex_state = EXPR_ENDFN;
+        return tLAMBDA;
+      }
+      if (IS_BEG() || (IS_SPCARG(c) && arg_ambiguous()))
+      {
+        lexer.lex_state = EXPR_BEG;
+        pushback(c);
+        if (c != '' && ISDIGIT(c))
+        {
+          return tUMINUS_NUM;
+        }
+        return tUMINUS;
+      }
+      lexer.lex_state = EXPR_BEG;
+      pushback(c);
+      warn_balanced("-", "unary operator", c);
+      return $('-');
+    }
+    
+    case '.':
+    {
+      lexer.lex_state = EXPR_BEG;
+      if ((c = nextc()) == '.')
+      {
+        if ((c = nextc()) == '.')
+        {
+          return tDOT3;
+        }
+        pushback(c);
+        return tDOT2;
+      }
+      pushback(c);
+      if (c != '' && ISDIGIT(c))
+      {
+        lexer.yyerror("no .<digit> floating literal anymore; put 0 before dot");
+      }
+      lexer.lex_state = EXPR_DOT;
+      return $('.');
+    }
+    
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+    {
+      return start_num(c);
+    }
+    
+    case ')':
+    case ']':
+      lexer.paren_nest--;
+    case '}':
+    {
+      var t = $(c);
+      lexer.COND_LEXPOP();
+      lexer.CMDARG_LEXPOP();
+      if (c == ')')
+        lexer.lex_state = EXPR_ENDFN;
+      else
+        lexer.lex_state = EXPR_ENDARG;
+      if (c == '}')
+      {
+        if (!lexer.brace_nest--)
+          t = tSTRING_DEND;
+      }
+      return t;
+    }
+    
+    case ':':
+    {
+      c = nextc();
+      if (c == ':')
+      {
+        if (IS_BEG() || IS_lex_state(EXPR_CLASS) || IS_SPCARG(''))
+        {
+          lexer.lex_state = EXPR_BEG;
+          return tCOLON3;
+        }
+        lexer.lex_state = EXPR_DOT;
+        return tCOLON2;
+      }
+      if (IS_END() || ISSPACE(c))
+      {
+        pushback(c);
+        warn_balanced(":", "symbol literal", c);
+        lexer.lex_state = EXPR_BEG;
+        return $(':');
+      }
+      switch (c)
+      {
+        case '\'':
+          lexer.lex_strterm = NEW_STRTERM(str_ssym, c, '');
+          break;
+        case '"':
+          lexer.lex_strterm = NEW_STRTERM(str_dsym, c, '');
+          break;
+        default:
+          pushback(c);
+          break;
+      }
+      lexer.lex_state = EXPR_FNAME;
+      return tSYMBEG;
+    }
+    
+    case '/':
+    {
+      if (IS_lex_state(EXPR_BEG_ANY))
+      {
+        lexer.lex_strterm = NEW_STRTERM(str_regexp, '/', '');
+        return tREGEXP_BEG;
+      }
+      if ((c = nextc()) == '=')
+      {
+        // set_yylval_id('/'); TODO
+        lexer.lex_state = EXPR_BEG;
+        return tOP_ASGN;
+      }
+      pushback(c);
+      if (IS_SPCARG(c))
+      {
+        arg_ambiguous();
+        lexer.lex_strterm = NEW_STRTERM(str_regexp, '/', '');
+        return tREGEXP_BEG;
+      }
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      warn_balanced("/", "regexp literal", c);
+      return $('/');
+    }
+    
+    case '^':
+    {
+      if ((c = nextc()) == '=')
+      {
+        // set_yylval_id('^'); TODO
+        lexer.lex_state = EXPR_BEG;
+        return tOP_ASGN;
+      }
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      pushback(c);
+      return $('^');
+    }
+    
+    case ';':
+    {
+      lexer.lex_state = EXPR_BEG;
+      lexer.command_start = true;
+      return $(';');
+    }
+    
+    case ',':
+    {
+      lexer.lex_state = EXPR_BEG;
+      return $(',');
+    }
+    
+    case '~':
+    {
+      if (IS_AFTER_OPERATOR())
+      {
+        if ((c = nextc()) != '@')
+        {
+          pushback(c);
+        }
+        lexer.lex_state = EXPR_ARG;
+      }
+      else
+      {
+        lexer.lex_state = EXPR_BEG;
+      }
+      return $('~');
+    }
+    
+    case '(':
+    {
+      var t = $(c);
+      if (IS_BEG())
+      {
+        t = tLPAREN;
+      }
+      else if (IS_SPCARG(''))
+      {
+        t = tLPAREN_ARG;
+      }
+      lexer.paren_nest++;
+      lexer.COND_PUSH(0);
+      lexer.CMDARG_PUSH(0);
+      lexer.lex_state = EXPR_BEG;
+      return t;
+    }
+    
+    case '[':
+    {
+      var t = $(c);
+      lexer.paren_nest++;
+      if (IS_AFTER_OPERATOR())
+      {
+        lexer.lex_state = EXPR_ARG;
+        if ((c = nextc()) == ']')
+        {
+          if ((c = nextc()) == '=')
+          {
+            return tASET;
+          }
+          pushback(c);
+          return tAREF;
+        }
+        pushback(c);
+        return $('[');
+      }
+      else if (IS_BEG())
+      {
+        t = tLBRACK;
+      }
+      else if (IS_ARG() && lexer.space_seen)
+      {
+        t = tLBRACK;
+      }
+      lexer.lex_state = EXPR_BEG;
+      lexer.COND_PUSH(0);
+      lexer.CMDARG_PUSH(0);
+      return t;
+    }
+    
+    case '{':
+    {
+      var t = $(c);
+      ++lexer.brace_nest;
+      if (lexer.lpar_beg && lexer.lpar_beg == lexer.paren_nest)
+      {
+        lexer.lex_state = EXPR_BEG;
+        lexer.lpar_beg = 0;
+        --lexer.paren_nest;
+        lexer.COND_PUSH(0);
+        lexer.CMDARG_PUSH(0);
+        return tLAMBEG;
+      }
+      if (IS_ARG() || IS_lex_state(EXPR_END | EXPR_ENDFN))
+        t = $('{');                /* block (primary) */
+      else if (IS_lex_state(EXPR_ENDARG))
+        t = tLBRACE_ARG;        /* block (expr) */
+      else
+        t = tLBRACE;            /* hash */
+      lexer.COND_PUSH(0);
+      lexer.CMDARG_PUSH(0);
+      lexer.lex_state = EXPR_BEG;
+      if (t != tLBRACE)
+        lexer.command_start = true;
+      return t;
+    }
+    
+    case '\\':
+    {
+      c = nextc();
+      if (c == '\n')
+      {
+        lexer.space_seen = true;
+        // skip \\n
+        continue retry; // was: goto retry;
+      }
+      pushback(c);
+      return $('\\');
+    }
+    
+    case '%':
+    {
+      var term = '';
+      var paren = '';
+      
+      quotation:
+      for (;;) // a label
+      {
+        // this label enulating loop expects the lex_state
+        // to be constant within its boudaries
+        if (IS_lex_state(EXPR_BEG_ANY))
+        {
+          c = nextc();
+          // was: quotation:
+          if (c == '' || !ISALNUM(c))
+          {
+            term = c;
+            c = 'Q';
+          }
+          else
+          {
+            term = nextc();
+            if (ISALNUM(term) || !ISASCII(term))
+            {
+              lexer.yyerror("unknown type of %string");
+              return 0;
+            }
+          }
+          if (c == '' || term == '')
+          {
+            compile_error("unterminated quoted string meets end of file");
+            return 0;
+          }
+          paren = term;
+          if (term == '(')
+            term = ')';
+          else if (term == '[')
+            term = ']';
+          else if (term == '{')
+            term = '}';
+          else if (term == '<')
+            term = '>';
+          else
+            paren = '';
+
+          switch (c)
+          {
+            case 'Q':
+              lexer.lex_strterm = NEW_STRTERM(str_dquote, term, paren);
+              return tSTRING_BEG;
+
+            case 'q':
+              lexer.lex_strterm = NEW_STRTERM(str_squote, term, paren);
+              return tSTRING_BEG;
+
+            case 'W':
+              lexer.lex_strterm = NEW_STRTERM(str_dword, term, paren);
+              do
+              {
+                c = nextc();
+              }
+              while (ISSPACE(c));
+              pushback(c);
+              return tWORDS_BEG;
+
+            case 'w':
+              lexer.lex_strterm = NEW_STRTERM(str_sword, term, paren);
+              do
+              {
+                c = nextc();
+              }
+              while (ISSPACE(c));
+              pushback(c);
+              return tQWORDS_BEG;
+
+            case 'I':
+              lexer.lex_strterm = NEW_STRTERM(str_dword, term, paren);
+              do
+              {
+                c = nextc();
+              }
+              while (ISSPACE(c));
+              pushback(c);
+              return tSYMBOLS_BEG;
+
+            case 'i':
+              lexer.lex_strterm = NEW_STRTERM(str_sword, term, paren);
+              do
+              {
+                c = nextc();
+              }
+              while (ISSPACE(c));
+              pushback(c);
+              return tQSYMBOLS_BEG;
+
+            case 'x':
+              lexer.lex_strterm = NEW_STRTERM(str_xquote, term, paren);
+              return tXSTRING_BEG;
+
+            case 'r':
+              lexer.lex_strterm = NEW_STRTERM(str_regexp, term, paren);
+              return tREGEXP_BEG;
+
+            case 's':
+              lexer.lex_strterm = NEW_STRTERM(str_ssym, term, paren);
+              lexer.lex_state = EXPR_FNAME;
+              return tSYMBEG;
+
+            default:
+              lexer.yyerror("unknown type of %string");
+              return 0;
+          }
+        }
+        if ((c = nextc()) == '=')
+        {
+          // set_yylval_id('%'); TODO
+          lexer.lex_state = EXPR_BEG;
+          return tOP_ASGN;
+        }
+        if (IS_SPCARG(c))
+        {
+          pushback(c); // added to jump to top
+          continue quotation; // was: goto quotation;
+        }
+        break; // the for (;;) label-loop
+      } // for (;;) quotation
+      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
+      pushback(c);
+      warn_balanced("%%", "string literal", c);
+      return $('%');
+    }
+    
+    case '$':
+    {
+      lexer.lex_state = EXPR_END;
+      newtok();
+      c = nextc();
+      switch (c)
+      {
+        case '_':              /* $_: last read line string */
+          c = nextc();
+          if (parser_is_identchar(c))
+          {
+            tokadd('$');
+            tokadd('_');
+            break;
+          }
+          pushback(c);
+          c = '_';
+          /* fall through */
+        case '~':              /* $~: match-data */
+        case '*':              /* $*: argv */
+        case '$':              /* $$: pid */
+        case '?':              /* $?: last status */
+        case '!':              /* $!: error string */
+        case '@':              /* $@: error position */
+        case '/':              /* $/: input record separator */
+        case '\\':             /* $\: output record separator */
+        case ';':              /* $;: field separator */
+        case ',':              /* $,: output field separator */
+        case '.':              /* $.: last read line number */
+        case '=':              /* $=: ignorecase */
+        case ':':              /* $:: load path */
+        case '<':              /* $<: reading filename */
+        case '>':              /* $>: default output handle */
+        case '\"':             /* $": already loaded files */
+          tokadd('$');
+          tokadd(c);
+          tokfix();
+          // set_yylval_name(rb_intern(tok())); TODO
+          return tGVAR;
+
+        case '-':
+          tokadd('$');
+          tokadd(c);
+          c = nextc();
+          if (parser_is_identchar(c))
+          {
+            if (tokadd(c) == '')
+              return 0;
+          }
+          else
+          {
+            pushback(c);
+          }
+        // was: gvar:
+          tokfix();
+          // set_yylval_name(rb_intern(tok())); TODO
+          return tGVAR;
+
+        case '&':              /* $&: last match */
+        case '`':              /* $`: string before last match */
+        case '\'':             /* $': string after last match */
+        case '+':              /* $+: string matches last paren. */
+          if (IS_lex_state_for(lexer.last_state, EXPR_FNAME))
+          {
+            tokadd('$');
+            tokadd(c);
+            // was: goto gvar;
+            tokfix();
+            // set_yylval_name(rb_intern(tok())); TODO
+            return tGVAR;
+          }
+          // set_yylval_node(NEW_BACK_REF(c)); TODO
+          return tBACK_REF;
+
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+          tokadd('$');
+          do
+          {
+            tokadd(c);
+            c = nextc();
+          }
+          while (c != '' && ISDIGIT(c));
+          pushback(c);
+          if (IS_lex_state_for(lexer.last_state, EXPR_FNAME))
+          {
+            // was: goto gvar;
+            tokfix();
+            // set_yylval_name(rb_intern(tok())); TODO
+            return tGVAR;
+          }
+          tokfix();
+          // set_yylval_node(NEW_NTH_REF(atoi(tok() + 1))); TODO
+          return tNTH_REF;
+
+        default:
+          if (!parser_is_identchar(c))
+          {
+            pushback(c);
+            return $('$');
+          }
+        case '0':
+          tokadd('$');
+      }
+      break;
+    }
+    
+    case '@':
+    {
+      c = nextc();
+      newtok();
+      tokadd('@');
+      if (c == '@')
+      {
+        tokadd('@');
+        c = nextc();
+      }
+      if (c != '' && ISDIGIT(c))
+      {
+        if (toklen() == 1)
+        {
+          compile_error("`@"+c+"' is not allowed as an instance variable name");
+        }
+        else
+        {
+          compile_error("`@@"+c+"' is not allowed as a class variable name");
+        }
+        return 0;
+      }
+      if (!parser_is_identchar(c))
+      {
+        pushback(c);
+        return $('@');
+      }
+      break;
+    }
+    
+    case '_':
+    {
+      if (was_bol() && whole_match_p("__END__", false))
+      {
+        lexer.ruby__end__seen = true;
+        lexer.eofp = true;
+        return 0; // was: return -1;
+      }
+      newtok();
+      break;
+    }
+    
+    // add before here :)
+    
+    default:
+    {
+      if (!parser_is_identchar(c))
+      {
+        compile_error("Invalid char `"+c+"' in expression");
+        continue retry; // was: goto retry;
+      }
+
+      newtok();
+      break the_giant_switch;
+    }
+  }
+  
+  do
+  {
+    if (tokadd(c) == '')
+      return 0;
+    c = nextc();
+  }
+  while (parser_is_identchar(c));
+  switch (tok()[0])
+  {
+    case '@':
+    case '$':
+      pushback(c);
+      break;
+    default:
+      if ((c == '!' || c == '?') && !peek('='))
+      {
+        tokadd(c);
+      }
+      else
+      {
+        pushback(c);
+      }
+  }
+  tokfix();
+  
+  {
+    var result = 0;
+
+    lexer.last_state = lexer.lex_state;
+    switch (tok()[0])
+    {
+      case '$':
+        lexer.lex_state = EXPR_END;
+        result = tGVAR;
+        break;
+      case '@':
+        lexer.lex_state = EXPR_END;
+        if (tok()[1] == '@')
+          result = tCVAR;
+        else
+          result = tIVAR;
+        break;
+
+      default:
+        if (toklast() == '!' || toklast() == '?')
+        {
+          result = tFID;
+        }
+        else
+        {
+          if (IS_lex_state(EXPR_FNAME))
+          {
+            if ((c = nextc()) == '=' && !peek('~') && !peek('>') &&
+                (!peek('=') || (peek_n('>', 1))))
+            {
+              result = tIDENTIFIER;
+              tokadd(c);
+              tokfix();
+            }
+            else
+            {
+              pushback(c);
+            }
+          }
+          if (result == 0 && ISUPPER(tok()[0]))
+          {
+            result = tCONSTANT;
+          }
+          else
+          {
+            result = tIDENTIFIER;
+          }
+        }
+
+        if (IS_LABEL_POSSIBLE())
+        {
+          if (IS_LABEL_SUFFIX(0))
+          {
+            lexer.lex_state = EXPR_BEG;
+            nextc();
+            // set_yylval_name(TOK_INTERN(!ENC_SINGLE(mb))); TODO
+            return tLABEL;
+          }
+        }
+        if (!IS_lex_state(EXPR_DOT))
+        {
+          // const struct kwtable *kw;
+
+          // See if it is a reserved word.
+          var kw = rb_reserved_word[tok()];
+          if (kw)
+          {
+            var state = lexer.lex_state;
+            lexer.lex_state = kw.state;
+            if (state == EXPR_FNAME)
+            {
+              // set_yylval_name(rb_intern(kw->name)); TODO
+              return kw.id0;
+            }
+            if (lexer.lex_state == EXPR_BEG)
+            {
+              lexer.command_start = true;
+            }
+            if (kw.id0 == keyword_do)
+            {
+              if (lexer.lpar_beg && lexer.lpar_beg == lexer.paren_nest)
+              {
+                lexer.lpar_beg = 0;
+                --lexer.paren_nest;
+                return keyword_do_LAMBDA;
+              }
+              if (lexer.COND_P())
+                return keyword_do_cond;
+              if (lexer.CMDARG_P() && state != EXPR_CMDARG)
+                return keyword_do_block;
+              if (state & (EXPR_BEG | EXPR_ENDARG))
+                return keyword_do_block;
+              return keyword_do;
+            }
+            if (state & (EXPR_BEG | EXPR_VALUE))
+              return kw.id0;
+            else
+            {
+              if (kw.id0 != kw.id1)
+                lexer.lex_state = EXPR_BEG;
+              return kw.id1;
+            }
+          }
+        }
+
+        if (IS_lex_state(EXPR_BEG_ANY | EXPR_ARG_ANY | EXPR_DOT))
+        {
+          if (lexer.cmd_state)
+          {
+            lexer.lex_state = EXPR_CMDARG;
+          }
+          else
+          {
+            lexer.lex_state = EXPR_ARG;
+          }
+        }
+        else if (lexer.lex_state == EXPR_FNAME)
+        {
+          lexer.lex_state = EXPR_ENDFN;
+        }
+        else
+        {
+          lexer.lex_state = EXPR_END;
+        }
+    }
+    {
+      // just take a plain string for now,
+      // do not convert to a symbol, leave it to JS engine
+      var ident = tok();
+
+      // set_yylval_name(ident); TODO
+      if (!IS_lex_state_for(lexer.last_state, EXPR_DOT | EXPR_FNAME) &&
+          is_local_id(ident) && lvar_defined(ident))
+      {
+        lexer.lex_state = EXPR_END;
+      }
+    }
+    return result;
+  }
+  
+  // return c == '' ? 0 : 9999 // EOF or $undefined
+  
+  } // retry for loop
+}
+
+function heredoc_identifier ()
+{
+  var term = '', func = 0;
+  
+  var c = nextc()
+  if (c == '-')
+  {
+    c = nextc();
+    func = STR_FUNC_INDENT;
+  }
+  defaultt:
+  {
+    quoted:
+    {
+      switch (c)
+      {
+        case '\'':
+          func |= str_squote;
+          break; // was: goto quoted;
+        case '"':
+          func |= str_dquote;
+          break; // was: goto quoted;
+        case '`':
+          func |= str_xquote;
+          break; // was: goto quoted;
+        default:
+          break quoted
+      }
+      // was: quoted:
+      newtok();
+      // tokadd($$(func)); add it to the `strterm` property
+      term = c;
+      while ((c = nextc()) != '' && c != term)
+      {
+        if (tokadd(c) == '')
+          return 0;
+      }
+      if (c == '')
+      {
+        compile_error("unterminated here document identifier");
+        return 0;
+      }
+      break defaultt;
+    } // quoted:
+
+    // was: default:
+    if (!parser_is_identchar(c))
+    {
+      pushback(c);
+      if (func & STR_FUNC_INDENT)
+      {
+        pushback('-');
+      }
+      return 0;
+    }
+    // TODO: create token with $text.substring(start, end)
+    newtok();
+    term = '"';
+    func |= str_dquote;
+    do
+    {
+      if (tokadd(c) == '')
+        return 0;
+    }
+    while ((c = nextc()) != '' && parser_is_identchar(c));
+    pushback(c);
+  } // defaultt:
+
+  tokfix();
+  lexer.lex_strterm = NEW_HEREDOCTERM(func, tok());
+  lex_goto_eol();
+  return term == '`' ? tXSTRING_BEG : tSTRING_BEG;
+}
+
+function here_document_error (eos)
+{
+  // was: error:
+    compile_error("can't find string \""+eos+"\" anywhere before EOF");
+    return here_document_restore(eos);
+}
+function here_document_restore (eos)
+{
+  // was: restore:
+    heredoc_restore(lexer.lex_strterm);
+    lexer.lex_strterm = null;
+    return 0;
+}
+function here_document (here)
+{
+  // we're at the heredoc content start
+  var func = here.nd_func,
+      eos = here.term,
+      indent = !!(func & STR_FUNC_INDENT);
+  
+  var str = ''; // accumulate string content here
+  
+  var c = nextc();
+  if (c == '')
+  {
+    here_document_error(eos);
+    return 0;
+  }
+  
+  if (was_bol() && whole_match_p(eos, indent))
+  {
+    heredoc_restore(lexer.lex_strterm);
+    return tSTRING_END;
+  }
+  
+  // do not look for `#{}` stuff here
+  if (!(func & STR_FUNC_EXPAND))
+  {
+    // mark a start of the string token
+    do
+    {
+      str += lex_lastline;
+      
+      // EOF reached in the middle of the heredoc
+      lex_goto_eol();
+      if (nextc() === '')
+      {
+        here_document_error(eos); // was: goto error;
+        return 0;
+      }
+    }
+    while (!whole_match_p(eos, indent));
+  }
+  // try to find all the `#{}` stuff here
+  else
+  {
+    /*      int mb = ENC_CODERANGE_7BIT, *mbp = &mb; */
+    newtok();
+    if (c == '#')
+    {
+      switch (c = nextc())
+      {
+        case '$':
+        case '@':
+          pushback(c);
+          return tSTRING_DVAR;
+        case '{':
+          lexer.command_start = true;
+          return tSTRING_DBEG;
+      }
+      tokadd('#');
+    }
+    do
+    {
+      pushback(c);
+      if ((c = tokadd_string(func, '\n', '', null)) == '')
+      {
+        if (lexer.eofp)
+        {
+          here_document_error(eos); // was: goto error;
+          return 0;
+        }
+        here_document_restore(); // was: goto restore;
+        return 0;
+      }
+      if (c != '\n')
+      {
+        // set_yylval_str(STR_NEW3(tok(), toklen(), enc, func)); TODO
+        return tSTRING_CONTENT;
+      }
+      tokadd(nextc());
+      
+      if ((c = nextc()) == '')
+      {
+        here_document_error(eos); // was: goto error;
+        return 0;
+      }
+    }
+    while (!whole_match_p(eos, indent));
+    // str = STR_NEW3(tok(), toklen(), enc, func); TODO
+  }
+  heredoc_restore(lexer.lex_strterm);
+  lexer.lex_strterm = NEW_STRTERM(-1, '', '');
+  // set_yylval_str(str); TODO:
+  return tSTRING_CONTENT;
+}
+
+function parse_string (quote)
+{
+  var func = quote.nd_func,
+      term = quote.term,
+      paren = quote.paren;
+  
+  var space = false;
+
+  if (func == -1)
+    return tSTRING_END;
+  var c = nextc();
+  if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
+  {
+    do
+    {
+      c = nextc();
+    }
+    while (ISSPACE(c));
+    space = true;
+  }
+  // quote.nd_nest is increased in tokadd_string()
+  // once for every `paren` char met
+  if (c == term && !quote.nd_nest)
+  {
+    if (func & STR_FUNC_QWORDS)
+    {
+      quote.nd_func = -1;
+      return $(' ');
+    }
+    if (!(func & STR_FUNC_REGEXP))
+      return tSTRING_END;
+    // set_yylval_num(regx_options()); TODO
+    return tREGEXP_END;
+  }
+  if (space)
+  {
+    pushback(c);
+    return $(' ');
+  }
+  newtok();
+  if ((func & STR_FUNC_EXPAND) && c == '#')
+  {
+    switch (c = nextc())
+    {
+      case '$':
+      case '@':
+        pushback(c);
+        return tSTRING_DVAR;
+      case '{':
+        lexer.command_start = true;
+        return tSTRING_DBEG;
+    }
+    tokadd('#');
+  }
+  pushback(c);
+  if (tokadd_string(func, term, paren, quote) == '')
+  {
+    lexer.ruby_sourceline = quote.nd_line;
+    if (func & STR_FUNC_REGEXP)
+    {
+      if (lexer.eofp)
+        compile_error("unterminated regexp meets end of file");
+      return tREGEXP_END;
+    }
+    else
+    {
+      if (lexer.eofp)
+        compile_error("unterminated string meets end of file");
+      return tSTRING_END;
+    }
+  }
+
+  tokfix();
+  // set_yylval_str(STR_NEW3(tok(), toklen(), enc, func)); TODO
+
+  return tSTRING_CONTENT;
+}
+
+
+function tokadd_string (func, term, paren, str_term)
+{
+  var c = '';
+  while ((c = nextc()) != '')
+  {
+    if (paren && c == paren)
+    {
+      ++str_term.nd_nest;
+    }
+    else if (c == term)
+    {
+      if (!str_term || !str_term.nd_nest)
+      {
+        pushback(c);
+        break;
+      }
+      --str_term.nd_nest;
+    }
+    else if ((func & STR_FUNC_EXPAND) && c == '#' && lex_p < lex_pend)
+    {
+      var c2 = lex_pv();
+      if (c2 == '$' || c2 == '@' || c2 == '{')
+      {
+        // push the '#' back
+        pushback(c);
+        // and leave it for the caller to process
+        break;
+      }
+    }
+    else if (c == '\\')
+    {
+      c = nextc();
+      switch (c)
+      {
+        case '\n':
+          if (func & STR_FUNC_QWORDS)
+            break;
+          if (func & STR_FUNC_EXPAND)
+            continue;
+          tokadd('\\');
+          break;
+
+        case '\\':
+          if (func & STR_FUNC_ESCAPE)
+            tokadd(c);
+          break;
+
+        case 'u':
+          if ((func & STR_FUNC_EXPAND) == 0)
+          {
+            tokadd('\\');
+            break;
+          }
+          parser_tokadd_utf8(true, !!(func & STR_FUNC_SYMBOL), !!(func & STR_FUNC_REGEXP));
+          continue;
+
+        default:
+          if (c == '')
+            return '';
+          if (!ISASCII(c))
+          {
+            if ((func & STR_FUNC_EXPAND) == 0)
+              tokadd('\\');
+            // was: goto non_ascii;
+            if (tokadd(c) == '')
+              return '';
+            continue;
+          }
+          if (func & STR_FUNC_REGEXP)
+          {
+            if (c == term && !simple_re_meta(c))
+            {
+              tokadd(c);
+              continue;
+            }
+            pushback(c);
+            if (!tokadd_escape()) // useless `c = ` was here
+              return '';
+            continue;
+          }
+          else if (func & STR_FUNC_EXPAND)
+          {
+            pushback(c);
+            if (func & STR_FUNC_ESCAPE)
+              tokadd('\\');
+            c = read_escape(0);
+          }
+          else if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
+          {
+            /* ignore backslashed spaces in %w */
+          }
+          else if (c != term && !(paren && c == paren))
+          {
+            tokadd('\\');
+            pushback(c);
+            continue;
+          }
+      }
+    }
+    else if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
+    {
+      pushback(c);
+      break;
+    }
+    tokadd(c);
+  }
+  return c;
+}
+
+function simple_re_meta (c)
+{
+  switch (c)
+  {
+    case '$':
+    case '*':
+    case '+':
+    case '.':
+    case '?':
+    case '^':
+    case '|':
+    case ')':
+      return true;
+    default:
+      return false;
+  }
+}
+
+
+function tokadd_escape_eof ()
+{
+  lexer.yyerror("Invalid escape character syntax");
+}
+// return `true` on success and `false` on failure,
+// it is quite different from original source,
+// however the returning value is a flag only there too;
+function tokadd_escape ()
+{
+  var c = '';
+  var flags = 0;
+
+  switch (c = nextc())
+  {
+    case '\n':
+      return true;                 /* just ignore */
+
+    case '0':
+    case '1':
+    case '2':
+    case '3':                  /* octal constant */
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    {
+      // was: scan_oct(lex_p, 3, &numlen);
+      
+      // we're here: "\|012",
+      // so just match one or two more digits
+      var oct = match_grex(/[0-7]{1,2}|/g);
+      if (!oct)
+      {
+        // was: goto eof;
+        tokadd_escape_eof();
+        return false;
+      }
+      lex_p += oct.length;
+      tokadd('\\' + c + oct);
+    }
+    return true;
+
+    case 'x':                  /* hex constant */
+      {
+        // was: tok_hex(&numlen);
+        
+        // we're here: "\x|AB",
+        // so just match one or two more digits
+        var hex = match_grex(/[0-9a-fA-F]{1,2}|/g);
+        if (!hex)
+        {
+          yyerror("invalid hex escape");
+          return false;
+        }
+        lex_p += hex.length;
+        tokadd('\\x' + hex);
+      }
+      return true;
+    
+    case '':
+      tokadd_escape_eof();
+      return false;
+    
+    case 'c':
+      tokadd("\\c");
+      return true;
+    
+    case 'M':
+    case 'C':
+      lexer.yyerror("JavaScript doesn't support `\\"+c+"-' in regexp");
+      if ((c = nextc()) != '-')
+      {
+        pushback(c);
+        tokadd_escape_eof();
+        return false;
+      }
+      tokcopy(3); // add though
+      return true;
+    
+    default:
+      tokadd("\\"+c);
+  }
+  return true;
+}
+
+// checks if the current line matches `/^\s*#{eos}\n?$/`;
+var whole_match_p_rexcache = {};
+function whole_match_p (eos, indent)
+{
+  if (!indent)
+  {
+    return lex_lastline == eos + '\n' || lex_lastline == eos;
+  }
+  
+  // here there are all with indentation enabled!
+  var rex = whole_match_p_rexcache[eos];
+  if (!rex)
+  {
+    // `eos` is an identifier and doesn't need to be escaped
+    rex = new RegExp('^[ \\t]*' + eos + '$', 'm');
+    whole_match_p_rexcache[eos] = rex;
+  }
+  
+  return rex.test(lex_lastline);
+}
+
+function heredoc_restore (here)
+{
+  // restores the line from where the heredoc occured to begin
+  lex_lastline = here.nd_orig;
+  lex_pbeg = 0;
+  lex_pend = lex_lastline.length;
+  // restores the position in the line, right after heredoc token
+  lex_p = here.nd_nth;
+  // have no ideas yet :)
+  lexer.heredoc_end = lexer.ruby_sourceline;
+  lexer.ruby_sourceline = here.nd_line;
+}
+
+var ESCAPE_CONTROL = 1,
+    ESCAPE_META = 2;
+
+function read_escape_eof ()
+{
+  lexer.yyerror("Invalid escape character syntax");
+  return '\0';
+}
+function read_escape (flags)
+{
+  var c = nextc();
+  switch (c)
+  {
+    case '\\':                 /* Backslash */
+      return c;
+
+    case 'n':                  /* newline */
+      return '\n';
+
+    case 't':                  /* horizontal tab */
+      return '\t';
+
+    case 'r':                  /* carriage-return */
+      return '\r';
+
+    case 'f':                  /* form-feed */
+      return '\f';
+
+    case 'v':                  /* vertical tab */
+      return '\v'; // \13
+
+    case 'a':                  /* alarm(bell) */
+      return '\a'; // \007
+
+    case 'e':                  /* escape */
+      return '\x1b'; // 033
+
+    case '0':
+    case '1':
+    case '2':
+    case '3':                  /* octal constant */
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+      pushback(c);
+      // was: c = scan_oct(lex_p, 3, &numlen);
+      var oct = match_grex(/[0-7]{1,3}|/g)[0];
+      c = $$(parseInt(oct, 8));
+      lex_p += oct.length;
+      return c;
+
+    case 'x':                  /* hex constant */
+      // was: c = tok_hex(&numlen);
+      var hex = match_grex(/[0-9a-fA-F]{1,2}|/g)[0];
+      if (!hex)
+      {
+        lexer.yyerror("invalid hex escape");
+        return '';
+      }
+      lex_p += hex.length;
+      c = $$(parseInt(hex, 16));
+      return c;
+
+    case 'b':                  /* backspace */
+      return '\x08'; // \010
+
+    case 's':                  /* space */
+      return ' ';
+
+    case 'M':
+      if (flags & ESCAPE_META)
+      {
+        // was: goto eof;
+        return read_escape_eof();
+      }
+      if ((c = nextc()) != '-')
+      {
+        pushback(c);
+        // was: goto eof;
+        return read_escape_eof();
+      }
+      if ((c = nextc()) == '\\')
+      {
+        if (peek('u'))
+        {
+          // was: goto eof;
+          return read_escape_eof();
+        }
+        return $$($(read_escape(flags | ESCAPE_META)) | 0x80);
+      }
+      else if (c == '' || !ISASCII(c))
+      {
+        // was: goto eof;
+        return read_escape_eof();
+      }
+      else
+      {
+        return $$(($(c) & 0xff) | 0x80);
+      }
+
+    case 'C':
+      if ((c = nextc()) != '-')
+      {
+        pushback(c);
+        // was: goto eof;
+        return read_escape_eof();
+      }
+    case 'c':
+      if (flags & ESCAPE_CONTROL)
+      {
+        // was: goto eof;
+        return read_escape_eof();
+      }
+      if ((c = nextc()) == '\\')
+      {
+        if (peek('u'))
+        {
+          // was: goto eof;
+          return read_escape_eof();
+        }
+        c = read_escape(flags | ESCAPE_CONTROL);
+      }
+      else if (c == '?')
+        return '\x7f'; // 0177;
+      else if (c == '' || !ISASCII(c))
+      {
+        // was: goto eof;
+        return read_escape_eof();
+      }
+      return $$($(c) & 0x9f);
+
+    // was: eof:
+    case -1:
+      return read_escape_eof();
+
+    default:
+      return c;
+  }
+}
+
+/* return value is for \u3042 */
+function parser_tokadd_utf8 (string_literal, symbol_literal, regexp_literal)
+{
+  /*
+   * If string_literal is true, then we allow multiple codepoints
+   * in \u{}, and add the codepoints to the current token.
+   * Otherwise we're parsing a character literal and return a single
+   * codepoint without adding it
+   */
+
+  if (regexp_literal)
+  {
+    tokadd('\\u');
+  }
+  
+  var c = nextc();
+  // handle \u{...} form
+  if (c === '{')
+  {
+    if (regexp_literal)
+    {
+      tokadd('{'); // was: tokadd(*lex_p);
+    }
+    for (;;)
+    {
+      // match hex digits or empty string
+      var hex = match_grex(/[0-9a-fA-F]{1,6}|/g)[0];
+      if (hex == '')
+      {
+        lexer.yyerror("invalid Unicode escape");
+        return '';
+      }
+      var codepoint = parseInt(hex, 16);
+      var the_char = $$(codepoint);
+      if (codepoint > 0x10ffff)
+      {
+        lexer.yyerror("invalid Unicode codepoint "+codepoint+" (too large)");
+        return '';
+      }
+      
+      lex_p += hex.length;
+      if (regexp_literal)
+      {
+        tokadd(hex);
+      }
+      else if (string_literal)
+      {
+        tokadd(the_char);
+      }
+      
+      c = nextc();
+      if (!string_literal)
+        break;
+      if (c !== ' ' && c !== '\t')
+        break;
+    }
+
+    if (c !== '}')
+    {
+      lexer.yyerror("unterminated Unicode escape");
+      return '';
+    }
+
+    if (regexp_literal)
+    {
+      tokadd('}');
+    }
+    
+    // return the last found codepoint/char
+    return the_char;
+  }
+  // handle \uxxxx form
+  else
+  {
+    // match 4 hex digits or empty string
+    var hex = match_grex(/[0-9a-fA-F]{4}|/g)[0];
+    if (hex === '')
+    {
+      lexer.yyerror("invalid Unicode escape");
+      return '';
+    }
+    var codepoint = parseInt(hex, 16);
+    var the_char = $$(codepoint);
+    lex_p += 4;
+    if (regexp_literal)
+    {
+      tokadd(hex);
+    }
+    else if (string_literal)
+    {
+      tokadd(the_char);
+    }
+    
+    // return the only found codepoint/char
+    return the_char;
+  }
+}
+
+// here `c` matches [0-9],
+// `c` is the first char of the future number,
+// as of Ruby 2.0 we don't expect to be called from leading '-' match
+function start_num (c)
+{
+  var is_float = false,
+      seen_point = false,
+      seen_e = false,
+      nondigit = '';
+
+  lexer.lex_state = EXPR_END;
+  newtok();
+  if (c == '-' || c == '+')
+  {
+    tokadd(c);
+    c = nextc();
+  }
+  
+  goto_trailing_uc: {
+  goto_decode_num: {
+  goto_invalid_octal: {
+  
+  if (c == '0')
+  {
+    var start = toklen();
+    c = nextc();
+    if (c == 'x' || c == 'X')
+    {
+      /* hexadecimal */
+      c = nextc();
+      if (c != '' && ISXDIGIT(c))
+      {
+        do
+        {
+          if (c == '_')
+          {
+            if (nondigit)
+              break;
+            nondigit = c;
+            continue;
+          }
+          if (!ISXDIGIT(c))
+            break;
+          nondigit = '';
+          tokadd(c);
+        }
+        while ((c = nextc()) != '');
+      }
+      pushback(c);
+      tokfix();
+      if (toklen() == start)
+      {
+        lexer.yyerror("numeric literal without digits");
+        return 0;
+      }
+      else if (nondigit)
+        break goto_trailing_uc; // was: goto trailing_uc;
+      // set_yylval_literal(rb_cstr_to_inum(tok(), 16, FALSE)); TODO
+      return tINTEGER;
+    }
+    if (c == 'b' || c == 'B')
+    {
+      /* binary */
+      c = nextc();
+      if (c == '0' || c == '1')
+      {
+        do
+        {
+          if (c == '_')
+          {
+            if (nondigit)
+              break;
+            nondigit = c;
+            continue;
+          }
+          if (c != '0' && c != '1')
+            break;
+          nondigit = '';
+          tokadd(c);
+        }
+        while ((c = nextc()) != '');
+      }
+      pushback(c);
+      tokfix();
+      if (toklen() == start)
+      {
+        lexer.yyerror("numeric literal without digits");
+        return 0;
+      }
+      else if (nondigit)
+        break goto_trailing_uc; // was: goto trailing_uc;
+      // set_yylval_literal(rb_cstr_to_inum(tok(), 2, FALSE)); TODO
+      return tINTEGER;
+    }
+    if (c == 'd' || c == 'D')
+    {
+      /* decimal */
+      c = nextc();
+      if (c != '' && ISDIGIT(c))
+      {
+        do
+        {
+          if (c == '_')
+          {
+            if (nondigit)
+              break;
+            nondigit = c;
+            continue;
+          }
+          if (!ISDIGIT(c))
+            break;
+          nondigit = '';
+          tokadd(c);
+        }
+        while ((c = nextc()) != '');
+      }
+      pushback(c);
+      tokfix();
+      if (toklen() == start)
+      {
+        lexer.yyerror("numeric literal without digits");
+        return 0;
+      }
+      else if (nondigit)
+        break goto_trailing_uc; // was: goto trailing_uc;
+      // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
+      return tINTEGER;
+    }
+    // was: if (c == '_')
+    // was: {
+    // was:   /* 0_0 */
+    // was:   goto octal_number;
+    // was: }
+    // and moved after the next if block
+    if (c == 'o' || c == 'O')
+    {
+      /* prefixed octal */
+      c = nextc();
+      if (c == '' || c == '_' || !ISDIGIT(c))
+      {
+        lexer.yyerror("numeric literal without digits");
+        return 0;
+      }
+    }
+    if ((c >= '0' && c <= '7') || c == '_')
+    {
+      /* octal */
+      // was:  octal_number:
+      do
+      {
+        if (c == '_')
+        {
+          if (nondigit)
+            break;
+          nondigit = c;
+          continue;
+        }
+        if (c < '0' || c > '9')
+          break;
+        if (c > '7')
+        {
+          lexer.yyerror("Invalid octal digit");
+          break goto_invalid_octal; // was: goto invalid_octal;
+        }
+        nondigit = '';
+        tokadd(c);
+      }
+      while ((c = nextc()) != '');
+      if (toklen() > start)
+      {
+        pushback(c);
+        tokfix();
+        if (nondigit)
+          break goto_trailing_uc; // was: goto trailing_uc;
+        // set_yylval_literal(rb_cstr_to_inum(tok(), 8, FALSE)); TODO
+        return tINTEGER;
+      }
+      if (nondigit)
+      {
+        pushback(c);
+        break goto_trailing_uc; // was: goto trailing_uc;
+      }
+    }
+    if (c > '7' && c <= '9')
+    {
+      // was: invalid_octal:
+      lexer.yyerror("Invalid octal digit");
+    }
+    else if (c == '.' || c == 'e' || c == 'E')
+    {
+      tokadd('0');
+    }
+    else
+    {
+      pushback(c);
+      // set_yylval_literal(INT2FIX(0)); TODO
+      return tINTEGER;
+    }
+  } // c == '0'
+
+  } // goto_invalid_octal
+
+  for (;;)
+  {
+    switch (c)
+    {
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        nondigit = '';
+        tokadd(c);
+        break;
+
+      case '.':
+        if (nondigit)
+          break goto_trailing_uc; // was: goto trailing_uc;
+        if (seen_point || seen_e)
+        {
+          break goto_decode_num; // was: goto decode_num;
+        }
+        else
+        {
+          var c0 = nextc();
+          if (c0 == '' || !ISDIGIT(c0))
+          {
+            pushback(c0);
+            break goto_decode_num; // was: goto decode_num;
+          }
+          c = c0;
+        }
+        tokadd('.');
+        tokadd(c);
+        is_float = true;
+        seen_point = true;
+        nondigit = '';
+        break;
+
+      case 'e':
+      case 'E':
+        if (nondigit)
+        {
+          pushback(c);
+          c = nondigit;
+          break goto_decode_num; // was: goto decode_num;
+        }
+        if (seen_e)
+        {
+          break goto_decode_num; // was: goto decode_num;
+        }
+        tokadd(c);
+        seen_e = true;
+        is_float = true;
+        nondigit = c;
+        c = nextc();
+        if (c != '-' && c != '+')
+          continue;
+        tokadd(c);
+        nondigit = c;
+        break;
+
+      case '_':          /* `_' in number just ignored */
+        if (nondigit)
+          break goto_decode_num; // was: goto decode_num;
+        nondigit = c;
+        break;
+
+      default:
+        break goto_decode_num; // was: goto decode_num;
+    }
+    c = nextc();
+  } // decimal for
+
+  } // goto_decode_num
+  
+  // was: decode_num:
+  pushback(c);
+  
+  } // goto_trailing_uc:
+  
+  if (nondigit) // always true after `break goto_trailing_uc;`
+  {
+    // was: trailing_uc:
+    lexer.yyerror("trailing `"+nondigit+"' in number");
+  }
+  tokfix();
+  if (is_float)
+  {
+    var d = parseInt(tok(), 10);
+    // if (errno == ERANGE)
+    // {
+    //   rb_warningS("Float %s out of range", tok());
+    //   errno = 0;
+    // }
+    // set_yylval_literal(DBL2NUM(d)); TODO
+    return tFLOAT;
+  }
+  // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
+  return tINTEGER;
+
+  // why are we so certain about returning `tFLOAT` or `tINTEGER`?
+  // because we have got here meating a digit :)
+}
+
+
+// struct kwtable {const char *name; int id[2]; enum lex_state_e state;};
+
+function dyna_in_block ()
+{
+  // TODO :)
+  return true;
+}
+lexer.dyna_in_block = dyna_in_block;
+function is_local_id (ident)
+{
+  // TODO :)
+  return true;
+}
+lexer.is_local_id = is_local_id;
+function local_id (ident)
+{
+  // TODO :)
+  return true;
+}
+lexer.local_id = local_id;
+function lvar_defined (ident)
+{
+  // TODO :)
+  return false;
+}
+
+var rb_reserved_word =
+{
+'__ENCODING__': {id0: keyword__ENCODING__, id1: keyword__ENCODING__, state: EXPR_END},
+'__LINE__': {id0: keyword__LINE__, id1: keyword__LINE__, state: EXPR_END},
+'__FILE__': {id0: keyword__FILE__, id1: keyword__FILE__, state: EXPR_END},
+'BEGIN': {id0: keyword_BEGIN, id1: keyword_BEGIN, state: EXPR_END},
+'END': {id0: keyword_END, id1: keyword_END, state: EXPR_END},
+'alias': {id0: keyword_alias, id1: keyword_alias, state: EXPR_FNAME},
+'and': {id0: keyword_and, id1: keyword_and, state: EXPR_VALUE},
+'begin': {id0: keyword_begin, id1: keyword_begin, state: EXPR_BEG},
+'break': {id0: keyword_break, id1: keyword_break, state: EXPR_MID},
+'case': {id0: keyword_case, id1: keyword_case, state: EXPR_VALUE},
+'class': {id0: keyword_class, id1: keyword_class, state: EXPR_CLASS},
+'def': {id0: keyword_def, id1: keyword_def, state: EXPR_FNAME},
+'defined?': {id0: keyword_defined, id1: keyword_defined, state: EXPR_ARG},
+'do': {id0: keyword_do, id1: keyword_do, state: EXPR_BEG},
+'else': {id0: keyword_else, id1: keyword_else, state: EXPR_BEG},
+'elsif': {id0: keyword_elsif, id1: keyword_elsif, state: EXPR_VALUE},
+'end': {id0: keyword_end, id1: keyword_end, state: EXPR_END},
+'ensure': {id0: keyword_ensure, id1: keyword_ensure, state: EXPR_BEG},
+'false': {id0: keyword_false, id1: keyword_false, state: EXPR_END},
+'for': {id0: keyword_for, id1: keyword_for, state: EXPR_VALUE},
+'if': {id0: keyword_if, id1: modifier_if, state: EXPR_VALUE},
+'in': {id0: keyword_in, id1: keyword_in, state: EXPR_VALUE},
+'module': {id0: keyword_module, id1: keyword_module, state: EXPR_VALUE},
+'next': {id0: keyword_next, id1: keyword_next, state: EXPR_MID},
+'nil': {id0: keyword_nil, id1: keyword_nil, state: EXPR_END},
+'not': {id0: keyword_not, id1: keyword_not, state: EXPR_ARG},
+'or': {id0: keyword_or, id1: keyword_or, state: EXPR_VALUE},
+'redo': {id0: keyword_redo, id1: keyword_redo, state: EXPR_END},
+'rescue': {id0: keyword_rescue, id1: modifier_rescue, state: EXPR_MID},
+'retry': {id0: keyword_retry, id1: keyword_retry, state: EXPR_END},
+'return': {id0: keyword_return, id1: keyword_return, state: EXPR_MID},
+'self': {id0: keyword_self, id1: keyword_self, state: EXPR_END},
+'super': {id0: keyword_super, id1: keyword_super, state: EXPR_ARG},
+'then': {id0: keyword_then, id1: keyword_then, state: EXPR_BEG},
+'true': {id0: keyword_true, id1: keyword_true, state: EXPR_END},
+'undef': {id0: keyword_undef, id1: keyword_undef, state: EXPR_FNAME},
+'unless': {id0: keyword_unless, id1: modifier_unless, state: EXPR_VALUE},
+'until': {id0: keyword_until, id1: modifier_until, state: EXPR_VALUE},
+'when': {id0: keyword_when, id1: keyword_when, state: EXPR_VALUE},
+'while': {id0: keyword_while, id1: modifier_while, state: EXPR_VALUE},
+'yield': {id0: keyword_yield, id1: keyword_yield, state: EXPR_ARG}
+};
+
+lexer.cursorPosition = function ()
+{
+  return (
+    lex_lastline.substring(0, lex_p) +
+    '>>here<<' +
+    lex_lastline.substring(lex_p)
+  );
+}
+
+function debug ()
+{
+  puts('\n\n')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts.apply(null, arguments)
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(lexer.cursorPosition())
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts(':::::::::::::::::::::::::::::::::::::::::::')
+  puts('\n\n')
+}
+lexer.debug = debug;
+
+function warn (msg, lineno, filename)
+{
+  puts
+  (
+    (filename || lexer.filename) +
+    ':' +
+    (lineno || lexer.ruby_sourceline) +
+    ': ' +
+    msg
+  );
+}
+this.warn = warn;
+
+function compile_error (msg)
+{
+  lexer.nerr++;
+
+  warn(msg);
+}
+
+lexer.yyerror = function yyerror (msg)
+{
+  compile_error(msg);
+
+  // to clean up \n \t and others
+  var line = lexer.get_lex_lastline();
+  var begin = line.substring(0, lex_p)
+                  .replace(/[\n\r]+/g, '')
+                  .replace(/\s+/g, ' ');
+  var end =   line.substring(lex_p)
+                  .replace(/[\n\r]+/g, '')
+                  .replace(/\s+/g, ' ');
+  var arrow = [];
+  arrow[begin.length] = '^';
+  puts(begin + end);
+  puts(arrow.join(' '));
+}
+
+} // function Lexer
+
+
+
+
+
 
 
 /**
@@ -198,449 +3215,66 @@ var EXPR_END_ANY = EXPR_END | EXPR_ENDARG | EXPR_ENDFN;
  * @author Java skeleton ported by Peter Leonov.
  */
 
-var YYParser = (function(){ // start of the Parser very own namespase
-
-function YYStack ()
-{
-  var stateStack = this.stateStack = [];
-  var valueStack = this.valueStack = [];
-
-  this.push = function push (state, value)
-  {
-    stateStack.push(state);
-    valueStack.push(value);
-  }
-
-  this.pop = function pop (num)
-  {
-    if (num <= 0)
-      return;
-
-    valueStack.length -= num;
-    stateStack.length -= num; // TODO: original code lacks this line
-  }
-
-  this.stateAt = function stateAt (i)
-  {
-    return stateStack[stateStack.length-1 - i];
-  }
-
-  this.valueAt = function valueAt (i)
-  {
-    return valueStack[valueStack.length-1 - i];
-  }
-
-  // used in debug mode or in an error recovery mode only
-  this.height = function height ()
-  {
-    return stateStack.length-1;
-  }
-}
 
 // Instantiates the Bison-generated parser.
+// `lexer` is the scanner that will supply tokens to the parser.
 function YYParser (lexer)
 {
-  // self
-  var yyparser = this;
-  
-  // The scanner that will supply tokens to the parser.
-  this.lexer = lexer;
 
-  // True if verbose error messages are enabled.
-  this.errorVerbose = true;
+// the three variables shared by Parser's guts and actions world
+// (`lexer` is shared too)
+var yyval, yystack, actionsTable;
 
+;(function(){ // actions table namespace start
 
-  var debug_reduce_print = this.debug_reduce_print.bind(this);
-  var debug_symbol_print = this.debug_symbol_print.bind(this);
-  var debug_stack_print  = this.debug_stack_print.bind(this);
-  var debug_print        = this.debug_print.bind(this);
+/* "%code actions" blocks.  */
 
 
 
+// here goes the code needed in rules only, when generating nodes,
+// we still know all the token numbers here too.
+// #include "generator.js"
 
 
 
-  
 
-  // Token returned by the scanner to signal the end of its input.
-  var EOF = 0;
 
-  // Returned by a Bison action in order to stop the parsing process
-  // and return success (<tt>true</tt>).
-  var YYACCEPT = 0;
 
-  // Returned by a Bison action in order to stop the parsing process
-  // and return failure (<tt>false</tt>).  */
-  var YYABORT = 1;
-
-  // Returned by a Bison action in order to start error recovery
-  // without printing an error message.
-  var YYERROR = 2;
-
-  // Internal return codes that are not supported for user semantic
-  // actions.
-  var YYERRLAB = 3;
-  var YYNEWSTATE = 4;
-  var YYDEFAULT = 5;
-  var YYREDUCE = 6;
-  var YYERRLAB1 = 7;
-  var YYRETURN = 8;
-
-  var yyntokens_ = this.yyntokens_ = 142;
-  
-  var yyerrstatus_ = 0;
-  function yyerrok () {yyerrstatus_ = 0;}
-  
-  // Return whether error recovery is being done.
-  // In this state, the parser reads token until it reaches a known state,
-  // and then restarts normal operation.
-  this.isRecovering = function isRecovering ()
-  {
-    return yyerrstatus_ == 0;
-  }
-
-  var yyval, yystack;
-
-  /**
-   * Parse input from the scanner that was specified at object construction
-   * time.  Return whether the end of the input was reached successfully.
-   *
-   * @return <tt>true</tt> if the parsing succeeds.  Note that this does not
-   *          imply that there were no syntax errors.
-   */
-  this.parse = function parse ()
-  {
-    // Lookahead and lookahead in internal form.
-    var yychar = yyempty_;
-    var yytoken = 0;
-
-    /* State.  */
-    var yyn = 0;
-    var yylen = 0;
-    var yystate = 0;
-
-    // the only place yystack value is changed
-    yystack = this.yystack = new YYStack();
-
-    /* Error handling.  */
-    var yynerrs_ = 0;
-
-    // Semantic value of the lookahead.
-    var yylval = null;
-
-    debug_print("Starting parse\n");
-    yyerrstatus_ = 0;
-
-
-    // Initialize the stack.
-    yystack.push(yystate, yylval);
-
-    // have tried: recursive closures, breaking blocks - switch is faster,
-    // next step: asm.js for the whole `parse()` function
-    var label = YYNEWSTATE;
-    goto_loop: for (;;)
-    switch (label)
-    {
-      //----------------.
-      // New state.     |
-      //---------------/
-      case YYNEWSTATE:
-        // Unlike in the C/C++ skeletons, the state is already pushed when we come here.
-
-        debug_print("Entering state " + yystate + "\n");
-
-        // Accept?
-        if (yystate == yyfinal_)
-          return true;
-
-        // Take a decision.
-        // First try without lookahead.
-        yyn = yypact_[yystate];
-        if (yyn == yypact_ninf_) // yyn pact value is default
-        {
-          // goto
-          label = YYDEFAULT;
-          continue goto_loop;
-        }
-
-        // Read a lookahead token.
-        if (yychar == yyempty_)
-        {
-          debug_print("Reading a token: ");
-          yychar = lexer.yylex();
-
-          yylval = lexer.getLVal();
-        }
-
-
-        // Convert token to internal form.
-        if (yychar <= EOF)
-        {
-          yychar = yytoken = EOF;
-          debug_print("Now at end of input.\n");
-        }
-        else
-        {
-          if (yychar >= 0 && yychar <= yyuser_token_number_max_)
-            yytoken = yytranslate_table_[yychar];
-          else
-            yytoken = yyundef_token_;
-
-          debug_symbol_print("Next token is", yytoken, yylval);
-        }
-
-        // If the proper action on seeing token YYTOKEN
-        // is to reduce or to detect an error, take that action.
-        yyn += yytoken;
-        if (yyn < 0 || yylast_ < yyn || yycheck_[yyn] != yytoken)
-        {
-          // goto
-          label = YYDEFAULT;
-          continue goto_loop;
-        }
-        // <= 0 means reduce or error.
-        else if ((yyn = yytable_[yyn]) <= 0)
-        {
-          if (yyn == yytable_ninf_) // yyn's value is an error
-          {
-            // goto
-            label = YYERRLAB;
-            continue goto_loop;
-          }
-          else
-          {
-            yyn = -yyn;
-
-            // goto
-            label = YYREDUCE;
-            continue goto_loop;
-          }
-        }
-
-        else
-        {
-          // Shift the lookahead token.
-          debug_symbol_print("Shifting", yytoken, yylval);
-
-          // Discard the token being shifted.
-          yychar = yyempty_;
-
-          // Count tokens shifted since error;
-          // after three, turn off error status.
-          if (yyerrstatus_ > 0)
-            --yyerrstatus_;
-
-          yystate = yyn;
-          yystack.push(yystate, yylval);
-
-          //goto
-          label = YYNEWSTATE;
-          continue goto_loop;
-        }
-
-        // won't reach here
-        return false;
-
-      //-----------------------------------------------------------.
-      // yydefault -- do the default action for the current state. |
-      //----------------------------------------------------------/
-      case YYDEFAULT:
-        yyn = yydefact_[yystate];
-        if (yyn == 0)
-        {
-          // goto
-          label = YYERRLAB;
-          continue goto_loop;
-        }
-        else
-        {
-          // goto
-          label = YYREDUCE;
-          continue goto_loop;
-        }
-
-      // won't reach here
-      return false;
-
-      //------------------------------------.
-      //  yyreduce -- Do a reduction.       |
-      //-----------------------------------/
-      case YYREDUCE:
-        yylen = yyr2_[yyn];
-        yyaction(yyn, yylen);
-        yystate = yystack.stateAt(0);
-        // goto
-        label = YYNEWSTATE;
-        continue goto_loop;
-
-      //-------------------------------------.
-      // yyerrlab -- here on detecting error |
-      //------------------------------------/
-      case YYERRLAB:
-        // If not already recovering from an error, report this error.
-        if (yyerrstatus_ == 0)
-        {
-          ++yynerrs_;
-          if (yychar == yyempty_)
-            yytoken = yyempty_;
-          lexer.yyerror(this.yysyntax_error(yystate, yytoken));
-        }
-
-        if (yyerrstatus_ == 3)
-        {
-          // If just tried and failed to reuse lookahead token
-          // after an error, discard it.
-
-          if (yychar <= EOF)
-          {
-            // Return failure if at end of input.
-            if (yychar == EOF)
-              return false;
-          }
-          else
-            yychar = yyempty_;
-        }
-
-        // Else will try to reuse lookahead token
-        // after shifting the error token.
-
-        // goto
-        label = YYERRLAB1;
-        continue goto_loop;
-
-      //--------------------------------------------------.
-      // errorlab -- error raised explicitly by YYERROR.  |
-      //-------------------------------------------------/
-      case YYERROR:
-
-        // Do not reclaim the symbols of the rule
-        // which action triggered this YYERROR.
-        yystack.pop(yylen);
-        yylen = 0;
-        debug_stack_print(yystack);
-        yystate = yystack.stateAt(0);
-        // goto
-        label = YYERRLAB1;
-        continue goto_loop;
-
-      //--------------------------------------------------------------.
-      // yyerrlab1 -- common code for both syntax error and YYERROR.  |
-      //-------------------------------------------------------------/
-      case YYERRLAB1:
-        yyerrstatus_ = 3; // Each real token shifted decrements this.
-
-        for (;;)
-        {
-          yyn = yypact_[yystate];
-          if (yyn != yypact_ninf_) // yyn pact value isn't default
-          {
-            yyn += yyterror_;
-            if (0 <= yyn && yyn <= yylast_ && yycheck_[yyn] == yyterror_)
-            {
-              yyn = yytable_[yyn];
-              if (0 < yyn)
-                break;
-            }
-          }
-
-          // Pop the current state because it cannot handle the error token.
-          if (yystack.height() == 0)
-          {
-            label = YYABORT;
-            continue goto_loop;
-          }
-
-          yystack.pop(1);
-          yystate = yystack.stateAt(0);
-          debug_stack_print(yystack);
-        }
-
-
-        // Shift the error token.
-        debug_symbol_print("Shifting", yystos_[yyn], yylval);
-
-        yystate = yyn;
-        yystack.push(yyn, yylval);
-        // goto
-        label = YYNEWSTATE;
-        continue goto_loop;
-
-      //--------------------------.
-      // Accept.                  |
-      //-------------------------/
-      case YYACCEPT:
-        return true;
-
-      //----------------------.
-      // Abort.               |
-      //---------------------/
-      case YYABORT:
-        // debug_symbol_print("Error: popping", yystos_[yyn], yylval);
-        // yystack.pop(1);
-        // yystate = yystack.stateAt(0);
-        // debug_stack_print(yystack);
-        return false;
-
-      default:
-        // won't reach here
-        return false;
-    } // for (;;) and switch (label)
-
-    // won't reach here
-    return false
-  }
-
-  var actionsTable; // defined lated in tables section
-
-  function yyaction (yyn, yylen)
-  {
-    /* If YYLEN is nonzero, implement the default value of the action:
-       `$$ = $1'.  Otherwise, use the top of the stack.
-
-       Otherwise, the following line sets YYVAL to garbage.
-       This behavior is undocumented and Bison
-       users should not rely upon it.  */
-    // var yyval; moved up in scope chain to share with actions
-    if (yylen > 0)
-      yyval = yystack.valueAt(yylen - 1);
-    else
-      yyval = yystack.valueAt(0);
-
-    debug_reduce_print(yyn);
-
-    var actionClosure = actionsTable[yyn]
-    if (actionClosure)
-      actionClosure(yystack)
-
-    debug_symbol_print("-> $$ =", yyr1_[yyn], yyval);
-
-    yystack.pop(yylen);
-    yylen = 0;
-    debug_stack_print(yystack);
-
-    // Shift the result of the reduction.
-    yyn = yyr1_[yyn];
-    var yystate = yypgoto_[yyn - yyntokens_] + yystack.stateAt(0);
-    if (0 <= yystate && yystate <= yylast_ && yycheck_[yystate] == yystack.stateAt(0))
-      yystate = yytable_[yystate];
-    else
-      yystate = yydefgoto_[yyn - yyntokens_];
-
-    yystack.push(yystate, yyval);
-    // was: usless: return YYNEWSTATE;
-  }
-
-  // declared erlier, before `action()`
-  actionsTable =
-  {
-      2: function ()
+actionsTable =
+{
+    2: function ()
     
     {
       lexer.lex_state = EXPR_BEG;
+      // gen.local_push(gen.compile_for_eval || gen.rb_parse_in_main());
     },
   3: function ()
     
-    {},
+    {
+        /*%%%*/
+            // if ($2 && !gen.compile_for_eval)
+            // {
+            //     /* last expression should not be void */
+            //     if ($2.nd_type != 'NODE_BLOCK')
+            //       gen.void_expr($2);
+            //     else
+            //     {
+            //       var node = $2;
+            //       while (node.nd_next)
+            //       {
+            //           node = node.nd_next;
+            //       }
+            //       gen.void_expr(node.nd_head);
+            //     }
+            // }
+            // gen.ruby_eval_tree = gen.NEW_SCOPE(0, block_append(ruby_eval_tree, $2));
+            /*%
+            $$ = $2;
+            parser->result = dispatch1(program, $$);
+            %*/
+            // local_pop();
+          
+    },
   4: function ()
     
     {},
@@ -664,7 +3298,9 @@ function YYParser (lexer)
     {},
   12: function ()
     
-    {},
+    {
+      
+    },
   13: function ()
     
     {},
@@ -1305,29 +3941,29 @@ function YYParser (lexer)
   286: function ()
     
     {
-		      yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = lexer.cmdarg_stack;
-		      lexer.cmdarg_stack = 0;
-		    },
+              yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = lexer.cmdarg_stack;
+              lexer.cmdarg_stack = 0;
+            },
   287: function ()
     
     {
-		      lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
-		      // touching this alters the parse.output
+              lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
+              // touching this alters the parse.output
           yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
-		    },
+            },
   288: function ()
     
     {
-		  lexer.lex_state = EXPR_ENDARG;
-		},
+          lexer.lex_state = EXPR_ENDARG;
+        },
   289: function ()
     
     {},
   290: function ()
     
     {
-		  lexer.lex_state = EXPR_ENDARG;
-		},
+          lexer.lex_state = EXPR_ENDARG;
+        },
   291: function ()
     
     {},
@@ -1364,8 +4000,8 @@ function YYParser (lexer)
   302: function ()
     
     {
-		      lexer.in_defined = false;
-		    },
+              lexer.in_defined = false;
+            },
   303: function ()
     
     {},
@@ -1390,26 +4026,26 @@ function YYParser (lexer)
   311: function ()
     
     {
-		    lexer.COND_PUSH(1);
-		  },
+            lexer.COND_PUSH(1);
+          },
   312: function ()
     
     {
-		    lexer.COND_POP();
-		  },
+            lexer.COND_POP();
+          },
   313: function ()
     
     {},
   314: function ()
     
     {
-		  lexer.COND_PUSH(1);
-		},
+          lexer.COND_PUSH(1);
+        },
   315: function ()
     
     {
-		  lexer.COND_POP();
-		},
+          lexer.COND_POP();
+        },
   316: function ()
     
     {},
@@ -1422,13 +4058,13 @@ function YYParser (lexer)
   319: function ()
     
     {
-		    lexer.COND_PUSH(1);
-		  },
+            lexer.COND_PUSH(1);
+          },
   320: function ()
     
     {
-		    lexer.COND_POP();
-		  },
+            lexer.COND_POP();
+          },
   321: function ()
     
     {},
@@ -1437,61 +4073,61 @@ function YYParser (lexer)
     {
           if (lexer.in_def || lexer.in_single)
             lexer.yyerror("class definition in method body");
-    			
-		    },
+                
+            },
   323: function ()
     
     {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
-		    },
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
+            },
   324: function ()
     
     {
           yyval = lexer.in_def;
           lexer.in_def = 0;
-		    },
+            },
   325: function ()
     
     {
-		      yyval = lexer.in_single;
-		      lexer.in_single = 0;
-		    },
+              yyval = lexer.in_single;
+              lexer.in_single = 0;
+            },
   326: function ()
     
     {
           lexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
           lexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
-		    },
+            },
   327: function ()
     
     {
           if (lexer.in_def || lexer.in_single)
             lexer.yyerror("module definition in method body");
-    			
-		    },
+                
+            },
   328: function ()
     
     {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((5-(3)))];
-		    },
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((5-(3)))];
+            },
   329: function ()
     
     {
-		      yyval = lexer.cur_mid; // TODO
-    			lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
-    			
-		      lexer.in_def++;
-		    },
+              yyval = lexer.cur_mid; // TODO
+                lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
+                
+              lexer.in_def++;
+            },
   330: function ()
     
     {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
-			    lexer.in_def--;
-			    lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
-		    },
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+                lexer.in_def--;
+                lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+            },
   331: function ()
     
     {
@@ -1667,8 +4303,8 @@ function YYParser (lexer)
   396: function ()
     
     {
-			lexer.command_start = true;
-		    },
+            lexer.command_start = true;
+            },
   397: function ()
     
     {},
@@ -1696,16 +4332,16 @@ function YYParser (lexer)
   407: function ()
     
     {
-		      yyval = lexer.lpar_beg;
-		      lexer.lpar_beg = ++lexer.paren_nest;
-		    },
+              yyval = lexer.lpar_beg;
+              lexer.lpar_beg = ++lexer.paren_nest;
+            },
   408: function ()
     
     {
           lexer.lpar_beg = yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
           // touching this alters the parse.output
           yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
-		    },
+            },
   409: function ()
     
     {},
@@ -1724,10 +4360,10 @@ function YYParser (lexer)
   414: function ()
     
     {
-	      // touching this alters the parse.output
+          // touching this alters the parse.output
         yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-			  yystack.valueStack[yystack.valueStack.length-1-((5-(1)))];
-		    },
+              yystack.valueStack[yystack.valueStack.length-1-((5-(1)))];
+            },
   415: function ()
     
     {},
@@ -1749,18 +4385,18 @@ function YYParser (lexer)
   421: function ()
     
     {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((5-(4)))];
-		    },
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((5-(4)))];
+            },
   422: function ()
     
     {},
   423: function ()
     
     {
-		      // touching this alters the parse.output
-			    yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]
-		    },
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]
+            },
   424: function ()
     
     {},
@@ -1772,7 +4408,7 @@ function YYParser (lexer)
     {
           // touching this alters the parse.output
           nd_set_line(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
-		    },
+            },
   427: function ()
     
     {},
@@ -1781,7 +4417,7 @@ function YYParser (lexer)
     {
           // touching this alters the parse.output
           yystack.valueStack[yystack.valueStack.length-1-((4-(3)))];
-		    },
+            },
   429: function ()
     
     {},
@@ -1797,9 +4433,9 @@ function YYParser (lexer)
   433: function ()
     
     {
-		      // touching this alters the parse.output
+              // touching this alters the parse.output
           yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-		    },
+            },
   434: function ()
     
     {},
@@ -1808,7 +4444,7 @@ function YYParser (lexer)
     {
           // touching this alters the parse.output
           yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-		    },
+            },
   436: function ()
     
     {},
@@ -1917,16 +4553,16 @@ function YYParser (lexer)
   483: function ()
     
     {
-			yyval = lexer.lex_strterm;
-			lexer.lex_strterm = null;
-			lexer.lex_state = EXPR_BEG;
-		    },
+            yyval = lexer.lex_strterm;
+            lexer.lex_strterm = null;
+            lexer.lex_state = EXPR_BEG;
+            },
   484: function ()
     
     {
-		    /*%%%*/
-			lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
-		    },
+            /*%%%*/
+            lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
+            },
   485: function ()
     
     {
@@ -1934,20 +4570,20 @@ function YYParser (lexer)
           yyval = lexer.cmdarg_stack;
           lexer.cond_stack = 0;
           lexer.cmdarg_stack = 0;
-		    },
+            },
   486: function ()
     
     {
-			yyval = lexer.lex_strterm;
-			lexer.lex_strterm = null;
-			lexer.lex_state = EXPR_BEG;
-		    },
+            yyval = lexer.lex_strterm;
+            lexer.lex_strterm = null;
+            lexer.lex_state = EXPR_BEG;
+            },
   487: function ()
     
     {
-			yyval = lexer.brace_nest;
-			lexer.brace_nest = 0;
-		    },
+            yyval = lexer.brace_nest;
+            lexer.brace_nest = 0;
+            },
   488: function ()
     
     {
@@ -1955,7 +4591,7 @@ function YYParser (lexer)
           lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
           lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
           lexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
-		    },
+            },
   489: function ()
     
     {},
@@ -1968,21 +4604,21 @@ function YYParser (lexer)
   493: function ()
     
     {
-			lexer.lex_state = EXPR_END;
-		    },
+            lexer.lex_state = EXPR_END;
+            },
   498: function ()
     
     {
-			lexer.lex_state = EXPR_END;
-		    },
+            lexer.lex_state = EXPR_END;
+            },
   501: function ()
     
     {
-		    },
+            },
   502: function ()
     
     {
-		    },
+            },
   508: function ()
     
     {},
@@ -2007,7 +4643,7 @@ function YYParser (lexer)
   515: function ()
     
     {
-		    },
+            },
   516: function ()
     
     {},
@@ -2023,29 +4659,29 @@ function YYParser (lexer)
   522: function ()
     
     {
-			lexer.lex_state = EXPR_BEG;
-			lexer.command_start = true;
-		    },
+            lexer.lex_state = EXPR_BEG;
+            lexer.command_start = true;
+            },
   523: function ()
     
     {},
   524: function ()
     
     {
-		      yyerrok();
-		    },
+              yyerrok();
+            },
   525: function ()
     
     {
-			lexer.lex_state = EXPR_BEG;
-			lexer.command_start = true;
-		    },
+            lexer.lex_state = EXPR_BEG;
+            lexer.command_start = true;
+            },
   526: function ()
     
     {
-			lexer.lex_state = EXPR_BEG;
-			lexer.command_start = true;
-		    },
+            lexer.lex_state = EXPR_BEG;
+            lexer.command_start = true;
+            },
   527: function ()
     
     {},
@@ -2112,23 +4748,23 @@ function YYParser (lexer)
   548: function ()
     
     {
-		      lexer.yyerror("formal argument cannot be a constant");
-		    },
+              lexer.yyerror("formal argument cannot be a constant");
+            },
   549: function ()
     
     {
-		      lexer.yyerror("formal argument cannot be an instance variable");
-		    },
+              lexer.yyerror("formal argument cannot be an instance variable");
+            },
   550: function ()
     
     {
-		      lexer.yyerror("formal argument cannot be a global variable");
-		    },
+              lexer.yyerror("formal argument cannot be a global variable");
+            },
   551: function ()
     
     {
-		      lexer.yyerror("formal argument cannot be a class variable");
-		    },
+              lexer.yyerror("formal argument cannot be a class variable");
+            },
   553: function ()
     
     {},
@@ -2188,20 +4824,20 @@ function YYParser (lexer)
     {
           if (!lexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
             lexer.yyerror("rest argument must be local variable");
-    			
-		    },
+                
+            },
   577: function ()
     
     {},
   580: function ()
     
     {
-		      if (!lexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+              if (!lexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
             lexer.yyerror("block argument must be local variable");
-    			else if (!lexer.dyna_in_block() && lexer.local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+                else if (!lexer.dyna_in_block() && lexer.local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
             lexer.yyerror("duplicated block argument name");
-    			
-		    },
+                
+            },
   581: function ()
     
     {},
@@ -2214,8 +4850,8 @@ function YYParser (lexer)
   584: function ()
     
     {
-		  lexer.lex_state = EXPR_BEG;
-		},
+          lexer.lex_state = EXPR_BEG;
+        },
   585: function ()
     
     {
@@ -2238,7 +4874,7 @@ function YYParser (lexer)
                 break;
             }
           }
-		    },
+            },
   587: function ()
     
     {},
@@ -2263,6 +4899,384 @@ function YYParser (lexer)
   618: function ()
     
     {}
+};
+
+})(); // actions table namespace end
+
+
+;(function(){ // start of the Parser very own namespase
+
+  // True if verbose error messages are enabled.
+  this.errorVerbose = true;
+
+  var debug_reduce_print = this.debug_reduce_print.bind(this);
+  var debug_symbol_print = this.debug_symbol_print.bind(this);
+  var debug_stack_print  = this.debug_stack_print.bind(this);
+  var debug_print        = this.debug_print.bind(this);
+  
+
+  // Token returned by the scanner to signal the end of its input.
+  var EOF = 0;
+
+  // Returned by a Bison action in order to stop the parsing process
+  // and return success (<tt>true</tt>).
+  var YYACCEPT = 0;
+
+  // Returned by a Bison action in order to stop the parsing process
+  // and return failure (<tt>false</tt>).  */
+  var YYABORT = 1;
+
+  // Returned by a Bison action in order to start error recovery
+  // without printing an error message.
+  var YYERROR = 2;
+
+  // Internal return codes that are not supported for user semantic
+  // actions.
+  var YYERRLAB = 3;
+  var YYNEWSTATE = 4;
+  var YYDEFAULT = 5;
+  var YYREDUCE = 6;
+  var YYERRLAB1 = 7;
+  var YYRETURN = 8;
+
+  var yyntokens_ = this.yyntokens_ = 142;
+  
+  var yyerrstatus_ = 0;
+  function yyerrok () {yyerrstatus_ = 0;}
+  
+  // Return whether error recovery is being done.
+  // In this state, the parser reads token until it reaches a known state,
+  // and then restarts normal operation.
+  this.isRecovering = function isRecovering ()
+  {
+    return yyerrstatus_ == 0;
+  }
+
+  /**
+   * Parse input from the scanner that was specified at object construction
+   * time.  Return whether the end of the input was reached successfully.
+   *
+   * @return <tt>true</tt> if the parsing succeeds.  Note that this does not
+   *          imply that there were no syntax errors.
+   */
+  this.parse = function parse ()
+  {
+    // Lookahead and lookahead in internal form.
+    var yychar = yyempty_;
+    var yytoken = 0;
+
+    /* State.  */
+    var yyn = 0;
+    var yylen = 0;
+    var yystate = 0;
+
+    // the only place yystack value is changed
+    yystack = this.yystack = new YYParser.Stack();
+
+    /* Error handling.  */
+    var yynerrs_ = 0;
+
+    // Semantic value of the lookahead.
+    var yylval = null;
+
+    debug_print("Starting parse\n");
+    yyerrstatus_ = 0;
+
+
+    // Initialize the stack.
+    yystack.push(yystate, yylval);
+
+    // have tried: recursive closures, breaking blocks - switch is faster,
+    // next step: asm.js for the whole `parse()` function
+    var label = YYNEWSTATE;
+    goto_loop: for (;;)
+    switch (label)
+    {
+      //----------------.
+      // New state.     |
+      //---------------/
+      case YYNEWSTATE:
+        // Unlike in the C/C++ skeletons, the state is already pushed when we come here.
+
+        debug_print("Entering state " + yystate + "\n");
+
+        // Accept?
+        if (yystate == yyfinal_)
+          return true;
+
+        // Take a decision.
+        // First try without lookahead.
+        yyn = yypact_[yystate];
+        if (yyn == yypact_ninf_) // yyn pact value is default
+        {
+          // goto
+          label = YYDEFAULT;
+          continue goto_loop;
+        }
+
+        // Read a lookahead token.
+        if (yychar == yyempty_)
+        {
+          debug_print("Reading a token: ");
+          yychar = lexer.yylex();
+
+          yylval = lexer.getLVal();
+        }
+
+
+        // Convert token to internal form.
+        if (yychar <= EOF)
+        {
+          yychar = yytoken = EOF;
+          debug_print("Now at end of input.\n");
+        }
+        else
+        {
+          if (yychar >= 0 && yychar <= yyuser_token_number_max_)
+            yytoken = yytranslate_table_[yychar];
+          else
+            yytoken = yyundef_token_;
+
+          debug_symbol_print("Next token is", yytoken, yylval);
+        }
+
+        // If the proper action on seeing token YYTOKEN
+        // is to reduce or to detect an error, take that action.
+        yyn += yytoken;
+        if (yyn < 0 || yylast_ < yyn || yycheck_[yyn] != yytoken)
+        {
+          // goto
+          label = YYDEFAULT;
+          continue goto_loop;
+        }
+        // <= 0 means reduce or error.
+        else if ((yyn = yytable_[yyn]) <= 0)
+        {
+          if (yyn == yytable_ninf_) // yyn's value is an error
+          {
+            // goto
+            label = YYERRLAB;
+            continue goto_loop;
+          }
+          else
+          {
+            yyn = -yyn;
+
+            // goto
+            label = YYREDUCE;
+            continue goto_loop;
+          }
+        }
+
+        else
+        {
+          // Shift the lookahead token.
+          debug_symbol_print("Shifting", yytoken, yylval);
+
+          // Discard the token being shifted.
+          yychar = yyempty_;
+
+          // Count tokens shifted since error;
+          // after three, turn off error status.
+          if (yyerrstatus_ > 0)
+            --yyerrstatus_;
+
+          yystate = yyn;
+          yystack.push(yystate, yylval);
+
+          //goto
+          label = YYNEWSTATE;
+          continue goto_loop;
+        }
+
+        // won't reach here
+        return false;
+
+      //-----------------------------------------------------------.
+      // yydefault -- do the default action for the current state. |
+      //----------------------------------------------------------/
+      case YYDEFAULT:
+        yyn = yydefact_[yystate];
+        if (yyn == 0)
+        {
+          // goto
+          label = YYERRLAB;
+          continue goto_loop;
+        }
+        else
+        {
+          // goto
+          label = YYREDUCE;
+          continue goto_loop;
+        }
+
+      // won't reach here
+      return false;
+
+      //------------------------------------.
+      //  yyreduce -- Do a reduction.       |
+      //-----------------------------------/
+      case YYREDUCE:
+        yylen = yyr2_[yyn];
+        yyaction(yyn, yylen);
+        yystate = yystack.stateAt(0);
+        // goto
+        label = YYNEWSTATE;
+        continue goto_loop;
+
+      //-------------------------------------.
+      // yyerrlab -- here on detecting error |
+      //------------------------------------/
+      case YYERRLAB:
+        // If not already recovering from an error, report this error.
+        if (yyerrstatus_ == 0)
+        {
+          ++yynerrs_;
+          if (yychar == yyempty_)
+            yytoken = yyempty_;
+          lexer.yyerror(this.yysyntax_error(yystate, yytoken));
+        }
+
+        if (yyerrstatus_ == 3)
+        {
+          // If just tried and failed to reuse lookahead token
+          // after an error, discard it.
+
+          if (yychar <= EOF)
+          {
+            // Return failure if at end of input.
+            if (yychar == EOF)
+              return false;
+          }
+          else
+            yychar = yyempty_;
+        }
+
+        // Else will try to reuse lookahead token
+        // after shifting the error token.
+
+        // goto
+        label = YYERRLAB1;
+        continue goto_loop;
+
+      //--------------------------------------------------.
+      // errorlab -- error raised explicitly by YYERROR.  |
+      //-------------------------------------------------/
+      case YYERROR:
+
+        // Do not reclaim the symbols of the rule
+        // which action triggered this YYERROR.
+        yystack.pop(yylen);
+        yylen = 0;
+        debug_stack_print(yystack);
+        yystate = yystack.stateAt(0);
+        // goto
+        label = YYERRLAB1;
+        continue goto_loop;
+
+      //--------------------------------------------------------------.
+      // yyerrlab1 -- common code for both syntax error and YYERROR.  |
+      //-------------------------------------------------------------/
+      case YYERRLAB1:
+        yyerrstatus_ = 3; // Each real token shifted decrements this.
+
+        for (;;)
+        {
+          yyn = yypact_[yystate];
+          if (yyn != yypact_ninf_) // yyn pact value isn't default
+          {
+            yyn += yyterror_;
+            if (0 <= yyn && yyn <= yylast_ && yycheck_[yyn] == yyterror_)
+            {
+              yyn = yytable_[yyn];
+              if (0 < yyn)
+                break;
+            }
+          }
+
+          // Pop the current state because it cannot handle the error token.
+          if (yystack.height() == 0)
+          {
+            label = YYABORT;
+            continue goto_loop;
+          }
+
+          yystack.pop(1);
+          yystate = yystack.stateAt(0);
+          debug_stack_print(yystack);
+        }
+
+
+        // Shift the error token.
+        debug_symbol_print("Shifting", yystos_[yyn], yylval);
+
+        yystate = yyn;
+        yystack.push(yyn, yylval);
+        // goto
+        label = YYNEWSTATE;
+        continue goto_loop;
+
+      //--------------------------.
+      // Accept.                  |
+      //-------------------------/
+      case YYACCEPT:
+        return true;
+
+      //----------------------.
+      // Abort.               |
+      //---------------------/
+      case YYABORT:
+        // debug_symbol_print("Error: popping", yystos_[yyn], yylval);
+        // yystack.pop(1);
+        // yystate = yystack.stateAt(0);
+        // debug_stack_print(yystack);
+        return false;
+
+      default:
+        // won't reach here
+        return false;
+    } // for (;;) and switch (label)
+
+    // won't reach here
+    return false
+  }
+
+  function yyaction (yyn, yylen)
+  {
+    /* If YYLEN is nonzero, implement the default value of the action:
+       `$$ = $1'.  Otherwise, use the top of the stack.
+
+       Otherwise, the following line sets YYVAL to garbage.
+       This behavior is undocumented and Bison
+       users should not rely upon it.  */
+    // var yyval; moved up in scope chain to share with actions
+    if (yylen > 0)
+      yyval = yystack.valueAt(yylen - 1);
+    else
+      yyval = yystack.valueAt(0);
+
+    debug_reduce_print(yyn);
+
+    var actionClosure = actionsTable[yyn]
+    if (actionClosure)
+      actionClosure(yystack)
+
+    debug_symbol_print("-> $$ =", yyr1_[yyn], yyval);
+
+    yystack.pop(yylen);
+    yylen = 0;
+    debug_stack_print(yystack);
+
+    // Shift the result of the reduction.
+    yyn = yyr1_[yyn];
+    var yystate = yypgoto_[yyn - yyntokens_] + yystack.stateAt(0);
+    if (0 <= yystate && yystate <= yylast_ && yycheck_[yystate] == yystack.stateAt(0))
+      yystate = yytable_[yystate];
+    else
+      yystate = yydefgoto_[yyn - yyntokens_];
+
+    yystack.push(yystate, yyval);
+    // was: usless: return YYNEWSTATE;
   }
 
   // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing STATE-NUM.
@@ -5373,76 +8387,74 @@ function YYParser (lexer)
     1876,  1879,  1880,  1882,  1884,  1886,  1888,  1890,  1893
     //[
   ];
-
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
   var yyrline_ = this.yyrline_ =
   [
     //]
-         0,   143,   143,   143,   152,   158,   161,   164,   167,   173,
-     176,   175,   183,   192,   198,   201,   204,   207,   213,   217,
-     216,   227,   226,   233,   236,   239,   244,   247,   250,   253,
-     256,   259,   262,   268,   270,   273,   276,   279,   282,   285,
-     288,   291,   294,   297,   300,   303,   308,   311,   318,   320,
-     322,   325,   328,   331,   336,   342,   344,   349,   351,   358,
-     357,   368,   374,   377,   380,   383,   386,   389,   392,   395,
-     398,   401,   404,   410,   412,   418,   420,   426,   429,   432,
-     435,   438,   441,   444,   447,   450,   452,   458,   460,   466,
-     469,   475,   478,   484,   487,   490,   493,   496,   499,   502,
-     508,   514,   520,   523,   526,   529,   532,   535,   538,   544,
-     550,   556,   561,   566,   569,   572,   578,   580,   582,   584,
-     589,   597,   599,   604,   607,   612,   616,   615,   624,   625,
-     626,   627,   628,   629,   630,   631,   632,   633,   634,   635,
-     636,   637,   638,   639,   640,   641,   642,   643,   644,   645,
-     646,   647,   648,   649,   650,   651,   652,   653,   657,   657,
-     657,   658,   658,   659,   659,   659,   660,   660,   660,   660,
-     661,   661,   661,   661,   662,   662,   662,   663,   663,   663,
-     663,   664,   664,   664,   664,   665,   665,   665,   665,   666,
-     666,   666,   666,   667,   667,   667,   667,   668,   668,   673,
-     676,   679,   682,   685,   688,   691,   694,   697,   700,   703,
-     706,   709,   712,   715,   718,   721,   724,   727,   730,   733,
-     736,   739,   742,   745,   748,   751,   754,   757,   760,   763,
-     766,   769,   772,   775,   778,   781,   784,   787,   790,   793,
-     796,   799,   799,   804,   807,   813,   817,   818,   820,   822,
-     826,   830,   831,   834,   835,   836,   838,   840,   844,   846,
-     848,   850,   852,   857,   857,   868,   872,   874,   878,   880,
-     882,   884,   888,   890,   892,   896,   897,   898,   899,   900,
-     901,   902,   903,   904,   905,   906,   909,   908,   921,   920,
-     927,   926,   932,   934,   936,   938,   940,   942,   944,   946,
-     948,   950,   950,   954,   956,   958,   960,   961,   963,   965,
-     970,   976,   980,   975,   987,   991,   986,   997,  1001,  1004,
-    1008,  1003,  1015,  1014,  1027,  1032,  1026,  1043,  1042,  1055,
-    1054,  1072,  1076,  1071,  1086,  1088,  1090,  1092,  1096,  1100,
-    1104,  1108,  1112,  1116,  1120,  1124,  1128,  1132,  1136,  1140,
-    1144,  1145,  1146,  1149,  1150,  1153,  1154,  1160,  1161,  1165,
-    1166,  1169,  1171,  1175,  1177,  1181,  1183,  1185,  1187,  1189,
-    1191,  1193,  1195,  1197,  1202,  1204,  1206,  1208,  1212,  1215,
-    1218,  1220,  1222,  1224,  1226,  1228,  1230,  1232,  1234,  1236,
-    1238,  1240,  1242,  1244,  1246,  1250,  1251,  1257,  1259,  1261,
-    1266,  1268,  1272,  1273,  1276,  1278,  1282,  1283,  1282,  1296,
-    1298,  1302,  1304,  1309,  1308,  1320,  1322,  1324,  1326,  1330,
-    1333,  1332,  1340,  1339,  1346,  1349,  1348,  1356,  1355,  1362,
-    1364,  1366,  1371,  1370,  1379,  1378,  1388,  1394,  1395,  1398,
-    1402,  1405,  1407,  1409,  1412,  1414,  1417,  1419,  1422,  1423,
-    1425,  1428,  1432,  1433,  1434,  1438,  1442,  1446,  1450,  1452,
-    1457,  1458,  1462,  1463,  1467,  1469,  1474,  1475,  1479,  1481,
-    1485,  1487,  1492,  1493,  1498,  1499,  1504,  1505,  1510,  1511,
-    1516,  1517,  1521,  1523,  1522,  1534,  1540,  1545,  1533,  1558,
-    1560,  1562,  1564,  1567,  1573,  1574,  1575,  1576,  1579,  1585,
-    1586,  1587,  1590,  1595,  1596,  1597,  1598,  1599,  1602,  1603,
-    1604,  1605,  1606,  1607,  1608,  1611,  1614,  1618,  1620,  1624,
-    1625,  1628,  1631,  1630,  1637,  1643,  1648,  1655,  1657,  1659,
-    1661,  1665,  1668,  1671,  1673,  1675,  1677,  1679,  1681,  1683,
-    1685,  1687,  1689,  1691,  1693,  1695,  1697,  1700,  1703,  1707,
-    1711,  1715,  1721,  1722,  1726,  1728,  1732,  1733,  1737,  1741,
-    1745,  1747,  1752,  1754,  1758,  1759,  1762,  1764,  1768,  1772,
-    1776,  1778,  1782,  1784,  1788,  1789,  1792,  1798,  1802,  1803,
-    1806,  1816,  1818,  1822,  1825,  1824,  1852,  1853,  1857,  1858,
-    1862,  1864,  1866,  1872,  1873,  1874,  1877,  1878,  1879,  1880,
-    1883,  1884,  1885,  1888,  1889,  1892,  1893,  1896,  1897,  1900,
-    1903,  1906,  1907,  1908,  1911,  1912,  1915,  1916,  1920
+         0,   137,   137,   137,   171,   177,   180,   183,   186,   192,
+     195,   194,   201,   209,   215,   218,   221,   224,   230,   234,
+     233,   244,   243,   250,   253,   256,   261,   264,   267,   270,
+     273,   276,   279,   285,   287,   290,   293,   296,   299,   302,
+     305,   308,   311,   314,   317,   320,   325,   328,   335,   337,
+     339,   342,   345,   348,   353,   359,   361,   366,   368,   375,
+     374,   385,   391,   394,   397,   400,   403,   406,   409,   412,
+     415,   418,   421,   427,   429,   435,   437,   443,   446,   449,
+     452,   455,   458,   461,   464,   467,   469,   475,   477,   483,
+     486,   492,   495,   501,   504,   507,   510,   513,   516,   519,
+     525,   531,   537,   540,   543,   546,   549,   552,   555,   561,
+     567,   573,   578,   583,   586,   589,   595,   597,   599,   601,
+     606,   614,   616,   621,   624,   629,   633,   632,   641,   642,
+     643,   644,   645,   646,   647,   648,   649,   650,   651,   652,
+     653,   654,   655,   656,   657,   658,   659,   660,   661,   662,
+     663,   664,   665,   666,   667,   668,   669,   670,   674,   674,
+     674,   675,   675,   676,   676,   676,   677,   677,   677,   677,
+     678,   678,   678,   678,   679,   679,   679,   680,   680,   680,
+     680,   681,   681,   681,   681,   682,   682,   682,   682,   683,
+     683,   683,   683,   684,   684,   684,   684,   685,   685,   690,
+     693,   696,   699,   702,   705,   708,   711,   714,   717,   720,
+     723,   726,   729,   732,   735,   738,   741,   744,   747,   750,
+     753,   756,   759,   762,   765,   768,   771,   774,   777,   780,
+     783,   786,   789,   792,   795,   798,   801,   804,   807,   810,
+     813,   816,   816,   821,   824,   830,   834,   835,   837,   839,
+     843,   847,   848,   851,   852,   853,   855,   857,   861,   863,
+     865,   867,   869,   874,   874,   885,   889,   891,   895,   897,
+     899,   901,   905,   907,   909,   913,   914,   915,   916,   917,
+     918,   919,   920,   921,   922,   923,   926,   925,   938,   937,
+     944,   943,   949,   951,   953,   955,   957,   959,   961,   963,
+     965,   967,   967,   971,   973,   975,   977,   978,   980,   982,
+     987,   993,   997,   992,  1004,  1008,  1003,  1014,  1018,  1021,
+    1025,  1020,  1032,  1031,  1044,  1049,  1043,  1060,  1059,  1072,
+    1071,  1089,  1093,  1088,  1103,  1105,  1107,  1109,  1113,  1117,
+    1121,  1125,  1129,  1133,  1137,  1141,  1145,  1149,  1153,  1157,
+    1161,  1162,  1163,  1166,  1167,  1170,  1171,  1177,  1178,  1182,
+    1183,  1186,  1188,  1192,  1194,  1198,  1200,  1202,  1204,  1206,
+    1208,  1210,  1212,  1214,  1219,  1221,  1223,  1225,  1229,  1232,
+    1235,  1237,  1239,  1241,  1243,  1245,  1247,  1249,  1251,  1253,
+    1255,  1257,  1259,  1261,  1263,  1267,  1268,  1274,  1276,  1278,
+    1283,  1285,  1289,  1290,  1293,  1295,  1299,  1300,  1299,  1313,
+    1315,  1319,  1321,  1326,  1325,  1337,  1339,  1341,  1343,  1347,
+    1350,  1349,  1357,  1356,  1363,  1366,  1365,  1373,  1372,  1379,
+    1381,  1383,  1388,  1387,  1396,  1395,  1405,  1411,  1412,  1415,
+    1419,  1422,  1424,  1426,  1429,  1431,  1434,  1436,  1439,  1440,
+    1442,  1445,  1449,  1450,  1451,  1455,  1459,  1463,  1467,  1469,
+    1474,  1475,  1479,  1480,  1484,  1486,  1491,  1492,  1496,  1498,
+    1502,  1504,  1509,  1510,  1515,  1516,  1521,  1522,  1527,  1528,
+    1533,  1534,  1538,  1540,  1539,  1551,  1557,  1562,  1550,  1575,
+    1577,  1579,  1581,  1584,  1590,  1591,  1592,  1593,  1596,  1602,
+    1603,  1604,  1607,  1612,  1613,  1614,  1615,  1616,  1619,  1620,
+    1621,  1622,  1623,  1624,  1625,  1628,  1631,  1635,  1637,  1641,
+    1642,  1645,  1648,  1647,  1654,  1660,  1665,  1672,  1674,  1676,
+    1678,  1682,  1685,  1688,  1690,  1692,  1694,  1696,  1698,  1700,
+    1702,  1704,  1706,  1708,  1710,  1712,  1714,  1717,  1720,  1724,
+    1728,  1732,  1738,  1739,  1743,  1745,  1749,  1750,  1754,  1758,
+    1762,  1764,  1769,  1771,  1775,  1776,  1779,  1781,  1785,  1789,
+    1793,  1795,  1799,  1801,  1805,  1806,  1809,  1815,  1819,  1820,
+    1823,  1833,  1835,  1839,  1842,  1841,  1869,  1870,  1874,  1875,
+    1879,  1881,  1883,  1889,  1890,  1891,  1894,  1895,  1896,  1897,
+    1900,  1901,  1902,  1905,  1906,  1909,  1910,  1913,  1914,  1917,
+    1920,  1923,  1924,  1925,  1928,  1929,  1932,  1933,  1937
     //[
   ];
-
   // YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.
   var yytranslate_table_ =
   [
@@ -5496,21 +8508,19 @@ function YYParser (lexer)
 
   var yyuser_token_number_max_ = 369;
   var yyundef_token_ = 2;
-}
+
+}).call(this); // end of the Parser very own namespase
+
+} // YYParser
 
 // rare used functions
 YYParser.prototype =
 {
   // Report on the debug stream that the rule yyrule is going to be reduced.
-
   debug_reduce_print: function debug_reduce_print (yyrule)
   {
     var yystack = this.yystack;
-
     var yylno = this.yyrline_[yyrule];
-
-
-
     var yynrhs = this.yyr2_[yyrule];
     // Print the symbols being reduced, and their result.
     this.debug_print("Reducing stack by rule " + (yyrule - 1) + " (line " + yylno + "):\n");
@@ -5548,7 +8558,6 @@ YYParser.prototype =
   {
     write(message);
   },
-
 
   // Generate an error message.
   yysyntax_error: function yysyntax_error (yystate, tok)
@@ -5686,3051 +8695,57 @@ YYParser.bisonVersion = "2.7.12-4996";
 // Name of the skeleton that generated this parser.
 YYParser.bisonSkeleton = "./lalr1.js";
 
-return YYParser;
-
-})(); // end of the Parser very own namespase
-
-;(function(){ // epilogue namespace
-
-
-
-
-var YYLexer = 
-(function(){
-
-// at first, read this: http://whitequark.org/blog/2013/04/01/ruby-hacking-guide-ch-11-finite-state-lexer/
-
-function Lexer ()
+YYParser.Stack = function Stack ()
 {
-// the yylex() method and all public data sit here
-var lexer = this;
+  var stateStack = this.stateStack = [];
+  var valueStack = this.valueStack = [];
 
-// $text: plain old JS string with ruby source code,
-// to be set later in `setText()`
-var $text = '';
-lexer.setText = function (text) { $text = text; }
-
-// the end of stream had been reached
-lexer.eofp = false;
-// the string to be parsed in the nex lex() call
-lexer.lex_strterm = null;
-// the main point of interaction with the parser out there
-lexer.lex_state = 0;
-// to store the main state
-lexer.last_state = 0;
-// have the lexer seen a space somewhere before the current char
-lexer.space_seen = false;
-// parser and lexer set this for lexer,
-// becomes `true` after `\n`, `;` or `(` is met
-lexer.command_start = false;
-// temp var for command_start during single run of `yylex`
-lexer.cmd_state = false;
-// used in `COND_*` macro-methods,
-// another spot of interlacing parser and lexer
-lexer.cond_stack = 0;
-// used in `CMDARG_*` macro-methods,
-// another spot of interlacing parser and lexer
-lexer.cmdarg_stack = 0;
-// controls level of nesting in `()` or `[]`
-lexer.paren_nest = 0;
-lexer.lpar_beg = 0;
-// controls level of nesting in `{}`
-lexer.brace_nest = 0;
-// controls the nesting of states of condition-ness and cmdarg-ness
-lexer.cond_stack = 0;
-lexer.cmdarg_stack = 0;
-// how deep in in singleton definition are we?
-lexer.in_single = 0;
-// are we in def …
-lexer.in_def = 0;
-// current method id/name (while in def …)
-lexer.cur_mid = '';
-// defined? … has its own roles of lexing
-lexer.in_defined = false;
-// have we seen `__END__` already in lexer?
-lexer.ruby__end__seen = false;
-// parser needs access to the line number,
-// AFAICT, parser never changes it, only sets nd_line on nodes
-lexer.ruby_sourceline = 0;
-// file name for meningfull error reporting
-lexer.filename = '(eval)';
-// parser doesn't touch it, but what is it?
-lexer.heredoc_end = 0;
-lexer.line_count = 0;
-// errors count
-lexer.nerr = 0;
-// TODO: check out list of stateful variables with the original
-
-// all lexer states codes had been moved to parse.y prologue
-
-// the shortcut for checking `lexer.lex_state` over and over again
-function IS_lex_state (ls)
-{
-  return lexer.lex_state & ls;
-}
-function IS_lex_state_for (state, ls)
-{
-  return state & ls;
-}
-
-
-// interface to lexer.cond_stack
-// void
-lexer.COND_PUSH = function (n)
-{
-  // was: ((cond_stack) = ((cond_stack)<<1)|(( n)&1))
-  lexer.cond_stack = (lexer.cond_stack << 1) | (n & 1);
-}
-// void
-lexer.COND_POP = function ()
-{
-  // was: ((cond_stack) = (cond_stack) >> 1)
-  lexer.cond_stack >>= 1;
-}
-// void
-lexer.COND_LEXPOP = function ()
-{
-  // was: ((cond_stack) = ((cond_stack) >> 1) | ((cond_stack) & 1))
-  var stack = lexer.cond_stack;
-  lexer.cond_stack = (stack >> 1) | (stack & 1);
-}
-// int
-lexer.COND_P = function ()
-{
-  // was: ((cond_stack)&1)
-  return lexer.cond_stack & 1;
-}
-
-// interface to lexer.cmdarg_stack
-// void
-lexer.CMDARG_PUSH = function (n)
-{
-  // was: ((cmdarg_stack) = ((cmdarg_stack)<<1)|(( n)&1))
-  lexer.cmdarg_stack = (lexer.cmdarg_stack << 1) | (n & 1);
-}
-// void
-lexer.CMDARG_POP = function ()
-{
-  // was: ((cmdarg_stack) = (cmdarg_stack) >> 1)
-  lexer.cmdarg_stack >>= 1;
-}
-// void
-lexer.CMDARG_LEXPOP = function ()
-{
-  // was: ((cmdarg_stack) = ((cmdarg_stack) >> 1) | ((cmdarg_stack) & 1))
-  var stack = lexer.cmdarg_stack;
-  lexer.cmdarg_stack = (stack >> 1) | (stack & 1);
-}
-// int
-lexer.CMDARG_P = function ()
-{
-  // was: ((cmdarg_stack)&1)
-  return lexer.cmdarg_stack & 1;
-}
-
-
-
-// few more shortcuts
-function IS_ARG () { return lexer.lex_state & EXPR_ARG_ANY }
-function IS_END () { return lexer.lex_state & EXPR_END_ANY }
-function IS_BEG () { return lexer.lex_state & EXPR_BEG_ANY }
-function IS_LABEL_POSSIBLE ()
-{
-  return (IS_lex_state(EXPR_BEG) && !lexer.cmd_state) || IS_ARG();
-}
-function IS_LABEL_SUFFIX (n)
-{
-  return peek_n(':', n) && !peek_n(':', n + 1);
-}
-
-// em…
-function IS_SPCARG (c)
-{
-  return IS_ARG() &&
-         lexer.space_seen &&
-         !ISSPACE(c);
-}
-
-function IS_AFTER_OPERATOR () { return IS_lex_state(EXPR_FNAME | EXPR_DOT) }
-
-function ambiguous_operator (op, syn)
-{
-  warning("`"+op+"' after local variable is interpreted as binary operator");
-  warning("even though it seems like "+syn);
-}
-// very specific warning function :)
-function warn_balanced (op, syn, c)
-{
-    if
-    (
-      !IS_lex_state_for
-      (
-        lexer.last_state,
-        EXPR_CLASS | EXPR_DOT | EXPR_FNAME | EXPR_ENDFN | EXPR_ENDARG
-      )
-      && lexer.space_seen
-      && !ISSPACE(c)
-    )
-    {
-      ambiguous_operator(op, syn);
-    }
-}
-
-var STR_FUNC_ESCAPE = 0x01;
-var STR_FUNC_EXPAND = 0x02;
-var STR_FUNC_REGEXP = 0x04;
-var STR_FUNC_QWORDS = 0x08;
-var STR_FUNC_SYMBOL = 0x10;
-var STR_FUNC_INDENT = 0x20;
-
-// enum string_type
-var str_squote = 0;
-var str_dquote = STR_FUNC_EXPAND;
-var str_xquote = STR_FUNC_EXPAND;
-var str_regexp = STR_FUNC_REGEXP | STR_FUNC_ESCAPE | STR_FUNC_EXPAND;
-var str_sword = STR_FUNC_QWORDS;
-var str_dword = STR_FUNC_QWORDS | STR_FUNC_EXPAND;
-var str_ssym = STR_FUNC_SYMBOL;
-var str_dsym = STR_FUNC_SYMBOL | STR_FUNC_EXPAND;
-
-
-
-
-
-// here go all $strem related functions
-
-function ISUPPER (c)
-{
-  return 'A' <= c && c <= 'Z';
-}
-function ISSPACE (c)
-{
-  return (
-    // the most common checked first
-    c === ' '  || c === '\n' || c === '\t' ||
-    c === '\f' || c === '\v'
-  )
-}
-// our own modification, does not match `\n`
-// used to avoid crossing end of line on white space search
-function ISSPACE_NOT_N (c)
-{
-  return (
-    // the most common checked first
-    c === ' '  || c === '\t' ||
-    c === '\f' || c === '\v'
-  )
-}
-
-
-var lex_pbeg = 0, // lex_pbeg never changes
-    lex_p = 0,
-    lex_pend = 0;
-
-var $text_pos = 0;
-// returns empty line as EOF
-function lex_getline ()
-{
-  var i = $text.indexOf('\n', $text_pos);
-  // didn't get any more newlines
-  if (i === -1)
+  this.push = function push (state, value)
   {
-    // the rest of the line
-    // e.g. match the `$`
-    i = $text.length;
-  }
-  else
-  {
-    i++; // include the `\n` char
-  }
-  
-  var line = $text.substring($text_pos, i);
-  $text_pos = i;
-  return line;
-}
-
-
-var lex_nextline = '',
-    lex_lastline = '';
-
-// lex_lastline reader for error reporting
-lexer.get_lex_lastline = function () { return lex_lastline; }
-
-function nextc ()
-{
-  if (lex_p == lex_pend)
-  {
-    var v = lex_nextline;
-    lex_nextline = '';
-    if (!v)
-    {
-      if (lexer.eofp)
-        return '';
-
-      if (!(v = lex_getline()))
-      {
-        lexer.eofp = true;
-        lex_goto_eol();
-        return '';
-      }
-    }
-    {
-      if (lexer.heredoc_end > 0)
-      {
-        lexer.ruby_sourceline = lexer.heredoc_end;
-        lexer.heredoc_end = 0;
-      }
-      lexer.ruby_sourceline++;
-      lexer.line_count++;
-      lex_pbeg = lex_p = 0;
-      lex_pend = v.length;
-      lex_lastline = v;
-    }
-  }
-  
-  return lex_lastline[lex_p++];
-}
-// jump right to the end of current buffered line,
-// here: "abc\n|" or here "abc|"
-function lex_goto_eol ()
-{
-  lex_p = lex_pend;
-}
-function lex_eol_p ()
-{
-  return lex_p >= lex_pend;
-}
-
-// just an emulation of lex_p[i] from C
-function nthchar (i)
-{
-  return lex_lastline[lex_p+i];
-}
-// just an emulation of *lex_p from C
-function lex_pv ()
-{
-  return lex_lastline[lex_p];
-}
-// emulation of `strncmp(lex_p, "begin", 5)`,
-// but you better use a precompiled regexp if `str` is a constant
-function strncmp_lex_p (str)
-{
-  return $test.substring(lex_p, lex_p + str.length) == str;
-}
-
-// forecast, if the nextc() will return character `c`
-function peek (c)
-{
-  return lex_p < lex_pend && c === lex_lastline[lex_p];
-}
-
-// forecast, if the nextc() will return character `c`
-// after n calls
-function peek_n (c, n)
-{
-  var pos = lex_p + n;
-  return pos < lex_pend && c === lex_lastline[pos];
-}
-
-// expects rex in this form: `/blablabla|/g`
-// that means `blablabla` or empty string (to prevent deep search)
-function match_grex (rex)
-{
-  // check if the rex is in proper form
-  if (!rex.global)
-  {
-    lexer.yyerror('match_grex() allows only global regexps: `…|/g`');
-    throw 'DEBUG';
-  }
-  if (rex.source.substr(-1) != '|')
-  {
-    lexer.yyerror('match_grex() need trailing empty string match: `…|/g`');
-    throw 'DEBUG';
-  }
-  rex.lastIndex = lex_p;
-  // there is always a match or an empty string in [0]
-  return rex.exec(lex_lastline);
-}
-// the same as `match_grex()` but does'n return the match,
-// treats the empty match as a `false`
-function test_grex (rex)
-{
-  // check if the rex is in proper form
-  if (!rex.global)
-  {
-    lexer.yyerror('test_grex() allows only global regexps: `…|/g`');
-    throw 'DEBUG';
-  }
-  if (rex.source.substr(-1) != '|')
-  {
-    lexer.yyerror('test_grex() need trailing empty string match: `…|/g`');
-    throw 'DEBUG';
-  }
-  rex.lastIndex = lex_p;
-  // there is always a match for an empty string
-  rex.test(lex_lastline);
-  // and on the actual match there coud be a change in `lastIndex`
-  return rex.lastIndex != lex_p;
-}
-// step back for one character and check
-// if the current character is equal to `c`
-function pushback (c)
-{
-  if (c == '')
-  {
-    if (lex_p != lex_pend)
-      throw 'lexer error: pushing back wrong EOF char';
-    return;
-  }
-  
-  lex_p--;
-  if (lex_lastline[lex_p] != c)
-    throw 'lexer error: pushing back wrong "'+c+'" char';
-}
-
-// was begin af a line (`^` in terms of regexps) before last `nextc()`,
-// that true if we're here "a|bc" of here "abc\na|bc"
-function was_bol ()
-{
-  return lex_p === /*lex_pbeg +*/ 1; // lex_pbeg never changes
-}
-
-
-// token related stuff
-
-var $tokenbuf = '',
-    $tok_start = 0,
-    $tok_end = 0;
-    
-function newtok ()
-{
-  $tok_start = $text_pos;
-  $tokenbuf = '';
-}
-function tokadd (c)
-{
-  $tokenbuf += c;
-  return c;
-}
-function tokcopy (n)
-{
-  $tokenbuf += $text.substring($text_pos - n, $text_pos);
-}
-
-function tokfix ()
-{
-  $tok_end = $text_pos;
-  /* was: tokenbuf[tokidx]='\0'*/
-}
-function tok () { return $tokenbuf; }
-function toklen () { return $tokenbuf.length; }
-function toklast ()
-{
-  return $tokenbuf.substr(-1)
-  // was: tokidx>0?tokenbuf[tokidx-1]:0)
-}
-
-// TODO
-this.getLVal = function () { return $tokenbuf; }
-
-
-
-// other stuff
-
-function parser_is_identchar (c)
-{
-  return !lexer.eofp && is_identchar(c);
-  
-}
-function is_identchar (c)
-{
-  // \w = [A-Za-z0-9_] = (isalnum(c) || c == '_')
-  return /^\w/.test(c) || !ISASCII(c);
-}
-
-function NEW_STRTERM (func, term, paren)
-{
-  return {
-    type: 'NODE_STRTERM',
-    nd_func: func,
-    nd_orig: '', // stub
-    nd_nth: 0, // stub
-    nd_line: lexer.ruby_sourceline,
-    nd_nest: 0, // for tokadd_string() and parse_string()
-    term: term,
-    paren: paren
-  };
-}
-// our addition
-function NEW_HEREDOCTERM (func, term)
-{
-  return {
-    type: 'NODE_HEREDOC',
-    nd_func: func,
-    nd_orig: lex_lastline,
-    nd_nth: lex_p,
-    nd_line: lexer.ruby_sourceline,
-    nd_nest: 0,
-    term: term,
-    paren: ''
-  };
-}
-
-// char to code shortcut
-function $ (c) { return c.charCodeAt(0) }
-function $$ (code) { return String.fromCharCode(code) }
-
-function ISASCII (c)
-{
-  return $(c) < 128;
-}
-
-function ISDIGIT (c)
-{
-  return /^\d$/.test(c);
-}
-function ISXDIGIT (c)
-{
-  return /^[0-9a-fA-F]/.test(c);
-}
-function ISALNUM (c)
-{
-  return /^\w$/.test(c);
-}
-
-// TODO: get rid of such a piece of junk :)
-function arg_ambiguous ()
-{
-  warning("ambiguous first argument; put parentheses or even spaces");
-  return true;
-}
-
-
-
-
-
-
-this.yylex = function yylex ()
-{
-  var c = '';
-  lexer.space_seen = false;
-  
-  if (lexer.lex_strterm)
-  {
-    var token = 0;
-    if (lexer.lex_strterm.type == 'NODE_HEREDOC')
-    {
-      token = here_document(lexer.lex_strterm);
-      if (token == tSTRING_END)
-      {
-        lexer.lex_strterm = null;
-        lexer.lex_state = EXPR_END;
-      }
-    }
-    else
-    {
-      token = parse_string(lexer.lex_strterm);
-      if (token == tSTRING_END || token == tREGEXP_END)
-      {
-        lexer.lex_strterm = null;
-        lexer.lex_state = EXPR_END;
-      }
-    }
-    return token;
-  }
-  
-  lexer.cmd_state = lexer.command_start;
-  lexer.command_start = false;
-  
-  retry: for (;;)
-  {
-  lexer.last_state = lexer.lex_state;
-  the_giant_switch:
-  switch (c = nextc())
-  {
-    // different signs of the input end
-    case '\0':    // NUL
-    case '\x04':  // ^D
-    case '\x1a':  // ^Z
-    case '':      // end of script.
-    {
-      return 0;
-    }
-    
-    // white spaces
-    case ' ':
-    case '\t':
-    case '\f':
-    case '\r': // TODO: scream on `\r` everywhere, or clear it out
-    case '\v':    // '\13'
-    {
-      lexer.space_seen = true;
-      continue retry;
-    }
-    
-    // it's a comment
-    case '#':
-    {
-      lex_goto_eol();
-      // fall throug to '\n'
-    }
-    case '\n':
-    {
-      if (IS_lex_state(EXPR_BEG | EXPR_VALUE | EXPR_CLASS | EXPR_FNAME | EXPR_DOT))
-      {
-        continue retry;
-      }
-      after_backslash_n: while ((c = nextc()))
-      {
-        switch (c)
-        {
-          case ' ':
-          case '\t':
-          case '\f':
-          case '\r':
-          case '\v':    // '\13'
-            lexer.space_seen = true;
-            break;
-          case '.':
-          {
-            if ((c = nextc()) != '.')
-            {
-              pushback(c);
-              pushback('.');
-              continue retry; // was: goto retry;
-            }
-          }
-          default:
-            --lexer.ruby_sourceline;
-            lex_nextline = lex_lastline;
-            
-          // EOF no decrement
-          case '':
-            lex_goto_eol();
-            break after_backslash_n;
-        }
-      }
-      // lands: break after_backslash_n;
-      lexer.command_start = true;
-      lexer.lex_state = EXPR_BEG;
-      return $('\n');
-    }
-  
-    case '*':
-    {
-      var token = 0
-      if ((c = nextc()) == '*')
-      {
-        if ((c = nextc()) == '=')
-        {
-          // set_yylval_id(tPOW); TODO
-          lexer.lex_state = EXPR_BEG;
-          return tOP_ASGN;
-        }
-        pushback(c);
-        if (IS_SPCARG(c))
-        {
-          warning("`**' interpreted as argument prefix");
-          token = tDSTAR;
-        }
-        else if (IS_BEG())
-        {
-          token = tDSTAR;
-        }
-        else
-        {
-          warn_balanced("**", "argument prefix", c);
-          token = tPOW;
-        }
-      }
-      else
-      {
-        if (c == '=')
-        {
-          // set_yylval_id('*'); TODO
-          lexer.lex_state = EXPR_BEG;
-          return tOP_ASGN;
-        }
-        pushback(c);
-        if (IS_SPCARG(c))
-        {
-          warning("`*' interpreted as argument prefix");
-          token = tSTAR;
-        }
-        else if (IS_BEG())
-        {
-          token = tSTAR;
-        }
-        else
-        {
-          warn_balanced("*", "argument prefix", c);
-          token = $('*');
-        }
-      }
-      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
-      return token;
-    }
-    
-    case '!':
-    {
-      c = nextc();
-      if (IS_AFTER_OPERATOR())
-      {
-        lexer.lex_state = EXPR_ARG;
-        if (c == '@')
-        {
-          return $('!');
-        }
-      }
-      else
-      {
-        lexer.lex_state = EXPR_BEG;
-      }
-      if (c == '=')
-      {
-        return tNEQ;
-      }
-      if (c == '~')
-      {
-        return tNMATCH;
-      }
-      pushback(c);
-      return $('!');
-    }
-    
-    case '=':
-    {
-      if (was_bol())
-      {
-        /* skip embedded rd document */
-        if (match_grex(/begin[\n \t]|/g)[0])
-        {
-          for (;;)
-          {
-            lex_goto_eol();
-            c = nextc();
-            if (c == '')
-            {
-              compile_error("embedded document meets end of file");
-              return 0;
-            }
-            if (c != '=')
-              continue;
-            if (match_grex(/end(?:[\n \t]|$)|/gm)[0])
-            {
-              break;
-            }
-          }
-          lex_goto_eol();
-          continue retry; // was: goto retry;
-        }
-      }
-
-      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
-      if ((c = nextc()) == '=')
-      {
-        if ((c = nextc()) == '=')
-        {
-          return tEQQ;
-        }
-        pushback(c);
-        return tEQ;
-      }
-      if (c == '~')
-      {
-        return tMATCH;
-      }
-      else if (c == '>')
-      {
-        return tASSOC;
-      }
-      pushback(c);
-      return $('=');
-    }
-    
-    case '<':
-    {
-      lexer.last_state = lexer.lex_state;
-      c = nextc();
-      if (c == '<' &&
-          !IS_lex_state(EXPR_DOT | EXPR_CLASS) &&
-          !IS_END() && (!IS_ARG() || lexer.space_seen))
-      {
-        var token = heredoc_identifier();
-        if (token)
-          return token;
-      }
-      if (IS_AFTER_OPERATOR())
-      {
-        lexer.lex_state = EXPR_ARG;
-      }
-      else
-      {
-        if (IS_lex_state(EXPR_CLASS))
-          lexer.command_start = true;
-        lexer.lex_state = EXPR_BEG;
-      }
-      if (c == '=')
-      {
-        if ((c = nextc()) == '>')
-        {
-          return tCMP;
-        }
-        pushback(c);
-        return tLEQ;
-      }
-      if (c == '<')
-      {
-        if ((c = nextc()) == '=')
-        {
-          // set_yylval_id(tLSHFT); TODO
-          lexer.lex_state = EXPR_BEG;
-          return tOP_ASGN;
-        }
-        pushback(c);
-        warn_balanced("<<", "here document", c);
-        return tLSHFT;
-      }
-      pushback(c);
-      return $('<');
-    }
-    
-    case '>':
-    {
-      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
-      if ((c = nextc()) == '=')
-      {
-        return tGEQ;
-      }
-      if (c == '>')
-      {
-        if ((c = nextc()) == '=')
-        {
-          // set_yylval_id(tRSHFT); TODO
-          lexer.lex_state = EXPR_BEG;
-          return tOP_ASGN;
-        }
-        pushback(c);
-        return tRSHFT;
-      }
-      pushback(c);
-      return $('>');
-    }
-    
-    case '"':
-    {
-      lexer.lex_strterm = NEW_STRTERM(str_dquote, '"', '')
-      return tSTRING_BEG;
-    }
-    
-    case '`':
-    {
-      if (IS_lex_state(EXPR_FNAME))
-      {
-        lexer.lex_state = EXPR_ENDFN;
-        return $(c);
-      }
-      if (IS_lex_state(EXPR_DOT))
-      {
-        if (lexer.cmd_state)
-          lexer.lex_state = EXPR_CMDARG;
-        else
-          lexer.lex_state = EXPR_ARG;
-        return $(c);
-      }
-      lexer.lex_strterm = NEW_STRTERM(str_xquote, '`', '');
-      return tXSTRING_BEG;
-    }
-    
-    case '\'':
-    {
-      lexer.lex_strterm = NEW_STRTERM(str_squote, '\'', '');
-      return tSTRING_BEG;
-    }
-    
-    case '?':
-    {
-      // trying to catch ternary operator
-      if (IS_END())
-      {
-        lexer.lex_state = EXPR_VALUE;
-        return $('?');
-      }
-      c = nextc();
-      if (c == '')
-      {
-        compile_error("incomplete character syntax");
-        return 0;
-      }
-      if (ISSPACE(c))
-      {
-        if (!IS_ARG())
-        {
-          var c2 = '';
-          switch (c)
-          {
-            case ' ':
-              c2 = 's';
-              break;
-            case '\n':
-              c2 = 'n';
-              break;
-            case '\t':
-              c2 = 't';
-              break;
-            case '\v':
-              c2 = 'v';
-              break;
-            case '\r':
-              c2 = 'r';
-              break;
-            case '\f':
-              c2 = 'f';
-              break;
-          }
-          if (c2)
-          {
-            warning("invalid character syntax; use ?\\" + c2);
-          }
-        }
-        pushback(c);
-        lexer.lex_state = EXPR_VALUE;
-        return $('?');
-      }
-      newtok();
-      if (!ISASCII(c))
-      {
-        if (tokadd(c) == '')
-          return 0;
-      }
-      else if (is_identchar(c) && lex_p < lex_pend && is_identchar(lex_pv()))
-      {
-        pushback(c);
-        lexer.lex_state = EXPR_VALUE;
-        return $('?');
-      }
-      else if (c == '\\')
-      {
-        if (peek('u'))
-        {
-          nextc();
-          c = parser_tokadd_utf8(false, false, false);
-          tokadd(c);
-        }
-        else if (!lex_eol_p() && !(c = lex_pv(), ISASCII(c)))
-        {
-          nextc();
-          if (tokadd(c) == '')
-            return 0;
-        }
-        else
-        {
-          c = read_escape(0);
-          tokadd(c);
-        }
-      }
-      else
-      {
-        tokadd(c);
-      }
-      tokfix();
-      // set_yylval_str(STR_NEW3(tok(), toklen(), enc, 0)); TODO
-      lexer.lex_state = EXPR_END;
-      return tCHAR;
-    }
-    
-    case '&':
-    {
-      if ((c = nextc()) == '&')
-      {
-        lexer.lex_state = EXPR_BEG;
-        if ((c = nextc()) == '=')
-        {
-          // set_yylval_id(tANDOP); TODO
-          lexer.lex_state = EXPR_BEG;
-          return tOP_ASGN;
-        }
-        pushback(c);
-        return tANDOP;
-      }
-      else if (c == '=')
-      {
-        // set_yylval_id('&'); TODO
-        lexer.lex_state = EXPR_BEG;
-        return tOP_ASGN;
-      }
-      pushback(c);
-      var t = $(c);
-      if (IS_SPCARG(c))
-      {
-        warning("`&' interpreted as argument prefix");
-        t = tAMPER;
-      }
-      else if (IS_BEG())
-      {
-        t = tAMPER;
-      }
-      else
-      {
-        warn_balanced("&", "argument prefix", c);
-        t = $('&');
-      }
-      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
-      return t;
-    }
-    
-    case '|':
-    {
-      if ((c = nextc()) == '|')
-      {
-        lexer.lex_state = EXPR_BEG;
-        if ((c = nextc()) == '=')
-        {
-          // set_yylval_id(tOROP); TODO
-          lexer.lex_state = EXPR_BEG;
-          return tOP_ASGN;
-        }
-        pushback(c);
-        return tOROP;
-      }
-      if (c == '=')
-      {
-        // set_yylval_id('|'); TODO
-        lexer.lex_state = EXPR_BEG;
-        return tOP_ASGN;
-      }
-      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
-      pushback(c);
-      return $('|');
-    }
-    
-    case '+':
-    {
-      c = nextc();
-      if (IS_AFTER_OPERATOR())
-      {
-        lexer.lex_state = EXPR_ARG;
-        if (c == '@')
-        {
-          return tUPLUS;
-        }
-        pushback(c);
-        return $('+');
-      }
-      if (c == '=')
-      {
-        // set_yylval_id('+'); TODO
-        lexer.lex_state = EXPR_BEG;
-        return tOP_ASGN;
-      }
-      if (IS_BEG() || (IS_SPCARG(c) && arg_ambiguous()))
-      {
-        lexer.lex_state = EXPR_BEG;
-        pushback(c); // pushing back char after `+`
-        if (c != '' && ISDIGIT(c))
-        {
-          c = '+';
-          return start_num(c); // was: goto start_num;
-        }
-        
-        return tUPLUS;
-      }
-      lexer.lex_state = EXPR_BEG;
-      pushback(c);
-      warn_balanced("+", "unary operator", c);
-      return $('+');
-    }
-    
-    case '-':
-    {
-      c = nextc();
-      if (IS_AFTER_OPERATOR())
-      {
-        lexer.lex_state = EXPR_ARG;
-        if (c == '@')
-        {
-          return tUMINUS;
-        }
-        pushback(c);
-        return $('-');
-      }
-      if (c == '=')
-      {
-        // set_yylval_id('-'); TODO
-        lexer.lex_state = EXPR_BEG;
-        return tOP_ASGN;
-      }
-      if (c == '>')
-      {
-        lexer.lex_state = EXPR_ENDFN;
-        return tLAMBDA;
-      }
-      if (IS_BEG() || (IS_SPCARG(c) && arg_ambiguous()))
-      {
-        lexer.lex_state = EXPR_BEG;
-        pushback(c);
-        if (c != '' && ISDIGIT(c))
-        {
-          return tUMINUS_NUM;
-        }
-        return tUMINUS;
-      }
-      lexer.lex_state = EXPR_BEG;
-      pushback(c);
-      warn_balanced("-", "unary operator", c);
-      return $('-');
-    }
-    
-    case '.':
-    {
-      lexer.lex_state = EXPR_BEG;
-      if ((c = nextc()) == '.')
-      {
-        if ((c = nextc()) == '.')
-        {
-          return tDOT3;
-        }
-        pushback(c);
-        return tDOT2;
-      }
-      pushback(c);
-      if (c != '' && ISDIGIT(c))
-      {
-        lexer.yyerror("no .<digit> floating literal anymore; put 0 before dot");
-      }
-      lexer.lex_state = EXPR_DOT;
-      return $('.');
-    }
-    
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-    {
-      return start_num(c);
-    }
-    
-    case ')':
-    case ']':
-      lexer.paren_nest--;
-    case '}':
-    {
-      var t = $(c);
-      lexer.COND_LEXPOP();
-      lexer.CMDARG_LEXPOP();
-      if (c == ')')
-        lexer.lex_state = EXPR_ENDFN;
-      else
-        lexer.lex_state = EXPR_ENDARG;
-      if (c == '}')
-      {
-        if (!lexer.brace_nest--)
-          t = tSTRING_DEND;
-      }
-      return t;
-    }
-    
-    case ':':
-    {
-      c = nextc();
-      if (c == ':')
-      {
-        if (IS_BEG() || IS_lex_state(EXPR_CLASS) || IS_SPCARG(''))
-        {
-          lexer.lex_state = EXPR_BEG;
-          return tCOLON3;
-        }
-        lexer.lex_state = EXPR_DOT;
-        return tCOLON2;
-      }
-      if (IS_END() || ISSPACE(c))
-      {
-        pushback(c);
-        warn_balanced(":", "symbol literal", c);
-        lexer.lex_state = EXPR_BEG;
-        return $(':');
-      }
-      switch (c)
-      {
-        case '\'':
-          lexer.lex_strterm = NEW_STRTERM(str_ssym, c, '');
-          break;
-        case '"':
-          lexer.lex_strterm = NEW_STRTERM(str_dsym, c, '');
-          break;
-        default:
-          pushback(c);
-          break;
-      }
-      lexer.lex_state = EXPR_FNAME;
-      return tSYMBEG;
-    }
-    
-    case '/':
-    {
-      if (IS_lex_state(EXPR_BEG_ANY))
-      {
-        lexer.lex_strterm = NEW_STRTERM(str_regexp, '/', '');
-        return tREGEXP_BEG;
-      }
-      if ((c = nextc()) == '=')
-      {
-        // set_yylval_id('/'); TODO
-        lexer.lex_state = EXPR_BEG;
-        return tOP_ASGN;
-      }
-      pushback(c);
-      if (IS_SPCARG(c))
-      {
-        arg_ambiguous();
-        lexer.lex_strterm = NEW_STRTERM(str_regexp, '/', '');
-        return tREGEXP_BEG;
-      }
-      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
-      warn_balanced("/", "regexp literal", c);
-      return $('/');
-    }
-    
-    case '^':
-    {
-      if ((c = nextc()) == '=')
-      {
-        // set_yylval_id('^'); TODO
-        lexer.lex_state = EXPR_BEG;
-        return tOP_ASGN;
-      }
-      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
-      pushback(c);
-      return $('^');
-    }
-    
-    case ';':
-    {
-      lexer.lex_state = EXPR_BEG;
-      lexer.command_start = true;
-      return $(';');
-    }
-    
-    case ',':
-    {
-      lexer.lex_state = EXPR_BEG;
-      return $(',');
-    }
-    
-    case '~':
-    {
-      if (IS_AFTER_OPERATOR())
-      {
-        if ((c = nextc()) != '@')
-        {
-          pushback(c);
-        }
-        lexer.lex_state = EXPR_ARG;
-      }
-      else
-      {
-        lexer.lex_state = EXPR_BEG;
-      }
-      return $('~');
-    }
-    
-    case '(':
-    {
-      var t = $(c);
-      if (IS_BEG())
-      {
-        t = tLPAREN;
-      }
-      else if (IS_SPCARG(''))
-      {
-        t = tLPAREN_ARG;
-      }
-      lexer.paren_nest++;
-      lexer.COND_PUSH(0);
-      lexer.CMDARG_PUSH(0);
-      lexer.lex_state = EXPR_BEG;
-      return t;
-    }
-    
-    case '[':
-    {
-      var t = $(c);
-      lexer.paren_nest++;
-      if (IS_AFTER_OPERATOR())
-      {
-        lexer.lex_state = EXPR_ARG;
-        if ((c = nextc()) == ']')
-        {
-          if ((c = nextc()) == '=')
-          {
-            return tASET;
-          }
-          pushback(c);
-          return tAREF;
-        }
-        pushback(c);
-        return $('[');
-      }
-      else if (IS_BEG())
-      {
-        t = tLBRACK;
-      }
-      else if (IS_ARG() && lexer.space_seen)
-      {
-        t = tLBRACK;
-      }
-      lexer.lex_state = EXPR_BEG;
-      lexer.COND_PUSH(0);
-      lexer.CMDARG_PUSH(0);
-      return t;
-    }
-    
-    case '{':
-    {
-      var t = $(c);
-      ++lexer.brace_nest;
-      if (lexer.lpar_beg && lexer.lpar_beg == lexer.paren_nest)
-      {
-        lexer.lex_state = EXPR_BEG;
-        lexer.lpar_beg = 0;
-        --lexer.paren_nest;
-        lexer.COND_PUSH(0);
-        lexer.CMDARG_PUSH(0);
-        return tLAMBEG;
-      }
-      if (IS_ARG() || IS_lex_state(EXPR_END | EXPR_ENDFN))
-        t = $('{');                /* block (primary) */
-      else if (IS_lex_state(EXPR_ENDARG))
-        t = tLBRACE_ARG;        /* block (expr) */
-      else
-        t = tLBRACE;            /* hash */
-      lexer.COND_PUSH(0);
-      lexer.CMDARG_PUSH(0);
-      lexer.lex_state = EXPR_BEG;
-      if (t != tLBRACE)
-        lexer.command_start = true;
-      return t;
-    }
-    
-    case '\\':
-    {
-      c = nextc();
-      if (c == '\n')
-      {
-        lexer.space_seen = true;
-        // skip \\n
-        continue retry; // was: goto retry;
-      }
-      pushback(c);
-      return $('\\');
-    }
-    
-    case '%':
-    {
-      var term = '';
-      var paren = '';
-      
-      quotation:
-      for (;;) // a label
-      {
-        // this label enulating loop expects the lex_state
-        // to be constant within its boudaries
-        if (IS_lex_state(EXPR_BEG_ANY))
-        {
-          c = nextc();
-          // was: quotation:
-          if (c == '' || !ISALNUM(c))
-          {
-            term = c;
-            c = 'Q';
-          }
-          else
-          {
-            term = nextc();
-            if (ISALNUM(term) || !ISASCII(term))
-            {
-              lexer.yyerror("unknown type of %string");
-              return 0;
-            }
-          }
-          if (c == '' || term == '')
-          {
-            compile_error("unterminated quoted string meets end of file");
-            return 0;
-          }
-          paren = term;
-          if (term == '(')
-            term = ')';
-          else if (term == '[')
-            term = ']';
-          else if (term == '{')
-            term = '}';
-          else if (term == '<')
-            term = '>';
-          else
-            paren = '';
-
-          switch (c)
-          {
-            case 'Q':
-              lexer.lex_strterm = NEW_STRTERM(str_dquote, term, paren);
-              return tSTRING_BEG;
-
-            case 'q':
-              lexer.lex_strterm = NEW_STRTERM(str_squote, term, paren);
-              return tSTRING_BEG;
-
-            case 'W':
-              lexer.lex_strterm = NEW_STRTERM(str_dword, term, paren);
-              do
-              {
-                c = nextc();
-              }
-              while (ISSPACE(c));
-              pushback(c);
-              return tWORDS_BEG;
-
-            case 'w':
-              lexer.lex_strterm = NEW_STRTERM(str_sword, term, paren);
-              do
-              {
-                c = nextc();
-              }
-              while (ISSPACE(c));
-              pushback(c);
-              return tQWORDS_BEG;
-
-            case 'I':
-              lexer.lex_strterm = NEW_STRTERM(str_dword, term, paren);
-              do
-              {
-                c = nextc();
-              }
-              while (ISSPACE(c));
-              pushback(c);
-              return tSYMBOLS_BEG;
-
-            case 'i':
-              lexer.lex_strterm = NEW_STRTERM(str_sword, term, paren);
-              do
-              {
-                c = nextc();
-              }
-              while (ISSPACE(c));
-              pushback(c);
-              return tQSYMBOLS_BEG;
-
-            case 'x':
-              lexer.lex_strterm = NEW_STRTERM(str_xquote, term, paren);
-              return tXSTRING_BEG;
-
-            case 'r':
-              lexer.lex_strterm = NEW_STRTERM(str_regexp, term, paren);
-              return tREGEXP_BEG;
-
-            case 's':
-              lexer.lex_strterm = NEW_STRTERM(str_ssym, term, paren);
-              lexer.lex_state = EXPR_FNAME;
-              return tSYMBEG;
-
-            default:
-              lexer.yyerror("unknown type of %string");
-              return 0;
-          }
-        }
-        if ((c = nextc()) == '=')
-        {
-          // set_yylval_id('%'); TODO
-          lexer.lex_state = EXPR_BEG;
-          return tOP_ASGN;
-        }
-        if (IS_SPCARG(c))
-        {
-          pushback(c); // added to jump to top
-          continue quotation; // was: goto quotation;
-        }
-        break; // the for (;;) label-loop
-      } // for (;;) quotation
-      lexer.lex_state = IS_AFTER_OPERATOR()? EXPR_ARG : EXPR_BEG;
-      pushback(c);
-      warn_balanced("%%", "string literal", c);
-      return $('%');
-    }
-    
-    case '$':
-    {
-      lexer.lex_state = EXPR_END;
-      newtok();
-      c = nextc();
-      switch (c)
-      {
-        case '_':              /* $_: last read line string */
-          c = nextc();
-          if (parser_is_identchar(c))
-          {
-            tokadd('$');
-            tokadd('_');
-            break;
-          }
-          pushback(c);
-          c = '_';
-          /* fall through */
-        case '~':              /* $~: match-data */
-        case '*':              /* $*: argv */
-        case '$':              /* $$: pid */
-        case '?':              /* $?: last status */
-        case '!':              /* $!: error string */
-        case '@':              /* $@: error position */
-        case '/':              /* $/: input record separator */
-        case '\\':             /* $\: output record separator */
-        case ';':              /* $;: field separator */
-        case ',':              /* $,: output field separator */
-        case '.':              /* $.: last read line number */
-        case '=':              /* $=: ignorecase */
-        case ':':              /* $:: load path */
-        case '<':              /* $<: reading filename */
-        case '>':              /* $>: default output handle */
-        case '\"':             /* $": already loaded files */
-          tokadd('$');
-          tokadd(c);
-          tokfix();
-          // set_yylval_name(rb_intern(tok())); TODO
-          return tGVAR;
-
-        case '-':
-          tokadd('$');
-          tokadd(c);
-          c = nextc();
-          if (parser_is_identchar(c))
-          {
-            if (tokadd(c) == '')
-              return 0;
-          }
-          else
-          {
-            pushback(c);
-          }
-        // was: gvar:
-          tokfix();
-          // set_yylval_name(rb_intern(tok())); TODO
-          return tGVAR;
-
-        case '&':              /* $&: last match */
-        case '`':              /* $`: string before last match */
-        case '\'':             /* $': string after last match */
-        case '+':              /* $+: string matches last paren. */
-          if (IS_lex_state_for(lexer.last_state, EXPR_FNAME))
-          {
-            tokadd('$');
-            tokadd(c);
-            // was: goto gvar;
-            tokfix();
-            // set_yylval_name(rb_intern(tok())); TODO
-            return tGVAR;
-          }
-          // set_yylval_node(NEW_BACK_REF(c)); TODO
-          return tBACK_REF;
-
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-          tokadd('$');
-          do
-          {
-            tokadd(c);
-            c = nextc();
-          }
-          while (c != '' && ISDIGIT(c));
-          pushback(c);
-          if (IS_lex_state_for(lexer.last_state, EXPR_FNAME))
-          {
-            // was: goto gvar;
-            tokfix();
-            // set_yylval_name(rb_intern(tok())); TODO
-            return tGVAR;
-          }
-          tokfix();
-          // set_yylval_node(NEW_NTH_REF(atoi(tok() + 1))); TODO
-          return tNTH_REF;
-
-        default:
-          if (!parser_is_identchar(c))
-          {
-            pushback(c);
-            return $('$');
-          }
-        case '0':
-          tokadd('$');
-      }
-      break;
-    }
-    
-    case '@':
-    {
-      c = nextc();
-      newtok();
-      tokadd('@');
-      if (c == '@')
-      {
-        tokadd('@');
-        c = nextc();
-      }
-      if (c != '' && ISDIGIT(c))
-      {
-        if (toklen() == 1)
-        {
-          compile_error("`@"+c+"' is not allowed as an instance variable name");
-        }
-        else
-        {
-          compile_error("`@@"+c+"' is not allowed as a class variable name");
-        }
-        return 0;
-      }
-      if (!parser_is_identchar(c))
-      {
-        pushback(c);
-        return $('@');
-      }
-      break;
-    }
-    
-    case '_':
-    {
-      if (was_bol() && whole_match_p("__END__", false))
-      {
-        lexer.ruby__end__seen = true;
-        lexer.eofp = true;
-        return 0; // was: return -1;
-      }
-      newtok();
-      break;
-    }
-    
-    // add before here :)
-    
-    default:
-    {
-      if (!parser_is_identchar(c))
-      {
-        compile_error("Invalid char `"+c+"' in expression");
-        continue retry; // was: goto retry;
-      }
-
-      newtok();
-      break the_giant_switch;
-    }
-  }
-  
-  do
-  {
-    if (tokadd(c) == '')
-      return 0;
-    c = nextc();
-  }
-  while (parser_is_identchar(c));
-  switch (tok()[0])
-  {
-    case '@':
-    case '$':
-      pushback(c);
-      break;
-    default:
-      if ((c == '!' || c == '?') && !peek('='))
-      {
-        tokadd(c);
-      }
-      else
-      {
-        pushback(c);
-      }
-  }
-  tokfix();
-  
-  {
-    var result = 0;
-
-    lexer.last_state = lexer.lex_state;
-    switch (tok()[0])
-    {
-      case '$':
-        lexer.lex_state = EXPR_END;
-        result = tGVAR;
-        break;
-      case '@':
-        lexer.lex_state = EXPR_END;
-        if (tok()[1] == '@')
-          result = tCVAR;
-        else
-          result = tIVAR;
-        break;
-
-      default:
-        if (toklast() == '!' || toklast() == '?')
-        {
-          result = tFID;
-        }
-        else
-        {
-          if (IS_lex_state(EXPR_FNAME))
-          {
-            if ((c = nextc()) == '=' && !peek('~') && !peek('>') &&
-                (!peek('=') || (peek_n('>', 1))))
-            {
-              result = tIDENTIFIER;
-              tokadd(c);
-              tokfix();
-            }
-            else
-            {
-              pushback(c);
-            }
-          }
-          if (result == 0 && ISUPPER(tok()[0]))
-          {
-            result = tCONSTANT;
-          }
-          else
-          {
-            result = tIDENTIFIER;
-          }
-        }
-
-        if (IS_LABEL_POSSIBLE())
-        {
-          if (IS_LABEL_SUFFIX(0))
-          {
-            lexer.lex_state = EXPR_BEG;
-            nextc();
-            // set_yylval_name(TOK_INTERN(!ENC_SINGLE(mb))); TODO
-            return tLABEL;
-          }
-        }
-        if (!IS_lex_state(EXPR_DOT))
-        {
-          // const struct kwtable *kw;
-
-          // See if it is a reserved word.
-          var kw = rb_reserved_word[tok()];
-          if (kw)
-          {
-            var state = lexer.lex_state;
-            lexer.lex_state = kw.state;
-            if (state == EXPR_FNAME)
-            {
-              // set_yylval_name(rb_intern(kw->name)); TODO
-              return kw.id0;
-            }
-            if (lexer.lex_state == EXPR_BEG)
-            {
-              lexer.command_start = true;
-            }
-            if (kw.id0 == keyword_do)
-            {
-              if (lexer.lpar_beg && lexer.lpar_beg == lexer.paren_nest)
-              {
-                lexer.lpar_beg = 0;
-                --lexer.paren_nest;
-                return keyword_do_LAMBDA;
-              }
-              if (lexer.COND_P())
-                return keyword_do_cond;
-              if (lexer.CMDARG_P() && state != EXPR_CMDARG)
-                return keyword_do_block;
-              if (state & (EXPR_BEG | EXPR_ENDARG))
-                return keyword_do_block;
-              return keyword_do;
-            }
-            if (state & (EXPR_BEG | EXPR_VALUE))
-              return kw.id0;
-            else
-            {
-              if (kw.id0 != kw.id1)
-                lexer.lex_state = EXPR_BEG;
-              return kw.id1;
-            }
-          }
-        }
-
-        if (IS_lex_state(EXPR_BEG_ANY | EXPR_ARG_ANY | EXPR_DOT))
-        {
-          if (lexer.cmd_state)
-          {
-            lexer.lex_state = EXPR_CMDARG;
-          }
-          else
-          {
-            lexer.lex_state = EXPR_ARG;
-          }
-        }
-        else if (lexer.lex_state == EXPR_FNAME)
-        {
-          lexer.lex_state = EXPR_ENDFN;
-        }
-        else
-        {
-          lexer.lex_state = EXPR_END;
-        }
-    }
-    {
-      // just take a plain string for now,
-      // do not convert to a symbol, leave it to JS engine
-      var ident = tok();
-
-      // set_yylval_name(ident); TODO
-      if (!IS_lex_state_for(lexer.last_state, EXPR_DOT | EXPR_FNAME) &&
-          is_local_id(ident) && lvar_defined(ident))
-      {
-        lexer.lex_state = EXPR_END;
-      }
-    }
-    return result;
-  }
-  
-  // return c == '' ? 0 : 9999 // EOF or $undefined
-  
-  } // retry for loop
-}
-
-function heredoc_identifier ()
-{
-  var term = '', func = 0;
-  
-  var c = nextc()
-  if (c == '-')
-  {
-    c = nextc();
-    func = STR_FUNC_INDENT;
-  }
-  defaultt:
-  {
-    quoted:
-    {
-      switch (c)
-      {
-        case '\'':
-          func |= str_squote;
-          break; // was: goto quoted;
-        case '"':
-          func |= str_dquote;
-          break; // was: goto quoted;
-        case '`':
-          func |= str_xquote;
-          break; // was: goto quoted;
-        default:
-          break quoted
-      }
-      // was: quoted:
-      newtok();
-      // tokadd($$(func)); add it to the `strterm` property
-      term = c;
-      while ((c = nextc()) != '' && c != term)
-      {
-        if (tokadd(c) == '')
-          return 0;
-      }
-      if (c == '')
-      {
-        compile_error("unterminated here document identifier");
-        return 0;
-      }
-      break defaultt;
-    } // quoted:
-
-    // was: default:
-    if (!parser_is_identchar(c))
-    {
-      pushback(c);
-      if (func & STR_FUNC_INDENT)
-      {
-        pushback('-');
-      }
-      return 0;
-    }
-    // TODO: create token with $text.substring(start, end)
-    newtok();
-    term = '"';
-    func |= str_dquote;
-    do
-    {
-      if (tokadd(c) == '')
-        return 0;
-    }
-    while ((c = nextc()) != '' && parser_is_identchar(c));
-    pushback(c);
-  } // defaultt:
-
-  tokfix();
-  lexer.lex_strterm = NEW_HEREDOCTERM(func, tok());
-  lex_goto_eol();
-  return term == '`' ? tXSTRING_BEG : tSTRING_BEG;
-}
-
-function here_document_error (eos)
-{
-  // was: error:
-    compile_error("can't find string \""+eos+"\" anywhere before EOF");
-    return here_document_restore(eos);
-}
-function here_document_restore (eos)
-{
-  // was: restore:
-    heredoc_restore(lexer.lex_strterm);
-    lexer.lex_strterm = null;
-    return 0;
-}
-function here_document (here)
-{
-  // we're at the heredoc content start
-  var func = here.nd_func,
-      eos = here.term,
-      indent = !!(func & STR_FUNC_INDENT);
-  
-  var str = ''; // accumulate string content here
-  
-  var c = nextc();
-  if (c == '')
-  {
-    here_document_error(eos);
-    return 0;
-  }
-  
-  if (was_bol() && whole_match_p(eos, indent))
-  {
-    heredoc_restore(lexer.lex_strterm);
-    return tSTRING_END;
-  }
-  
-  // do not look for `#{}` stuff here
-  if (!(func & STR_FUNC_EXPAND))
-  {
-    // mark a start of the string token
-    do
-    {
-      str += lex_lastline;
-      
-      // EOF reached in the middle of the heredoc
-      lex_goto_eol();
-      if (nextc() === '')
-      {
-        here_document_error(eos); // was: goto error;
-        return 0;
-      }
-    }
-    while (!whole_match_p(eos, indent));
-  }
-  // try to find all the `#{}` stuff here
-  else
-  {
-    /*      int mb = ENC_CODERANGE_7BIT, *mbp = &mb; */
-    newtok();
-    if (c == '#')
-    {
-      switch (c = nextc())
-      {
-        case '$':
-        case '@':
-          pushback(c);
-          return tSTRING_DVAR;
-        case '{':
-          lexer.command_start = true;
-          return tSTRING_DBEG;
-      }
-      tokadd('#');
-    }
-    do
-    {
-      pushback(c);
-      if ((c = tokadd_string(func, '\n', '', null)) == '')
-      {
-        if (lexer.eofp)
-        {
-          here_document_error(eos); // was: goto error;
-          return 0;
-        }
-        here_document_restore(); // was: goto restore;
-        return 0;
-      }
-      if (c != '\n')
-      {
-        // set_yylval_str(STR_NEW3(tok(), toklen(), enc, func)); TODO
-        return tSTRING_CONTENT;
-      }
-      tokadd(nextc());
-      
-      if ((c = nextc()) == '')
-      {
-        here_document_error(eos); // was: goto error;
-        return 0;
-      }
-    }
-    while (!whole_match_p(eos, indent));
-    // str = STR_NEW3(tok(), toklen(), enc, func); TODO
-  }
-  heredoc_restore(lexer.lex_strterm);
-  lexer.lex_strterm = NEW_STRTERM(-1, '', '');
-  // set_yylval_str(str); TODO:
-  return tSTRING_CONTENT;
-}
-
-function parse_string (quote)
-{
-  var func = quote.nd_func,
-      term = quote.term,
-      paren = quote.paren;
-  
-  var space = false;
-
-  if (func == -1)
-    return tSTRING_END;
-  var c = nextc();
-  if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
-  {
-    do
-    {
-      c = nextc();
-    }
-    while (ISSPACE(c));
-    space = true;
-  }
-  // quote.nd_nest is increased in tokadd_string()
-  // once for every `paren` char met
-  if (c == term && !quote.nd_nest)
-  {
-    if (func & STR_FUNC_QWORDS)
-    {
-      quote.nd_func = -1;
-      return $(' ');
-    }
-    if (!(func & STR_FUNC_REGEXP))
-      return tSTRING_END;
-    // set_yylval_num(regx_options()); TODO
-    return tREGEXP_END;
-  }
-  if (space)
-  {
-    pushback(c);
-    return $(' ');
-  }
-  newtok();
-  if ((func & STR_FUNC_EXPAND) && c == '#')
-  {
-    switch (c = nextc())
-    {
-      case '$':
-      case '@':
-        pushback(c);
-        return tSTRING_DVAR;
-      case '{':
-        lexer.command_start = true;
-        return tSTRING_DBEG;
-    }
-    tokadd('#');
-  }
-  pushback(c);
-  if (tokadd_string(func, term, paren, quote) == '')
-  {
-    lexer.ruby_sourceline = quote.nd_line;
-    if (func & STR_FUNC_REGEXP)
-    {
-      if (lexer.eofp)
-        compile_error("unterminated regexp meets end of file");
-      return tREGEXP_END;
-    }
-    else
-    {
-      if (lexer.eofp)
-        compile_error("unterminated string meets end of file");
-      return tSTRING_END;
-    }
+    stateStack.push(state);
+    valueStack.push(value);
   }
 
-  tokfix();
-  // set_yylval_str(STR_NEW3(tok(), toklen(), enc, func)); TODO
-
-  return tSTRING_CONTENT;
-}
-
-
-function tokadd_string (func, term, paren, str_term)
-{
-  var c = '';
-  while ((c = nextc()) != '')
+  this.pop = function pop (num)
   {
-    if (paren && c == paren)
-    {
-      ++str_term.nd_nest;
-    }
-    else if (c == term)
-    {
-      if (!str_term || !str_term.nd_nest)
-      {
-        pushback(c);
-        break;
-      }
-      --str_term.nd_nest;
-    }
-    else if ((func & STR_FUNC_EXPAND) && c == '#' && lex_p < lex_pend)
-    {
-      var c2 = lex_pv();
-      if (c2 == '$' || c2 == '@' || c2 == '{')
-      {
-        // push the '#' back
-        pushback(c);
-        // and leave it for the caller to process
-        break;
-      }
-    }
-    else if (c == '\\')
-    {
-      c = nextc();
-      switch (c)
-      {
-        case '\n':
-          if (func & STR_FUNC_QWORDS)
-            break;
-          if (func & STR_FUNC_EXPAND)
-            continue;
-          tokadd('\\');
-          break;
+    if (num <= 0)
+      return;
 
-        case '\\':
-          if (func & STR_FUNC_ESCAPE)
-            tokadd(c);
-          break;
-
-        case 'u':
-          if ((func & STR_FUNC_EXPAND) == 0)
-          {
-            tokadd('\\');
-            break;
-          }
-          parser_tokadd_utf8(true, !!(func & STR_FUNC_SYMBOL), !!(func & STR_FUNC_REGEXP));
-          continue;
-
-        default:
-          if (c == '')
-            return '';
-          if (!ISASCII(c))
-          {
-            if ((func & STR_FUNC_EXPAND) == 0)
-              tokadd('\\');
-            // was: goto non_ascii;
-            if (tokadd(c) == '')
-              return '';
-            continue;
-          }
-          if (func & STR_FUNC_REGEXP)
-          {
-            if (c == term && !simple_re_meta(c))
-            {
-              tokadd(c);
-              continue;
-            }
-            pushback(c);
-            if (!tokadd_escape()) // useless `c = ` was here
-              return '';
-            continue;
-          }
-          else if (func & STR_FUNC_EXPAND)
-          {
-            pushback(c);
-            if (func & STR_FUNC_ESCAPE)
-              tokadd('\\');
-            c = read_escape(0);
-          }
-          else if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
-          {
-            /* ignore backslashed spaces in %w */
-          }
-          else if (c != term && !(paren && c == paren))
-          {
-            tokadd('\\');
-            pushback(c);
-            continue;
-          }
-      }
-    }
-    else if ((func & STR_FUNC_QWORDS) && ISSPACE(c))
-    {
-      pushback(c);
-      break;
-    }
-    tokadd(c);
+    valueStack.length -= num;
+    stateStack.length -= num; // TODO: original code lacks this line
   }
-  return c;
-}
 
-function simple_re_meta (c)
-{
-  switch (c)
+  this.stateAt = function stateAt (i)
   {
-    case '$':
-    case '*':
-    case '+':
-    case '.':
-    case '?':
-    case '^':
-    case '|':
-    case ')':
-      return true;
-    default:
-      return false;
+    return stateStack[stateStack.length-1 - i];
+  }
+
+  this.valueAt = function valueAt (i)
+  {
+    return valueStack[valueStack.length-1 - i];
+  }
+
+  // used in debug mode or in an error recovery mode only
+  this.height = function height ()
+  {
+    return stateStack.length-1;
   }
 }
 
 
-function tokadd_escape_eof ()
-{
-  lexer.yyerror("Invalid escape character syntax");
-}
-// return `true` on success and `false` on failure,
-// it is quite different from original source,
-// however the returning value is a flag only there too;
-function tokadd_escape ()
-{
-  var c = '';
-  var flags = 0;
-
-  switch (c = nextc())
-  {
-    case '\n':
-      return true;                 /* just ignore */
-
-    case '0':
-    case '1':
-    case '2':
-    case '3':                  /* octal constant */
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    {
-      // was: scan_oct(lex_p, 3, &numlen);
-      
-      // we're here: "\|012",
-      // so just match one or two more digits
-      var oct = match_grex(/[0-7]{1,2}|/g);
-      if (!oct)
-      {
-        // was: goto eof;
-        tokadd_escape_eof();
-        return false;
-      }
-      lex_p += oct.length;
-      tokadd('\\' + c + oct);
-    }
-    return true;
-
-    case 'x':                  /* hex constant */
-      {
-        // was: tok_hex(&numlen);
-        
-        // we're here: "\x|AB",
-        // so just match one or two more digits
-        var hex = match_grex(/[0-9a-fA-F]{1,2}|/g);
-        if (!hex)
-        {
-          yyerror("invalid hex escape");
-          return false;
-        }
-        lex_p += hex.length;
-        tokadd('\\x' + hex);
-      }
-      return true;
-    
-    case '':
-      tokadd_escape_eof();
-      return false;
-    
-    case 'c':
-      tokadd("\\c");
-      return true;
-    
-    case 'M':
-    case 'C':
-      lexer.yyerror("JavaScript doesn't support `\\"+c+"-' in regexp");
-      if ((c = nextc()) != '-')
-      {
-        pushback(c);
-        tokadd_escape_eof();
-        return false;
-      }
-      tokcopy(3); // add though
-      return true;
-    
-    default:
-      tokadd("\\"+c);
-  }
-  return true;
-}
-
-// checks if the current line matches `/^\s*#{eos}\n?$/`;
-var whole_match_p_rexcache = {};
-function whole_match_p (eos, indent)
-{
-  if (!indent)
-  {
-    return lex_lastline == eos + '\n' || lex_lastline == eos;
-  }
-  
-  // here there are all with indentation enabled!
-  var rex = whole_match_p_rexcache[eos];
-  if (!rex)
-  {
-    // `eos` is an identifier and doesn't need to be escaped
-    rex = new RegExp('^[ \\t]*' + eos + '$', 'm');
-    whole_match_p_rexcache[eos] = rex;
-  }
-  
-  return rex.test(lex_lastline);
-}
-
-function heredoc_restore (here)
-{
-  // restores the line from where the heredoc occured to begin
-  lex_lastline = here.nd_orig;
-  lex_pbeg = 0;
-  lex_pend = lex_lastline.length;
-  // restores the position in the line, right after heredoc token
-  lex_p = here.nd_nth;
-  // have no ideas yet :)
-  lexer.heredoc_end = lexer.ruby_sourceline;
-  lexer.ruby_sourceline = here.nd_line;
-}
-
-var ESCAPE_CONTROL = 1,
-    ESCAPE_META = 2;
-
-function read_escape_eof ()
-{
-  lexer.yyerror("Invalid escape character syntax");
-  return '\0';
-}
-function read_escape (flags)
-{
-  var c = nextc();
-  switch (c)
-  {
-    case '\\':                 /* Backslash */
-      return c;
-
-    case 'n':                  /* newline */
-      return '\n';
-
-    case 't':                  /* horizontal tab */
-      return '\t';
-
-    case 'r':                  /* carriage-return */
-      return '\r';
-
-    case 'f':                  /* form-feed */
-      return '\f';
-
-    case 'v':                  /* vertical tab */
-      return '\v'; // \13
-
-    case 'a':                  /* alarm(bell) */
-      return '\a'; // \007
-
-    case 'e':                  /* escape */
-      return '\x1b'; // 033
-
-    case '0':
-    case '1':
-    case '2':
-    case '3':                  /* octal constant */
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-      pushback(c);
-      // was: c = scan_oct(lex_p, 3, &numlen);
-      var oct = match_grex(/[0-7]{1,3}|/g)[0];
-      c = $$(parseInt(oct, 8));
-      lex_p += oct.length;
-      return c;
-
-    case 'x':                  /* hex constant */
-      // was: c = tok_hex(&numlen);
-      var hex = match_grex(/[0-9a-fA-F]{1,2}|/g)[0];
-      if (!hex)
-      {
-        lexer.yyerror("invalid hex escape");
-        return '';
-      }
-      lex_p += hex.length;
-      c = $$(parseInt(hex, 16));
-      return c;
-
-    case 'b':                  /* backspace */
-      return '\x08'; // \010
-
-    case 's':                  /* space */
-      return ' ';
-
-    case 'M':
-      if (flags & ESCAPE_META)
-      {
-        // was: goto eof;
-        return read_escape_eof();
-      }
-      if ((c = nextc()) != '-')
-      {
-        pushback(c);
-        // was: goto eof;
-        return read_escape_eof();
-      }
-      if ((c = nextc()) == '\\')
-      {
-        if (peek('u'))
-        {
-          // was: goto eof;
-          return read_escape_eof();
-        }
-        return $$($(read_escape(flags | ESCAPE_META)) | 0x80);
-      }
-      else if (c == '' || !ISASCII(c))
-      {
-        // was: goto eof;
-        return read_escape_eof();
-      }
-      else
-      {
-        return $$(($(c) & 0xff) | 0x80);
-      }
-
-    case 'C':
-      if ((c = nextc()) != '-')
-      {
-        pushback(c);
-        // was: goto eof;
-        return read_escape_eof();
-      }
-    case 'c':
-      if (flags & ESCAPE_CONTROL)
-      {
-        // was: goto eof;
-        return read_escape_eof();
-      }
-      if ((c = nextc()) == '\\')
-      {
-        if (peek('u'))
-        {
-          // was: goto eof;
-          return read_escape_eof();
-        }
-        c = read_escape(flags | ESCAPE_CONTROL);
-      }
-      else if (c == '?')
-        return '\x7f'; // 0177;
-      else if (c == '' || !ISASCII(c))
-      {
-        // was: goto eof;
-        return read_escape_eof();
-      }
-      return $$($(c) & 0x9f);
-
-    // was: eof:
-    case -1:
-      return read_escape_eof();
-
-    default:
-      return c;
-  }
-}
-
-/* return value is for \u3042 */
-function parser_tokadd_utf8 (string_literal, symbol_literal, regexp_literal)
-{
-  /*
-   * If string_literal is true, then we allow multiple codepoints
-   * in \u{}, and add the codepoints to the current token.
-   * Otherwise we're parsing a character literal and return a single
-   * codepoint without adding it
-   */
-
-  if (regexp_literal)
-  {
-    tokadd('\\u');
-  }
-  
-  var c = nextc();
-  // handle \u{...} form
-  if (c === '{')
-  {
-    if (regexp_literal)
-    {
-      tokadd('{'); // was: tokadd(*lex_p);
-    }
-    for (;;)
-    {
-      // match hex digits or empty string
-      var hex = match_grex(/[0-9a-fA-F]{1,6}|/g)[0];
-      if (hex == '')
-      {
-        lexer.yyerror("invalid Unicode escape");
-        return '';
-      }
-      var codepoint = parseInt(hex, 16);
-      var the_char = $$(codepoint);
-      if (codepoint > 0x10ffff)
-      {
-        lexer.yyerror("invalid Unicode codepoint "+codepoint+" (too large)");
-        return '';
-      }
-      
-      lex_p += hex.length;
-      if (regexp_literal)
-      {
-        tokadd(hex);
-      }
-      else if (string_literal)
-      {
-        tokadd(the_char);
-      }
-      
-      c = nextc();
-      if (!string_literal)
-        break;
-      if (c !== ' ' && c !== '\t')
-        break;
-    }
-
-    if (c !== '}')
-    {
-      lexer.yyerror("unterminated Unicode escape");
-      return '';
-    }
-
-    if (regexp_literal)
-    {
-      tokadd('}');
-    }
-    
-    // return the last found codepoint/char
-    return the_char;
-  }
-  // handle \uxxxx form
-  else
-  {
-    // match 4 hex digits or empty string
-    var hex = match_grex(/[0-9a-fA-F]{4}|/g)[0];
-    if (hex === '')
-    {
-      lexer.yyerror("invalid Unicode escape");
-      return '';
-    }
-    var codepoint = parseInt(hex, 16);
-    var the_char = $$(codepoint);
-    lex_p += 4;
-    if (regexp_literal)
-    {
-      tokadd(hex);
-    }
-    else if (string_literal)
-    {
-      tokadd(the_char);
-    }
-    
-    // return the only found codepoint/char
-    return the_char;
-  }
-}
-
-// here `c` matches [0-9],
-// `c` is the first char of the future number,
-// as of Ruby 2.0 we don't expect to be called from leading '-' match
-function start_num (c)
-{
-  var is_float = false,
-      seen_point = false,
-      seen_e = false,
-      nondigit = '';
-
-  lexer.lex_state = EXPR_END;
-  newtok();
-  if (c == '-' || c == '+')
-  {
-    tokadd(c);
-    c = nextc();
-  }
-  
-  goto_trailing_uc: {
-  goto_decode_num: {
-  goto_invalid_octal: {
-  
-  if (c == '0')
-  {
-    var start = toklen();
-    c = nextc();
-    if (c == 'x' || c == 'X')
-    {
-      /* hexadecimal */
-      c = nextc();
-      if (c != '' && ISXDIGIT(c))
-      {
-        do
-        {
-          if (c == '_')
-          {
-            if (nondigit)
-              break;
-            nondigit = c;
-            continue;
-          }
-          if (!ISXDIGIT(c))
-            break;
-          nondigit = '';
-          tokadd(c);
-        }
-        while ((c = nextc()) != '');
-      }
-      pushback(c);
-      tokfix();
-      if (toklen() == start)
-      {
-        lexer.yyerror("numeric literal without digits");
-        return 0;
-      }
-      else if (nondigit)
-        break goto_trailing_uc; // was: goto trailing_uc;
-      // set_yylval_literal(rb_cstr_to_inum(tok(), 16, FALSE)); TODO
-      return tINTEGER;
-    }
-    if (c == 'b' || c == 'B')
-    {
-      /* binary */
-      c = nextc();
-      if (c == '0' || c == '1')
-      {
-        do
-        {
-          if (c == '_')
-          {
-            if (nondigit)
-              break;
-            nondigit = c;
-            continue;
-          }
-          if (c != '0' && c != '1')
-            break;
-          nondigit = '';
-          tokadd(c);
-        }
-        while ((c = nextc()) != '');
-      }
-      pushback(c);
-      tokfix();
-      if (toklen() == start)
-      {
-        lexer.yyerror("numeric literal without digits");
-        return 0;
-      }
-      else if (nondigit)
-        break goto_trailing_uc; // was: goto trailing_uc;
-      // set_yylval_literal(rb_cstr_to_inum(tok(), 2, FALSE)); TODO
-      return tINTEGER;
-    }
-    if (c == 'd' || c == 'D')
-    {
-      /* decimal */
-      c = nextc();
-      if (c != '' && ISDIGIT(c))
-      {
-        do
-        {
-          if (c == '_')
-          {
-            if (nondigit)
-              break;
-            nondigit = c;
-            continue;
-          }
-          if (!ISDIGIT(c))
-            break;
-          nondigit = '';
-          tokadd(c);
-        }
-        while ((c = nextc()) != '');
-      }
-      pushback(c);
-      tokfix();
-      if (toklen() == start)
-      {
-        lexer.yyerror("numeric literal without digits");
-        return 0;
-      }
-      else if (nondigit)
-        break goto_trailing_uc; // was: goto trailing_uc;
-      // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
-      return tINTEGER;
-    }
-    // was: if (c == '_')
-    // was: {
-    // was:   /* 0_0 */
-    // was:   goto octal_number;
-    // was: }
-    // and moved after the next if block
-    if (c == 'o' || c == 'O')
-    {
-      /* prefixed octal */
-      c = nextc();
-      if (c == '' || c == '_' || !ISDIGIT(c))
-      {
-        lexer.yyerror("numeric literal without digits");
-        return 0;
-      }
-    }
-    if ((c >= '0' && c <= '7') || c == '_')
-    {
-      /* octal */
-      // was:  octal_number:
-      do
-      {
-        if (c == '_')
-        {
-          if (nondigit)
-            break;
-          nondigit = c;
-          continue;
-        }
-        if (c < '0' || c > '9')
-          break;
-        if (c > '7')
-        {
-          lexer.yyerror("Invalid octal digit");
-          break goto_invalid_octal; // was: goto invalid_octal;
-        }
-        nondigit = '';
-        tokadd(c);
-      }
-      while ((c = nextc()) != '');
-      if (toklen() > start)
-      {
-        pushback(c);
-        tokfix();
-        if (nondigit)
-          break goto_trailing_uc; // was: goto trailing_uc;
-        // set_yylval_literal(rb_cstr_to_inum(tok(), 8, FALSE)); TODO
-        return tINTEGER;
-      }
-      if (nondigit)
-      {
-        pushback(c);
-        break goto_trailing_uc; // was: goto trailing_uc;
-      }
-    }
-    if (c > '7' && c <= '9')
-    {
-      // was: invalid_octal:
-      lexer.yyerror("Invalid octal digit");
-    }
-    else if (c == '.' || c == 'e' || c == 'E')
-    {
-      tokadd('0');
-    }
-    else
-    {
-      pushback(c);
-      // set_yylval_literal(INT2FIX(0)); TODO
-      return tINTEGER;
-    }
-  } // c == '0'
-
-  } // goto_invalid_octal
-
-  for (;;)
-  {
-    switch (c)
-    {
-      case '0':
-      case '1':
-      case '2':
-      case '3':
-      case '4':
-      case '5':
-      case '6':
-      case '7':
-      case '8':
-      case '9':
-        nondigit = '';
-        tokadd(c);
-        break;
-
-      case '.':
-        if (nondigit)
-          break goto_trailing_uc; // was: goto trailing_uc;
-        if (seen_point || seen_e)
-        {
-          break goto_decode_num; // was: goto decode_num;
-        }
-        else
-        {
-          var c0 = nextc();
-          if (c0 == '' || !ISDIGIT(c0))
-          {
-            pushback(c0);
-            break goto_decode_num; // was: goto decode_num;
-          }
-          c = c0;
-        }
-        tokadd('.');
-        tokadd(c);
-        is_float = true;
-        seen_point = true;
-        nondigit = '';
-        break;
-
-      case 'e':
-      case 'E':
-        if (nondigit)
-        {
-          pushback(c);
-          c = nondigit;
-          break goto_decode_num; // was: goto decode_num;
-        }
-        if (seen_e)
-        {
-          break goto_decode_num; // was: goto decode_num;
-        }
-        tokadd(c);
-        seen_e = true;
-        is_float = true;
-        nondigit = c;
-        c = nextc();
-        if (c != '-' && c != '+')
-          continue;
-        tokadd(c);
-        nondigit = c;
-        break;
-
-      case '_':          /* `_' in number just ignored */
-        if (nondigit)
-          break goto_decode_num; // was: goto decode_num;
-        nondigit = c;
-        break;
-
-      default:
-        break goto_decode_num; // was: goto decode_num;
-    }
-    c = nextc();
-  } // decimal for
-
-  } // goto_decode_num
-  
-  // was: decode_num:
-  pushback(c);
-  
-  } // goto_trailing_uc:
-  
-  if (nondigit) // always true after `break goto_trailing_uc;`
-  {
-    // was: trailing_uc:
-    lexer.yyerror("trailing `"+nondigit+"' in number");
-  }
-  tokfix();
-  if (is_float)
-  {
-    var d = parseInt(tok(), 10);
-    // if (errno == ERANGE)
-    // {
-    //   rb_warningS("Float %s out of range", tok());
-    //   errno = 0;
-    // }
-    // set_yylval_literal(DBL2NUM(d)); TODO
-    return tFLOAT;
-  }
-  // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
-  return tINTEGER;
-
-  // why are we so certain about returning `tFLOAT` or `tINTEGER`?
-  // because we have got here meating a digit :)
-}
+// here goes the epilog
 
 
-// struct kwtable {const char *name; int id[2]; enum lex_state_e state;};
-
-function dyna_in_block ()
-{
-  // TODO :)
-  return true;
-}
-lexer.dyna_in_block = dyna_in_block;
-function is_local_id (ident)
-{
-  // TODO :)
-  return true;
-}
-lexer.is_local_id = is_local_id;
-function local_id (ident)
-{
-  // TODO :)
-  return true;
-}
-lexer.local_id = local_id;
-function lvar_defined (ident)
-{
-  // TODO :)
-  return false;
-}
-
-var rb_reserved_word =
-{
-'__ENCODING__': {id0: keyword__ENCODING__, id1: keyword__ENCODING__, state: EXPR_END},
-'__LINE__': {id0: keyword__LINE__, id1: keyword__LINE__, state: EXPR_END},
-'__FILE__': {id0: keyword__FILE__, id1: keyword__FILE__, state: EXPR_END},
-'BEGIN': {id0: keyword_BEGIN, id1: keyword_BEGIN, state: EXPR_END},
-'END': {id0: keyword_END, id1: keyword_END, state: EXPR_END},
-'alias': {id0: keyword_alias, id1: keyword_alias, state: EXPR_FNAME},
-'and': {id0: keyword_and, id1: keyword_and, state: EXPR_VALUE},
-'begin': {id0: keyword_begin, id1: keyword_begin, state: EXPR_BEG},
-'break': {id0: keyword_break, id1: keyword_break, state: EXPR_MID},
-'case': {id0: keyword_case, id1: keyword_case, state: EXPR_VALUE},
-'class': {id0: keyword_class, id1: keyword_class, state: EXPR_CLASS},
-'def': {id0: keyword_def, id1: keyword_def, state: EXPR_FNAME},
-'defined?': {id0: keyword_defined, id1: keyword_defined, state: EXPR_ARG},
-'do': {id0: keyword_do, id1: keyword_do, state: EXPR_BEG},
-'else': {id0: keyword_else, id1: keyword_else, state: EXPR_BEG},
-'elsif': {id0: keyword_elsif, id1: keyword_elsif, state: EXPR_VALUE},
-'end': {id0: keyword_end, id1: keyword_end, state: EXPR_END},
-'ensure': {id0: keyword_ensure, id1: keyword_ensure, state: EXPR_BEG},
-'false': {id0: keyword_false, id1: keyword_false, state: EXPR_END},
-'for': {id0: keyword_for, id1: keyword_for, state: EXPR_VALUE},
-'if': {id0: keyword_if, id1: modifier_if, state: EXPR_VALUE},
-'in': {id0: keyword_in, id1: keyword_in, state: EXPR_VALUE},
-'module': {id0: keyword_module, id1: keyword_module, state: EXPR_VALUE},
-'next': {id0: keyword_next, id1: keyword_next, state: EXPR_MID},
-'nil': {id0: keyword_nil, id1: keyword_nil, state: EXPR_END},
-'not': {id0: keyword_not, id1: keyword_not, state: EXPR_ARG},
-'or': {id0: keyword_or, id1: keyword_or, state: EXPR_VALUE},
-'redo': {id0: keyword_redo, id1: keyword_redo, state: EXPR_END},
-'rescue': {id0: keyword_rescue, id1: modifier_rescue, state: EXPR_MID},
-'retry': {id0: keyword_retry, id1: keyword_retry, state: EXPR_END},
-'return': {id0: keyword_return, id1: keyword_return, state: EXPR_MID},
-'self': {id0: keyword_self, id1: keyword_self, state: EXPR_END},
-'super': {id0: keyword_super, id1: keyword_super, state: EXPR_ARG},
-'then': {id0: keyword_then, id1: keyword_then, state: EXPR_BEG},
-'true': {id0: keyword_true, id1: keyword_true, state: EXPR_END},
-'undef': {id0: keyword_undef, id1: keyword_undef, state: EXPR_FNAME},
-'unless': {id0: keyword_unless, id1: modifier_unless, state: EXPR_VALUE},
-'until': {id0: keyword_until, id1: modifier_until, state: EXPR_VALUE},
-'when': {id0: keyword_when, id1: keyword_when, state: EXPR_VALUE},
-'while': {id0: keyword_while, id1: modifier_while, state: EXPR_VALUE},
-'yield': {id0: keyword_yield, id1: keyword_yield, state: EXPR_ARG}
-};
-
-lexer.cursorPosition = function ()
-{
-  return (
-    lex_lastline.substring(0, lex_p) +
-    '>>here<<' +
-    lex_lastline.substring(lex_p)
-  );
-}
-
-function debug ()
-{
-  puts('\n\n')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts.apply(null, arguments)
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(lexer.cursorPosition())
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts(':::::::::::::::::::::::::::::::::::::::::::')
-  puts('\n\n')
-}
-lexer.debug = debug;
-
-function warning (msg)
-{
-  puts
-  (
-    lexer.filename +
-    ':' +
-    lexer.ruby_sourceline +
-    ': ' +
-    msg
-  );
-}
-
-function compile_error (msg)
-{
-  lexer.nerr++;
-
-  puts
-  (
-    lexer.filename +
-    ':' +
-    lexer.ruby_sourceline +
-    ': ' +
-    msg
-  );
-}
-
-lexer.yyerror = function yyerror (msg)
-{
-  compile_error(msg);
-
-  // to clean up \n \t and others
-  var line = lexer.get_lex_lastline();
-  var begin = line.substring(0, lex_p)
-                  .replace(/[\n\r]+/g, '')
-                  .replace(/\s+/g, ' ');
-  var end =   line.substring(lex_p)
-                  .replace(/[\n\r]+/g, '')
-                  .replace(/\s+/g, ' ');
-  var arrow = [];
-  arrow[begin.length] = '^';
-  puts(begin + end);
-  puts(arrow.join(' '));
-}
-
-} // function Lexer
-
-return Lexer;
-
-})();
 
 global.parse = function (text)
 {
-  var lexer = new YYLexer();
+  var lexer = new YYLexer(text);
   lexer.filename = 'ruby.rb';
-  lexer.setText(text);
-
-  var parser = new YYParser(lexer);
   
-  var begin = new Date();
-  var res = parser.parse();
-  // print('time: ' + (new Date - begin));
-  return res;
+  var parser = new YYParser(lexer);
+  return parser.parse();
 }
 
 
-})(); // end of epilogue namespace
-
-}).call(this); // end of the whole parser+lexer namespase
+})(); // end of the whole parser+lexer namespase
 
