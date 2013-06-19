@@ -8,7 +8,10 @@
 ;(function(){
 "use strict"
 
-// binding function (code) { return eval(code) }
+// binding: var binding = function (code) { return eval(code) }
+var b = (function(){ var x = 5; return function(code){ return eval(code) };  })();
+b('alert(x)');
+
 
 
 
