@@ -32,15 +32,22 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* First part of user declarations.  */
 
 
+;(function(){ // whole parser and lexer namespase start
 
 "use strict";
 
+// TODO:
+// var global_symbols = {}; // name => ID
+// var global_symbols_counter = 0;
+// function global_symbols_add (name)
+// {
+//   return global_symbols[name] = ++global_symbols_counter;
+// }
 
 
-;(function(){ // start of the whole parser+lexer namespase
-/* First part of user declarations.  */
 
 // Tokens.
 // Token numbers, to be returned by the scanner.
@@ -159,6 +166,7 @@ var
   tUMINUS_NUM = 368,
   tLAST_TOKEN = 369;
 
+
 // here goes all the lexer code that depends on token numbers
 /* "%code lexer" blocks.  */
 
@@ -259,7 +267,8 @@ lexer.line_count = 0;
 lexer.nerr = 0;
 // TODO: check out list of stateful variables with the original
 
-// all lexer states codes had been moved to parse.y prologue
+// the token value to be stored in the values stack
+lexer.yylval = null;
 
 // the shortcut for checking `lexer.lex_state` over and over again
 function IS_lex_state (ls)
@@ -627,11 +636,6 @@ function toklast ()
   // was: tokidx>0?tokenbuf[tokidx-1]:0)
 }
 
-// TODO
-this.getLVal = function () { return $tokenbuf; }
-
-
-
 // other stuff
 
 function parser_is_identchar (c)
@@ -820,7 +824,7 @@ this.yylex = function yylex ()
       {
         if ((c = nextc()) == '=')
         {
-          // set_yylval_id(tPOW); TODO
+          lexer.yylval = tPOW; // TODO: maybe a string needed
           lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
@@ -844,7 +848,7 @@ this.yylex = function yylex ()
       {
         if (c == '=')
         {
-          // set_yylval_id('*'); TODO
+          lexer.yylval = $('*'); // ID
           lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
@@ -980,7 +984,7 @@ this.yylex = function yylex ()
       {
         if ((c = nextc()) == '=')
         {
-          // set_yylval_id(tLSHFT); TODO
+          lexer.yylval = tLSHFT; // ID
           lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
@@ -1003,7 +1007,7 @@ this.yylex = function yylex ()
       {
         if ((c = nextc()) == '=')
         {
-          // set_yylval_id(tRSHFT); TODO
+          lexer.yylval = tRSHFT; // ID
           lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
@@ -1131,7 +1135,7 @@ this.yylex = function yylex ()
         tokadd(c);
       }
       tokfix();
-      // set_yylval_str(STR_NEW3(tok(), toklen(), enc, 0)); TODO
+      lexer.yylval = tok(); // plain string
       lexer.lex_state = EXPR_END;
       return tCHAR;
     }
@@ -1143,7 +1147,7 @@ this.yylex = function yylex ()
         lexer.lex_state = EXPR_BEG;
         if ((c = nextc()) == '=')
         {
-          // set_yylval_id(tANDOP); TODO
+          lexer.yylval = tANDOP; // ID
           lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
@@ -1152,7 +1156,7 @@ this.yylex = function yylex ()
       }
       else if (c == '=')
       {
-        // set_yylval_id('&'); TODO
+        lexer.yylval= $('&'); // ID
         lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
@@ -1183,7 +1187,7 @@ this.yylex = function yylex ()
         lexer.lex_state = EXPR_BEG;
         if ((c = nextc()) == '=')
         {
-          // set_yylval_id(tOROP); TODO
+          lexer.yylval = tOROP; // ID
           lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
@@ -1192,7 +1196,7 @@ this.yylex = function yylex ()
       }
       if (c == '=')
       {
-        // set_yylval_id('|'); TODO
+        lexer.yylval = $('|'); // ID
         lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
@@ -1216,7 +1220,7 @@ this.yylex = function yylex ()
       }
       if (c == '=')
       {
-        // set_yylval_id('+'); TODO
+        lexer.yylval = $('+'); // ID
         lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
@@ -1253,7 +1257,7 @@ this.yylex = function yylex ()
       }
       if (c == '=')
       {
-        // set_yylval_id('-'); TODO
+        lexer.yylval = $('-'); // ID
         lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
@@ -1378,7 +1382,7 @@ this.yylex = function yylex ()
       }
       if ((c = nextc()) == '=')
       {
-        // set_yylval_id('/'); TODO
+        lexer.yylval = $('/'); // ID
         lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
@@ -1398,7 +1402,7 @@ this.yylex = function yylex ()
     {
       if ((c = nextc()) == '=')
       {
-        // set_yylval_id('^'); TODO
+        lexer.yylval = $('^'); // ID
         lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
@@ -1643,7 +1647,7 @@ this.yylex = function yylex ()
         }
         if ((c = nextc()) == '=')
         {
-          // set_yylval_id('%'); TODO
+          lexer.yylval = $('%'); // ID
           lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
@@ -1697,7 +1701,7 @@ this.yylex = function yylex ()
           tokadd('$');
           tokadd(c);
           tokfix();
-          // set_yylval_name(rb_intern(tok())); TODO
+          lexer.yylval = tok(); // intern string
           return tGVAR;
 
         case '-':
@@ -1715,7 +1719,7 @@ this.yylex = function yylex ()
           }
         // was: gvar:
           tokfix();
-          // set_yylval_name(rb_intern(tok())); TODO
+          lexer.yylval = tok(); // intern string
           return tGVAR;
 
         case '&':              /* $&: last match */
@@ -1724,14 +1728,14 @@ this.yylex = function yylex ()
         case '+':              /* $+: string matches last paren. */
           if (IS_lex_state_for(lexer.last_state, EXPR_FNAME))
           {
-            tokadd('$');
-            tokadd(c);
+            tokadd('$'+c);
             // was: goto gvar;
             tokfix();
-            // set_yylval_name(rb_intern(tok())); TODO
+            lexer.yylval = tok(); // intern string
             return tGVAR;
           }
-          // set_yylval_node(NEW_BACK_REF(c)); TODO
+          // was: set_yylval_node(NEW_BACK_REF(c)); TODO: check after time
+          lexer.yylval = c; // we create new NODE_BACK_REF in parser
           return tBACK_REF;
 
         case '1':
@@ -3084,6 +3088,17 @@ function lvar_defined (ident)
   return false;
 }
 
+// TODO:
+// function rb_intern (name)
+// {
+//   var id = global_symbols[name];
+//   if (id)
+//     return id;
+//   
+//   return global_symbols_add(id);
+// }
+
+
 var rb_reserved_word =
 {
 '__ENCODING__': {id0: keyword__ENCODING__, id1: keyword__ENCODING__, state: EXPR_END},
@@ -3181,6 +3196,7 @@ function compile_error (msg)
 
   warn(msg);
 }
+lexer.compile_error = compile_error
 
 lexer.yyerror = function yyerror (msg)
 {
@@ -3220,9 +3236,11 @@ lexer.yyerror = function yyerror (msg)
 // `lexer` is the scanner that will supply tokens to the parser.
 function YYParser (lexer)
 {
+// self
+var parser = this;
 
 // the three variables shared by Parser's guts and actions world
-// (`lexer` is shared too)
+// (`lexer` and `parser` are shared too)
 var yyval, yystack, actionsTable;
 
 ;(function(){ // actions table namespace start
@@ -3233,7 +3251,1082 @@ var yyval, yystack, actionsTable;
 
 // here goes the code needed in rules only, when generating nodes,
 // we still know all the token numbers here too.
-// #include "generator.js"
+// here is the main generator interface
+
+// nodes classes
+
+var NODE_FL_NEWLINE = 1<<7;
+var NODE_FL_CREF_PUSHED_BY_EVAL = NODE_FL_NEWLINE;
+var NODE_FL_CREF_OMOD_SHARED = 1<<6;
+
+
+// TODO: implement them all
+function NODE_BLOCK_PASS () {}
+function NODE_ARGSPUSH () {}
+function NODE_DSYM () {}
+function NODE_AND () {}
+function NODE_OR () {}
+function NODE_EVSTR () {}
+function NODE_MASGN () {}
+function NODE_LASGN () {}
+function NODE_DASGN () {}
+function NODE_DASGN_CURR () {}
+function NODE_GASGN () {}
+function NODE_IASGN () {}
+function NODE_SELF () {}
+function NODE_TRUE () {}
+function NODE_FALSE () {}
+function NODE_NIL () {}
+function NODE_RETURN () {}
+function NODE_BREAK () {}
+function NODE_NEXT () {}
+function NODE_REDO () {}
+function NODE_RETRY () {}
+function NODE_LVAR () {}
+function NODE_DVAR () {}
+function NODE_IVAR () {}
+function NODE_CVAR () {}
+function NODE_NTH_REF () {}
+function NODE_CONST () {}
+function NODE_DSTR () {}
+function NODE_DREGX () {}
+function NODE_DREGX_ONCE () {}
+function NODE_COLON2 () {}
+function NODE_COLON3 () {}
+function NODE_SELF () {}
+function NODE_NIL () {}
+function NODE_TRUE () {}
+function NODE_FALSE () {}
+function NODE_DEFINED () {}
+
+
+
+
+
+function NODE_SCOPE (tbl, body, args)
+{
+  this.type = NODE_SCOPE;
+  this.flags = 0;
+  this.line = 0;
+
+  this.tbl = tbl || local_tbl();
+  this.body = body;
+  this.args = args;
+}
+
+function NODE_BLOCK (head)
+{
+  this.type = NODE_BLOCK;
+  this.flags = 0;
+  this.line = 0;
+
+  this.head = head; // set later
+  this.next = null;
+  this.end = null; // set later
+}
+
+function NODE_BEGIN (body)
+{
+  this.type = NODE_BEGIN;
+  this.flags = 0;
+  this.line = 0;
+
+  this.body = body;
+}
+
+function NODE_RESCUE (body, rescue, elsee) // elsee for else
+{
+  this.type = NODE_RESCUE;
+  this.flags = 0;
+  this.line = 0;
+
+  this.body = body;
+  this.rescue = rescue;
+  this.elsee = elsee;
+}
+
+function NODE_RESBODY (exclude, body, rescue) // elsee for else
+{
+  this.type = NODE_RESBODY;
+  this.flags = 0;
+  this.line = 0;
+
+  this.exclude = exclude;
+  this.body = body;
+  this.rescue = rescue;
+}
+
+function NODE_ENSURE (body, enshure) // elsee for else
+{
+  this.type = NODE_ENSURE;
+  this.flags = 0;
+  this.line = 0;
+
+  this.body = body;
+  this.enshure = enshure;
+}
+
+function NODE_NIL ()
+{
+  this.type = NODE_NIL;
+  this.flags = 0;
+  this.line = 0;
+}
+
+function NODE_ALIAS (name, entity) // TODO: fix names
+{
+  this.type = NODE_ALIAS;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.name = name;
+  this.entity = entity;
+}
+
+function NODE_VALIAS (name, entity) // TODO: fix names
+{
+  this.type = NODE_VALIAS;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.name = name;
+  this.entity = entity;
+}
+
+function NODE_BACK_REF (name)
+{
+  this.type = NODE_BACK_REF;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.name = name;
+}
+
+function NODE_IF (cond, body, elsee)
+{
+  this.type = NODE_IF;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.cond = cond;
+  this.body = body; // aka "then"
+  this.elsee = elsee;
+}
+
+function NODE_MATCH2 (nd_1st, nd_2nd)
+{
+  this.type = NODE_MATCH2;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.nd_1st = nd_1st;
+  this.nd_2nd = nd_2nd;
+}
+
+function NODE_GVAR (name)
+{
+  this.type = NODE_GVAR;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.name = name;
+}
+
+function NODE_DOT2 (beg, end)
+{
+  this.type = NODE_DOT2;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.beg = beg;
+  this.end = end;
+}
+
+function NODE_DOT3 (beg, end)
+{
+  this.type = NODE_DOT3;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.beg = beg;
+  this.end = end;
+}
+
+function NODE_LIT (lit, lit_type)
+{
+  this.type = NODE_LIT;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.lit = lit;
+  this.lit_type = lit_type;
+}
+
+function NODE_WHILE (cond, body, n)
+{
+  this.type = NODE_WHILE;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.cond = cond;
+  this.body = body;
+  this.n = n; // TODO: n what?
+}
+
+function NODE_UNTIL (cond, body, n)
+{
+  this.type = NODE_UNTIL;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.cond = cond;
+  this.body = body;
+  this.n = n; // TODO: n what?
+}
+
+function NODE_POSTEXE (body)
+{
+  this.type = NODE_POSTEXE;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.body = body;
+}
+
+function NODE_OP_ASGN_OR (vid, val)
+{
+  this.type = NODE_OP_ASGN_OR;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.vid = vid;
+  this.val = val;
+}
+
+function NODE_OP_ASGN1 (vid, op, args)
+{
+  this.type = NODE_OP_ASGN_OR;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.vid = vid;
+  this.op = op;
+  this.args = args;
+}
+
+function NODE_OP_ASGN2 (vid, op, args)
+{
+  this.type = NODE_OP_ASGN_OR;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.vid = vid;
+  this.op = op;
+  this.args = args;
+}
+
+function NODE_OP_ASGN_AND (vid, val)
+{
+  this.type = NODE_OP_ASGN_AND;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.vid = vid;
+  this.val = val;
+}
+
+function NODE_CALL (vid, val)
+{
+  this.type = NODE_CALL;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.vid = vid;
+  this.val = val;
+}
+
+function NODE_ARRAY (next)
+{
+  this.type = NODE_ARRAY;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.next = next;
+  this.end = null;
+  this.alen = 1;
+}
+
+var NODE_LIST = NODE_ARRAY;
+
+function NODE_STR (lit) // literal
+{
+  this.type = NODE_STR;
+  this.flags = 0;
+  this.line = 0;
+  
+  this.lit = lit;
+}
+
+function NODE_ZARRAY () // literal
+{
+  this.type = NODE_ZARRAY;
+  this.flags = 0;
+  this.line = 0;
+}
+
+function NODE_ARGSCAT () // literal
+{
+  this.type = NODE_ARGSCAT;
+  this.flags = 0;
+  this.line = 0;
+}
+
+
+
+// from parse.y
+// 
+// > in rules (and generator) we have access to those things:
+// >   * all the code from prologue (not much though);
+// >   * `lexer`: instance of our Lexer class from the lexer code block;
+// >   * $$ and $N through the `yyval` and `yystack` local variables
+// >   * all the code and variables from `rules` code block.
+
+
+// This file is incuded into its own namesapase closure,
+// so feel free to create global variables here,
+// they all will be local to the parser actions.
+
+
+var ruby_verbose = true;
+
+// just a constants to compare to
+var DVARS_INHERIT = {},  // (NODE *) 1
+    DVARS_TOPSCOPE = {}; // NULL
+
+var lvtbl = null;
+
+function vtable_alloc (prev)
+{
+  var tbl =
+  {
+    prev: prev
+  };
+  
+  return tbl;
+}
+
+function local_push (inherit_dvars)
+{
+  var local =
+  {
+    prev: lvtbl,
+    args: vtable_alloc(0),
+    vars: vtable_alloc(inherit_dvars ? DVARS_INHERIT : DVARS_TOPSCOPE),
+    used: vtable_alloc(0)
+  };
+  lvtbl = local;
+}
+
+function local_pop ()
+{
+  var local = lvtbl.prev;
+  if (lvtbl.used)
+  {
+    warn_unused_var(lvtbl);
+  }
+  lvtbl = local;
+}
+
+function warn_unused_var (local)
+{
+  // TODO
+}
+
+function rb_bug ()
+{
+  // TODO: scream, of even log to the base.
+}
+
+var id2name_table = [];
+function rb_id2name (id)
+{
+  return id2name_table[id] || 'unknown-id';
+}
+
+
+// TODO: analise these
+var compile_for_eval = false;
+
+// `eval` handling
+// require sets it to 0 http://rxr.whitequark.org/mri/source/ruby.c?v=2.0.0-p0#537
+var parse_in_eval = 0;
+function rb_parse_in_eval () { return parse_in_eval > 0; }
+function rb_parse_in_main () { return parse_in_eval < 0; }
+// http://rxr.whitequark.org/mri/source/vm_eval.c?v=2.0.0-p0#1207
+/* make eval iseq */
+// th->parse_in_eval++;
+// th->mild_compile_error++;
+// iseqval = rb_iseq_compile_on_base(src, rb_str_new2(file), INT2FIX(line), base_block);
+// th->mild_compile_error--;
+// th->parse_in_eval--;
+
+// the root node, I think
+var ruby_eval_tree = null;
+var ruby_eval_tree_begin = null;
+
+
+
+
+
+
+function fixpos (node, orig)
+{
+  if (!node)
+    return;
+  if (!orig)
+    return;
+  if (orig == DVARS_INHERIT) // (NODE *) 1
+    return;
+  node.line = orig.line;
+}
+
+function parser_warning (node, mesg)
+{
+  lexer.warn(mesg, node.line);
+}
+
+
+function block_append (head, tail)
+{
+  var end, h = head;
+
+  if (tail == null)
+    return head;
+
+  if (h == null)
+    return tail;
+  switch (h.type)
+  {
+    case NODE_LIT:
+    case NODE_STR:
+    case NODE_SELF:
+    case NODE_TRUE:
+    case NODE_FALSE:
+    case NODE_NIL:
+      lexer.warn(h, "unused literal ignored");
+      return tail;
+    default:
+      h = end = new NODE_BLOCK(head);
+      end.end = end;
+      fixpos(end, head);
+      head = end;
+      break;
+    case NODE_BLOCK:
+      end = h.end;
+      break;
+  }
+
+  var nd = end.head;
+  switch (nd.type)
+  {
+    case NODE_RETURN:
+    case NODE_BREAK:
+    case NODE_NEXT:
+    case NODE_REDO:
+    case NODE_RETRY:
+      if (ruby_verbose)
+      {
+        parser_warning(tail, "statement not reached");
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  if (tail.type != NODE_BLOCK)
+  {
+    tail = new NODE_BLOCK(tail);
+    tail.end = tail;
+  }
+  end.next = tail;
+  h.end = tail.end;
+  return head;
+}
+
+
+function void_stmts (node)
+{
+  if (!ruby_verbose) TODO
+    return;
+
+  if (!node)
+    return;
+  if (node.type != NODE_BLOCK)
+    return;
+
+  for (;;)
+  {
+    if (!node.next)
+      return;
+    void_expr(node.head);
+    node = node.next;
+  }
+}
+
+
+// TODO: handle NODE_BEGIN with remove_begin()
+function void_expr (node)
+{
+  var useless = '';
+
+  if (!ruby_verbose) // TODO: hide in development mode
+    return;
+
+  if (!node)
+    return;
+  switch (node.type)
+  {
+    case NODE_CALL:
+      switch (node.mid)
+      {
+        case $('+'):
+        case $('-'):
+        case $('*'):
+        case $('/'):
+        case $('%'):
+        case tPOW:
+        case tUPLUS:
+        case tUMINUS:
+        case $('|'):
+        case $('^'):
+        case $('&'):
+        case tCMP:
+        case $('>'):
+        case tGEQ:
+        case $('<'):
+        case tLEQ:
+        case tEQ:
+        case tNEQ:
+          useless = rb_id2name(node.mid);
+          break;
+      }
+      break;
+
+    case NODE_LVAR:
+    case NODE_DVAR:
+    case NODE_GVAR:
+    case NODE_IVAR:
+    case NODE_CVAR:
+    case NODE_NTH_REF:
+    case NODE_BACK_REF:
+      useless = "a variable";
+      break;
+    case NODE_CONST:
+      useless = "a constant";
+      break;
+    case NODE_LIT:
+    case NODE_STR:
+    case NODE_DSTR:
+    case NODE_DREGX:
+    case NODE_DREGX_ONCE:
+      useless = "a literal";
+      break;
+    case NODE_COLON2:
+    case NODE_COLON3:
+      useless = "::";
+      break;
+    case NODE_DOT2:
+      useless = "..";
+      break;
+    case NODE_DOT3:
+      useless = "...";
+      break;
+    case NODE_SELF:
+      useless = "self";
+      break;
+    case NODE_NIL:
+      useless = "nil";
+      break;
+    case NODE_TRUE:
+      useless = "true";
+      break;
+    case NODE_FALSE:
+      useless = "false";
+      break;
+    case NODE_DEFINED:
+      useless = "defined?";
+      break;
+  }
+
+  if (useless)
+  {
+    var l = node.line;
+    lexer.warn("possibly useless use of "+useless+" in void context", l);
+  }
+}
+
+
+function local_tbl ()
+{
+  var buf = {};
+  
+  for (var k in lvtbl.args)
+    buf[k] = lvtbl.args[k]
+  
+  for (var k in lvtbl.vars)
+    buf[k] = lvtbl.vars[k]
+  
+  return buf;
+}
+
+var deferred_nodes = [];
+
+function fixup_nodes (deferred_nodes)
+{
+  // TODO: seams like a reduction for ranges
+}
+
+// shifts all leading NODE_BEGIN nodes in list:
+//   NODE_BEGIN->NODE_BEGIN->NODE_BEGIN->other_node
+// becomes
+//   other_node
+function remove_begin (node)
+{
+  while (node && node.type == NODE_BEGIN && node.body)
+  {
+    node = n1.body;
+  }
+  return node;
+}
+
+
+function  newline_node (node)
+{
+  if (node)
+  {
+    node = remove_begin(node);
+    node.flags |= NODE_FL_NEWLINE;
+  }
+  return node;
+}
+
+
+function check_cond (node)
+{
+  if (node == null)
+    return null;
+  assign_in_cond(node);
+
+  switch (node.type)
+  {
+    case NODE_DSTR:
+    case NODE_EVSTR:
+    case NODE_STR:
+      lexer.warn("string literal in condition");
+      break;
+
+    case NODE_DREGX:
+    case NODE_DREGX_ONCE:
+      parser_warning(node, "regex literal in condition");
+      return new NODE_MATCH2(node, new NODE_GVAR("$_"));
+
+    case NODE_AND:
+    case NODE_OR:
+      node.nd_1st = check_cond(node.nd_1st);
+      node.nd_2nd = check_cond(node.nd_2nd);
+      break;
+
+    case NODE_DOT2:
+    case NODE_DOT3:
+      node.beg = range_op(node.beg);
+      node.end = range_op(node.end);
+      if (node.type == NODE_DOT2)
+        // was: nd_set_type(node, NODE_FLIP2); TODO: understand
+        node.type = NODE_FLIP2;
+      else if (nd_type(node) == NODE_DOT3)
+        // was: nd_set_type(node, NODE_FLIP3); TODO: understand
+        node.type = NODE_FLIP3;
+      // if (!e_option_supplied(parser)) // TODO
+      {
+        var b = literal_node(node.beg);
+        var e = literal_node(node.end);
+        if ((b == 1 && e == 1) || (b + e >= 2 && ruby_verbose))
+        {
+          parser_warning(node, "range literal in condition");
+        }
+      }
+      break;
+
+    case NODE_DSYM:
+      parser_warning(node, "literal in condition");
+      break;
+
+    case NODE_LIT:
+      if (node.lit_type == 'REGEXP')
+      {
+        parser_warning(node, "regex literal in condition");
+        // was: nd_set_type(node, NODE_MATCH); TODO: understand
+        node.type = NODE_MATCH;
+      }
+      else
+      {
+        parser_warning(node, "literal in condition");
+      }
+    default:
+      break;
+  }
+  return node;
+}
+
+
+function assign_in_cond (node)
+{
+  switch (node.type)
+  {
+    case NODE_MASGN:
+      lexer.yyerror("multiple assignment in conditional");
+      return true;
+
+    case NODE_LASGN:
+    case NODE_DASGN:
+    case NODE_DASGN_CURR:
+    case NODE_GASGN:
+    case NODE_IASGN:
+      break;
+
+    default:
+      return false;
+  }
+
+  if (!node.value)
+    return true;
+  if (is_static_content(node.value))
+  {
+    /* reports always */
+    parser_warning(node.value, "found = in conditional, should be ==");
+  }
+  return true;
+}
+
+function range_op (node)
+{
+  if (node == null)
+    return null;
+
+  var type = node.type;
+  value_expr(node);
+  if (type == NODE_LIT && node.lit_type == 'FIXNUM')
+  {
+    warn_unless_e_option(parser, node,
+                         "integer literal in conditional range");
+    return NEW_CALL(node, tEQ, NEW_LIST(NEW_GVAR(rb_intern("$."))));
+  }
+  return cond0(parser, node);
+}
+
+
+function literal_node (node)
+{
+  if (!node)
+    return 1;        /* same as NODE_NIL */ // TODO: understand
+  switch (node.type)
+  {
+    case NODE_LIT:
+    case NODE_STR:
+    case NODE_DSTR:
+    case NODE_EVSTR:
+    case NODE_DREGX:
+    case NODE_DREGX_ONCE:
+    case NODE_DSYM:
+      return 2;
+    case NODE_TRUE:
+    case NODE_FALSE:
+    case NODE_NIL:
+      return 1;
+  }
+  return 0;
+}
+
+
+function is_static_content (node)
+{
+  if (!node)
+    return true;
+  switch (node.type)
+  {
+    case NODE_HASH:
+      if (!(node = node.head))
+        break;
+    case NODE_ARRAY:
+      do
+      {
+        if (!is_static_content(node.head))
+          return false;
+      }
+      while ((node = node.next) != null);
+    case NODE_LIT:
+    case NODE_STR:
+    case NODE_NIL:
+    case NODE_TRUE:
+    case NODE_FALSE:
+    case NODE_ZARRAY:
+      break;
+    default:
+      return false;
+  }
+  return true;
+}
+
+
+function value_expr (node)
+{
+  var cond = false;
+
+  if (!node)
+  {
+    lexer.warn("empty expression");
+  }
+  while (node)
+  {
+    switch (node.type)
+    {
+      case NODE_DEFN:
+      case NODE_DEFS:
+        parser_warning(node, "void value expression");
+        return false;
+
+      case NODE_RETURN:
+      case NODE_BREAK:
+      case NODE_NEXT:
+      case NODE_REDO:
+      case NODE_RETRY:
+        if (!cond)
+          lexer.yyerror("void value expression");
+        /* or "control never reach"? */
+        return false;
+
+      case NODE_BLOCK:
+        while (node.next)
+        {
+          node = node.next;
+        }
+        node = node.head;
+        break;
+
+      case NODE_BEGIN:
+        node = node.body;
+        break;
+
+      case NODE_IF:
+        if (!node.body) // aka "then"
+        {
+          node = node.elsee;
+          break;
+        }
+        else if (!node.elsee)
+        {
+          node = node.body;
+          break;
+        }
+        if (!value_expr(node.body))
+          return false;
+        node = node.elsee;
+        break;
+
+      case NODE_AND:
+      case NODE_OR:
+        cond = true;
+        node = node.nd_2nd;
+        break;
+
+      default:
+        return true;
+    }
+  }
+
+  return true;
+}
+
+function new_op_assign (lhs, op, rhs)
+{
+  var asgn = null;
+
+  if (lhs)
+  {
+    var vid = lhs.vid; // TODO: ID op operation: tPOW, $('*'), tLSHFT, etc.
+    if (op == tOROP)
+    {
+      lhs.value = rhs;
+      asgn = new NODE_OP_ASGN_OR(gettable(vid), lhs);
+      if (is_asgn_or_id(vid))
+      {
+        asgn.aid = vid;
+      }
+    }
+    else if (op == tANDOP)
+    {
+      lhs.value = rhs;
+      asgn = new NODE_OP_ASGN_AND(gettable(vid), lhs);
+    }
+    else
+    {
+      asgn = lhs;
+      asgn.value = new NODE_CALL(gettable(vid), op, new NODE_LIST(rhs));
+    }
+  }
+  else
+  {
+    asgn = new NODE_BEGIN(null);
+  }
+  return asgn;
+}
+
+// TODO: understand and... rewrite :)
+function gettable (id)
+{
+  throw 'TODO: function gettable (id)';
+  switch (id)
+  {
+    case keyword_self:
+      return NEW_SELF();
+    case keyword_nil:
+      return NEW_NIL();
+    case keyword_true:
+      return NEW_TRUE();
+    case keyword_false:
+      return NEW_FALSE();
+    case keyword__FILE__:
+      return
+        new NODE_STR(ruby_sourcefile);
+    case keyword__LINE__:
+      return NEW_LIT(INT2FIX(tokline));
+    case keyword__ENCODING__:
+      return NEW_LIT(rb_enc_from_encoding(current_enc));
+  }
+  switch (id_type(id))
+  {
+    case ID_LOCAL:
+      if (dyna_in_block() && dvar_defined(id))
+        return NEW_DVAR(id);
+      if (local_id(id))
+        return NEW_LVAR(id);
+      /* method call without arguments */
+      return NEW_VCALL(id);
+    case ID_GLOBAL:
+      return NEW_GVAR(id);
+    case ID_INSTANCE:
+      return NEW_IVAR(id);
+    case ID_CONST:
+      return NEW_CONST(id);
+    case ID_CLASS:
+      return NEW_CVAR(id);
+  }
+  lexer.compile_error("identifier %s is not valid to get", rb_id2name(id));
+  return null;
+}
+
+// used only in new_op_assign()
+// TODO: understand
+function is_asgn_or_id (id)
+{
+  // ((is_notop_id(id)) && \ // isn't an operator
+  // (((id)&ID_SCOPE_MASK) == ID_GLOBAL || \    // $*
+  // ((id)&ID_SCOPE_MASK) == ID_INSTANCE || \   // @*
+  // ((id)&ID_SCOPE_MASK) == ID_CLASS))         // @@*
+  
+  // may translate to:
+  // typeof id == "string"
+  // id[0] == '$'
+  // id[0] == '@' && id[1] != '@'
+  // id[0] == '@' && id[1] == '@'
+  
+  return true;
+}
+
+function arg_concat_gen (node1, node2)
+{
+  if (!node2)
+    return node1;
+  switch (node1.type)
+  {
+    case NODE_BLOCK_PASS:
+      if (node1.head)
+        node1.head = arg_concat(node1.head, node2);
+      else
+        node1.head = new NODE_LIST(node2);
+      return node1;
+    case NODE_ARGSPUSH:
+      if (node2.type != NODE_ARRAY)
+        break;
+      node1.body = list_concat(new NODE_LIST(node1.body), node2);
+      // was: nd_set_type(node1, NODE_ARGSCAT);
+      node1.type = NODE_ARGSCAT; // TODO
+      return node1;
+    case NODE_ARGSCAT:
+      if (node2.type != NODE_ARRAY ||
+          node1.body.type != NODE_ARRAY)
+        break;
+      node1.body = list_concat(node1.body, node2);
+      return node1;
+  }
+  return new NODE_ARGSCAT(node1, node2);
+}
+
+function list_concat (head, tail)
+{
+  var last = null;
+
+  if (head.next)
+  {
+    last = head.next.end;
+  }
+  else
+  {
+    last = head;
+  }
+
+  head.alen += tail.alen;
+  last.next = tail;
+  if (tail.next)
+  {
+    head.next.end = tail.next.end;
+  }
+  else
+  {
+    head.next.end = tail;
+  }
+
+  return head;
+}
+
+function new_attr_op_assign (lhs, attr, op, rhs)
+{
+  if (op == tOROP)
+  {
+    op = 0;
+  }
+  else if (op == tANDOP)
+  {
+    op = 1;
+  }
+  // var asgn = new NEW_OP_ASGN2(lhs, attr, op, rhs);
+  
+  var asgn = new NODE_OP_ASGN2
+  (
+    lhs,
+    rhs,
+    new NODE_OP_ASGN2
+    (
+      attr,
+      op,
+      rb_id_attrset(attr)
+    )
+  )
+  
+  fixpos(asgn, lhs);
+  return asgn;
+}
 
 
 
@@ -3245,80 +4338,129 @@ actionsTable =
     2: function ()
     
     {
-      lexer.lex_state = EXPR_BEG;
-      // gen.local_push(gen.compile_for_eval || gen.rb_parse_in_main());
+            lexer.lex_state = EXPR_BEG;
+            // creates a new chain link of `lvtbl`es
+            local_push(compile_for_eval || rb_parse_in_main());
     },
   3: function ()
     
     {
-        /*%%%*/
-            // if ($2 && !gen.compile_for_eval)
-            // {
-            //     /* last expression should not be void */
-            //     if ($2.nd_type != 'NODE_BLOCK')
-            //       gen.void_expr($2);
-            //     else
-            //     {
-            //       var node = $2;
-            //       while (node.nd_next)
-            //       {
-            //           node = node.nd_next;
-            //       }
-            //       gen.void_expr(node.nd_head);
-            //     }
-            // }
-            // gen.ruby_eval_tree = gen.NEW_SCOPE(0, block_append(ruby_eval_tree, $2));
-            /*%
-            $$ = $2;
-            parser->result = dispatch1(program, $$);
-            %*/
-            // local_pop();
-          
+            if (yystack.valueStack[yystack.valueStack.length-1-((2-(2)))] && !compile_for_eval)
+            {
+                /* last expression should not be void */
+                if (yystack.valueStack[yystack.valueStack.length-1-((2-(2)))].type != NODE_BLOCK)
+                  void_expr(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
+                else
+                {
+                  var node = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
+                  while (node.next)
+                  {
+                      node = node.next;
+                  }
+                  void_expr(node.head);
+                }
+            }
+            ruby_eval_tree = 
+              new NODE_SCOPE(null, block_append(ruby_eval_tree, yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]), null);
+            // creates the chain link off `lvtbl`es and restores it
+            local_pop();
     },
   4: function ()
     
-    {},
+    {
+      void_stmts(yystack.valueStack[yystack.valueStack.length-1-((2-(1)))]);
+      fixup_nodes(deferred_nodes);
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
+    },
   5: function ()
     
-    {},
+    {
+      yyval = new NODE_BEGIN(null); // empty body
+    },
   6: function ()
     
-    {},
+    {
+      yyval = newline_node(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
+    },
   7: function ()
     
-    {},
+    {
+      yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], newline_node(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
+    },
   8: function ()
     
-    {},
+    {
+      yyval = remove_begin(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
+    },
   10: function ()
     
     {},
   11: function ()
     
-    {},
+    {
+      ruby_eval_tree_begin = block_append(ruby_eval_tree_begin, yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]);
+      yyval = new NODE_BEGIN(null);
+      puts(123)
+    },
   12: function ()
     
     {
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
+      if (yystack.valueStack[yystack.valueStack.length-1-((4-(2)))])
+      {
+        yyval = new NODE_RESCUE(yystack.valueStack[yystack.valueStack.length-1-((4-(1)))], yystack.valueStack[yystack.valueStack.length-1-((4-(2)))], yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
+      }
+      else if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])
+      {
+        lexer.warn("else without rescue is useless");
+        yyval = block_append(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
+      }
       
+      if (yystack.valueStack[yystack.valueStack.length-1-((4-(4)))])
+      {
+        if (yyval)
+        {
+          yyval = new NODE_ENSURE(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(4)))]);
+        }
+        else
+        {
+          yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((4-(4)))], new NODE_NIL());
+        }
+      }
+      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(1)))]);
     },
   13: function ()
     
-    {},
+    {
+      void_stmts(yystack.valueStack[yystack.valueStack.length-1-((2-(1)))]);
+      fixup_nodes(deferred_nodes);
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
+    },
   14: function ()
     
-    {},
+    {
+      yyval = new NODE_BEGIN(null);
+    },
   15: function ()
     
-    {},
+    {
+      yyval = newline_node(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
+    },
   16: function ()
     
-    {},
+    {
+      yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], newline_node(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
+    },
   17: function ()
     
-    {},
+    {
+      yyval = remove_begin(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
+    },
   18: function ()
     
-    {},
+    {
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((1-(1)))];
+    },
   19: function ()
     
     {
@@ -3326,7 +4468,10 @@ actionsTable =
     },
   20: function ()
     
-    {},
+    {
+      ruby_eval_tree_begin = block_append(ruby_eval_tree_begin, yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]);
+      yyval = new NODE_BEGIN(null);
+    },
   21: function ()
     
     {
@@ -3334,54 +4479,124 @@ actionsTable =
     },
   22: function ()
     
-    {},
+    {
+      yyval = new NODE_ALIAS(yystack.valueStack[yystack.valueStack.length-1-((4-(2)))], yystack.valueStack[yystack.valueStack.length-1-((4-(4)))]);
+    },
   23: function ()
     
-    {},
+    {
+      yyval = new NODE_VALIAS(yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+    },
   24: function ()
     
-    {},
+    {
+      yyval = new NODE_VALIAS(yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], new NODE_BACK_REF(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
+    },
   25: function ()
     
     {
       lexer.yyerror("can't make alias for the number variables");
+      yyval = new NODE_BEGIN(null);
     },
   26: function ()
     
-    {},
+    {
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
+    },
   27: function ()
     
-    {},
+    {
+      yyval = new NODE_IF(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]), null);
+      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+    },
   28: function ()
     
-    {},
+    {
+      // #define NEW_UNLESS(c,t,e) NEW_IF(c,e,t)
+      yyval = new NODE_IF(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), null, remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]));
+      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+    },
   29: function ()
     
-    {},
+    {
+      if (yystack.valueStack[yystack.valueStack.length-1-((3-(1)))] && yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].type == NODE_BEGIN)
+      {
+        yyval = new NODE_WHILE(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].body, 0);
+      }
+      else
+      {
+        yyval = new NODE_WHILE(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], 1);
+      }
+    },
   30: function ()
     
-    {},
+    {
+      if (yystack.valueStack[yystack.valueStack.length-1-((3-(1)))] && yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].type == NODE_BEGIN)
+      {
+        yyval = new NODE_UNTIL(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].body, 0);
+      }
+      else
+      {
+        yyval = new NODE_UNTIL(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], 1);
+      }
+    },
   31: function ()
     
-    {},
+    {
+      var resq = new NODE_RESBODY(null, remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), null);
+      yyval = new NODE_RESCUE(remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]), resq, null);
+    },
   32: function ()
     
     {
       if (lexer.in_def || lexer.in_single)
-        rb_warn("END in method; use at_exit");
+      {
+        lexer.warn("END in method; use at_exit");
+      }
+      yyval = new NODE_POSTEXE(new NODE_SCOPE
+      (
+        null, // tbl
+        yystack.valueStack[yystack.valueStack.length-1-((4-(3)))],   // body
+        null  // args
+      ));
     },
   34: function ()
     
-    {},
+    {
+      value_expr(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+      yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].value = yystack.valueStack[yystack.valueStack.length-1-((3-(3)))];
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((3-(1)))];
+    },
   35: function ()
     
-    {},
+    {
+      value_expr(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+      yyval = new_op_assign(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+    },
   36: function ()
     
-    {},
+    {
+      value_expr(yystack.valueStack[yystack.valueStack.length-1-((6-(6)))]);
+      if (!yystack.valueStack[yystack.valueStack.length-1-((6-(3)))])
+        yystack.valueStack[yystack.valueStack.length-1-((6-(3)))] = new NODE_ZARRAY();
+      var args = arg_concat(yystack.valueStack[yystack.valueStack.length-1-((6-(3)))], yystack.valueStack[yystack.valueStack.length-1-((6-(6)))]);
+      if (yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] == tOROP)
+      {
+        yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] = 0;
+      }
+      else if (yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] == tANDOP)
+      {
+        yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] = 1;
+      }
+      yyval = NEW_OP_ASGN1(yystack.valueStack[yystack.valueStack.length-1-((6-(1)))], yystack.valueStack[yystack.valueStack.length-1-((6-(5)))], args);
+      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((6-(1)))]);
+    },
   37: function ()
     
-    {},
+    {
+      value_expr(yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
+      yyval = new_attr_op_assign(yystack.valueStack[yystack.valueStack.length-1-((5-(1)))], ripper_id2sym('.'), yystack.valueStack[yystack.valueStack.length-1-((5-(3)))], yystack.valueStack[yystack.valueStack.length-1-((5-(4)))], yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
+    },
   38: function ()
     
     {},
@@ -4653,6 +5868,11 @@ actionsTable =
   518: function ()
     
     {},
+  520: function ()
+    
+    {
+      yyval = new NODE_BACK_REF(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
+    },
   521: function ()
     
     {},
@@ -4668,7 +5888,7 @@ actionsTable =
   524: function ()
     
     {
-              yyerrok();
+              parser.yyerrok();
             },
   525: function ()
     
@@ -4855,11 +6075,11 @@ actionsTable =
   585: function ()
     
     {
-          if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == 0) {
+          if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == null) {
             lexer.yyerror("can't define singleton method for ().");
           }
           else {
-            switch (nd_type(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])) { // TODO
+            switch (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))].type) { // TODO
               case NODE_STR:
               case NODE_DSTR:
               case NODE_XSTR:
@@ -4892,13 +6112,16 @@ actionsTable =
     {},
   614: function ()
     
-    {yyerrok();},
+    { parser.yyerrok(); },
   617: function ()
     
-    {yyerrok();},
+    { parser.yyerrok(); },
   618: function ()
     
-    {}
+    {
+      // empty ensure or else block for example
+      yyval = null;
+    }
 };
 
 })(); // actions table namespace end
@@ -4942,7 +6165,7 @@ actionsTable =
   var yyntokens_ = this.yyntokens_ = 142;
   
   var yyerrstatus_ = 0;
-  function yyerrok () {yyerrstatus_ = 0;}
+  parser.yyerrok = function yyerrok () { yyerrstatus_ = 0; }
   
   // Return whether error recovery is being done.
   // In this state, the parser reads token until it reaches a known state,
@@ -5019,8 +6242,7 @@ actionsTable =
         {
           debug_print("Reading a token: ");
           yychar = lexer.yylex();
-
-          yylval = lexer.getLVal();
+          yylval = lexer.yylval;
         }
 
 
@@ -8391,68 +9613,68 @@ actionsTable =
   var yyrline_ = this.yyrline_ =
   [
     //]
-         0,   137,   137,   137,   171,   177,   180,   183,   186,   192,
-     195,   194,   201,   209,   215,   218,   221,   224,   230,   234,
-     233,   244,   243,   250,   253,   256,   261,   264,   267,   270,
-     273,   276,   279,   285,   287,   290,   293,   296,   299,   302,
-     305,   308,   311,   314,   317,   320,   325,   328,   335,   337,
-     339,   342,   345,   348,   353,   359,   361,   366,   368,   375,
-     374,   385,   391,   394,   397,   400,   403,   406,   409,   412,
-     415,   418,   421,   427,   429,   435,   437,   443,   446,   449,
-     452,   455,   458,   461,   464,   467,   469,   475,   477,   483,
-     486,   492,   495,   501,   504,   507,   510,   513,   516,   519,
-     525,   531,   537,   540,   543,   546,   549,   552,   555,   561,
-     567,   573,   578,   583,   586,   589,   595,   597,   599,   601,
-     606,   614,   616,   621,   624,   629,   633,   632,   641,   642,
-     643,   644,   645,   646,   647,   648,   649,   650,   651,   652,
-     653,   654,   655,   656,   657,   658,   659,   660,   661,   662,
-     663,   664,   665,   666,   667,   668,   669,   670,   674,   674,
-     674,   675,   675,   676,   676,   676,   677,   677,   677,   677,
-     678,   678,   678,   678,   679,   679,   679,   680,   680,   680,
-     680,   681,   681,   681,   681,   682,   682,   682,   682,   683,
-     683,   683,   683,   684,   684,   684,   684,   685,   685,   690,
-     693,   696,   699,   702,   705,   708,   711,   714,   717,   720,
-     723,   726,   729,   732,   735,   738,   741,   744,   747,   750,
-     753,   756,   759,   762,   765,   768,   771,   774,   777,   780,
-     783,   786,   789,   792,   795,   798,   801,   804,   807,   810,
-     813,   816,   816,   821,   824,   830,   834,   835,   837,   839,
-     843,   847,   848,   851,   852,   853,   855,   857,   861,   863,
-     865,   867,   869,   874,   874,   885,   889,   891,   895,   897,
-     899,   901,   905,   907,   909,   913,   914,   915,   916,   917,
-     918,   919,   920,   921,   922,   923,   926,   925,   938,   937,
-     944,   943,   949,   951,   953,   955,   957,   959,   961,   963,
-     965,   967,   967,   971,   973,   975,   977,   978,   980,   982,
-     987,   993,   997,   992,  1004,  1008,  1003,  1014,  1018,  1021,
-    1025,  1020,  1032,  1031,  1044,  1049,  1043,  1060,  1059,  1072,
-    1071,  1089,  1093,  1088,  1103,  1105,  1107,  1109,  1113,  1117,
-    1121,  1125,  1129,  1133,  1137,  1141,  1145,  1149,  1153,  1157,
-    1161,  1162,  1163,  1166,  1167,  1170,  1171,  1177,  1178,  1182,
-    1183,  1186,  1188,  1192,  1194,  1198,  1200,  1202,  1204,  1206,
-    1208,  1210,  1212,  1214,  1219,  1221,  1223,  1225,  1229,  1232,
-    1235,  1237,  1239,  1241,  1243,  1245,  1247,  1249,  1251,  1253,
-    1255,  1257,  1259,  1261,  1263,  1267,  1268,  1274,  1276,  1278,
-    1283,  1285,  1289,  1290,  1293,  1295,  1299,  1300,  1299,  1313,
-    1315,  1319,  1321,  1326,  1325,  1337,  1339,  1341,  1343,  1347,
-    1350,  1349,  1357,  1356,  1363,  1366,  1365,  1373,  1372,  1379,
-    1381,  1383,  1388,  1387,  1396,  1395,  1405,  1411,  1412,  1415,
-    1419,  1422,  1424,  1426,  1429,  1431,  1434,  1436,  1439,  1440,
-    1442,  1445,  1449,  1450,  1451,  1455,  1459,  1463,  1467,  1469,
-    1474,  1475,  1479,  1480,  1484,  1486,  1491,  1492,  1496,  1498,
-    1502,  1504,  1509,  1510,  1515,  1516,  1521,  1522,  1527,  1528,
-    1533,  1534,  1538,  1540,  1539,  1551,  1557,  1562,  1550,  1575,
-    1577,  1579,  1581,  1584,  1590,  1591,  1592,  1593,  1596,  1602,
-    1603,  1604,  1607,  1612,  1613,  1614,  1615,  1616,  1619,  1620,
-    1621,  1622,  1623,  1624,  1625,  1628,  1631,  1635,  1637,  1641,
-    1642,  1645,  1648,  1647,  1654,  1660,  1665,  1672,  1674,  1676,
-    1678,  1682,  1685,  1688,  1690,  1692,  1694,  1696,  1698,  1700,
-    1702,  1704,  1706,  1708,  1710,  1712,  1714,  1717,  1720,  1724,
-    1728,  1732,  1738,  1739,  1743,  1745,  1749,  1750,  1754,  1758,
-    1762,  1764,  1769,  1771,  1775,  1776,  1779,  1781,  1785,  1789,
-    1793,  1795,  1799,  1801,  1805,  1806,  1809,  1815,  1819,  1820,
-    1823,  1833,  1835,  1839,  1842,  1841,  1869,  1870,  1874,  1875,
-    1879,  1881,  1883,  1889,  1890,  1891,  1894,  1895,  1896,  1897,
-    1900,  1901,  1902,  1905,  1906,  1909,  1910,  1913,  1914,  1917,
-    1920,  1923,  1924,  1925,  1928,  1929,  1932,  1933,  1937
+         0,   154,   154,   154,   183,   191,   196,   201,   206,   213,
+     216,   215,   226,   254,   262,   267,   272,   277,   283,   289,
+     288,   301,   300,   309,   314,   319,   325,   330,   336,   343,
+     355,   367,   373,   387,   389,   396,   402,   420,   426,   429,
+     432,   435,   438,   441,   444,   447,   452,   455,   462,   464,
+     466,   469,   472,   475,   480,   486,   488,   493,   495,   502,
+     501,   512,   518,   521,   524,   527,   530,   533,   536,   539,
+     542,   545,   548,   554,   556,   562,   564,   570,   573,   576,
+     579,   582,   585,   588,   591,   594,   596,   602,   604,   610,
+     613,   619,   622,   628,   631,   634,   637,   640,   643,   646,
+     652,   658,   664,   667,   670,   673,   676,   679,   682,   688,
+     694,   700,   705,   710,   713,   716,   722,   724,   726,   728,
+     733,   741,   743,   748,   751,   756,   760,   759,   768,   769,
+     770,   771,   772,   773,   774,   775,   776,   777,   778,   779,
+     780,   781,   782,   783,   784,   785,   786,   787,   788,   789,
+     790,   791,   792,   793,   794,   795,   796,   797,   801,   801,
+     801,   802,   802,   803,   803,   803,   804,   804,   804,   804,
+     805,   805,   805,   805,   806,   806,   806,   807,   807,   807,
+     807,   808,   808,   808,   808,   809,   809,   809,   809,   810,
+     810,   810,   810,   811,   811,   811,   811,   812,   812,   817,
+     820,   823,   826,   829,   832,   835,   838,   841,   844,   847,
+     850,   853,   856,   859,   862,   865,   868,   871,   874,   877,
+     880,   883,   886,   889,   892,   895,   898,   901,   904,   907,
+     910,   913,   916,   919,   922,   925,   928,   931,   934,   937,
+     940,   943,   943,   948,   951,   957,   961,   962,   964,   966,
+     970,   974,   975,   978,   979,   980,   982,   984,   988,   990,
+     992,   994,   996,  1001,  1001,  1012,  1016,  1018,  1022,  1024,
+    1026,  1028,  1032,  1034,  1036,  1040,  1041,  1042,  1043,  1044,
+    1045,  1046,  1047,  1048,  1049,  1050,  1053,  1052,  1065,  1064,
+    1071,  1070,  1076,  1078,  1080,  1082,  1084,  1086,  1088,  1090,
+    1092,  1094,  1094,  1098,  1100,  1102,  1104,  1105,  1107,  1109,
+    1114,  1120,  1124,  1119,  1131,  1135,  1130,  1141,  1145,  1148,
+    1152,  1147,  1159,  1158,  1171,  1176,  1170,  1187,  1186,  1199,
+    1198,  1216,  1220,  1215,  1230,  1232,  1234,  1236,  1240,  1244,
+    1248,  1252,  1256,  1260,  1264,  1268,  1272,  1276,  1280,  1284,
+    1288,  1289,  1290,  1293,  1294,  1297,  1298,  1304,  1305,  1309,
+    1310,  1313,  1315,  1319,  1321,  1325,  1327,  1329,  1331,  1333,
+    1335,  1337,  1339,  1341,  1346,  1348,  1350,  1352,  1356,  1359,
+    1362,  1364,  1366,  1368,  1370,  1372,  1374,  1376,  1378,  1380,
+    1382,  1384,  1386,  1388,  1390,  1394,  1395,  1401,  1403,  1405,
+    1410,  1412,  1416,  1417,  1420,  1422,  1426,  1427,  1426,  1440,
+    1442,  1446,  1448,  1453,  1452,  1464,  1466,  1468,  1470,  1474,
+    1477,  1476,  1484,  1483,  1490,  1493,  1492,  1500,  1499,  1506,
+    1508,  1510,  1515,  1514,  1523,  1522,  1532,  1538,  1539,  1542,
+    1546,  1549,  1551,  1553,  1556,  1558,  1561,  1563,  1566,  1567,
+    1569,  1572,  1576,  1577,  1578,  1582,  1586,  1590,  1594,  1596,
+    1601,  1602,  1606,  1607,  1611,  1613,  1618,  1619,  1623,  1625,
+    1629,  1631,  1636,  1637,  1642,  1643,  1648,  1649,  1654,  1655,
+    1660,  1661,  1665,  1667,  1666,  1678,  1684,  1689,  1677,  1702,
+    1704,  1706,  1708,  1711,  1717,  1718,  1719,  1720,  1723,  1729,
+    1730,  1731,  1734,  1739,  1740,  1741,  1742,  1743,  1746,  1747,
+    1748,  1749,  1750,  1751,  1752,  1755,  1758,  1762,  1764,  1769,
+    1770,  1775,  1778,  1777,  1784,  1790,  1795,  1802,  1804,  1806,
+    1808,  1812,  1815,  1818,  1820,  1822,  1824,  1826,  1828,  1830,
+    1832,  1834,  1836,  1838,  1840,  1842,  1844,  1847,  1850,  1854,
+    1858,  1862,  1868,  1869,  1873,  1875,  1879,  1880,  1884,  1888,
+    1892,  1894,  1899,  1901,  1905,  1906,  1909,  1911,  1915,  1919,
+    1923,  1925,  1929,  1931,  1935,  1936,  1939,  1945,  1949,  1950,
+    1953,  1963,  1965,  1969,  1972,  1971,  1999,  2000,  2004,  2005,
+    2009,  2011,  2013,  2019,  2020,  2021,  2024,  2025,  2026,  2027,
+    2030,  2031,  2032,  2035,  2036,  2039,  2040,  2043,  2044,  2047,
+    2050,  2053,  2054,  2055,  2060,  2063,  2068,  2070,  2075
     //[
   ];
   // YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.
@@ -8733,9 +9955,14 @@ YYParser.Stack = function Stack ()
 }
 
 
-// here goes the epilog
+// here goes the epilogue
 
 
+
+
+// Exports part.
+// Here we have to expose our YY* classes to outer world somehow.
+// And yes, all the two YYParser and YYLexer are visible here
 
 global.parse = function (text)
 {
@@ -8746,6 +9973,7 @@ global.parse = function (text)
   return parser.parse();
 }
 
+})(); // whole parser and lexer namespase start
 
-})(); // end of the whole parser+lexer namespase
+
 
