@@ -35,9 +35,14 @@
 /* First part of user declarations.  */
 
 
-;(function(){ // whole parser and lexer namespase start
+;(function(){ // whole parser and lexer namespace start
 
 "use strict";
+
+// char to code shortcut
+function $ (c) { return c.charCodeAt(0) }
+function $$ (code) { return String.fromCharCode(code) }
+
 
 // TODO:
 // var global_symbols = {}; // name => ID
@@ -215,6 +220,10 @@ function YYLexer ($text)
 {
 // the yylex() method and all public data sit here
 var lexer = this;
+
+// connection to the generator
+var gen = null;
+lexer.setGenerator = function (g) { gen = g; }
 
 // the end of stream had been reached
 lexer.eofp = false;
@@ -677,10 +686,6 @@ function NEW_HEREDOCTERM (func, term)
   };
 }
 
-// char to code shortcut
-function $ (c) { return c.charCodeAt(0) }
-function $$ (code) { return String.fromCharCode(code) }
-
 function ISASCII (c)
 {
   return $(c) < 128;
@@ -713,6 +718,8 @@ function arg_ambiguous ()
 
 this.yylex = function yylex ()
 {
+  lexer.yylval = null;
+  
   var c = '';
   lexer.space_seen = false;
   
@@ -824,7 +831,7 @@ this.yylex = function yylex ()
       {
         if ((c = nextc()) == '=')
         {
-          lexer.yylval = tPOW; // TODO: maybe a string needed
+          lexer.yylval = tPOW; // TODO: maybe a token id needed
           lexer.lex_state = EXPR_BEG;
           return tOP_ASGN;
         }
@@ -1156,7 +1163,7 @@ this.yylex = function yylex ()
       }
       else if (c == '=')
       {
-        lexer.yylval= $('&'); // ID
+        lexer.yylval = $('&'); // ID
         lexer.lex_state = EXPR_BEG;
         return tOP_ASGN;
       }
@@ -1698,15 +1705,13 @@ this.yylex = function yylex ()
         case '<':              /* $<: reading filename */
         case '>':              /* $>: default output handle */
         case '\"':             /* $": already loaded files */
-          tokadd('$');
-          tokadd(c);
+          tokadd('$'+c);
           tokfix();
-          lexer.yylval = tok(); // intern string
+          lexer.yylval = tok(); // ID: intern string
           return tGVAR;
 
         case '-':
-          tokadd('$');
-          tokadd(c);
+          tokadd('$'+c);
           c = nextc();
           if (parser_is_identchar(c))
           {
@@ -1719,7 +1724,7 @@ this.yylex = function yylex ()
           }
         // was: gvar:
           tokfix();
-          lexer.yylval = tok(); // intern string
+          lexer.yylval = tok(); // ID, intern string
           return tGVAR;
 
         case '&':              /* $&: last match */
@@ -1731,7 +1736,7 @@ this.yylex = function yylex ()
             tokadd('$'+c);
             // was: goto gvar;
             tokfix();
-            lexer.yylval = tok(); // intern string
+            lexer.yylval = tok(); // ID, intern string
             return tGVAR;
           }
           // was: set_yylval_node(NEW_BACK_REF(c)); TODO: check after time
@@ -1747,7 +1752,7 @@ this.yylex = function yylex ()
         case '7':
         case '8':
         case '9':
-          tokadd('$');
+          // was: tokadd('$');
           do
           {
             tokadd(c);
@@ -1759,11 +1764,13 @@ this.yylex = function yylex ()
           {
             // was: goto gvar;
             tokfix();
-            // set_yylval_name(rb_intern(tok())); TODO
+            // was: set_yylval_name(rb_intern(tok())); TODO: check
+            lexer.yylval = '$'+tok();
             return tGVAR;
           }
           tokfix();
-          // set_yylval_node(NEW_NTH_REF(atoi(tok() + 1))); TODO
+          // was: set_yylval_node(NEW_NTH_REF(atoi(tok() + 1))); TODO: check
+          lexer.yylval = +tok();
           return tNTH_REF;
 
         default:
@@ -1931,7 +1938,8 @@ this.yylex = function yylex ()
             lexer.lex_state = kw.state;
             if (state == EXPR_FNAME)
             {
-              // set_yylval_name(rb_intern(kw->name)); TODO
+              // was: set_yylval_name(rb_intern(kw->name)); TODO: check
+              lexer.yylval = kw.name;
               return kw.id0;
             }
             if (lexer.lex_state == EXPR_BEG)
@@ -1990,9 +1998,10 @@ this.yylex = function yylex ()
       // do not convert to a symbol, leave it to JS engine
       var ident = tok();
 
-      // set_yylval_name(ident); TODO
+      // was: set_yylval_name(ident); TODO: check
+      lexer.yylval = ident;
       if (!IS_lex_state_for(lexer.last_state, EXPR_DOT | EXPR_FNAME) &&
-          is_local_id(ident) && lvar_defined(ident))
+          gen.is_local_id(ident) && gen.lvar_defined(ident))
       {
         lexer.lex_state = EXPR_END;
       }
@@ -2166,7 +2175,8 @@ function here_document (here)
       }
       if (c != '\n')
       {
-        // set_yylval_str(STR_NEW3(tok(), toklen(), enc, func)); TODO
+        // was: set_yylval_str(STR_NEW3(tok(), toklen(), enc, func));
+        lexer.yylval = tok()
         return tSTRING_CONTENT;
       }
       tokadd(nextc());
@@ -2178,11 +2188,12 @@ function here_document (here)
       }
     }
     while (!whole_match_p(eos, indent));
-    // str = STR_NEW3(tok(), toklen(), enc, func); TODO
+    str = tok();
   }
   heredoc_restore(lexer.lex_strterm);
   lexer.lex_strterm = NEW_STRTERM(-1, '', '');
-  // set_yylval_str(str); TODO:
+  // was: set_yylval_str(str); TODO:
+  lexer.yylval = str;
   return tSTRING_CONTENT;
 }
 
@@ -2259,7 +2270,8 @@ function parse_string (quote)
   }
 
   tokfix();
-  // set_yylval_str(STR_NEW3(tok(), toklen(), enc, func)); TODO
+  // was: set_yylval_str(STR_NEW3(tok(), toklen(), enc, func));
+  lexer.yylval = tok();
 
   return tSTRING_CONTENT;
 }
@@ -2808,7 +2820,7 @@ function start_num (c)
       }
       else if (nondigit)
         break goto_trailing_uc; // was: goto trailing_uc;
-      // set_yylval_literal(rb_cstr_to_inum(tok(), 16, FALSE)); TODO
+      lexer.yylval = parseInt(tok(), 1);
       return tINTEGER;
     }
     if (c == 'b' || c == 'B')
@@ -2842,7 +2854,7 @@ function start_num (c)
       }
       else if (nondigit)
         break goto_trailing_uc; // was: goto trailing_uc;
-      // set_yylval_literal(rb_cstr_to_inum(tok(), 2, FALSE)); TODO
+      lexer.yylval = parseInt(tok(), 2);
       return tINTEGER;
     }
     if (c == 'd' || c == 'D')
@@ -2876,7 +2888,7 @@ function start_num (c)
       }
       else if (nondigit)
         break goto_trailing_uc; // was: goto trailing_uc;
-      // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
+      lexer.yylval = parseInt(tok(), 10)
       return tINTEGER;
     }
     // was: if (c == '_')
@@ -2925,7 +2937,7 @@ function start_num (c)
         tokfix();
         if (nondigit)
           break goto_trailing_uc; // was: goto trailing_uc;
-        // set_yylval_literal(rb_cstr_to_inum(tok(), 8, FALSE)); TODO
+        lexer.yylval = parseInt(tok(), 8);
         return tINTEGER;
       }
       if (nondigit)
@@ -2946,7 +2958,8 @@ function start_num (c)
     else
     {
       pushback(c);
-      // set_yylval_literal(INT2FIX(0)); TODO
+      // was: set_yylval_literal(INT2FIX(0));
+      lexer.yylval = 0;
       return tINTEGER;
     }
   } // c == '0'
@@ -3048,13 +3061,13 @@ function start_num (c)
     var d = parseInt(tok(), 10);
     // if (errno == ERANGE)
     // {
-    //   rb_warningS("Float %s out of range", tok());
+    //   rb_warningS("Float %s out of range", tok()); TODO
     //   errno = 0;
     // }
-    // set_yylval_literal(DBL2NUM(d)); TODO
+    lexer.yylval = d;
     return tFLOAT;
   }
-  // set_yylval_literal(rb_cstr_to_inum(tok(), 10, FALSE)); TODO
+  lexer.yylval = parseInt(tok(), 10);
   return tINTEGER;
 
   // why are we so certain about returning `tFLOAT` or `tINTEGER`?
@@ -3063,43 +3076,7 @@ function start_num (c)
 
 
 // struct kwtable {const char *name; int id[2]; enum lex_state_e state;};
-
-function dyna_in_block ()
-{
-  // TODO :)
-  return true;
-}
-lexer.dyna_in_block = dyna_in_block;
-function is_local_id (ident)
-{
-  // TODO :)
-  return true;
-}
-lexer.is_local_id = is_local_id;
-function local_id (ident)
-{
-  // TODO :)
-  return true;
-}
-lexer.local_id = local_id;
-function lvar_defined (ident)
-{
-  // TODO :)
-  return false;
-}
-
-// TODO:
-// function rb_intern (name)
-// {
-//   var id = global_symbols[name];
-//   if (id)
-//     return id;
-//   
-//   return global_symbols_add(id);
-// }
-
-
-var rb_reserved_word =
+var rb_reserved_word = lexer.rb_reserved_word =
 {
 '__ENCODING__': {id0: keyword__ENCODING__, id1: keyword__ENCODING__, state: EXPR_END},
 '__LINE__': {id0: keyword__LINE__, id1: keyword__LINE__, state: EXPR_END},
@@ -3239,2902 +3216,26 @@ function YYParser (lexer)
 // self
 var parser = this;
 
-// the three variables shared by Parser's guts and actions world
-// (`lexer` and `parser` are shared too)
+// The three variables shared by Parser's guts and actions world
+// defined after the Parser very own namespace.
+// (`lexer` and `parser` are shared too),
 var yyval, yystack, actionsTable;
-
-;(function(){ // actions table namespace start
-
-/* "%code actions" blocks.  */
-
-
-
-// here goes the code needed in rules only, when generating nodes,
-// we still know all the token numbers here too.
-// here is the main generator interface
-
-// nodes classes
-
-var NODE_FL_NEWLINE = 1<<7;
-var NODE_FL_CREF_PUSHED_BY_EVAL = NODE_FL_NEWLINE;
-var NODE_FL_CREF_OMOD_SHARED = 1<<6;
-
-
-// TODO: implement them all
-function NODE_BLOCK_PASS () {}
-function NODE_ARGSPUSH () {}
-function NODE_DSYM () {}
-function NODE_AND () {}
-function NODE_OR () {}
-function NODE_EVSTR () {}
-function NODE_MASGN () {}
-function NODE_LASGN () {}
-function NODE_DASGN () {}
-function NODE_DASGN_CURR () {}
-function NODE_GASGN () {}
-function NODE_IASGN () {}
-function NODE_SELF () {}
-function NODE_TRUE () {}
-function NODE_FALSE () {}
-function NODE_NIL () {}
-function NODE_RETURN () {}
-function NODE_BREAK () {}
-function NODE_NEXT () {}
-function NODE_REDO () {}
-function NODE_RETRY () {}
-function NODE_LVAR () {}
-function NODE_DVAR () {}
-function NODE_IVAR () {}
-function NODE_CVAR () {}
-function NODE_NTH_REF () {}
-function NODE_CONST () {}
-function NODE_DSTR () {}
-function NODE_DREGX () {}
-function NODE_DREGX_ONCE () {}
-function NODE_COLON2 () {}
-function NODE_COLON3 () {}
-function NODE_SELF () {}
-function NODE_NIL () {}
-function NODE_TRUE () {}
-function NODE_FALSE () {}
-function NODE_DEFINED () {}
-
-
-
-
-
-function NODE_SCOPE (tbl, body, args)
-{
-  this.type = NODE_SCOPE;
-  this.flags = 0;
-  this.line = 0;
-
-  this.tbl = tbl || local_tbl();
-  this.body = body;
-  this.args = args;
-}
-
-function NODE_BLOCK (head)
-{
-  this.type = NODE_BLOCK;
-  this.flags = 0;
-  this.line = 0;
-
-  this.head = head; // set later
-  this.next = null;
-  this.end = null; // set later
-}
-
-function NODE_BEGIN (body)
-{
-  this.type = NODE_BEGIN;
-  this.flags = 0;
-  this.line = 0;
-
-  this.body = body;
-}
-
-function NODE_RESCUE (body, rescue, elsee) // elsee for else
-{
-  this.type = NODE_RESCUE;
-  this.flags = 0;
-  this.line = 0;
-
-  this.body = body;
-  this.rescue = rescue;
-  this.elsee = elsee;
-}
-
-function NODE_RESBODY (exclude, body, rescue) // elsee for else
-{
-  this.type = NODE_RESBODY;
-  this.flags = 0;
-  this.line = 0;
-
-  this.exclude = exclude;
-  this.body = body;
-  this.rescue = rescue;
-}
-
-function NODE_ENSURE (body, enshure) // elsee for else
-{
-  this.type = NODE_ENSURE;
-  this.flags = 0;
-  this.line = 0;
-
-  this.body = body;
-  this.enshure = enshure;
-}
-
-function NODE_NIL ()
-{
-  this.type = NODE_NIL;
-  this.flags = 0;
-  this.line = 0;
-}
-
-function NODE_ALIAS (name, entity) // TODO: fix names
-{
-  this.type = NODE_ALIAS;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.name = name;
-  this.entity = entity;
-}
-
-function NODE_VALIAS (name, entity) // TODO: fix names
-{
-  this.type = NODE_VALIAS;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.name = name;
-  this.entity = entity;
-}
-
-function NODE_BACK_REF (name)
-{
-  this.type = NODE_BACK_REF;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.name = name;
-}
-
-function NODE_IF (cond, body, elsee)
-{
-  this.type = NODE_IF;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.cond = cond;
-  this.body = body; // aka "then"
-  this.elsee = elsee;
-}
-
-function NODE_MATCH2 (nd_1st, nd_2nd)
-{
-  this.type = NODE_MATCH2;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.nd_1st = nd_1st;
-  this.nd_2nd = nd_2nd;
-}
-
-function NODE_GVAR (name)
-{
-  this.type = NODE_GVAR;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.name = name;
-}
-
-function NODE_DOT2 (beg, end)
-{
-  this.type = NODE_DOT2;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.beg = beg;
-  this.end = end;
-}
-
-function NODE_DOT3 (beg, end)
-{
-  this.type = NODE_DOT3;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.beg = beg;
-  this.end = end;
-}
-
-function NODE_LIT (lit, lit_type)
-{
-  this.type = NODE_LIT;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.lit = lit;
-  this.lit_type = lit_type;
-}
-
-function NODE_WHILE (cond, body, n)
-{
-  this.type = NODE_WHILE;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.cond = cond;
-  this.body = body;
-  this.n = n; // TODO: n what?
-}
-
-function NODE_UNTIL (cond, body, n)
-{
-  this.type = NODE_UNTIL;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.cond = cond;
-  this.body = body;
-  this.n = n; // TODO: n what?
-}
-
-function NODE_POSTEXE (body)
-{
-  this.type = NODE_POSTEXE;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.body = body;
-}
-
-function NODE_OP_ASGN_OR (vid, val)
-{
-  this.type = NODE_OP_ASGN_OR;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.vid = vid;
-  this.val = val;
-}
-
-function NODE_OP_ASGN1 (vid, op, args)
-{
-  this.type = NODE_OP_ASGN_OR;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.vid = vid;
-  this.op = op;
-  this.args = args;
-}
-
-function NODE_OP_ASGN2 (vid, op, args)
-{
-  this.type = NODE_OP_ASGN_OR;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.vid = vid;
-  this.op = op;
-  this.args = args;
-}
-
-function NODE_OP_ASGN_AND (vid, val)
-{
-  this.type = NODE_OP_ASGN_AND;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.vid = vid;
-  this.val = val;
-}
-
-function NODE_CALL (vid, val)
-{
-  this.type = NODE_CALL;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.vid = vid;
-  this.val = val;
-}
-
-function NODE_ARRAY (next)
-{
-  this.type = NODE_ARRAY;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.next = next;
-  this.end = null;
-  this.alen = 1;
-}
-
-var NODE_LIST = NODE_ARRAY;
-
-function NODE_STR (lit) // literal
-{
-  this.type = NODE_STR;
-  this.flags = 0;
-  this.line = 0;
-  
-  this.lit = lit;
-}
-
-function NODE_ZARRAY () // literal
-{
-  this.type = NODE_ZARRAY;
-  this.flags = 0;
-  this.line = 0;
-}
-
-function NODE_ARGSCAT () // literal
-{
-  this.type = NODE_ARGSCAT;
-  this.flags = 0;
-  this.line = 0;
-}
-
-
-
-// from parse.y
-// 
-// > in rules (and generator) we have access to those things:
-// >   * all the code from prologue (not much though);
-// >   * `lexer`: instance of our Lexer class from the lexer code block;
-// >   * $$ and $N through the `yyval` and `yystack` local variables
-// >   * all the code and variables from `rules` code block.
-
-
-// This file is incuded into its own namesapase closure,
-// so feel free to create global variables here,
-// they all will be local to the parser actions.
-
-
-var ruby_verbose = true;
-
-// just a constants to compare to
-var DVARS_INHERIT = {},  // (NODE *) 1
-    DVARS_TOPSCOPE = {}; // NULL
-
-var lvtbl = null;
-
-function vtable_alloc (prev)
-{
-  var tbl =
-  {
-    prev: prev
-  };
-  
-  return tbl;
-}
-
-function local_push (inherit_dvars)
-{
-  var local =
-  {
-    prev: lvtbl,
-    args: vtable_alloc(0),
-    vars: vtable_alloc(inherit_dvars ? DVARS_INHERIT : DVARS_TOPSCOPE),
-    used: vtable_alloc(0)
-  };
-  lvtbl = local;
-}
-
-function local_pop ()
-{
-  var local = lvtbl.prev;
-  if (lvtbl.used)
-  {
-    warn_unused_var(lvtbl);
-  }
-  lvtbl = local;
-}
-
-function warn_unused_var (local)
-{
-  // TODO
-}
-
-function rb_bug ()
-{
-  // TODO: scream, of even log to the base.
-}
-
-var id2name_table = [];
-function rb_id2name (id)
-{
-  return id2name_table[id] || 'unknown-id';
-}
-
-
-// TODO: analise these
-var compile_for_eval = false;
-
-// `eval` handling
-// require sets it to 0 http://rxr.whitequark.org/mri/source/ruby.c?v=2.0.0-p0#537
-var parse_in_eval = 0;
-function rb_parse_in_eval () { return parse_in_eval > 0; }
-function rb_parse_in_main () { return parse_in_eval < 0; }
-// http://rxr.whitequark.org/mri/source/vm_eval.c?v=2.0.0-p0#1207
-/* make eval iseq */
-// th->parse_in_eval++;
-// th->mild_compile_error++;
-// iseqval = rb_iseq_compile_on_base(src, rb_str_new2(file), INT2FIX(line), base_block);
-// th->mild_compile_error--;
-// th->parse_in_eval--;
-
-// the root node, I think
-var ruby_eval_tree = null;
-var ruby_eval_tree_begin = null;
-
-
-
-
-
-
-function fixpos (node, orig)
-{
-  if (!node)
-    return;
-  if (!orig)
-    return;
-  if (orig == DVARS_INHERIT) // (NODE *) 1
-    return;
-  node.line = orig.line;
-}
-
-function parser_warning (node, mesg)
-{
-  lexer.warn(mesg, node.line);
-}
-
-
-function block_append (head, tail)
-{
-  var end, h = head;
-
-  if (tail == null)
-    return head;
-
-  if (h == null)
-    return tail;
-  switch (h.type)
-  {
-    case NODE_LIT:
-    case NODE_STR:
-    case NODE_SELF:
-    case NODE_TRUE:
-    case NODE_FALSE:
-    case NODE_NIL:
-      lexer.warn(h, "unused literal ignored");
-      return tail;
-    default:
-      h = end = new NODE_BLOCK(head);
-      end.end = end;
-      fixpos(end, head);
-      head = end;
-      break;
-    case NODE_BLOCK:
-      end = h.end;
-      break;
-  }
-
-  var nd = end.head;
-  switch (nd.type)
-  {
-    case NODE_RETURN:
-    case NODE_BREAK:
-    case NODE_NEXT:
-    case NODE_REDO:
-    case NODE_RETRY:
-      if (ruby_verbose)
-      {
-        parser_warning(tail, "statement not reached");
-      }
-      break;
-
-    default:
-      break;
-  }
-
-  if (tail.type != NODE_BLOCK)
-  {
-    tail = new NODE_BLOCK(tail);
-    tail.end = tail;
-  }
-  end.next = tail;
-  h.end = tail.end;
-  return head;
-}
-
-
-function void_stmts (node)
-{
-  if (!ruby_verbose) TODO
-    return;
-
-  if (!node)
-    return;
-  if (node.type != NODE_BLOCK)
-    return;
-
-  for (;;)
-  {
-    if (!node.next)
-      return;
-    void_expr(node.head);
-    node = node.next;
-  }
-}
-
-
-// TODO: handle NODE_BEGIN with remove_begin()
-function void_expr (node)
-{
-  var useless = '';
-
-  if (!ruby_verbose) // TODO: hide in development mode
-    return;
-
-  if (!node)
-    return;
-  switch (node.type)
-  {
-    case NODE_CALL:
-      switch (node.mid)
-      {
-        case $('+'):
-        case $('-'):
-        case $('*'):
-        case $('/'):
-        case $('%'):
-        case tPOW:
-        case tUPLUS:
-        case tUMINUS:
-        case $('|'):
-        case $('^'):
-        case $('&'):
-        case tCMP:
-        case $('>'):
-        case tGEQ:
-        case $('<'):
-        case tLEQ:
-        case tEQ:
-        case tNEQ:
-          useless = rb_id2name(node.mid);
-          break;
-      }
-      break;
-
-    case NODE_LVAR:
-    case NODE_DVAR:
-    case NODE_GVAR:
-    case NODE_IVAR:
-    case NODE_CVAR:
-    case NODE_NTH_REF:
-    case NODE_BACK_REF:
-      useless = "a variable";
-      break;
-    case NODE_CONST:
-      useless = "a constant";
-      break;
-    case NODE_LIT:
-    case NODE_STR:
-    case NODE_DSTR:
-    case NODE_DREGX:
-    case NODE_DREGX_ONCE:
-      useless = "a literal";
-      break;
-    case NODE_COLON2:
-    case NODE_COLON3:
-      useless = "::";
-      break;
-    case NODE_DOT2:
-      useless = "..";
-      break;
-    case NODE_DOT3:
-      useless = "...";
-      break;
-    case NODE_SELF:
-      useless = "self";
-      break;
-    case NODE_NIL:
-      useless = "nil";
-      break;
-    case NODE_TRUE:
-      useless = "true";
-      break;
-    case NODE_FALSE:
-      useless = "false";
-      break;
-    case NODE_DEFINED:
-      useless = "defined?";
-      break;
-  }
-
-  if (useless)
-  {
-    var l = node.line;
-    lexer.warn("possibly useless use of "+useless+" in void context", l);
-  }
-}
-
-
-function local_tbl ()
-{
-  var buf = {};
-  
-  for (var k in lvtbl.args)
-    buf[k] = lvtbl.args[k]
-  
-  for (var k in lvtbl.vars)
-    buf[k] = lvtbl.vars[k]
-  
-  return buf;
-}
-
-var deferred_nodes = [];
-
-function fixup_nodes (deferred_nodes)
-{
-  // TODO: seams like a reduction for ranges
-}
-
-// shifts all leading NODE_BEGIN nodes in list:
-//   NODE_BEGIN->NODE_BEGIN->NODE_BEGIN->other_node
-// becomes
-//   other_node
-function remove_begin (node)
-{
-  while (node && node.type == NODE_BEGIN && node.body)
-  {
-    node = n1.body;
-  }
-  return node;
-}
-
-
-function  newline_node (node)
-{
-  if (node)
-  {
-    node = remove_begin(node);
-    node.flags |= NODE_FL_NEWLINE;
-  }
-  return node;
-}
-
-
-function check_cond (node)
-{
-  if (node == null)
-    return null;
-  assign_in_cond(node);
-
-  switch (node.type)
-  {
-    case NODE_DSTR:
-    case NODE_EVSTR:
-    case NODE_STR:
-      lexer.warn("string literal in condition");
-      break;
-
-    case NODE_DREGX:
-    case NODE_DREGX_ONCE:
-      parser_warning(node, "regex literal in condition");
-      return new NODE_MATCH2(node, new NODE_GVAR("$_"));
-
-    case NODE_AND:
-    case NODE_OR:
-      node.nd_1st = check_cond(node.nd_1st);
-      node.nd_2nd = check_cond(node.nd_2nd);
-      break;
-
-    case NODE_DOT2:
-    case NODE_DOT3:
-      node.beg = range_op(node.beg);
-      node.end = range_op(node.end);
-      if (node.type == NODE_DOT2)
-        // was: nd_set_type(node, NODE_FLIP2); TODO: understand
-        node.type = NODE_FLIP2;
-      else if (nd_type(node) == NODE_DOT3)
-        // was: nd_set_type(node, NODE_FLIP3); TODO: understand
-        node.type = NODE_FLIP3;
-      // if (!e_option_supplied(parser)) // TODO
-      {
-        var b = literal_node(node.beg);
-        var e = literal_node(node.end);
-        if ((b == 1 && e == 1) || (b + e >= 2 && ruby_verbose))
-        {
-          parser_warning(node, "range literal in condition");
-        }
-      }
-      break;
-
-    case NODE_DSYM:
-      parser_warning(node, "literal in condition");
-      break;
-
-    case NODE_LIT:
-      if (node.lit_type == 'REGEXP')
-      {
-        parser_warning(node, "regex literal in condition");
-        // was: nd_set_type(node, NODE_MATCH); TODO: understand
-        node.type = NODE_MATCH;
-      }
-      else
-      {
-        parser_warning(node, "literal in condition");
-      }
-    default:
-      break;
-  }
-  return node;
-}
-
-
-function assign_in_cond (node)
-{
-  switch (node.type)
-  {
-    case NODE_MASGN:
-      lexer.yyerror("multiple assignment in conditional");
-      return true;
-
-    case NODE_LASGN:
-    case NODE_DASGN:
-    case NODE_DASGN_CURR:
-    case NODE_GASGN:
-    case NODE_IASGN:
-      break;
-
-    default:
-      return false;
-  }
-
-  if (!node.value)
-    return true;
-  if (is_static_content(node.value))
-  {
-    /* reports always */
-    parser_warning(node.value, "found = in conditional, should be ==");
-  }
-  return true;
-}
-
-function range_op (node)
-{
-  if (node == null)
-    return null;
-
-  var type = node.type;
-  value_expr(node);
-  if (type == NODE_LIT && node.lit_type == 'FIXNUM')
-  {
-    warn_unless_e_option(parser, node,
-                         "integer literal in conditional range");
-    return NEW_CALL(node, tEQ, NEW_LIST(NEW_GVAR(rb_intern("$."))));
-  }
-  return cond0(parser, node);
-}
-
-
-function literal_node (node)
-{
-  if (!node)
-    return 1;        /* same as NODE_NIL */ // TODO: understand
-  switch (node.type)
-  {
-    case NODE_LIT:
-    case NODE_STR:
-    case NODE_DSTR:
-    case NODE_EVSTR:
-    case NODE_DREGX:
-    case NODE_DREGX_ONCE:
-    case NODE_DSYM:
-      return 2;
-    case NODE_TRUE:
-    case NODE_FALSE:
-    case NODE_NIL:
-      return 1;
-  }
-  return 0;
-}
-
-
-function is_static_content (node)
-{
-  if (!node)
-    return true;
-  switch (node.type)
-  {
-    case NODE_HASH:
-      if (!(node = node.head))
-        break;
-    case NODE_ARRAY:
-      do
-      {
-        if (!is_static_content(node.head))
-          return false;
-      }
-      while ((node = node.next) != null);
-    case NODE_LIT:
-    case NODE_STR:
-    case NODE_NIL:
-    case NODE_TRUE:
-    case NODE_FALSE:
-    case NODE_ZARRAY:
-      break;
-    default:
-      return false;
-  }
-  return true;
-}
-
-
-function value_expr (node)
-{
-  var cond = false;
-
-  if (!node)
-  {
-    lexer.warn("empty expression");
-  }
-  while (node)
-  {
-    switch (node.type)
-    {
-      case NODE_DEFN:
-      case NODE_DEFS:
-        parser_warning(node, "void value expression");
-        return false;
-
-      case NODE_RETURN:
-      case NODE_BREAK:
-      case NODE_NEXT:
-      case NODE_REDO:
-      case NODE_RETRY:
-        if (!cond)
-          lexer.yyerror("void value expression");
-        /* or "control never reach"? */
-        return false;
-
-      case NODE_BLOCK:
-        while (node.next)
-        {
-          node = node.next;
-        }
-        node = node.head;
-        break;
-
-      case NODE_BEGIN:
-        node = node.body;
-        break;
-
-      case NODE_IF:
-        if (!node.body) // aka "then"
-        {
-          node = node.elsee;
-          break;
-        }
-        else if (!node.elsee)
-        {
-          node = node.body;
-          break;
-        }
-        if (!value_expr(node.body))
-          return false;
-        node = node.elsee;
-        break;
-
-      case NODE_AND:
-      case NODE_OR:
-        cond = true;
-        node = node.nd_2nd;
-        break;
-
-      default:
-        return true;
-    }
-  }
-
-  return true;
-}
-
-function new_op_assign (lhs, op, rhs)
-{
-  var asgn = null;
-
-  if (lhs)
-  {
-    var vid = lhs.vid; // TODO: ID op operation: tPOW, $('*'), tLSHFT, etc.
-    if (op == tOROP)
-    {
-      lhs.value = rhs;
-      asgn = new NODE_OP_ASGN_OR(gettable(vid), lhs);
-      if (is_asgn_or_id(vid))
-      {
-        asgn.aid = vid;
-      }
-    }
-    else if (op == tANDOP)
-    {
-      lhs.value = rhs;
-      asgn = new NODE_OP_ASGN_AND(gettable(vid), lhs);
-    }
-    else
-    {
-      asgn = lhs;
-      asgn.value = new NODE_CALL(gettable(vid), op, new NODE_LIST(rhs));
-    }
-  }
-  else
-  {
-    asgn = new NODE_BEGIN(null);
-  }
-  return asgn;
-}
-
-// TODO: understand and... rewrite :)
-function gettable (id)
-{
-  throw 'TODO: function gettable (id)';
-  switch (id)
-  {
-    case keyword_self:
-      return NEW_SELF();
-    case keyword_nil:
-      return NEW_NIL();
-    case keyword_true:
-      return NEW_TRUE();
-    case keyword_false:
-      return NEW_FALSE();
-    case keyword__FILE__:
-      return
-        new NODE_STR(ruby_sourcefile);
-    case keyword__LINE__:
-      return NEW_LIT(INT2FIX(tokline));
-    case keyword__ENCODING__:
-      return NEW_LIT(rb_enc_from_encoding(current_enc));
-  }
-  switch (id_type(id))
-  {
-    case ID_LOCAL:
-      if (dyna_in_block() && dvar_defined(id))
-        return NEW_DVAR(id);
-      if (local_id(id))
-        return NEW_LVAR(id);
-      /* method call without arguments */
-      return NEW_VCALL(id);
-    case ID_GLOBAL:
-      return NEW_GVAR(id);
-    case ID_INSTANCE:
-      return NEW_IVAR(id);
-    case ID_CONST:
-      return NEW_CONST(id);
-    case ID_CLASS:
-      return NEW_CVAR(id);
-  }
-  lexer.compile_error("identifier %s is not valid to get", rb_id2name(id));
-  return null;
-}
-
-// used only in new_op_assign()
-// TODO: understand
-function is_asgn_or_id (id)
-{
-  // ((is_notop_id(id)) && \ // isn't an operator
-  // (((id)&ID_SCOPE_MASK) == ID_GLOBAL || \    // $*
-  // ((id)&ID_SCOPE_MASK) == ID_INSTANCE || \   // @*
-  // ((id)&ID_SCOPE_MASK) == ID_CLASS))         // @@*
-  
-  // may translate to:
-  // typeof id == "string"
-  // id[0] == '$'
-  // id[0] == '@' && id[1] != '@'
-  // id[0] == '@' && id[1] == '@'
-  
-  return true;
-}
-
-function arg_concat_gen (node1, node2)
-{
-  if (!node2)
-    return node1;
-  switch (node1.type)
-  {
-    case NODE_BLOCK_PASS:
-      if (node1.head)
-        node1.head = arg_concat(node1.head, node2);
-      else
-        node1.head = new NODE_LIST(node2);
-      return node1;
-    case NODE_ARGSPUSH:
-      if (node2.type != NODE_ARRAY)
-        break;
-      node1.body = list_concat(new NODE_LIST(node1.body), node2);
-      // was: nd_set_type(node1, NODE_ARGSCAT);
-      node1.type = NODE_ARGSCAT; // TODO
-      return node1;
-    case NODE_ARGSCAT:
-      if (node2.type != NODE_ARRAY ||
-          node1.body.type != NODE_ARRAY)
-        break;
-      node1.body = list_concat(node1.body, node2);
-      return node1;
-  }
-  return new NODE_ARGSCAT(node1, node2);
-}
-
-function list_concat (head, tail)
-{
-  var last = null;
-
-  if (head.next)
-  {
-    last = head.next.end;
-  }
-  else
-  {
-    last = head;
-  }
-
-  head.alen += tail.alen;
-  last.next = tail;
-  if (tail.next)
-  {
-    head.next.end = tail.next.end;
-  }
-  else
-  {
-    head.next.end = tail;
-  }
-
-  return head;
-}
-
-function new_attr_op_assign (lhs, attr, op, rhs)
-{
-  if (op == tOROP)
-  {
-    op = 0;
-  }
-  else if (op == tANDOP)
-  {
-    op = 1;
-  }
-  // var asgn = new NEW_OP_ASGN2(lhs, attr, op, rhs);
-  
-  var asgn = new NODE_OP_ASGN2
-  (
-    lhs,
-    rhs,
-    new NODE_OP_ASGN2
-    (
-      attr,
-      op,
-      rb_id_attrset(attr)
-    )
-  )
-  
-  fixpos(asgn, lhs);
-  return asgn;
-}
-
-
-
-
-
-
-actionsTable =
-{
-    2: function ()
-    
-    {
-            lexer.lex_state = EXPR_BEG;
-            // creates a new chain link of `lvtbl`es
-            local_push(compile_for_eval || rb_parse_in_main());
-    },
-  3: function ()
-    
-    {
-            if (yystack.valueStack[yystack.valueStack.length-1-((2-(2)))] && !compile_for_eval)
-            {
-                /* last expression should not be void */
-                if (yystack.valueStack[yystack.valueStack.length-1-((2-(2)))].type != NODE_BLOCK)
-                  void_expr(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
-                else
-                {
-                  var node = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
-                  while (node.next)
-                  {
-                      node = node.next;
-                  }
-                  void_expr(node.head);
-                }
-            }
-            ruby_eval_tree = 
-              new NODE_SCOPE(null, block_append(ruby_eval_tree, yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]), null);
-            // creates the chain link off `lvtbl`es and restores it
-            local_pop();
-    },
-  4: function ()
-    
-    {
-      void_stmts(yystack.valueStack[yystack.valueStack.length-1-((2-(1)))]);
-      fixup_nodes(deferred_nodes);
-      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
-    },
-  5: function ()
-    
-    {
-      yyval = new NODE_BEGIN(null); // empty body
-    },
-  6: function ()
-    
-    {
-      yyval = newline_node(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
-    },
-  7: function ()
-    
-    {
-      yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], newline_node(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
-    },
-  8: function ()
-    
-    {
-      yyval = remove_begin(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
-    },
-  10: function ()
-    
-    {},
-  11: function ()
-    
-    {
-      ruby_eval_tree_begin = block_append(ruby_eval_tree_begin, yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]);
-      yyval = new NODE_BEGIN(null);
-      puts(123)
-    },
-  12: function ()
-    
-    {
-      yyval = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
-      if (yystack.valueStack[yystack.valueStack.length-1-((4-(2)))])
-      {
-        yyval = new NODE_RESCUE(yystack.valueStack[yystack.valueStack.length-1-((4-(1)))], yystack.valueStack[yystack.valueStack.length-1-((4-(2)))], yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
-      }
-      else if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])
-      {
-        lexer.warn("else without rescue is useless");
-        yyval = block_append(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
-      }
-      
-      if (yystack.valueStack[yystack.valueStack.length-1-((4-(4)))])
-      {
-        if (yyval)
-        {
-          yyval = new NODE_ENSURE(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(4)))]);
-        }
-        else
-        {
-          yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((4-(4)))], new NODE_NIL());
-        }
-      }
-      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(1)))]);
-    },
-  13: function ()
-    
-    {
-      void_stmts(yystack.valueStack[yystack.valueStack.length-1-((2-(1)))]);
-      fixup_nodes(deferred_nodes);
-      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
-    },
-  14: function ()
-    
-    {
-      yyval = new NODE_BEGIN(null);
-    },
-  15: function ()
-    
-    {
-      yyval = newline_node(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
-    },
-  16: function ()
-    
-    {
-      yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], newline_node(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
-    },
-  17: function ()
-    
-    {
-      yyval = remove_begin(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
-    },
-  18: function ()
-    
-    {
-      yyval = yystack.valueStack[yystack.valueStack.length-1-((1-(1)))];
-    },
-  19: function ()
-    
-    {
-      lexer.yyerror("BEGIN is permitted only at toplevel");
-    },
-  20: function ()
-    
-    {
-      ruby_eval_tree_begin = block_append(ruby_eval_tree_begin, yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]);
-      yyval = new NODE_BEGIN(null);
-    },
-  21: function ()
-    
-    {
-      lexer.lex_state = EXPR_FNAME;
-    },
-  22: function ()
-    
-    {
-      yyval = new NODE_ALIAS(yystack.valueStack[yystack.valueStack.length-1-((4-(2)))], yystack.valueStack[yystack.valueStack.length-1-((4-(4)))]);
-    },
-  23: function ()
-    
-    {
-      yyval = new NODE_VALIAS(yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
-    },
-  24: function ()
-    
-    {
-      yyval = new NODE_VALIAS(yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], new NODE_BACK_REF(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
-    },
-  25: function ()
-    
-    {
-      lexer.yyerror("can't make alias for the number variables");
-      yyval = new NODE_BEGIN(null);
-    },
-  26: function ()
-    
-    {
-      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
-    },
-  27: function ()
-    
-    {
-      yyval = new NODE_IF(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]), null);
-      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
-    },
-  28: function ()
-    
-    {
-      // #define NEW_UNLESS(c,t,e) NEW_IF(c,e,t)
-      yyval = new NODE_IF(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), null, remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]));
-      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
-    },
-  29: function ()
-    
-    {
-      if (yystack.valueStack[yystack.valueStack.length-1-((3-(1)))] && yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].type == NODE_BEGIN)
-      {
-        yyval = new NODE_WHILE(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].body, 0);
-      }
-      else
-      {
-        yyval = new NODE_WHILE(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], 1);
-      }
-    },
-  30: function ()
-    
-    {
-      if (yystack.valueStack[yystack.valueStack.length-1-((3-(1)))] && yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].type == NODE_BEGIN)
-      {
-        yyval = new NODE_UNTIL(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].body, 0);
-      }
-      else
-      {
-        yyval = new NODE_UNTIL(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], 1);
-      }
-    },
-  31: function ()
-    
-    {
-      var resq = new NODE_RESBODY(null, remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), null);
-      yyval = new NODE_RESCUE(remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]), resq, null);
-    },
-  32: function ()
-    
-    {
-      if (lexer.in_def || lexer.in_single)
-      {
-        lexer.warn("END in method; use at_exit");
-      }
-      yyval = new NODE_POSTEXE(new NODE_SCOPE
-      (
-        null, // tbl
-        yystack.valueStack[yystack.valueStack.length-1-((4-(3)))],   // body
-        null  // args
-      ));
-    },
-  34: function ()
-    
-    {
-      value_expr(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
-      yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].value = yystack.valueStack[yystack.valueStack.length-1-((3-(3)))];
-      yyval = yystack.valueStack[yystack.valueStack.length-1-((3-(1)))];
-    },
-  35: function ()
-    
-    {
-      value_expr(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
-      yyval = new_op_assign(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
-    },
-  36: function ()
-    
-    {
-      value_expr(yystack.valueStack[yystack.valueStack.length-1-((6-(6)))]);
-      if (!yystack.valueStack[yystack.valueStack.length-1-((6-(3)))])
-        yystack.valueStack[yystack.valueStack.length-1-((6-(3)))] = new NODE_ZARRAY();
-      var args = arg_concat(yystack.valueStack[yystack.valueStack.length-1-((6-(3)))], yystack.valueStack[yystack.valueStack.length-1-((6-(6)))]);
-      if (yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] == tOROP)
-      {
-        yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] = 0;
-      }
-      else if (yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] == tANDOP)
-      {
-        yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] = 1;
-      }
-      yyval = NEW_OP_ASGN1(yystack.valueStack[yystack.valueStack.length-1-((6-(1)))], yystack.valueStack[yystack.valueStack.length-1-((6-(5)))], args);
-      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((6-(1)))]);
-    },
-  37: function ()
-    
-    {
-      value_expr(yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
-      yyval = new_attr_op_assign(yystack.valueStack[yystack.valueStack.length-1-((5-(1)))], ripper_id2sym('.'), yystack.valueStack[yystack.valueStack.length-1-((5-(3)))], yystack.valueStack[yystack.valueStack.length-1-((5-(4)))], yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
-    },
-  38: function ()
-    
-    {},
-  39: function ()
-    
-    {},
-  40: function ()
-    
-    {},
-  41: function ()
-    
-    {},
-  42: function ()
-    
-    {},
-  43: function ()
-    
-    {},
-  44: function ()
-    
-    {},
-  46: function ()
-    
-    {},
-  47: function ()
-    
-    {},
-  49: function ()
-    
-    {},
-  50: function ()
-    
-    {},
-  51: function ()
-    
-    {},
-  52: function ()
-    
-    {},
-  54: function ()
-    
-    {},
-  58: function ()
-    
-    {},
-  59: function ()
-    
-    {},
-  60: function ()
-    
-    {
-      // touching this alters the parse.output
-      yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-    },
-  61: function ()
-    
-    {},
-  62: function ()
-    
-    {},
-  63: function ()
-    
-    {},
-  64: function ()
-    
-    {},
-  65: function ()
-    
-    {},
-  66: function ()
-    
-    {},
-  67: function ()
-    
-    {},
-  68: function ()
-    
-    {},
-  69: function ()
-    
-    {},
-  70: function ()
-    
-    {},
-  71: function ()
-    
-    {},
-  72: function ()
-    
-    {},
-  74: function ()
-    
-    {},
-  76: function ()
-    
-    {},
-  77: function ()
-    
-    {},
-  78: function ()
-    
-    {},
-  79: function ()
-    
-    {},
-  80: function ()
-    
-    {},
-  81: function ()
-    
-    {},
-  82: function ()
-    
-    {},
-  83: function ()
-    
-    {},
-  84: function ()
-    
-    {},
-  85: function ()
-    
-    {},
-  86: function ()
-    
-    {},
-  88: function ()
-    
-    {},
-  89: function ()
-    
-    {},
-  90: function ()
-    
-    {},
-  91: function ()
-    
-    {},
-  92: function ()
-    
-    {},
-  93: function ()
-    
-    {},
-  94: function ()
-    
-    {},
-  95: function ()
-    
-    {},
-  96: function ()
-    
-    {},
-  97: function ()
-    
-    {},
-  98: function ()
-    
-    {},
-  99: function ()
-    
-    {
-      if (lexer.in_def || lexer.in_single)
-        lexer.yyerror("dynamic constant assignment");
-    },
-  100: function ()
-    
-    {
-      if (lexer.in_def || lexer.in_single)
-        lexer.yyerror("dynamic constant assignment");
-    },
-  101: function ()
-    
-    {},
-  102: function ()
-    
-    {},
-  103: function ()
-    
-    {},
-  104: function ()
-    
-    {},
-  105: function ()
-    
-    {},
-  106: function ()
-    
-    {},
-  107: function ()
-    
-    {},
-  108: function ()
-    
-    {
-      if (lexer.in_def || lexer.in_single)
-        lexer.yyerror("dynamic constant assignment");
-    },
-  109: function ()
-    
-    {
-      if (lexer.in_def || lexer.in_single)
-        lexer.yyerror("dynamic constant assignment");
-    },
-  110: function ()
-    
-    {},
-  111: function ()
-    
-    {
-      lexer.yyerror("class/module name must be CONSTANT");
-    },
-  113: function ()
-    
-    {},
-  114: function ()
-    
-    {},
-  115: function ()
-    
-    {},
-  119: function ()
-    
-    {
-      lexer.lex_state = EXPR_ENDFN;
-    },
-  120: function ()
-    
-    {
-      lexer.lex_state = EXPR_ENDFN;
-    },
-  123: function ()
-    
-    {},
-  125: function ()
-    
-    {},
-  126: function ()
-    
-    {
-      lexer.lex_state = EXPR_FNAME;
-    },
-  127: function ()
-    
-    {},
-  128: function ()
-    
-    {},
-  129: function ()
-    
-    {},
-  130: function ()
-    
-    {},
-  131: function ()
-    
-    {},
-  132: function ()
-    
-    {},
-  133: function ()
-    
-    {},
-  134: function ()
-    
-    {},
-  135: function ()
-    
-    {},
-  136: function ()
-    
-    {},
-  137: function ()
-    
-    {},
-  138: function ()
-    
-    {},
-  139: function ()
-    
-    {},
-  140: function ()
-    
-    {},
-  141: function ()
-    
-    {},
-  142: function ()
-    
-    {},
-  143: function ()
-    
-    {},
-  144: function ()
-    
-    {},
-  145: function ()
-    
-    {},
-  146: function ()
-    
-    {},
-  147: function ()
-    
-    {},
-  148: function ()
-    
-    {},
-  149: function ()
-    
-    {},
-  150: function ()
-    
-    {},
-  151: function ()
-    
-    {},
-  152: function ()
-    
-    {},
-  153: function ()
-    
-    {},
-  154: function ()
-    
-    {},
-  155: function ()
-    
-    {},
-  156: function ()
-    
-    {},
-  157: function ()
-    
-    {},
-  199: function ()
-    
-    {},
-  200: function ()
-    
-    {},
-  201: function ()
-    
-    {},
-  202: function ()
-    
-    {},
-  203: function ()
-    
-    {},
-  204: function ()
-    
-    {},
-  205: function ()
-    
-    {},
-  206: function ()
-    
-    {},
-  207: function ()
-    
-    {},
-  208: function ()
-    
-    {},
-  209: function ()
-    
-    {},
-  210: function ()
-    
-    {},
-  211: function ()
-    
-    {},
-  212: function ()
-    
-    {},
-  213: function ()
-    
-    {},
-  214: function ()
-    
-    {},
-  215: function ()
-    
-    {},
-  216: function ()
-    
-    {},
-  217: function ()
-    
-    {},
-  218: function ()
-    
-    {},
-  219: function ()
-    
-    {},
-  220: function ()
-    
-    {},
-  221: function ()
-    
-    {},
-  222: function ()
-    
-    {},
-  223: function ()
-    
-    {},
-  224: function ()
-    
-    {},
-  225: function ()
-    
-    {},
-  226: function ()
-    
-    {},
-  227: function ()
-    
-    {},
-  228: function ()
-    
-    {},
-  229: function ()
-    
-    {},
-  230: function ()
-    
-    {},
-  231: function ()
-    
-    {},
-  232: function ()
-    
-    {},
-  233: function ()
-    
-    {},
-  234: function ()
-    
-    {},
-  235: function ()
-    
-    {},
-  236: function ()
-    
-    {},
-  237: function ()
-    
-    {},
-  238: function ()
-    
-    {},
-  239: function ()
-    
-    {},
-  240: function ()
-    
-    {},
-  241: function ()
-    
-    { lexer.in_defined = true;},
-  242: function ()
-    
-    {
-      lexer.in_defined = false;
-    },
-  243: function ()
-    
-    {},
-  244: function ()
-    
-    {},
-  245: function ()
-    
-    {},
-  247: function ()
-    
-    {},
-  248: function ()
-    
-    {},
-  249: function ()
-    
-    {},
-  250: function ()
-    
-    {},
-  255: function ()
-    
-    {},
-  256: function ()
-    
-    {},
-  257: function ()
-    
-    {},
-  258: function ()
-    
-    {},
-  259: function ()
-    
-    {},
-  260: function ()
-    
-    {},
-  261: function ()
-    
-    {},
-  263: function ()
-    
-    {
-      yyval = lexer.cmdarg_stack;
-      lexer.CMDARG_PUSH(1);
-    },
-  264: function ()
-    
-    {
-      // CMDARG_POP()
-      lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
-    },
-  265: function ()
-    
-    {},
-  266: function ()
-    
-    {},
-  267: function ()
-    
-    {},
-  268: function ()
-    
-    {},
-  269: function ()
-    
-    {},
-  270: function ()
-    
-    {},
-  271: function ()
-    
-    {},
-  272: function ()
-    
-    {},
-  273: function ()
-    
-    {},
-  274: function ()
-    
-    {},
-  285: function ()
-    
-    {},
-  286: function ()
-    
-    {
-              yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = lexer.cmdarg_stack;
-              lexer.cmdarg_stack = 0;
-            },
-  287: function ()
-    
-    {
-              lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
-              // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
-            },
-  288: function ()
-    
-    {
-          lexer.lex_state = EXPR_ENDARG;
-        },
-  289: function ()
-    
-    {},
-  290: function ()
-    
-    {
-          lexer.lex_state = EXPR_ENDARG;
-        },
-  291: function ()
-    
-    {},
-  292: function ()
-    
-    {},
-  293: function ()
-    
-    {},
-  294: function ()
-    
-    {},
-  295: function ()
-    
-    {},
-  296: function ()
-    
-    {},
-  297: function ()
-    
-    {},
-  298: function ()
-    
-    {},
-  299: function ()
-    
-    {},
-  300: function ()
-    
-    {},
-  301: function ()
-    
-    { lexer.in_defined = true;},
-  302: function ()
-    
-    {
-              lexer.in_defined = false;
-            },
-  303: function ()
-    
-    {},
-  304: function ()
-    
-    {},
-  305: function ()
-    
-    {},
-  307: function ()
-    
-    {},
-  308: function ()
-    
-    {},
-  309: function ()
-    
-    {},
-  310: function ()
-    
-    {},
-  311: function ()
-    
-    {
-            lexer.COND_PUSH(1);
-          },
-  312: function ()
-    
-    {
-            lexer.COND_POP();
-          },
-  313: function ()
-    
-    {},
-  314: function ()
-    
-    {
-          lexer.COND_PUSH(1);
-        },
-  315: function ()
-    
-    {
-          lexer.COND_POP();
-        },
-  316: function ()
-    
-    {},
-  317: function ()
-    
-    {},
-  318: function ()
-    
-    {},
-  319: function ()
-    
-    {
-            lexer.COND_PUSH(1);
-          },
-  320: function ()
-    
-    {
-            lexer.COND_POP();
-          },
-  321: function ()
-    
-    {},
-  322: function ()
-    
-    {
-          if (lexer.in_def || lexer.in_single)
-            lexer.yyerror("class definition in method body");
-                
-            },
-  323: function ()
-    
-    {
-              // touching this alters the parse.output
-                yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
-            },
-  324: function ()
-    
-    {
-          yyval = lexer.in_def;
-          lexer.in_def = 0;
-            },
-  325: function ()
-    
-    {
-              yyval = lexer.in_single;
-              lexer.in_single = 0;
-            },
-  326: function ()
-    
-    {
-          lexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
-          lexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
-            },
-  327: function ()
-    
-    {
-          if (lexer.in_def || lexer.in_single)
-            lexer.yyerror("module definition in method body");
-                
-            },
-  328: function ()
-    
-    {
-              // touching this alters the parse.output
-                yystack.valueStack[yystack.valueStack.length-1-((5-(3)))];
-            },
-  329: function ()
-    
-    {
-              yyval = lexer.cur_mid; // TODO
-                lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
-                
-              lexer.in_def++;
-            },
-  330: function ()
-    
-    {
-              // touching this alters the parse.output
-                yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
-                lexer.in_def--;
-                lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
-            },
-  331: function ()
-    
-    {
-      lexer.lex_state = EXPR_FNAME;
-    },
-  332: function ()
-    
-    {
-      lexer.in_single++;
-      lexer.lex_state = EXPR_ENDFN; /* force for args */
-    },
-  333: function ()
-    
-    {
-      lexer.in_single--;
-    },
-  334: function ()
-    
-    {},
-  335: function ()
-    
-    {},
-  336: function ()
-    
-    {},
-  337: function ()
-    
-    {},
-  338: function ()
-    
-    {},
-  339: function ()
-    
-    {},
-  340: function ()
-    
-    {},
-  341: function ()
-    
-    {},
-  342: function ()
-    
-    {},
-  343: function ()
-    
-    {},
-  344: function ()
-    
-    {},
-  345: function ()
-    
-    {},
-  346: function ()
-    
-    {},
-  347: function ()
-    
-    {},
-  348: function ()
-    
-    {},
-  349: function ()
-    
-    {},
-  356: function ()
-    
-    {},
-  358: function ()
-    
-    {},
-  361: function ()
-    
-    {},
-  362: function ()
-    
-    {},
-  363: function ()
-    
-    {},
-  364: function ()
-    
-    {},
-  365: function ()
-    
-    {},
-  366: function ()
-    
-    {},
-  367: function ()
-    
-    {},
-  368: function ()
-    
-    {},
-  369: function ()
-    
-    {},
-  370: function ()
-    
-    {},
-  371: function ()
-    
-    {},
-  372: function ()
-    
-    {},
-  373: function ()
-    
-    {},
-  374: function ()
-    
-    {},
-  375: function ()
-    
-    {},
-  376: function ()
-    
-    {},
-  377: function ()
-    
-    {},
-  378: function ()
-    
-    {},
-  379: function ()
-    
-    {},
-  380: function ()
-    
-    {},
-  381: function ()
-    
-    {},
-  382: function ()
-    
-    {},
-  383: function ()
-    
-    {},
-  384: function ()
-    
-    {},
-  385: function ()
-    
-    {},
-  386: function ()
-    
-    {},
-  387: function ()
-    
-    {},
-  388: function ()
-    
-    {},
-  389: function ()
-    
-    {},
-  390: function ()
-    
-    {},
-  391: function ()
-    
-    {},
-  392: function ()
-    
-    {},
-  393: function ()
-    
-    {},
-  394: function ()
-    
-    {},
-  396: function ()
-    
-    {
-            lexer.command_start = true;
-            },
-  397: function ()
-    
-    {},
-  398: function ()
-    
-    {},
-  399: function ()
-    
-    {},
-  400: function ()
-    
-    {},
-  401: function ()
-    
-    {},
-  404: function ()
-    
-    {},
-  405: function ()
-    
-    {},
-  406: function ()
-    
-    {},
-  407: function ()
-    
-    {
-              yyval = lexer.lpar_beg;
-              lexer.lpar_beg = ++lexer.paren_nest;
-            },
-  408: function ()
-    
-    {
-          lexer.lpar_beg = yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
-          // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
-            },
-  409: function ()
-    
-    {},
-  410: function ()
-    
-    {},
-  411: function ()
-    
-    {},
-  412: function ()
-    
-    {},
-  413: function ()
-    
-    {},
-  414: function ()
-    
-    {
-          // touching this alters the parse.output
-        yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-              yystack.valueStack[yystack.valueStack.length-1-((5-(1)))];
-            },
-  415: function ()
-    
-    {},
-  416: function ()
-    
-    {},
-  417: function ()
-    
-    {},
-  418: function ()
-    
-    {},
-  419: function ()
-    
-    {},
-  420: function ()
-    
-    {},
-  421: function ()
-    
-    {
-              // touching this alters the parse.output
-                yystack.valueStack[yystack.valueStack.length-1-((5-(4)))];
-            },
-  422: function ()
-    
-    {},
-  423: function ()
-    
-    {
-              // touching this alters the parse.output
-                yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]
-            },
-  424: function ()
-    
-    {},
-  425: function ()
-    
-    {},
-  426: function ()
-    
-    {
-          // touching this alters the parse.output
-          nd_set_line(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
-            },
-  427: function ()
-    
-    {},
-  428: function ()
-    
-    {
-          // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((4-(3)))];
-            },
-  429: function ()
-    
-    {},
-  430: function ()
-    
-    {},
-  431: function ()
-    
-    {},
-  432: function ()
-    
-    {},
-  433: function ()
-    
-    {
-              // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-            },
-  434: function ()
-    
-    {},
-  435: function ()
-    
-    {
-          // touching this alters the parse.output
-          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
-            },
-  436: function ()
-    
-    {},
-  439: function ()
-    
-    {},
-  441: function ()
-    
-    {},
-  442: function ()
-    
-    {},
-  444: function ()
-    
-    {},
-  446: function ()
-    
-    {},
-  449: function ()
-    
-    {},
-  451: function ()
-    
-    {},
-  454: function ()
-    
-    {},
-  455: function ()
-    
-    {},
-  456: function ()
-    
-    {},
-  457: function ()
-    
-    {},
-  458: function ()
-    
-    {},
-  459: function ()
-    
-    {},
-  460: function ()
-    
-    {},
-  461: function ()
-    
-    {},
-  463: function ()
-    
-    {},
-  464: function ()
-    
-    {},
-  465: function ()
-    
-    {},
-  466: function ()
-    
-    {},
-  467: function ()
-    
-    {},
-  468: function ()
-    
-    {},
-  469: function ()
-    
-    {},
-  470: function ()
-    
-    {},
-  471: function ()
-    
-    {},
-  472: function ()
-    
-    {},
-  473: function ()
-    
-    {},
-  474: function ()
-    
-    {},
-  475: function ()
-    
-    {},
-  476: function ()
-    
-    {},
-  477: function ()
-    
-    {},
-  478: function ()
-    
-    {},
-  479: function ()
-    
-    {},
-  480: function ()
-    
-    {},
-  481: function ()
-    
-    {},
-  483: function ()
-    
-    {
-            yyval = lexer.lex_strterm;
-            lexer.lex_strterm = null;
-            lexer.lex_state = EXPR_BEG;
-            },
-  484: function ()
-    
-    {
-            /*%%%*/
-            lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
-            },
-  485: function ()
-    
-    {
-          yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = lexer.cond_stack;
-          yyval = lexer.cmdarg_stack;
-          lexer.cond_stack = 0;
-          lexer.cmdarg_stack = 0;
-            },
-  486: function ()
-    
-    {
-            yyval = lexer.lex_strterm;
-            lexer.lex_strterm = null;
-            lexer.lex_state = EXPR_BEG;
-            },
-  487: function ()
-    
-    {
-            yyval = lexer.brace_nest;
-            lexer.brace_nest = 0;
-            },
-  488: function ()
-    
-    {
-          lexer.cond_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
-          lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
-          lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
-          lexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
-            },
-  489: function ()
-    
-    {},
-  490: function ()
-    
-    {},
-  491: function ()
-    
-    {},
-  493: function ()
-    
-    {
-            lexer.lex_state = EXPR_END;
-            },
-  498: function ()
-    
-    {
-            lexer.lex_state = EXPR_END;
-            },
-  501: function ()
-    
-    {
-            },
-  502: function ()
-    
-    {
-            },
-  508: function ()
-    
-    {},
-  509: function ()
-    
-    {yyval = keyword_self;},
-  510: function ()
-    
-    {yyval = keyword_true;},
-  511: function ()
-    
-    {yyval = keyword_false;},
-  512: function ()
-    
-    {yyval = keyword__FILE__;},
-  513: function ()
-    
-    {yyval = keyword__LINE__;},
-  514: function ()
-    
-    {yyval = keyword__ENCODING__;},
-  515: function ()
-    
-    {
-            },
-  516: function ()
-    
-    {},
-  517: function ()
-    
-    {},
-  518: function ()
-    
-    {},
-  520: function ()
-    
-    {
-      yyval = new NODE_BACK_REF(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
-    },
-  521: function ()
-    
-    {},
-  522: function ()
-    
-    {
-            lexer.lex_state = EXPR_BEG;
-            lexer.command_start = true;
-            },
-  523: function ()
-    
-    {},
-  524: function ()
-    
-    {
-              parser.yyerrok();
-            },
-  525: function ()
-    
-    {
-            lexer.lex_state = EXPR_BEG;
-            lexer.command_start = true;
-            },
-  526: function ()
-    
-    {
-            lexer.lex_state = EXPR_BEG;
-            lexer.command_start = true;
-            },
-  527: function ()
-    
-    {},
-  528: function ()
-    
-    {},
-  529: function ()
-    
-    {},
-  530: function ()
-    
-    {},
-  531: function ()
-    
-    {},
-  532: function ()
-    
-    {},
-  533: function ()
-    
-    {},
-  534: function ()
-    
-    {},
-  535: function ()
-    
-    {},
-  536: function ()
-    
-    {},
-  537: function ()
-    
-    {},
-  538: function ()
-    
-    {},
-  539: function ()
-    
-    {},
-  540: function ()
-    
-    {},
-  541: function ()
-    
-    {},
-  542: function ()
-    
-    {},
-  543: function ()
-    
-    {},
-  544: function ()
-    
-    {},
-  545: function ()
-    
-    {},
-  546: function ()
-    
-    {},
-  547: function ()
-    
-    {},
-  548: function ()
-    
-    {
-              lexer.yyerror("formal argument cannot be a constant");
-            },
-  549: function ()
-    
-    {
-              lexer.yyerror("formal argument cannot be an instance variable");
-            },
-  550: function ()
-    
-    {
-              lexer.yyerror("formal argument cannot be a global variable");
-            },
-  551: function ()
-    
-    {
-              lexer.yyerror("formal argument cannot be a class variable");
-            },
-  553: function ()
-    
-    {},
-  554: function ()
-    
-    {},
-  555: function ()
-    
-    {},
-  557: function ()
-    
-    {},
-  558: function ()
-    
-    {},
-  559: function ()
-    
-    {},
-  560: function ()
-    
-    {},
-  561: function ()
-    
-    {},
-  562: function ()
-    
-    {},
-  563: function ()
-    
-    {},
-  566: function ()
-    
-    {},
-  567: function ()
-    
-    {},
-  568: function ()
-    
-    {},
-  569: function ()
-    
-    {},
-  570: function ()
-    
-    {},
-  571: function ()
-    
-    {},
-  572: function ()
-    
-    {},
-  573: function ()
-    
-    {},
-  576: function ()
-    
-    {
-          if (!lexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
-            lexer.yyerror("rest argument must be local variable");
-                
-            },
-  577: function ()
-    
-    {},
-  580: function ()
-    
-    {
-              if (!lexer.is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
-            lexer.yyerror("block argument must be local variable");
-                else if (!lexer.dyna_in_block() && lexer.local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
-            lexer.yyerror("duplicated block argument name");
-                
-            },
-  581: function ()
-    
-    {},
-  582: function ()
-    
-    {},
-  583: function ()
-    
-    {},
-  584: function ()
-    
-    {
-          lexer.lex_state = EXPR_BEG;
-        },
-  585: function ()
-    
-    {
-          if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == null) {
-            lexer.yyerror("can't define singleton method for ().");
-          }
-          else {
-            switch (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))].type) { // TODO
-              case NODE_STR:
-              case NODE_DSTR:
-              case NODE_XSTR:
-              case NODE_DXSTR:
-              case NODE_DREGX:
-              case NODE_LIT:
-              case NODE_ARRAY:
-              case NODE_ZARRAY:
-                lexer.yyerror("can't define singleton method for literals");
-              default:
-                value_expr(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]); // TODO
-                break;
-            }
-          }
-            },
-  587: function ()
-    
-    {},
-  589: function ()
-    
-    {},
-  590: function ()
-    
-    {},
-  591: function ()
-    
-    {},
-  592: function ()
-    
-    {},
-  614: function ()
-    
-    { parser.yyerrok(); },
-  617: function ()
-    
-    { parser.yyerrok(); },
-  618: function ()
-    
-    {
-      // empty ensure or else block for example
-      yyval = null;
-    }
-};
-
-})(); // actions table namespace end
-
 
 ;(function(){ // start of the Parser very own namespase
 
   // True if verbose error messages are enabled.
   this.errorVerbose = true;
 
+  // enable/disable all the debug messages
+  parser.yydebug = false;
+  // enable/disable printing the token values
+  parser.yydebug_yylval = true;
+  // enable/disable printing the whole action functions applied
+  parser.yydebug_action = false;
   var debug_reduce_print = this.debug_reduce_print.bind(this);
   var debug_symbol_print = this.debug_symbol_print.bind(this);
   var debug_stack_print  = this.debug_stack_print.bind(this);
+  var debug_action_print = this.debug_action_print.bind(this);
   var debug_print        = this.debug_print.bind(this);
   
 
@@ -6480,6 +3581,7 @@ actionsTable =
     debug_reduce_print(yyn);
 
     var actionClosure = actionsTable[yyn]
+    debug_action_print(actionClosure);
     if (actionClosure)
       actionClosure(yystack)
 
@@ -9613,68 +6715,68 @@ actionsTable =
   var yyrline_ = this.yyrline_ =
   [
     //]
-         0,   154,   154,   154,   183,   191,   196,   201,   206,   213,
-     216,   215,   226,   254,   262,   267,   272,   277,   283,   289,
-     288,   301,   300,   309,   314,   319,   325,   330,   336,   343,
-     355,   367,   373,   387,   389,   396,   402,   420,   426,   429,
-     432,   435,   438,   441,   444,   447,   452,   455,   462,   464,
-     466,   469,   472,   475,   480,   486,   488,   493,   495,   502,
-     501,   512,   518,   521,   524,   527,   530,   533,   536,   539,
-     542,   545,   548,   554,   556,   562,   564,   570,   573,   576,
-     579,   582,   585,   588,   591,   594,   596,   602,   604,   610,
-     613,   619,   622,   628,   631,   634,   637,   640,   643,   646,
-     652,   658,   664,   667,   670,   673,   676,   679,   682,   688,
-     694,   700,   705,   710,   713,   716,   722,   724,   726,   728,
-     733,   741,   743,   748,   751,   756,   760,   759,   768,   769,
-     770,   771,   772,   773,   774,   775,   776,   777,   778,   779,
-     780,   781,   782,   783,   784,   785,   786,   787,   788,   789,
-     790,   791,   792,   793,   794,   795,   796,   797,   801,   801,
-     801,   802,   802,   803,   803,   803,   804,   804,   804,   804,
-     805,   805,   805,   805,   806,   806,   806,   807,   807,   807,
-     807,   808,   808,   808,   808,   809,   809,   809,   809,   810,
-     810,   810,   810,   811,   811,   811,   811,   812,   812,   817,
-     820,   823,   826,   829,   832,   835,   838,   841,   844,   847,
-     850,   853,   856,   859,   862,   865,   868,   871,   874,   877,
-     880,   883,   886,   889,   892,   895,   898,   901,   904,   907,
-     910,   913,   916,   919,   922,   925,   928,   931,   934,   937,
-     940,   943,   943,   948,   951,   957,   961,   962,   964,   966,
-     970,   974,   975,   978,   979,   980,   982,   984,   988,   990,
-     992,   994,   996,  1001,  1001,  1012,  1016,  1018,  1022,  1024,
-    1026,  1028,  1032,  1034,  1036,  1040,  1041,  1042,  1043,  1044,
-    1045,  1046,  1047,  1048,  1049,  1050,  1053,  1052,  1065,  1064,
-    1071,  1070,  1076,  1078,  1080,  1082,  1084,  1086,  1088,  1090,
-    1092,  1094,  1094,  1098,  1100,  1102,  1104,  1105,  1107,  1109,
-    1114,  1120,  1124,  1119,  1131,  1135,  1130,  1141,  1145,  1148,
-    1152,  1147,  1159,  1158,  1171,  1176,  1170,  1187,  1186,  1199,
-    1198,  1216,  1220,  1215,  1230,  1232,  1234,  1236,  1240,  1244,
-    1248,  1252,  1256,  1260,  1264,  1268,  1272,  1276,  1280,  1284,
-    1288,  1289,  1290,  1293,  1294,  1297,  1298,  1304,  1305,  1309,
-    1310,  1313,  1315,  1319,  1321,  1325,  1327,  1329,  1331,  1333,
-    1335,  1337,  1339,  1341,  1346,  1348,  1350,  1352,  1356,  1359,
-    1362,  1364,  1366,  1368,  1370,  1372,  1374,  1376,  1378,  1380,
-    1382,  1384,  1386,  1388,  1390,  1394,  1395,  1401,  1403,  1405,
-    1410,  1412,  1416,  1417,  1420,  1422,  1426,  1427,  1426,  1440,
-    1442,  1446,  1448,  1453,  1452,  1464,  1466,  1468,  1470,  1474,
-    1477,  1476,  1484,  1483,  1490,  1493,  1492,  1500,  1499,  1506,
-    1508,  1510,  1515,  1514,  1523,  1522,  1532,  1538,  1539,  1542,
-    1546,  1549,  1551,  1553,  1556,  1558,  1561,  1563,  1566,  1567,
-    1569,  1572,  1576,  1577,  1578,  1582,  1586,  1590,  1594,  1596,
-    1601,  1602,  1606,  1607,  1611,  1613,  1618,  1619,  1623,  1625,
-    1629,  1631,  1636,  1637,  1642,  1643,  1648,  1649,  1654,  1655,
-    1660,  1661,  1665,  1667,  1666,  1678,  1684,  1689,  1677,  1702,
-    1704,  1706,  1708,  1711,  1717,  1718,  1719,  1720,  1723,  1729,
-    1730,  1731,  1734,  1739,  1740,  1741,  1742,  1743,  1746,  1747,
-    1748,  1749,  1750,  1751,  1752,  1755,  1758,  1762,  1764,  1769,
-    1770,  1775,  1778,  1777,  1784,  1790,  1795,  1802,  1804,  1806,
-    1808,  1812,  1815,  1818,  1820,  1822,  1824,  1826,  1828,  1830,
-    1832,  1834,  1836,  1838,  1840,  1842,  1844,  1847,  1850,  1854,
-    1858,  1862,  1868,  1869,  1873,  1875,  1879,  1880,  1884,  1888,
-    1892,  1894,  1899,  1901,  1905,  1906,  1909,  1911,  1915,  1919,
-    1923,  1925,  1929,  1931,  1935,  1936,  1939,  1945,  1949,  1950,
-    1953,  1963,  1965,  1969,  1972,  1971,  1999,  2000,  2004,  2005,
-    2009,  2011,  2013,  2019,  2020,  2021,  2024,  2025,  2026,  2027,
-    2030,  2031,  2032,  2035,  2036,  2039,  2040,  2043,  2044,  2047,
-    2050,  2053,  2054,  2055,  2060,  2063,  2068,  2070,  2075
+         0,   161,   161,   161,   191,   199,   204,   209,   214,   221,
+     224,   223,   234,   262,   270,   275,   280,   285,   291,   297,
+     296,   309,   308,   317,   322,   327,   333,   338,   344,   351,
+     363,   375,   381,   395,   397,   404,   410,   428,   435,   438,
+     441,   444,   447,   450,   453,   456,   461,   464,   471,   473,
+     475,   478,   481,   484,   489,   495,   497,   502,   504,   511,
+     510,   521,   527,   530,   533,   536,   539,   542,   545,   548,
+     551,   554,   557,   563,   565,   571,   573,   579,   582,   585,
+     588,   591,   594,   597,   600,   603,   605,   611,   613,   619,
+     622,   628,   631,   637,   640,   643,   646,   649,   652,   655,
+     661,   667,   673,   676,   679,   682,   685,   688,   691,   697,
+     703,   709,   714,   719,   722,   725,   731,   733,   735,   737,
+     742,   750,   752,   757,   760,   765,   769,   768,   777,   778,
+     779,   780,   781,   782,   783,   784,   785,   786,   787,   788,
+     789,   790,   791,   792,   793,   794,   795,   796,   797,   798,
+     799,   800,   801,   802,   803,   804,   805,   806,   810,   810,
+     810,   811,   811,   812,   812,   812,   813,   813,   813,   813,
+     814,   814,   814,   814,   815,   815,   815,   816,   816,   816,
+     816,   817,   817,   817,   817,   818,   818,   818,   818,   819,
+     819,   819,   819,   820,   820,   820,   820,   821,   821,   826,
+     829,   832,   835,   838,   841,   844,   847,   850,   853,   856,
+     859,   862,   865,   868,   871,   874,   877,   880,   883,   888,
+     893,   896,   899,   902,   905,   908,   911,   914,   917,   920,
+     923,   926,   929,   932,   935,   938,   941,   944,   947,   950,
+     953,   956,   956,   961,   964,   970,   974,   975,   977,   979,
+     983,   987,   988,   991,   992,   993,   995,   997,  1001,  1003,
+    1005,  1007,  1009,  1014,  1014,  1025,  1029,  1031,  1035,  1037,
+    1039,  1041,  1045,  1047,  1049,  1053,  1054,  1055,  1056,  1057,
+    1058,  1059,  1060,  1061,  1062,  1063,  1066,  1065,  1078,  1077,
+    1084,  1083,  1089,  1091,  1093,  1095,  1097,  1099,  1101,  1103,
+    1105,  1107,  1107,  1111,  1113,  1115,  1117,  1118,  1120,  1122,
+    1127,  1133,  1137,  1132,  1144,  1148,  1143,  1154,  1158,  1161,
+    1165,  1160,  1172,  1171,  1184,  1189,  1183,  1200,  1199,  1212,
+    1211,  1229,  1233,  1228,  1243,  1245,  1247,  1249,  1253,  1257,
+    1261,  1265,  1269,  1273,  1277,  1281,  1285,  1289,  1293,  1297,
+    1301,  1302,  1303,  1306,  1307,  1310,  1311,  1317,  1318,  1322,
+    1323,  1326,  1328,  1332,  1334,  1338,  1340,  1342,  1344,  1346,
+    1348,  1350,  1352,  1354,  1359,  1361,  1363,  1365,  1369,  1372,
+    1375,  1377,  1379,  1381,  1383,  1385,  1387,  1389,  1391,  1393,
+    1395,  1397,  1399,  1401,  1403,  1407,  1408,  1414,  1416,  1418,
+    1423,  1425,  1429,  1430,  1433,  1435,  1439,  1440,  1439,  1453,
+    1455,  1459,  1461,  1466,  1465,  1477,  1479,  1481,  1483,  1487,
+    1490,  1489,  1497,  1496,  1503,  1506,  1505,  1513,  1512,  1519,
+    1521,  1523,  1528,  1527,  1536,  1535,  1545,  1551,  1552,  1555,
+    1559,  1562,  1564,  1566,  1569,  1571,  1574,  1576,  1579,  1580,
+    1582,  1585,  1589,  1590,  1591,  1595,  1599,  1603,  1607,  1609,
+    1614,  1615,  1619,  1620,  1624,  1626,  1631,  1632,  1636,  1638,
+    1642,  1644,  1649,  1650,  1655,  1656,  1661,  1662,  1667,  1668,
+    1673,  1674,  1678,  1680,  1679,  1691,  1697,  1702,  1690,  1715,
+    1717,  1719,  1721,  1724,  1730,  1731,  1732,  1733,  1736,  1742,
+    1746,  1750,  1754,  1760,  1761,  1762,  1763,  1764,  1767,  1768,
+    1769,  1770,  1771,  1772,  1773,  1776,  1779,  1783,  1785,  1790,
+    1791,  1796,  1799,  1798,  1805,  1811,  1816,  1823,  1825,  1827,
+    1829,  1833,  1836,  1839,  1841,  1843,  1845,  1847,  1849,  1851,
+    1853,  1855,  1857,  1859,  1861,  1863,  1865,  1868,  1871,  1875,
+    1879,  1883,  1889,  1890,  1894,  1896,  1900,  1901,  1905,  1909,
+    1913,  1915,  1920,  1922,  1926,  1927,  1930,  1932,  1936,  1940,
+    1944,  1946,  1950,  1952,  1956,  1957,  1960,  1966,  1970,  1971,
+    1974,  1984,  1986,  1990,  1993,  1992,  2020,  2021,  2025,  2026,
+    2030,  2032,  2034,  2040,  2041,  2042,  2045,  2046,  2047,  2048,
+    2051,  2052,  2053,  2056,  2057,  2060,  2061,  2064,  2065,  2068,
+    2071,  2074,  2075,  2076,  2081,  2084,  2089,  2091,  2096
     //[
   ];
   // YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.
@@ -9733,6 +6835,3254 @@ actionsTable =
 
 }).call(this); // end of the Parser very own namespase
 
+;(function(){ // actions table namespace start
+
+/* "%code actions" blocks.  */
+
+
+
+// here goes the code needed in rules only, when generating nodes,
+// we still know all the token numbers here too.
+// here is the main generator interface
+
+// nodes classes
+
+// TODO: implement them all
+var
+  NODE_SCOPE          = 1,
+  NODE_BLOCK          = 2,
+  NODE_IF             = 3,
+  NODE_CASE           = 4,
+  NODE_WHEN           = 5,
+  NODE_OPT_N          = 6,
+  NODE_WHILE          = 7,
+  NODE_UNTIL          = 8,
+  NODE_ITER           = 9,
+  NODE_FOR            = 10,
+  NODE_BREAK          = 11,
+  NODE_NEXT           = 12,
+  NODE_REDO           = 13,
+  NODE_RETRY          = 14,
+  NODE_BEGIN          = 15,
+  NODE_RESCUE         = 16,
+  NODE_RESBODY        = 17,
+  NODE_ENSURE         = 18,
+  NODE_AND            = 19,
+  NODE_OR             = 20,
+  NODE_MASGN          = 21,
+  NODE_LASGN          = 22,
+  NODE_DASGN          = 23,
+  NODE_DASGN_CURR     = 24,
+  NODE_GASGN          = 25,
+  NODE_IASGN          = 26,
+  NODE_IASGN2         = 27,
+  NODE_CDECL          = 28,
+  NODE_CVASGN         = 29,
+  NODE_CVDECL         = 30,
+  NODE_OP_ASGN1       = 31,
+  NODE_OP_ASGN2       = 32,
+  NODE_OP_ASGN_AND    = 33,
+  NODE_OP_ASGN_OR     = 34,
+  NODE_OP_CDECL       = 35,
+  NODE_CALL           = 36,
+  NODE_FCALL          = 37,
+  NODE_VCALL          = 38,
+  NODE_SUPER          = 39,
+  NODE_ZSUPER         = 40,
+  NODE_ARRAY          = 41,
+  NODE_ZARRAY         = 42,
+  NODE_VALUES         = 43,
+  NODE_HASH           = 44,
+  NODE_RETURN         = 45,
+  NODE_YIELD          = 46,
+  NODE_LVAR           = 47,
+  NODE_DVAR           = 48,
+  NODE_GVAR           = 49,
+  NODE_IVAR           = 50,
+  NODE_CONST          = 51,
+  NODE_CVAR           = 52,
+  NODE_NTH_REF        = 53,
+  NODE_BACK_REF       = 54,
+  NODE_MATCH          = 55,
+  NODE_MATCH2         = 56,
+  NODE_MATCH3         = 57,
+  NODE_LIT            = 58,
+  NODE_STR            = 59,
+  NODE_DSTR           = 60,
+  NODE_XSTR           = 61,
+  NODE_DXSTR          = 62,
+  NODE_EVSTR          = 63,
+  NODE_DREGX          = 64,
+  NODE_DREGX_ONCE     = 65,
+  NODE_ARGS           = 66,
+  NODE_ARGS_AUX       = 67,
+  NODE_OPT_ARG        = 68,
+  NODE_KW_ARG         = 69,
+  NODE_POSTARG        = 70,
+  NODE_ARGSCAT        = 71,
+  NODE_ARGSPUSH       = 72,
+  NODE_SPLAT          = 73,
+  NODE_TO_ARY         = 74,
+  NODE_BLOCK_ARG      = 75,
+  NODE_BLOCK_PASS     = 76,
+  NODE_DEFN           = 77,
+  NODE_DEFS           = 78,
+  NODE_ALIAS          = 79,
+  NODE_VALIAS         = 80,
+  NODE_UNDEF          = 81,
+  NODE_CLASS          = 82,
+  NODE_MODULE         = 83,
+  NODE_SCLASS         = 84,
+  NODE_COLON2         = 85,
+  NODE_COLON3         = 86,
+  NODE_CREF           = 87,
+  NODE_DOT2           = 88,
+  NODE_DOT3           = 89,
+  NODE_FLIP2          = 90,
+  NODE_FLIP3          = 91,
+  NODE_SELF           = 92,
+  NODE_NIL            = 93,
+  NODE_TRUE           = 94,
+  NODE_FALSE          = 95,
+  NODE_ERRINFO        = 96,
+  NODE_DEFINED        = 97,
+  NODE_POSTEXE        = 98,
+  NODE_ALLOCA         = 99,
+  NODE_BMETHOD        = 100,
+  NODE_MEMO           = 101,
+  NODE_IFUNC          = 102,
+  NODE_DSYM           = 103,
+  NODE_ATTRASGN       = 104,
+  NODE_PRELUDE        = 105,
+  NODE_LAMBDA         = 106,
+  NODE_LAST           = 107;
+
+
+function N () {}
+
+
+function NEW_SCOPE (tbl, body, args)
+{
+  var n = new N();
+  n.type = NODE_SCOPE;
+  n.flags = 0;
+  n.line = 0;
+
+  n.tbl = tbl || local_tbl();
+  n.body = body;
+  n.args = args;
+  
+  return n;
+}
+
+function NEW_BLOCK (head)
+{
+  var n = new N();
+  n.type = NODE_BLOCK;
+  n.flags = 0;
+  n.line = 0;
+
+  n.head = head; // set later
+  n.next = null;
+  n.end = null; // set later
+  return n;
+}
+
+function NEW_BEGIN (body)
+{
+  var n = new N();
+  n.type = NODE_BEGIN;
+  n.flags = 0;
+  n.line = 0;
+
+  n.body = body;
+  return n;
+}
+
+function NEW_RESCUE (body, rescue, elsee) // elsee for else
+{
+  var n = new N();
+  n.type = NODE_RESCUE;
+  n.flags = 0;
+  n.line = 0;
+
+  n.body = body;
+  n.rescue = rescue;
+  n.elsee = elsee;
+  return n;
+}
+
+function NEW_RESBODY (exclude, body, rescue) // elsee for else
+{
+  var n = new N();
+  n.type = NODE_RESBODY;
+  n.flags = 0;
+  n.line = 0;
+
+  n.exclude = exclude;
+  n.body = body;
+  n.rescue = rescue;
+  return n;
+}
+
+function NEW_ENSURE (body, enshure) // elsee for else
+{
+  var n = new N();
+  n.type = NODE_ENSURE;
+  n.flags = 0;
+  n.line = 0;
+
+  n.body = body;
+  n.enshure = enshure;
+  return n;
+}
+
+function NEW_NIL ()
+{
+  var n = new N();
+  n.type = NODE_NIL;
+  n.flags = 0;
+  n.line = 0;
+  return n;
+}
+
+function NEW_ALIAS (name, entity) // TODO: fix names
+{
+  var n = new N();
+  n.type = NODE_ALIAS;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.name = name;
+  n.entity = entity;
+  return n;
+}
+
+function NEW_VALIAS (name, entity) // TODO: fix names
+{
+  var n = new N();
+  n.type = NODE_VALIAS;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.name = name;
+  n.entity = entity;
+  return n;
+}
+
+function NEW_BACK_REF (name)
+{
+  var n = new N();
+  n.type = NODE_BACK_REF;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.name = name;
+  return n;
+}
+
+function NEW_IF (cond, body, elsee)
+{
+  var n = new N();
+  n.type = NODE_IF;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.cond = cond;
+  n.body = body; // aka "then"
+  n.elsee = elsee;
+  return n;
+}
+
+function NEW_MATCH2 (nd_1st, nd_2nd)
+{
+  var n = new N();
+  n.type = NODE_MATCH2;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.nd_1st = nd_1st;
+  n.nd_2nd = nd_2nd;
+  return n;
+}
+
+function NEW_GVAR (name)
+{
+  var n = new N();
+  n.type = NODE_GVAR;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.name = name;
+  return n;
+}
+
+function NEW_DOT2 (beg, end)
+{
+  var n = new N();
+  n.type = NODE_DOT2;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.beg = beg;
+  n.end = end;
+  return n;
+}
+
+function NEW_DOT3 (beg, end)
+{
+  var n = new N();
+  n.type = NODE_DOT3;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.beg = beg;
+  n.end = end;
+  return n;
+}
+
+function NEW_LIT (lit, lit_type)
+{
+  var n = new N();
+  n.type = NODE_LIT;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.lit = lit;
+  n.lit_type = lit_type;
+  return n;
+}
+
+function NEW_WHILE (cond, body, n)
+{
+  var n = new N();
+  n.type = NODE_WHILE;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.cond = cond;
+  n.body = body;
+  n.n = n; // TODO: n what?
+  return n;
+}
+
+function NEW_UNTIL (cond, body, n)
+{
+  var n = new N();
+  n.type = NODE_UNTIL;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.cond = cond;
+  n.body = body;
+  n.n = n; // TODO: n what?
+  return n;
+}
+
+function NEW_POSTEXE (body)
+{
+  var n = new N();
+  n.type = NODE_POSTEXE;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.body = body;
+  return n;
+}
+
+function NEW_OP_ASGN_OR (vid, val)
+{
+  var n = new N();
+  n.type = NODE_OP_ASGN_OR;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.vid = vid;
+  n.val = val;
+  return n;
+}
+
+function NEW_OP_ASGN1 (vid, op, args)
+{
+  var n = new N();
+  n.type = NODE_OP_ASGN_OR;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.vid = vid;
+  n.op = op;
+  n.args = args;
+  return n;
+}
+
+function NEW_OP_ASGN2 (vid, op, args)
+{
+  var n = new N();
+  n.type = NODE_OP_ASGN_OR;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.vid = vid;
+  n.op = op;
+  n.args = args;
+  return n;
+}
+
+function NEW_OP_ASGN_AND (vid, val)
+{
+  var n = new N();
+  n.type = NODE_OP_ASGN_AND;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.vid = vid;
+  n.val = val;
+  return n;
+}
+
+function NEW_CALL (mid, val)
+{
+  var n = new N();
+  n.type = NODE_CALL;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.mid = mid;
+  n.val = val;
+  return n;
+}
+
+function NEW_ARRAY (next)
+{
+  var n = new N();
+  n.type = NODE_ARRAY;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.next = next;
+  n.end = null;
+  n.alen = 1;
+  return n;
+}
+
+var NEW_LIST = NEW_ARRAY;
+
+function NEW_STR (lit) // literal
+{
+  var n = new N();
+  n.type = NODE_STR;
+  n.flags = 0;
+  n.line = 0;
+  
+  n.lit = lit;
+  return n;
+}
+
+function NEW_ZARRAY () // literal
+{
+  var n = new N();
+  n.type = NODE_ZARRAY;
+  n.flags = 0;
+  n.line = 0;
+  return n;
+}
+
+function NEW_ARGSCAT () // literal
+{
+  var n = new N();
+  n.type = NODE_ARGSCAT;
+  n.flags = 0;
+  n.line = 0;
+  return n;
+}
+
+
+
+// from parse.y
+// 
+// > in rules (and generator) we have access to those things:
+// >   * all the code from prologue (not much though);
+// >   * `lexer`: instance of our Lexer class from the lexer code block;
+// >   * `parser`: instance of our Parser class;
+// >   * $$ and $N through the `yyval` and `yystack` local variables
+// >   * all the code and variables from `rules` code block.
+
+
+// everything on IDs is here
+
+var tLAST_OP_ID = tLAST_TOKEN;
+var ID_SCOPE_MASK = 0x07;
+
+var ID_SCOPE_SHIFT  = 3,
+    ID_SCOPE_MASK   = 0x07,                
+    ID_LOCAL        = 0x00,
+    ID_GLOBAL       = 0x03,
+    ID_INSTANCE     = 0x01,
+    ID_ATTRSET      = 0x04,
+    ID_CONST        = 0x05,
+    ID_CLASS        = 0x06,
+    ID_JUNK         = 0x07;
+
+
+function is_notop_id (id)
+  { return id > tLAST_OP_ID }
+function is_local_id (id)
+  { return is_notop_id(id) && (id & ID_SCOPE_MASK) == ID_LOCAL }
+function is_global_id (id)
+  { return is_notop_id(id) && (id & ID_SCOPE_MASK) == ID_GLOBAL }
+function is_instance_id (id)
+  { return is_notop_id(id) && (id & ID_SCOPE_MASK) == ID_INSTANCE }
+function is_attrset_id (id)
+  { return is_notop_id(id) && (id & ID_SCOPE_MASK) == ID_ATTRSET }
+function is_const_id (id)
+  { return is_notop_id(id) && (id & ID_SCOPE_MASK) == ID_CONST }
+function is_class_id (id)
+  { return is_notop_id(id) && (id & ID_SCOPE_MASK) == ID_CLASS }
+function is_junk_id (id)
+  { return is_notop_id(id) && (id & ID_SCOPE_MASK) == ID_JUNK }
+function id_type (id)
+  { return is_notop_id(id) ? (id & ID_SCOPE_MASK) : -1 }
+function is_asgn_or_id (id)
+{
+  if (!is_notop_id(id))
+    return false;
+  var t = id & ID_SCOPE_MASK;
+  return t == ID_GLOBAL || t == ID_INSTANCE || t == ID_CLASS;
+}
+
+// cuts type bits (of count `ID_SCOPE_SHIFT`)
+// and sets one for `ID_ATTRSET`
+function rb_id_attrset (id)
+{
+  id &= ~ID_SCOPE_MASK;
+  id |= ID_ATTRSET;
+  return id;
+}
+
+
+var op_tbl = // TODO: rethink
+{
+  "..":         tDOT2,
+  "...":        tDOT3,
+  "+(binary)":  $('+'),
+  "-(binary)":  $('-'),
+  "**":         tPOW,
+  "**(dstar)":  tDSTAR,
+  "+@":         tUPLUS,
+  "-@":         tUMINUS,
+  "<=>":        tCMP,
+  ">=":         tGEQ,
+  "<=":         tLEQ,
+  "==":         tEQ,
+  "===":        tEQQ,
+  "!=":         tNEQ,
+  "=~":         tMATCH,
+  "!~":         tNMATCH,
+  "[]":         tAREF,
+  "[]=":        tASET,
+  "<<":         tLSHFT,
+  ">>":         tRSHFT,
+  "::":         tCOLON2
+};
+
+
+var rb_id2name = [];
+var global_symbols_name2id = {};
+for (var k in lexer.rb_reserved_word)
+{
+  var kw = lexer.rb_reserved_word[k];
+  rb_id2name[kw.id0] = k;
+  rb_id2name[kw.id1] = k;
+}
+
+rb_id2name.length = tLAST_OP_ID;
+
+function register_symid_str (id, name)
+{
+  rb_id2name[id] = name;
+  global_symbols_name2id[name] = id;
+}
+
+
+for (var k in op_tbl)
+{
+  var id = op_tbl[k];
+  register_symid_str(id, k);
+}
+
+// print(JSON.stringify(rb_id2name))
+// print(JSON.stringify(global_symbols_name2id))
+
+
+
+// rb_intern3 rb_intern2 rb_intern_str
+function rb_intern (name)
+{
+  var id = rb_id2name[name];
+  if (id !== undefined)
+    return id;
+
+  return intern_str(str);
+}
+
+function intern_str (name)
+{
+  var id = 0;
+  goto_id_register: {
+    switch (name[0])
+    {
+      case '$':
+        id |= ID_GLOBAL;
+        break;
+      case '@':
+        if (name[1] == '@')
+        {
+          id |= ID_CLASS;
+        }
+        else
+        {
+          id |= ID_INSTANCE;
+        }
+        break;
+      default:
+        // was: a seach through `op_tbl`, which is precalced above
+        //      so we could never get here through the `rb_intern()`
+
+        if (name[name.length-1] == '=')
+        {
+          /* attribute assignment */
+          id = rb_intern(name);
+          if (id > tLAST_OP_ID && !is_attrset_id(id))
+          {
+            id = rb_id_attrset(id); // sets type bits to `ID_ATTRSET`
+            break goto_id_register; // was: goto id_register;
+          }
+          id = ID_ATTRSET;
+        }
+        else if ('A' <= name[0] && name[0] <= 'Z')
+        {
+          id = ID_CONST;
+        }
+        else
+        {
+          id = ID_LOCAL;
+        }
+        break;
+    }
+    // was: new_id:
+    id |= ++global_symbols.last_id << ID_SCOPE_SHIFT;
+  } // was: id_register:
+  return register_symid_str(id, str);
+}
+
+
+
+
+
+
+
+
+// function new_bv (name) // ID name
+// {
+//   if (!name)
+//     return;
+//   if (!is_local_id(name))
+//   {
+//     lexer.compile_error("invalid local variable - " + rb_id2name[name]);
+//     return;
+//   }
+//   shadowing_lvar(name);
+//   dyna_var(name);
+// }
+
+
+
+
+var NODE_FL_NEWLINE = 1<<7;
+var NODE_FL_CREF_PUSHED_BY_EVAL = NODE_FL_NEWLINE;
+var NODE_FL_CREF_OMOD_SHARED = 1<<6;
+
+
+function dyna_in_block ()
+{
+  // TODO :)
+  return true;
+}
+
+function is_local_id (ident)
+{
+  // TODO :)
+  return true;
+}
+function lvar_defined (ident)
+{
+  // puts('::::::::::::::::::::::::::::::::::::::::::::::::new lvar', ident)
+  // TODO :)
+  return false;
+}
+
+// point of ident knowlage exchange,
+// some kind of export inside out :)
+lexer.setGenerator
+({
+  is_local_id: is_local_id,
+  lvar_defined: lvar_defined
+});
+
+function local_id (ident)
+{
+  // TODO :)
+  return true;
+}
+
+
+
+// This file is incuded into its own namesapase closure,
+// so feel free to create global variables here,
+// they all will be local to the parser actions.
+
+
+var ruby_verbose = true;
+
+// just a constants to compare to
+var DVARS_INHERIT = {},  // (NODE *) 1
+    DVARS_TOPSCOPE = {}; // NULL
+
+var lvtbl = null;
+
+function vtable_alloc (prev)
+{
+  var tbl =
+  {
+    prev: prev
+  };
+  
+  return tbl;
+}
+
+function local_push (inherit_dvars)
+{
+  var local =
+  {
+    prev: lvtbl,
+    args: vtable_alloc(0),
+    vars: vtable_alloc(inherit_dvars ? DVARS_INHERIT : DVARS_TOPSCOPE),
+    used: vtable_alloc(0)
+  };
+  lvtbl = local;
+}
+
+function local_pop ()
+{
+  var local = lvtbl.prev;
+  if (lvtbl.used)
+  {
+    warn_unused_var(lvtbl);
+  }
+  lvtbl = local;
+}
+
+function warn_unused_var (local)
+{
+  // TODO
+}
+
+function rb_bug ()
+{
+  // TODO: scream, of even log to the base.
+}
+
+
+// TODO: analise these
+var compile_for_eval = false;
+
+// `eval` handling
+// require sets it to 0 http://rxr.whitequark.org/mri/source/ruby.c?v=2.0.0-p0#537
+var parse_in_eval = 0;
+function rb_parse_in_eval () { return parse_in_eval > 0; }
+function rb_parse_in_main () { return parse_in_eval < 0; }
+// http://rxr.whitequark.org/mri/source/vm_eval.c?v=2.0.0-p0#1207
+/* make eval iseq */
+// th->parse_in_eval++;
+// th->mild_compile_error++;
+// iseqval = rb_iseq_compile_on_base(src, rb_str_new2(file), INT2FIX(line), base_block);
+// th->mild_compile_error--;
+// th->parse_in_eval--;
+
+// the root node, I think
+var ruby_eval_tree = null;
+var ruby_eval_tree_begin = null;
+
+
+
+
+
+
+function fixpos (node, orig)
+{
+  if (!node)
+    return;
+  if (!orig)
+    return;
+  if (orig == DVARS_INHERIT) // (NODE *) 1
+    return;
+  node.line = orig.line;
+}
+
+function parser_warning (node, mesg)
+{
+  lexer.warn(mesg, node.line);
+}
+
+
+function block_append (head, tail)
+{
+  var end, h = head;
+
+  if (tail == null)
+    return head;
+
+  if (h == null)
+    return tail;
+  switch (h.type)
+  {
+    case NODE_LIT:
+    case NODE_STR:
+    case NODE_SELF:
+    case NODE_TRUE:
+    case NODE_FALSE:
+    case NODE_NIL:
+      lexer.warn(h, "unused literal ignored");
+      return tail;
+    default:
+      h = end = NEW_BLOCK(head);
+      end.end = end;
+      fixpos(end, head);
+      head = end;
+      break;
+    case NODE_BLOCK:
+      end = h.end;
+      break;
+  }
+
+  var nd = end.head;
+  switch (nd.type)
+  {
+    case NODE_RETURN:
+    case NODE_BREAK:
+    case NODE_NEXT:
+    case NODE_REDO:
+    case NODE_RETRY:
+      if (ruby_verbose)
+      {
+        parser_warning(tail, "statement not reached");
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  if (tail.type != NODE_BLOCK)
+  {
+    tail = NEW_BLOCK(tail);
+    tail.end = tail;
+  }
+  end.next = tail;
+  h.end = tail.end;
+  return head;
+}
+
+
+function void_stmts (node)
+{
+  if (!ruby_verbose) // TODO
+    return;
+
+  if (!node)
+    return;
+  if (node.type != NODE_BLOCK)
+    return;
+
+  for (;;)
+  {
+    if (!node.next)
+      return;
+    void_expr(node.head);
+    node = node.next;
+  }
+}
+
+
+// TODO: handle NODE_BEGIN with remove_begin()
+function void_expr (node)
+{
+  var useless = '';
+
+  if (!ruby_verbose) // TODO: hide in development mode
+    return;
+
+  if (!node)
+    return;
+  switch (node.type)
+  {
+    case NODE_CALL:
+      switch (node.mid)
+      {
+        case $('+'):
+        case $('-'):
+        case $('*'):
+        case $('/'):
+        case $('%'):
+        case tPOW:
+        case tUPLUS:
+        case tUMINUS:
+        case $('|'):
+        case $('^'):
+        case $('&'):
+        case tCMP:
+        case $('>'):
+        case tGEQ:
+        case $('<'):
+        case tLEQ:
+        case tEQ:
+        case tNEQ:
+          useless = rb_id2name[node.mid];
+          break;
+      }
+      break;
+
+    case NODE_LVAR:
+    case NODE_DVAR:
+    case NODE_GVAR:
+    case NODE_IVAR:
+    case NODE_CVAR:
+    case NODE_NTH_REF:
+    case NODE_BACK_REF:
+      useless = "a variable";
+      break;
+    case NODE_CONST:
+      useless = "a constant";
+      break;
+    case NODE_LIT:
+    case NODE_STR:
+    case NODE_DSTR:
+    case NODE_DREGX:
+    case NODE_DREGX_ONCE:
+      useless = "a literal";
+      break;
+    case NODE_COLON2:
+    case NODE_COLON3:
+      useless = "::";
+      break;
+    case NODE_DOT2:
+      useless = "..";
+      break;
+    case NODE_DOT3:
+      useless = "...";
+      break;
+    case NODE_SELF:
+      useless = "self";
+      break;
+    case NODE_NIL:
+      useless = "nil";
+      break;
+    case NODE_TRUE:
+      useless = "true";
+      break;
+    case NODE_FALSE:
+      useless = "false";
+      break;
+    case NODE_DEFINED:
+      useless = "defined?";
+      break;
+  }
+
+  if (useless)
+  {
+    lexer.warn("possibly useless use of "+useless+" in void context", node.line);
+  }
+}
+
+
+function local_tbl ()
+{
+  var buf = {};
+  
+  for (var k in lvtbl.args)
+    buf[k] = lvtbl.args[k]
+  
+  for (var k in lvtbl.vars)
+    buf[k] = lvtbl.vars[k]
+  
+  return buf;
+}
+
+var deferred_nodes = [];
+
+function fixup_nodes (deferred_nodes)
+{
+  // TODO: seams like a reduction for ranges
+}
+
+// shifts all leading NODE_BEGIN nodes in list:
+//   NODE_BEGIN->NODE_BEGIN->NODE_BEGIN->other_node
+// becomes
+//   other_node
+function remove_begin (node)
+{
+  while (node && node.type == NODE_BEGIN && node.body)
+  {
+    node = n1.body;
+  }
+  return node;
+}
+
+
+function  newline_node (node)
+{
+  if (node)
+  {
+    node = remove_begin(node);
+    node.flags |= NODE_FL_NEWLINE;
+  }
+  return node;
+}
+
+
+function check_cond (node)
+{
+  if (node == null)
+    return null;
+  assign_in_cond(node);
+
+  switch (node.type)
+  {
+    case NODE_DSTR:
+    case NODE_EVSTR:
+    case NODE_STR:
+      lexer.warn("string literal in condition");
+      break;
+
+    case NODE_DREGX:
+    case NODE_DREGX_ONCE:
+      parser_warning(node, "regex literal in condition");
+      return NEW_MATCH2(node, NEW_GVAR("$_"));
+
+    case NODE_AND:
+    case NODE_OR:
+      node.nd_1st = check_cond(node.nd_1st);
+      node.nd_2nd = check_cond(node.nd_2nd);
+      break;
+
+    case NODE_DOT2:
+    case NODE_DOT3:
+      node.beg = range_op(node.beg);
+      node.end = range_op(node.end);
+      if (node.type == NODE_DOT2)
+        // was: nd_set_type(node, NODE_FLIP2); TODO: understand
+        node.type = NODE_FLIP2;
+      else if (node.type == NODE_DOT3)
+        // was: nd_set_type(node, NODE_FLIP3); TODO: understand
+        node.type = NODE_FLIP3;
+      // if (!e_option_supplied(parser)) // TODO
+      {
+        var b = literal_node(node.beg);
+        var e = literal_node(node.end);
+        if ((b == 1 && e == 1) || (b + e >= 2 && ruby_verbose))
+        {
+          parser_warning(node, "range literal in condition");
+        }
+      }
+      break;
+
+    case NODE_DSYM:
+      parser_warning(node, "literal in condition");
+      break;
+
+    case NODE_LIT:
+      if (node.lit_type == 'REGEXP')
+      {
+        parser_warning(node, "regex literal in condition");
+        // was: nd_set_type(node, NODE_MATCH); TODO: understand
+        node.type = NODE_MATCH;
+      }
+      else
+      {
+        parser_warning(node, "literal in condition");
+      }
+    default:
+      break;
+  }
+  return node;
+}
+
+
+function assign_in_cond (node)
+{
+  switch (node.type)
+  {
+    case NODE_MASGN:
+      lexer.yyerror("multiple assignment in conditional");
+      return true;
+
+    case NODE_LASGN:
+    case NODE_DASGN:
+    case NODE_DASGN_CURR:
+    case NODE_GASGN:
+    case NODE_IASGN:
+      break;
+
+    default:
+      return false;
+  }
+
+  if (!node.value)
+    return true;
+  if (is_static_content(node.value))
+  {
+    /* reports always */
+    parser_warning(node.value, "found = in conditional, should be ==");
+  }
+  return true;
+}
+
+function range_op (node)
+{
+  if (node == null)
+    return null;
+
+  var type = node.type;
+  value_expr(node);
+  if (type == NODE_LIT && node.lit_type == 'FIXNUM')
+  {
+    warn_unless_e_option(parser, node,
+                         "integer literal in conditional range");
+    return NEW_CALL(node, tEQ, NEW_LIST(NEW_GVAR(rb_intern("$."))));
+  }
+  return cond0(parser, node);
+}
+
+
+function literal_node (node)
+{
+  if (!node)
+    return 1;        /* same as NODE_NIL */ // TODO: understand
+  switch (node.type)
+  {
+    case NODE_LIT:
+    case NODE_STR:
+    case NODE_DSTR:
+    case NODE_EVSTR:
+    case NODE_DREGX:
+    case NODE_DREGX_ONCE:
+    case NODE_DSYM:
+      return 2;
+    case NODE_TRUE:
+    case NODE_FALSE:
+    case NODE_NIL:
+      return 1;
+  }
+  return 0;
+}
+
+
+function is_static_content (node)
+{
+  if (!node)
+    return true;
+  switch (node.type)
+  {
+    case NODE_HASH:
+      if (!(node = node.head))
+        break;
+    case NODE_ARRAY:
+      do
+      {
+        if (!is_static_content(node.head))
+          return false;
+      }
+      while ((node = node.next) != null);
+    case NODE_LIT:
+    case NODE_STR:
+    case NODE_NIL:
+    case NODE_TRUE:
+    case NODE_FALSE:
+    case NODE_ZARRAY:
+      break;
+    default:
+      return false;
+  }
+  return true;
+}
+
+
+function value_expr (node)
+{
+  var cond = false;
+
+  if (!node)
+  {
+    lexer.warn("empty expression");
+  }
+  while (node)
+  {
+    switch (node.type)
+    {
+      case NODE_DEFN:
+      case NODE_DEFS:
+        parser_warning(node, "void value expression");
+        return false;
+
+      case NODE_RETURN:
+      case NODE_BREAK:
+      case NODE_NEXT:
+      case NODE_REDO:
+      case NODE_RETRY:
+        if (!cond)
+          lexer.yyerror("void value expression");
+        /* or "control never reach"? */
+        return false;
+
+      case NODE_BLOCK:
+        while (node.next)
+        {
+          node = node.next;
+        }
+        node = node.head;
+        break;
+
+      case NODE_BEGIN:
+        node = node.body;
+        break;
+
+      case NODE_IF:
+        if (!node.body) // aka "then"
+        {
+          node = node.elsee;
+          break;
+        }
+        else if (!node.elsee)
+        {
+          node = node.body;
+          break;
+        }
+        if (!value_expr(node.body))
+          return false;
+        node = node.elsee;
+        break;
+
+      case NODE_AND:
+      case NODE_OR:
+        cond = true;
+        node = node.nd_2nd;
+        break;
+
+      default:
+        return true;
+    }
+  }
+
+  return true;
+}
+
+function new_op_assign (lhs, op, rhs)
+{
+  var asgn = null;
+
+  if (lhs)
+  {
+    var vid = lhs.vid; // TODO: ID op operation: tPOW, $('*'), tLSHFT, etc.
+    if (op == tOROP)
+    {
+      lhs.value = rhs;
+      asgn = NEW_OP_ASGN_OR(gettable(vid), lhs);
+      if (is_asgn_or_id(vid))
+      {
+        asgn.aid = vid;
+      }
+    }
+    else if (op == tANDOP)
+    {
+      lhs.value = rhs;
+      asgn = NEW_OP_ASGN_AND(gettable(vid), lhs);
+    }
+    else
+    {
+      asgn = lhs;
+      asgn.value = NEW_CALL(gettable(vid), op, NEW_LIST(rhs));
+    }
+  }
+  else
+  {
+    asgn = NEW_BEGIN(null);
+  }
+  return asgn;
+}
+
+// TODO: understand and... rewrite :)
+function gettable (id)
+{
+  throw 'TODO: function gettable (id)';
+  switch (id)
+  {
+    case keyword_self:
+      return NEW_SELF();
+    case keyword_nil:
+      return NEW_NIL();
+    case keyword_true:
+      return NEW_TRUE();
+    case keyword_false:
+      return NEW_FALSE();
+    case keyword__FILE__:
+      return
+        NEW_STR(ruby_sourcefile);
+    case keyword__LINE__:
+      return NEW_LIT(INT2FIX(tokline));
+    case keyword__ENCODING__:
+      return NEW_LIT(rb_enc_from_encoding(current_enc));
+  }
+  switch (id_type(id))
+  {
+    case ID_LOCAL:
+      if (dyna_in_block() && dvar_defined(id))
+        return NEW_DVAR(id);
+      if (local_id(id))
+        return NEW_LVAR(id);
+      /* method call without arguments */
+      return NEW_VCALL(id);
+    case ID_GLOBAL:
+      return NEW_GVAR(id);
+    case ID_INSTANCE:
+      return NEW_IVAR(id);
+    case ID_CONST:
+      return NEW_CONST(id);
+    case ID_CLASS:
+      return NEW_CVAR(id);
+  }
+  lexer.compile_error("identifier %s is not valid to get", rb_id2name[id]);
+  return null;
+}
+
+// used only in new_op_assign()
+// TODO: understand
+function is_asgn_or_id (id)
+{
+  // ((is_notop_id(id)) && \ // isn't an operator
+  // (((id)&ID_SCOPE_MASK) == ID_GLOBAL || \    // $*
+  // ((id)&ID_SCOPE_MASK) == ID_INSTANCE || \   // @*
+  // ((id)&ID_SCOPE_MASK) == ID_CLASS))         // @@*
+  
+  // may translate to:
+  // typeof id == "string"
+  // id[0] == '$'
+  // id[0] == '@' && id[1] != '@'
+  // id[0] == '@' && id[1] == '@'
+  
+  return true;
+}
+
+function arg_concat_gen (node1, node2)
+{
+  if (!node2)
+    return node1;
+  switch (node1.type)
+  {
+    case NODE_BLOCK_PASS:
+      if (node1.head)
+        node1.head = arg_concat(node1.head, node2);
+      else
+        node1.head = NEW_LIST(node2);
+      return node1;
+    case NODE_ARGSPUSH:
+      if (node2.type != NODE_ARRAY)
+        break;
+      node1.body = list_concat(NEW_LIST(node1.body), node2);
+      // was: nd_set_type(node1, NODE_ARGSCAT);
+      node1.type = NODE_ARGSCAT; // TODO
+      return node1;
+    case NODE_ARGSCAT:
+      if (node2.type != NODE_ARRAY ||
+          node1.body.type != NODE_ARRAY)
+        break;
+      node1.body = list_concat(node1.body, node2);
+      return node1;
+  }
+  return NEW_ARGSCAT(node1, node2);
+}
+
+function list_concat (head, tail)
+{
+  var last = null;
+
+  if (head.next)
+  {
+    last = head.next.end;
+  }
+  else
+  {
+    last = head;
+  }
+
+  head.alen += tail.alen;
+  last.next = tail;
+  if (tail.next)
+  {
+    head.next.end = tail.next.end;
+  }
+  else
+  {
+    head.next.end = tail;
+  }
+
+  return head;
+}
+
+function new_attr_op_assign (lhs, attr, op, rhs)
+{
+  if (op == tOROP)
+  {
+    op = 0;
+  }
+  else if (op == tANDOP)
+  {
+    op = 1;
+  }
+  // var asgn = new NEW_OP_ASGN2(lhs, attr, op, rhs);
+  
+  var asgn = NEW_OP_ASGN2
+  (
+    lhs,
+    rhs,
+    NEW_OP_ASGN2
+    (
+      attr,
+      op,
+      rb_id_attrset(attr)
+    )
+  )
+  
+  fixpos(asgn, lhs);
+  return asgn;
+}
+
+
+
+
+
+
+actionsTable =
+{
+    2: function ()
+    
+    {
+            lexer.lex_state = EXPR_BEG;
+            // creates a new chain link of `lvtbl`es
+            local_push(compile_for_eval || rb_parse_in_main());
+    },
+  3: function ()
+    
+    {
+      // program: {} top_compstmt
+            if (yystack.valueStack[yystack.valueStack.length-1-((2-(2)))] && !compile_for_eval)
+            {
+                /* last expression should not be void */
+                if (yystack.valueStack[yystack.valueStack.length-1-((2-(2)))].type != NODE_BLOCK)
+                  void_expr(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
+                else
+                {
+                  var node = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
+                  while (node.next)
+                  {
+                      node = node.next;
+                  }
+                  void_expr(node.head);
+                }
+            }
+            ruby_eval_tree = 
+              NEW_SCOPE(null, block_append(ruby_eval_tree, yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]), null);
+            // creates the chain link off `lvtbl`es and restores it
+            local_pop();
+    },
+  4: function ()
+    
+    {
+      void_stmts(yystack.valueStack[yystack.valueStack.length-1-((2-(1)))]);
+      fixup_nodes(deferred_nodes);
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
+    },
+  5: function ()
+    
+    {
+      yyval = NEW_BEGIN(null); // empty body
+    },
+  6: function ()
+    
+    {
+      yyval = newline_node(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
+    },
+  7: function ()
+    
+    {
+      yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], newline_node(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
+    },
+  8: function ()
+    
+    {
+      yyval = remove_begin(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
+    },
+  10: function ()
+    
+    {},
+  11: function ()
+    
+    {
+      ruby_eval_tree_begin = block_append(ruby_eval_tree_begin, yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]);
+      yyval = NEW_BEGIN(null);
+      puts(123)
+    },
+  12: function ()
+    
+    {
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
+      if (yystack.valueStack[yystack.valueStack.length-1-((4-(2)))])
+      {
+        yyval = NEW_RESCUE(yystack.valueStack[yystack.valueStack.length-1-((4-(1)))], yystack.valueStack[yystack.valueStack.length-1-((4-(2)))], yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
+      }
+      else if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))])
+      {
+        lexer.warn("else without rescue is useless");
+        yyval = block_append(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
+      }
+      
+      if (yystack.valueStack[yystack.valueStack.length-1-((4-(4)))])
+      {
+        if (yyval)
+        {
+          yyval = NEW_ENSURE(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(4)))]);
+        }
+        else
+        {
+          yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((4-(4)))], NEW_NIL());
+        }
+      }
+      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(1)))]);
+    },
+  13: function ()
+    
+    {
+      void_stmts(yystack.valueStack[yystack.valueStack.length-1-((2-(1)))]);
+      fixup_nodes(deferred_nodes);
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
+    },
+  14: function ()
+    
+    {
+      yyval = NEW_BEGIN(null);
+    },
+  15: function ()
+    
+    {
+      yyval = newline_node(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
+    },
+  16: function ()
+    
+    {
+      yyval = block_append(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], newline_node(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
+    },
+  17: function ()
+    
+    {
+      yyval = remove_begin(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]);
+    },
+  18: function ()
+    
+    {
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((1-(1)))];
+    },
+  19: function ()
+    
+    {
+      lexer.yyerror("BEGIN is permitted only at toplevel");
+    },
+  20: function ()
+    
+    {
+      ruby_eval_tree_begin = block_append(ruby_eval_tree_begin, yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]);
+      yyval = NEW_BEGIN(null);
+    },
+  21: function ()
+    
+    {
+      lexer.lex_state = EXPR_FNAME;
+    },
+  22: function ()
+    
+    {
+      yyval = NEW_ALIAS(yystack.valueStack[yystack.valueStack.length-1-((4-(2)))], yystack.valueStack[yystack.valueStack.length-1-((4-(4)))]);
+    },
+  23: function ()
+    
+    {
+      yyval = NEW_VALIAS(yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+    },
+  24: function ()
+    
+    {
+      yyval = NEW_VALIAS(yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], NEW_BACK_REF(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]));
+    },
+  25: function ()
+    
+    {
+      lexer.yyerror("can't make alias for the number variables");
+      yyval = NEW_BEGIN(null);
+    },
+  26: function ()
+    
+    {
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
+    },
+  27: function ()
+    
+    {
+      yyval = NEW_IF(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]), null);
+      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+    },
+  28: function ()
+    
+    {
+      // #define NEW_UNLESS(c,t,e) NEW_IF(c,e,t)
+      yyval = NEW_IF(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), null, remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]));
+      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+    },
+  29: function ()
+    
+    {
+      if (yystack.valueStack[yystack.valueStack.length-1-((3-(1)))] && yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].type == NODE_BEGIN)
+      {
+        yyval = NEW_WHILE(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].body, 0);
+      }
+      else
+      {
+        yyval = NEW_WHILE(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], 1);
+      }
+    },
+  30: function ()
+    
+    {
+      if (yystack.valueStack[yystack.valueStack.length-1-((3-(1)))] && yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].type == NODE_BEGIN)
+      {
+        yyval = NEW_UNTIL(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].body, 0);
+      }
+      else
+      {
+        yyval = NEW_UNTIL(check_cond(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], 1);
+      }
+    },
+  31: function ()
+    
+    {
+      var resq = NEW_RESBODY(null, remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]), null);
+      yyval = NEW_RESCUE(remove_begin(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))]), resq, null);
+    },
+  32: function ()
+    
+    {
+      if (lexer.in_def || lexer.in_single)
+      {
+        lexer.warn("END in method; use at_exit");
+      }
+      yyval = NEW_POSTEXE(NEW_SCOPE
+      (
+        null, // tbl
+        yystack.valueStack[yystack.valueStack.length-1-((4-(3)))],   // body
+        null  // args
+      ));
+    },
+  34: function ()
+    
+    {
+      value_expr(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+      yystack.valueStack[yystack.valueStack.length-1-((3-(1)))].value = yystack.valueStack[yystack.valueStack.length-1-((3-(3)))];
+      yyval = yystack.valueStack[yystack.valueStack.length-1-((3-(1)))];
+    },
+  35: function ()
+    
+    {
+      value_expr(yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+      yyval = new_op_assign(yystack.valueStack[yystack.valueStack.length-1-((3-(1)))], yystack.valueStack[yystack.valueStack.length-1-((3-(2)))], yystack.valueStack[yystack.valueStack.length-1-((3-(3)))]);
+    },
+  36: function ()
+    
+    {
+      value_expr(yystack.valueStack[yystack.valueStack.length-1-((6-(6)))]);
+      if (!yystack.valueStack[yystack.valueStack.length-1-((6-(3)))])
+        yystack.valueStack[yystack.valueStack.length-1-((6-(3)))] = NEW_ZARRAY();
+      var args = arg_concat(yystack.valueStack[yystack.valueStack.length-1-((6-(3)))], yystack.valueStack[yystack.valueStack.length-1-((6-(6)))]);
+      if (yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] == tOROP)
+      {
+        yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] = 0;
+      }
+      else if (yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] == tANDOP)
+      {
+        yystack.valueStack[yystack.valueStack.length-1-((6-(5)))] = 1;
+      }
+      yyval = NEW_OP_ASGN1(yystack.valueStack[yystack.valueStack.length-1-((6-(1)))], yystack.valueStack[yystack.valueStack.length-1-((6-(5)))], args);
+      fixpos(yyval, yystack.valueStack[yystack.valueStack.length-1-((6-(1)))]);
+    },
+  37: function ()
+    
+    {
+      puts(':::::::::::::::::::::::::::::::::::::::::')
+      value_expr(yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
+      yyval = new_attr_op_assign(yystack.valueStack[yystack.valueStack.length-1-((5-(1)))], ripper_id2sym('.'), yystack.valueStack[yystack.valueStack.length-1-((5-(3)))], yystack.valueStack[yystack.valueStack.length-1-((5-(4)))], yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
+    },
+  38: function ()
+    
+    {},
+  39: function ()
+    
+    {},
+  40: function ()
+    
+    {},
+  41: function ()
+    
+    {},
+  42: function ()
+    
+    {},
+  43: function ()
+    
+    {},
+  44: function ()
+    
+    {},
+  46: function ()
+    
+    {},
+  47: function ()
+    
+    {},
+  49: function ()
+    
+    {},
+  50: function ()
+    
+    {},
+  51: function ()
+    
+    {},
+  52: function ()
+    
+    {},
+  54: function ()
+    
+    {},
+  58: function ()
+    
+    {},
+  59: function ()
+    
+    {},
+  60: function ()
+    
+    {
+      // touching this alters the parse.output
+      yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+    },
+  61: function ()
+    
+    {},
+  62: function ()
+    
+    {},
+  63: function ()
+    
+    {},
+  64: function ()
+    
+    {},
+  65: function ()
+    
+    {},
+  66: function ()
+    
+    {},
+  67: function ()
+    
+    {},
+  68: function ()
+    
+    {},
+  69: function ()
+    
+    {},
+  70: function ()
+    
+    {},
+  71: function ()
+    
+    {},
+  72: function ()
+    
+    {},
+  74: function ()
+    
+    {},
+  76: function ()
+    
+    {},
+  77: function ()
+    
+    {},
+  78: function ()
+    
+    {},
+  79: function ()
+    
+    {},
+  80: function ()
+    
+    {},
+  81: function ()
+    
+    {},
+  82: function ()
+    
+    {},
+  83: function ()
+    
+    {},
+  84: function ()
+    
+    {},
+  85: function ()
+    
+    {},
+  86: function ()
+    
+    {},
+  88: function ()
+    
+    {},
+  89: function ()
+    
+    {},
+  90: function ()
+    
+    {},
+  91: function ()
+    
+    {},
+  92: function ()
+    
+    {},
+  93: function ()
+    
+    {},
+  94: function ()
+    
+    {},
+  95: function ()
+    
+    {},
+  96: function ()
+    
+    {},
+  97: function ()
+    
+    {},
+  98: function ()
+    
+    {},
+  99: function ()
+    
+    {
+      if (lexer.in_def || lexer.in_single)
+        lexer.yyerror("dynamic constant assignment");
+    },
+  100: function ()
+    
+    {
+      if (lexer.in_def || lexer.in_single)
+        lexer.yyerror("dynamic constant assignment");
+    },
+  101: function ()
+    
+    {},
+  102: function ()
+    
+    {},
+  103: function ()
+    
+    {},
+  104: function ()
+    
+    {},
+  105: function ()
+    
+    {},
+  106: function ()
+    
+    {},
+  107: function ()
+    
+    {},
+  108: function ()
+    
+    {
+      if (lexer.in_def || lexer.in_single)
+        lexer.yyerror("dynamic constant assignment");
+    },
+  109: function ()
+    
+    {
+      if (lexer.in_def || lexer.in_single)
+        lexer.yyerror("dynamic constant assignment");
+    },
+  110: function ()
+    
+    {},
+  111: function ()
+    
+    {
+      lexer.yyerror("class/module name must be CONSTANT");
+    },
+  113: function ()
+    
+    {},
+  114: function ()
+    
+    {},
+  115: function ()
+    
+    {},
+  119: function ()
+    
+    {
+      lexer.lex_state = EXPR_ENDFN;
+    },
+  120: function ()
+    
+    {
+      lexer.lex_state = EXPR_ENDFN;
+    },
+  123: function ()
+    
+    {},
+  125: function ()
+    
+    {},
+  126: function ()
+    
+    {
+      lexer.lex_state = EXPR_FNAME;
+    },
+  127: function ()
+    
+    {},
+  128: function ()
+    
+    {},
+  129: function ()
+    
+    {},
+  130: function ()
+    
+    {},
+  131: function ()
+    
+    {},
+  132: function ()
+    
+    {},
+  133: function ()
+    
+    {},
+  134: function ()
+    
+    {},
+  135: function ()
+    
+    {},
+  136: function ()
+    
+    {},
+  137: function ()
+    
+    {},
+  138: function ()
+    
+    {},
+  139: function ()
+    
+    {},
+  140: function ()
+    
+    {},
+  141: function ()
+    
+    {},
+  142: function ()
+    
+    {},
+  143: function ()
+    
+    {},
+  144: function ()
+    
+    {},
+  145: function ()
+    
+    {},
+  146: function ()
+    
+    {},
+  147: function ()
+    
+    {},
+  148: function ()
+    
+    {},
+  149: function ()
+    
+    {},
+  150: function ()
+    
+    {},
+  151: function ()
+    
+    {},
+  152: function ()
+    
+    {},
+  153: function ()
+    
+    {},
+  154: function ()
+    
+    {},
+  155: function ()
+    
+    {},
+  156: function ()
+    
+    {},
+  157: function ()
+    
+    {},
+  199: function ()
+    
+    {},
+  200: function ()
+    
+    {},
+  201: function ()
+    
+    {},
+  202: function ()
+    
+    {},
+  203: function ()
+    
+    {},
+  204: function ()
+    
+    {},
+  205: function ()
+    
+    {},
+  206: function ()
+    
+    {},
+  207: function ()
+    
+    {},
+  208: function ()
+    
+    {},
+  209: function ()
+    
+    {},
+  210: function ()
+    
+    {},
+  211: function ()
+    
+    {},
+  212: function ()
+    
+    {},
+  213: function ()
+    
+    {},
+  214: function ()
+    
+    {},
+  215: function ()
+    
+    {},
+  216: function ()
+    
+    {},
+  217: function ()
+    
+    {},
+  218: function ()
+    
+    {
+      // TODO: convert tINTEGER to NODE_LIT()
+    },
+  219: function ()
+    
+    {
+      // TODO: convert tFLOAT to NODE_LIT()
+    },
+  220: function ()
+    
+    {},
+  221: function ()
+    
+    {},
+  222: function ()
+    
+    {},
+  223: function ()
+    
+    {},
+  224: function ()
+    
+    {},
+  225: function ()
+    
+    {},
+  226: function ()
+    
+    {},
+  227: function ()
+    
+    {},
+  228: function ()
+    
+    {},
+  229: function ()
+    
+    {},
+  230: function ()
+    
+    {},
+  231: function ()
+    
+    {},
+  232: function ()
+    
+    {},
+  233: function ()
+    
+    {},
+  234: function ()
+    
+    {},
+  235: function ()
+    
+    {},
+  236: function ()
+    
+    {},
+  237: function ()
+    
+    {},
+  238: function ()
+    
+    {},
+  239: function ()
+    
+    {},
+  240: function ()
+    
+    {},
+  241: function ()
+    
+    { lexer.in_defined = true;},
+  242: function ()
+    
+    {
+      lexer.in_defined = false;
+    },
+  243: function ()
+    
+    {},
+  244: function ()
+    
+    {},
+  245: function ()
+    
+    {},
+  247: function ()
+    
+    {},
+  248: function ()
+    
+    {},
+  249: function ()
+    
+    {},
+  250: function ()
+    
+    {},
+  255: function ()
+    
+    {},
+  256: function ()
+    
+    {},
+  257: function ()
+    
+    {},
+  258: function ()
+    
+    {},
+  259: function ()
+    
+    {},
+  260: function ()
+    
+    {},
+  261: function ()
+    
+    {},
+  263: function ()
+    
+    {
+      yyval = lexer.cmdarg_stack;
+      lexer.CMDARG_PUSH(1);
+    },
+  264: function ()
+    
+    {
+      // CMDARG_POP()
+      lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((2-(1)))];
+    },
+  265: function ()
+    
+    {},
+  266: function ()
+    
+    {},
+  267: function ()
+    
+    {},
+  268: function ()
+    
+    {},
+  269: function ()
+    
+    {},
+  270: function ()
+    
+    {},
+  271: function ()
+    
+    {},
+  272: function ()
+    
+    {},
+  273: function ()
+    
+    {},
+  274: function ()
+    
+    {},
+  285: function ()
+    
+    {},
+  286: function ()
+    
+    {
+              yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = lexer.cmdarg_stack;
+              lexer.cmdarg_stack = 0;
+            },
+  287: function ()
+    
+    {
+              lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
+              // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
+            },
+  288: function ()
+    
+    {
+          lexer.lex_state = EXPR_ENDARG;
+        },
+  289: function ()
+    
+    {},
+  290: function ()
+    
+    {
+          lexer.lex_state = EXPR_ENDARG;
+        },
+  291: function ()
+    
+    {},
+  292: function ()
+    
+    {},
+  293: function ()
+    
+    {},
+  294: function ()
+    
+    {},
+  295: function ()
+    
+    {},
+  296: function ()
+    
+    {},
+  297: function ()
+    
+    {},
+  298: function ()
+    
+    {},
+  299: function ()
+    
+    {},
+  300: function ()
+    
+    {},
+  301: function ()
+    
+    { lexer.in_defined = true;},
+  302: function ()
+    
+    {
+              lexer.in_defined = false;
+            },
+  303: function ()
+    
+    {},
+  304: function ()
+    
+    {},
+  305: function ()
+    
+    {},
+  307: function ()
+    
+    {},
+  308: function ()
+    
+    {},
+  309: function ()
+    
+    {},
+  310: function ()
+    
+    {},
+  311: function ()
+    
+    {
+            lexer.COND_PUSH(1);
+          },
+  312: function ()
+    
+    {
+            lexer.COND_POP();
+          },
+  313: function ()
+    
+    {},
+  314: function ()
+    
+    {
+          lexer.COND_PUSH(1);
+        },
+  315: function ()
+    
+    {
+          lexer.COND_POP();
+        },
+  316: function ()
+    
+    {},
+  317: function ()
+    
+    {},
+  318: function ()
+    
+    {},
+  319: function ()
+    
+    {
+            lexer.COND_PUSH(1);
+          },
+  320: function ()
+    
+    {
+            lexer.COND_POP();
+          },
+  321: function ()
+    
+    {},
+  322: function ()
+    
+    {
+          if (lexer.in_def || lexer.in_single)
+            lexer.yyerror("class definition in method body");
+                
+            },
+  323: function ()
+    
+    {
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
+            },
+  324: function ()
+    
+    {
+          yyval = lexer.in_def;
+          lexer.in_def = 0;
+            },
+  325: function ()
+    
+    {
+              yyval = lexer.in_single;
+              lexer.in_single = 0;
+            },
+  326: function ()
+    
+    {
+          lexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
+          lexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
+            },
+  327: function ()
+    
+    {
+          if (lexer.in_def || lexer.in_single)
+            lexer.yyerror("module definition in method body");
+                
+            },
+  328: function ()
+    
+    {
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((5-(3)))];
+            },
+  329: function ()
+    
+    {
+              yyval = lexer.cur_mid; // TODO
+                lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
+                
+              lexer.in_def++;
+            },
+  330: function ()
+    
+    {
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+                lexer.in_def--;
+                lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+            },
+  331: function ()
+    
+    {
+      lexer.lex_state = EXPR_FNAME;
+    },
+  332: function ()
+    
+    {
+      lexer.in_single++;
+      lexer.lex_state = EXPR_ENDFN; /* force for args */
+    },
+  333: function ()
+    
+    {
+      lexer.in_single--;
+    },
+  334: function ()
+    
+    {},
+  335: function ()
+    
+    {},
+  336: function ()
+    
+    {},
+  337: function ()
+    
+    {},
+  338: function ()
+    
+    {},
+  339: function ()
+    
+    {},
+  340: function ()
+    
+    {},
+  341: function ()
+    
+    {},
+  342: function ()
+    
+    {},
+  343: function ()
+    
+    {},
+  344: function ()
+    
+    {},
+  345: function ()
+    
+    {},
+  346: function ()
+    
+    {},
+  347: function ()
+    
+    {},
+  348: function ()
+    
+    {},
+  349: function ()
+    
+    {},
+  356: function ()
+    
+    {},
+  358: function ()
+    
+    {},
+  361: function ()
+    
+    {},
+  362: function ()
+    
+    {},
+  363: function ()
+    
+    {},
+  364: function ()
+    
+    {},
+  365: function ()
+    
+    {},
+  366: function ()
+    
+    {},
+  367: function ()
+    
+    {},
+  368: function ()
+    
+    {},
+  369: function ()
+    
+    {},
+  370: function ()
+    
+    {},
+  371: function ()
+    
+    {},
+  372: function ()
+    
+    {},
+  373: function ()
+    
+    {},
+  374: function ()
+    
+    {},
+  375: function ()
+    
+    {},
+  376: function ()
+    
+    {},
+  377: function ()
+    
+    {},
+  378: function ()
+    
+    {},
+  379: function ()
+    
+    {},
+  380: function ()
+    
+    {},
+  381: function ()
+    
+    {},
+  382: function ()
+    
+    {},
+  383: function ()
+    
+    {},
+  384: function ()
+    
+    {},
+  385: function ()
+    
+    {},
+  386: function ()
+    
+    {},
+  387: function ()
+    
+    {},
+  388: function ()
+    
+    {},
+  389: function ()
+    
+    {},
+  390: function ()
+    
+    {},
+  391: function ()
+    
+    {},
+  392: function ()
+    
+    {},
+  393: function ()
+    
+    {},
+  394: function ()
+    
+    {},
+  396: function ()
+    
+    {
+            lexer.command_start = true;
+            },
+  397: function ()
+    
+    {},
+  398: function ()
+    
+    {},
+  399: function ()
+    
+    {},
+  400: function ()
+    
+    {},
+  401: function ()
+    
+    {},
+  404: function ()
+    
+    {},
+  405: function ()
+    
+    {},
+  406: function ()
+    
+    {},
+  407: function ()
+    
+    {
+              yyval = lexer.lpar_beg;
+              lexer.lpar_beg = ++lexer.paren_nest;
+            },
+  408: function ()
+    
+    {
+          lexer.lpar_beg = yystack.valueStack[yystack.valueStack.length-1-((4-(2)))];
+          // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((4-(1)))];
+            },
+  409: function ()
+    
+    {},
+  410: function ()
+    
+    {},
+  411: function ()
+    
+    {},
+  412: function ()
+    
+    {},
+  413: function ()
+    
+    {},
+  414: function ()
+    
+    {
+          // touching this alters the parse.output
+        yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+              yystack.valueStack[yystack.valueStack.length-1-((5-(1)))];
+            },
+  415: function ()
+    
+    {},
+  416: function ()
+    
+    {},
+  417: function ()
+    
+    {},
+  418: function ()
+    
+    {},
+  419: function ()
+    
+    {},
+  420: function ()
+    
+    {},
+  421: function ()
+    
+    {
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((5-(4)))];
+            },
+  422: function ()
+    
+    {},
+  423: function ()
+    
+    {
+              // touching this alters the parse.output
+                yystack.valueStack[yystack.valueStack.length-1-((5-(4)))]
+            },
+  424: function ()
+    
+    {},
+  425: function ()
+    
+    {},
+  426: function ()
+    
+    {
+          // touching this alters the parse.output
+          nd_set_line(yyval, yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]);
+            },
+  427: function ()
+    
+    {},
+  428: function ()
+    
+    {
+          // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((4-(3)))];
+            },
+  429: function ()
+    
+    {},
+  430: function ()
+    
+    {},
+  431: function ()
+    
+    {},
+  432: function ()
+    
+    {},
+  433: function ()
+    
+    {
+              // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+            },
+  434: function ()
+    
+    {},
+  435: function ()
+    
+    {
+          // touching this alters the parse.output
+          yystack.valueStack[yystack.valueStack.length-1-((5-(2)))];
+            },
+  436: function ()
+    
+    {},
+  439: function ()
+    
+    {},
+  441: function ()
+    
+    {},
+  442: function ()
+    
+    {},
+  444: function ()
+    
+    {},
+  446: function ()
+    
+    {},
+  449: function ()
+    
+    {},
+  451: function ()
+    
+    {},
+  454: function ()
+    
+    {},
+  455: function ()
+    
+    {},
+  456: function ()
+    
+    {},
+  457: function ()
+    
+    {},
+  458: function ()
+    
+    {},
+  459: function ()
+    
+    {},
+  460: function ()
+    
+    {},
+  461: function ()
+    
+    {},
+  463: function ()
+    
+    {},
+  464: function ()
+    
+    {},
+  465: function ()
+    
+    {},
+  466: function ()
+    
+    {},
+  467: function ()
+    
+    {},
+  468: function ()
+    
+    {},
+  469: function ()
+    
+    {},
+  470: function ()
+    
+    {},
+  471: function ()
+    
+    {},
+  472: function ()
+    
+    {},
+  473: function ()
+    
+    {},
+  474: function ()
+    
+    {},
+  475: function ()
+    
+    {},
+  476: function ()
+    
+    {},
+  477: function ()
+    
+    {},
+  478: function ()
+    
+    {},
+  479: function ()
+    
+    {},
+  480: function ()
+    
+    {},
+  481: function ()
+    
+    {},
+  483: function ()
+    
+    {
+            yyval = lexer.lex_strterm;
+            lexer.lex_strterm = null;
+            lexer.lex_state = EXPR_BEG;
+            },
+  484: function ()
+    
+    {
+            /*%%%*/
+            lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((3-(2)))];
+            },
+  485: function ()
+    
+    {
+          yystack.valueStack[yystack.valueStack.length-1-((1-(1)))] = lexer.cond_stack;
+          yyval = lexer.cmdarg_stack;
+          lexer.cond_stack = 0;
+          lexer.cmdarg_stack = 0;
+            },
+  486: function ()
+    
+    {
+            yyval = lexer.lex_strterm;
+            lexer.lex_strterm = null;
+            lexer.lex_state = EXPR_BEG;
+            },
+  487: function ()
+    
+    {
+            yyval = lexer.brace_nest;
+            lexer.brace_nest = 0;
+            },
+  488: function ()
+    
+    {
+          lexer.cond_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+          lexer.cmdarg_stack = yystack.valueStack[yystack.valueStack.length-1-((6-(2)))];
+          lexer.lex_strterm = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
+          lexer.brace_nest = yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
+            },
+  489: function ()
+    
+    {},
+  490: function ()
+    
+    {},
+  491: function ()
+    
+    {},
+  493: function ()
+    
+    {
+            lexer.lex_state = EXPR_END;
+            },
+  498: function ()
+    
+    {
+            lexer.lex_state = EXPR_END;
+            },
+  499: function ()
+    
+    {
+              // TODO: convert tINTEGER to NODE_LIT()
+            },
+  500: function ()
+    
+    {
+              // TODO: convert tFLOAT to NODE_LIT()
+            },
+  501: function ()
+    
+    {
+              // TODO: convert tINTEGER to NODE_LIT()
+            },
+  502: function ()
+    
+    {
+              // TODO: convert tFLOAT to NODE_LIT()
+            },
+  508: function ()
+    
+    {},
+  509: function ()
+    
+    {yyval = keyword_self;},
+  510: function ()
+    
+    {yyval = keyword_true;},
+  511: function ()
+    
+    {yyval = keyword_false;},
+  512: function ()
+    
+    {yyval = keyword__FILE__;},
+  513: function ()
+    
+    {yyval = keyword__LINE__;},
+  514: function ()
+    
+    {yyval = keyword__ENCODING__;},
+  515: function ()
+    
+    {
+            },
+  516: function ()
+    
+    {},
+  517: function ()
+    
+    {},
+  518: function ()
+    
+    {},
+  520: function ()
+    
+    {
+      yyval = NEW_BACK_REF(yystack.valueStack[yystack.valueStack.length-1-((1-(1)))]);
+    },
+  521: function ()
+    
+    {},
+  522: function ()
+    
+    {
+            lexer.lex_state = EXPR_BEG;
+            lexer.command_start = true;
+            },
+  523: function ()
+    
+    {},
+  524: function ()
+    
+    {
+              parser.yyerrok();
+            },
+  525: function ()
+    
+    {
+            lexer.lex_state = EXPR_BEG;
+            lexer.command_start = true;
+            },
+  526: function ()
+    
+    {
+            lexer.lex_state = EXPR_BEG;
+            lexer.command_start = true;
+            },
+  527: function ()
+    
+    {},
+  528: function ()
+    
+    {},
+  529: function ()
+    
+    {},
+  530: function ()
+    
+    {},
+  531: function ()
+    
+    {},
+  532: function ()
+    
+    {},
+  533: function ()
+    
+    {},
+  534: function ()
+    
+    {},
+  535: function ()
+    
+    {},
+  536: function ()
+    
+    {},
+  537: function ()
+    
+    {},
+  538: function ()
+    
+    {},
+  539: function ()
+    
+    {},
+  540: function ()
+    
+    {},
+  541: function ()
+    
+    {},
+  542: function ()
+    
+    {},
+  543: function ()
+    
+    {},
+  544: function ()
+    
+    {},
+  545: function ()
+    
+    {},
+  546: function ()
+    
+    {},
+  547: function ()
+    
+    {},
+  548: function ()
+    
+    {
+              lexer.yyerror("formal argument cannot be a constant");
+            },
+  549: function ()
+    
+    {
+              lexer.yyerror("formal argument cannot be an instance variable");
+            },
+  550: function ()
+    
+    {
+              lexer.yyerror("formal argument cannot be a global variable");
+            },
+  551: function ()
+    
+    {
+              lexer.yyerror("formal argument cannot be a class variable");
+            },
+  553: function ()
+    
+    {},
+  554: function ()
+    
+    {},
+  555: function ()
+    
+    {},
+  557: function ()
+    
+    {},
+  558: function ()
+    
+    {},
+  559: function ()
+    
+    {},
+  560: function ()
+    
+    {},
+  561: function ()
+    
+    {},
+  562: function ()
+    
+    {},
+  563: function ()
+    
+    {},
+  566: function ()
+    
+    {},
+  567: function ()
+    
+    {},
+  568: function ()
+    
+    {},
+  569: function ()
+    
+    {},
+  570: function ()
+    
+    {},
+  571: function ()
+    
+    {},
+  572: function ()
+    
+    {},
+  573: function ()
+    
+    {},
+  576: function ()
+    
+    {
+          if (!is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))])) // TODO
+            lexer.yyerror("rest argument must be local variable");
+                
+            },
+  577: function ()
+    
+    {},
+  580: function ()
+    
+    {
+              if (!is_local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+            lexer.yyerror("block argument must be local variable");
+                else if (!dyna_in_block() && local_id(yystack.valueStack[yystack.valueStack.length-1-((2-(2)))]))
+            lexer.yyerror("duplicated block argument name");
+                
+            },
+  581: function ()
+    
+    {},
+  582: function ()
+    
+    {},
+  583: function ()
+    
+    {},
+  584: function ()
+    
+    {
+          lexer.lex_state = EXPR_BEG;
+        },
+  585: function ()
+    
+    {
+          if (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))] == null) {
+            lexer.yyerror("can't define singleton method for ().");
+          }
+          else {
+            switch (yystack.valueStack[yystack.valueStack.length-1-((4-(3)))].type) { // TODO
+              case NODE_STR:
+              case NODE_DSTR:
+              case NODE_XSTR:
+              case NODE_DXSTR:
+              case NODE_DREGX:
+              case NODE_LIT:
+              case NODE_ARRAY:
+              case NODE_ZARRAY:
+                lexer.yyerror("can't define singleton method for literals");
+              default:
+                value_expr(yystack.valueStack[yystack.valueStack.length-1-((4-(3)))]); // TODO
+                break;
+            }
+          }
+            },
+  587: function ()
+    
+    {},
+  589: function ()
+    
+    {},
+  590: function ()
+    
+    {},
+  591: function ()
+    
+    {},
+  592: function ()
+    
+    {},
+  614: function ()
+    
+    { parser.yyerrok(); },
+  617: function ()
+    
+    { parser.yyerrok(); },
+  618: function ()
+    
+    {
+      // empty ensure or else block for example
+      yyval = null;
+    }
+};
+
+})(); // actions table namespace end
+
+
 } // YYParser
 
 // rare used functions
@@ -9741,6 +10091,9 @@ YYParser.prototype =
   // Report on the debug stream that the rule yyrule is going to be reduced.
   debug_reduce_print: function debug_reduce_print (yyrule)
   {
+    if (!this.yydebug)
+      return;
+
     var yystack = this.yystack;
     var yylno = this.yyrline_[yyrule];
     var yynrhs = this.yyr2_[yyrule];
@@ -9760,24 +10113,43 @@ YYParser.prototype =
 
   debug_symbol_print: function debug_symbol_print (message, yytype, yyvaluep)
   {
+    if (!this.yydebug)
+      return;
+
     this.debug_print
     (
       message
       + (yytype < this.yyntokens_ ? " token " : " nterm ")
       + this.yytname_[yytype]
       + " ("
-      // + (yyvaluep == null ? "(null)" : JSON.stringify(yyvaluep))
+      + (this.yydebug_yylval ? JSON.stringify(yyvaluep) : '')
       + ")\n"
     );
   },
 
   debug_stack_print: function debug_stack_print ()
   {
+    if (!this.yydebug)
+      return;
+
     puts("Stack now " + this.yystack.stateStack.join(' '));
+  },
+
+  debug_action_print: function debug_action_print (action)
+  {
+    if (!this.yydebug)
+      return;
+    if (!this.yydebug_action)
+      return;
+
+    puts(action);
   },
 
   debug_print: function debug_print (message)
   {
+    if (!this.yydebug)
+      return;
+
     write(message);
   },
 
@@ -9964,16 +10336,10 @@ YYParser.Stack = function Stack ()
 // Here we have to expose our YY* classes to outer world somehow.
 // And yes, all the two YYParser and YYLexer are visible here
 
-global.parse = function (text)
-{
-  var lexer = new YYLexer(text);
-  lexer.filename = 'ruby.rb';
-  
-  var parser = new YYParser(lexer);
-  return parser.parse();
-}
+global.YYLexer = YYLexer;
+global.YYParser = YYParser;
 
-})(); // whole parser and lexer namespase start
+})(); // whole parser and lexer namespace start
 
 
 
