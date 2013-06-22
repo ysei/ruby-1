@@ -164,7 +164,7 @@ function IS_END () { return lexer.lex_state & EXPR_END_ANY }
 function IS_BEG () { return lexer.lex_state & EXPR_BEG_ANY }
 function IS_LABEL_POSSIBLE ()
 {
-  return (IS_lex_state(EXPR_BEG) && !lexer.cmd_state) || IS_ARG();
+  return (IS_lex_state(EXPR_BEG | EXPR_ENDFN) && !lexer.cmd_state) || IS_ARG();
 }
 function IS_LABEL_SUFFIX (n)
 {
@@ -231,6 +231,10 @@ function ISUPPER (c)
 {
   return 'A' <= c && c <= 'Z';
 }
+function ISALPHA (c)
+{
+  return /^[a-fA-F]/.test(c);
+}
 function ISSPACE (c)
 {
   return (
@@ -239,6 +243,23 @@ function ISSPACE (c)
     c === '\f' || c === '\v'
   )
 }
+function ISASCII (c)
+{
+  return $(c) < 128;
+}
+function ISDIGIT (c)
+{
+  return /^\d$/.test(c);
+}
+function ISXDIGIT (c)
+{
+  return /^[0-9a-fA-F]/.test(c);
+}
+function ISALNUM (c)
+{
+  return /^\w$/.test(c);
+}
+
 // our own modification, does not match `\n`
 // used to avoid crossing end of line on white space search
 function ISSPACE_NOT_N (c)
@@ -338,6 +359,11 @@ function nthchar (i)
 function lex_pv ()
 {
   return lex_lastline[lex_p];
+}
+// just an emulation of *p from C
+function p_pv (p)
+{
+  return lex_lastline[p];
 }
 // emulation of `strncmp(lex_p, "begin", 5)`,
 // but you better use a precompiled regexp if `str` is a constant
@@ -505,24 +531,6 @@ function NEW_HEREDOCTERM (func, term)
     term: term,
     paren: ''
   };
-}
-
-function ISASCII (c)
-{
-  return $(c) < 128;
-}
-
-function ISDIGIT (c)
-{
-  return /^\d$/.test(c);
-}
-function ISXDIGIT (c)
-{
-  return /^[0-9a-fA-F]/.test(c);
-}
-function ISALNUM (c)
-{
-  return /^\w$/.test(c);
 }
 
 // TODO: get rid of such a piece of junk :)
@@ -1598,7 +1606,8 @@ this.yylex = function yylex ()
           if (!parser_is_identchar(c))
           {
             pushback(c);
-            return $('$');
+            compile_error("`$"+c+"' is not allowed as a global variable name");
+            return 0;
           }
         case '0':
           tokadd('$');
@@ -1616,8 +1625,9 @@ this.yylex = function yylex ()
         tokadd('@');
         c = nextc();
       }
-      if (c != '' && ISDIGIT(c))
+      if (c != '' && ISDIGIT(c) || !parser_is_identchar(c))
       {
+        pushback(c);
         if (toklen() == 1)
         {
           compile_error("`@"+c+"' is not allowed as an instance variable name");
@@ -1627,11 +1637,6 @@ this.yylex = function yylex ()
           compile_error("`@@"+c+"' is not allowed as a class variable name");
         }
         return 0;
-      }
-      if (!parser_is_identchar(c))
-      {
-        pushback(c);
-        return $('@');
       }
       break;
     }
@@ -1964,17 +1969,11 @@ function here_document (here)
     newtok();
     if (c == '#')
     {
-      switch (c = nextc())
-      {
-        case '$':
-        case '@':
-          pushback(c);
-          return tSTRING_DVAR;
-        case '{':
-          lexer.command_start = true;
-          return tSTRING_DBEG;
-      }
+      var t = parser_peek_variable_name();
+      if (t)
+        return t;
       tokadd('#');
+      c = nextc();
     }
     do
     {
@@ -2055,17 +2054,11 @@ function parse_string (quote)
   newtok();
   if ((func & STR_FUNC_EXPAND) && c == '#')
   {
-    switch (c = nextc())
-    {
-      case '$':
-      case '@':
-        pushback(c);
-        return tSTRING_DVAR;
-      case '{':
-        lexer.command_start = true;
-        return tSTRING_DBEG;
-    }
+    var t = parser_peek_variable_name();
+    if (t)
+      return t;
     tokadd('#');
+    c = nextc();
   }
   pushback(c);
   if (tokadd_string(func, term, paren, quote) == '')
@@ -2206,14 +2199,9 @@ function simple_re_meta (c)
 {
   switch (c)
   {
-    case '$':
-    case '*':
-    case '+':
-    case '.':
-    case '?':
-    case '^':
-    case '|':
-    case ')':
+    case '$': case '*': case '+': case '.':
+    case '?': case '^': case '|':
+    case ')': case ']': case '}': case '>':
       return true;
     default:
       return false;
@@ -2889,6 +2877,49 @@ function start_num (c)
   // why are we so certain about returning `tFLOAT` or `tINTEGER`?
   // because we have got here meating a digit :)
 }
+
+function parser_peek_variable_name ()
+{
+  var p = lex_p;
+
+  if (p + 1 >= lex_pend)
+    return 0;
+  var c = p_pv(p++);
+  switch (c)
+  {
+    case '$':
+      if ((c = p_pv(p)) == '-')
+      {
+        if (++p >= lex_pend)
+          return 0;
+        c = p_pv(p);
+      }
+      else if (is_global_name_punct(c) || ISDIGIT(c))
+      {
+        return tSTRING_DVAR;
+      }
+      break;
+    case '@':
+      if ((c = p_pv(p)) == '@')
+      {
+        if (++p >= lex_pend)
+          return 0;
+        c = p_pv(p);
+      }
+      break;
+    case '{':
+      lex_p = p;
+      lexer.command_start = true;
+      return tSTRING_DBEG;
+    default:
+      return 0;
+  }
+
+  if (!ISASCII(c) || c == '_' || ISALPHA(c))
+    return tSTRING_DVAR;
+  return 0;
+}
+
 
 
 // struct kwtable {const char *name; int id[2]; enum lex_state_e state;};
