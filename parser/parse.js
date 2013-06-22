@@ -39,6 +39,16 @@
 
 "use strict";
 
+// returns own property or `undefined`
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+function ownProperty (obj, prop)
+{
+  if (hasOwnProperty.call(obj, prop))
+    return obj[prop];
+  // has no such property
+  return undefined;
+}
+
 // char to code shortcut
 function $ (c) { return c.charCodeAt(0) }
 function $$ (code) { return String.fromCharCode(code) }
@@ -351,7 +361,7 @@ function IS_END () { return lexer.lex_state & EXPR_END_ANY }
 function IS_BEG () { return lexer.lex_state & EXPR_BEG_ANY }
 function IS_LABEL_POSSIBLE ()
 {
-  return (IS_lex_state(EXPR_BEG) && !lexer.cmd_state) || IS_ARG();
+  return (IS_lex_state(EXPR_BEG | EXPR_ENDFN) && !lexer.cmd_state) || IS_ARG();
 }
 function IS_LABEL_SUFFIX (n)
 {
@@ -418,6 +428,10 @@ function ISUPPER (c)
 {
   return 'A' <= c && c <= 'Z';
 }
+function ISALPHA (c)
+{
+  return /^[a-zA-Z]/.test(c);
+}
 function ISSPACE (c)
 {
   return (
@@ -426,6 +440,23 @@ function ISSPACE (c)
     c === '\f' || c === '\v'
   )
 }
+function ISASCII (c)
+{
+  return $(c) < 128;
+}
+function ISDIGIT (c)
+{
+  return /^\d$/.test(c);
+}
+function ISXDIGIT (c)
+{
+  return /^[0-9a-fA-F]/.test(c);
+}
+function ISALNUM (c)
+{
+  return /^\w$/.test(c);
+}
+
 // our own modification, does not match `\n`
 // used to avoid crossing end of line on white space search
 function ISSPACE_NOT_N (c)
@@ -525,6 +556,11 @@ function nthchar (i)
 function lex_pv ()
 {
   return lex_lastline[lex_p];
+}
+// just an emulation of *p from C
+function p_pv (p)
+{
+  return lex_lastline[p];
 }
 // emulation of `strncmp(lex_p, "begin", 5)`,
 // but you better use a precompiled regexp if `str` is a constant
@@ -684,24 +720,6 @@ function NEW_HEREDOCTERM (func, term)
     term: term,
     paren: ''
   };
-}
-
-function ISASCII (c)
-{
-  return $(c) < 128;
-}
-
-function ISDIGIT (c)
-{
-  return /^\d$/.test(c);
-}
-function ISXDIGIT (c)
-{
-  return /^[0-9a-fA-F]/.test(c);
-}
-function ISALNUM (c)
-{
-  return /^\w$/.test(c);
 }
 
 // TODO: get rid of such a piece of junk :)
@@ -1777,7 +1795,8 @@ this.yylex = function yylex ()
           if (!parser_is_identchar(c))
           {
             pushback(c);
-            return $('$');
+            compile_error("`$"+c+"' is not allowed as a global variable name");
+            return 0;
           }
         case '0':
           tokadd('$');
@@ -1795,8 +1814,9 @@ this.yylex = function yylex ()
         tokadd('@');
         c = nextc();
       }
-      if (c != '' && ISDIGIT(c))
+      if (c != '' && ISDIGIT(c) || !parser_is_identchar(c))
       {
+        pushback(c);
         if (toklen() == 1)
         {
           compile_error("`@"+c+"' is not allowed as an instance variable name");
@@ -1806,11 +1826,6 @@ this.yylex = function yylex ()
           compile_error("`@@"+c+"' is not allowed as a class variable name");
         }
         return 0;
-      }
-      if (!parser_is_identchar(c))
-      {
-        pushback(c);
-        return $('@');
       }
       break;
     }
@@ -1931,15 +1946,14 @@ this.yylex = function yylex ()
           // const struct kwtable *kw;
 
           // See if it is a reserved word.
-          var kw = rb_reserved_word[tok()];
+          var kw = ownProperty(rb_reserved_word, tok());
           if (kw)
           {
             var state = lexer.lex_state;
             lexer.lex_state = kw.state;
             if (state == EXPR_FNAME)
             {
-              // was: set_yylval_name(rb_intern(kw->name)); TODO: check
-              lexer.yylval = kw.name;
+              lexer.yylval = gen.rb_intern(tok()); // was: kw.name
               return kw.id0;
             }
             if (lexer.lex_state == EXPR_BEG)
@@ -1966,9 +1980,13 @@ this.yylex = function yylex ()
               return kw.id0;
             else
             {
-              if (kw.id0 != kw.id1)
+              // packed `id1`
+              if (kw.id1) // was: kw.id0 != kw.id1
+              {
                 lexer.lex_state = EXPR_BEG;
-              return kw.id1;
+                return kw.id1;
+              }
+              return kw.id0;
             }
           }
         }
@@ -1994,11 +2012,7 @@ this.yylex = function yylex ()
         }
     }
     {
-      // just take a plain string for now,
-      // do not convert to a symbol, leave it to JS engine
-      var ident = tok();
-
-      // was: set_yylval_name(ident); TODO: check
+      var ident = gen.rb_intern(tok());
       lexer.yylval = ident;
       if (!IS_lex_state_for(lexer.last_state, EXPR_DOT | EXPR_FNAME) &&
           gen.is_local_id(ident) && gen.lvar_defined(ident))
@@ -2148,17 +2162,11 @@ function here_document (here)
     newtok();
     if (c == '#')
     {
-      switch (c = nextc())
-      {
-        case '$':
-        case '@':
-          pushback(c);
-          return tSTRING_DVAR;
-        case '{':
-          lexer.command_start = true;
-          return tSTRING_DBEG;
-      }
+      var t = parser_peek_variable_name();
+      if (t)
+        return t;
       tokadd('#');
+      c = nextc();
     }
     do
     {
@@ -2228,7 +2236,7 @@ function parse_string (quote)
     }
     if (!(func & STR_FUNC_REGEXP))
       return tSTRING_END;
-    // set_yylval_num(regx_options()); TODO
+    lexer.yylval = regx_options();
     return tREGEXP_END;
   }
   if (space)
@@ -2239,17 +2247,11 @@ function parse_string (quote)
   newtok();
   if ((func & STR_FUNC_EXPAND) && c == '#')
   {
-    switch (c = nextc())
-    {
-      case '$':
-      case '@':
-        pushback(c);
-        return tSTRING_DVAR;
-      case '{':
-        lexer.command_start = true;
-        return tSTRING_DBEG;
-    }
+    var t = parser_peek_variable_name();
+    if (t)
+      return t;
     tokadd('#');
+    c = nextc();
   }
   pushback(c);
   if (tokadd_string(func, term, paren, quote) == '')
@@ -2386,18 +2388,20 @@ function tokadd_string (func, term, paren, str_term)
   return c;
 }
 
+function regx_options ()
+{
+  var options = match_grex(/[a-zA-Z]+|/g)[0];
+  lex_p += options.length;
+  return options;
+}
+
 function simple_re_meta (c)
 {
   switch (c)
   {
-    case '$':
-    case '*':
-    case '+':
-    case '.':
-    case '?':
-    case '^':
-    case '|':
-    case ')':
+    case '$': case '*': case '+': case '.':
+    case '?': case '^': case '|':
+    case ')': case ']': case '}': case '>':
       return true;
     default:
       return false;
@@ -3074,51 +3078,112 @@ function start_num (c)
   // because we have got here meating a digit :)
 }
 
+var ruby_global_name_punct_bits =
+{
+  '~': true, '*': true, '$':  true, '?':  true,
+  '!': true, '@': true, '/':  true, '\\': true,
+  ';': true, ',': true, '.':  true, '=':  true,
+  ':': true, '<': true, '>':  true, '\"': true,
+  '&': true, '`': true, '\'': true, '+':  true,
+  '0': true
+};
+
+function is_global_name_punct (c)
+{
+  if (c <= ' '/*0x20*/ || /*0x7e*/ '~' < c)
+    return false;
+  return ruby_global_name_punct_bits[c];
+}
+
+
+function parser_peek_variable_name ()
+{
+  var p = lex_p;
+
+  if (p + 1 >= lex_pend)
+    return 0;
+  var c = p_pv(p++);
+  switch (c)
+  {
+    case '$':
+      if ((c = p_pv(p)) == '-')
+      {
+        if (++p >= lex_pend)
+          return 0;
+        c = p_pv(p);
+      }
+      else if (is_global_name_punct(c) || ISDIGIT(c))
+      {
+        return tSTRING_DVAR;
+      }
+      break;
+    case '@':
+      if ((c = p_pv(p)) == '@')
+      {
+        if (++p >= lex_pend)
+          return 0;
+        c = p_pv(p);
+      }
+      break;
+    case '{':
+      lex_p = p;
+      lexer.command_start = true;
+      return tSTRING_DBEG;
+    default:
+      return 0;
+  }
+
+  if (!ISASCII(c) || c == '_' || ISALPHA(c))
+    return tSTRING_DVAR;
+  return 0;
+}
+
+
 
 // struct kwtable {const char *name; int id[2]; enum lex_state_e state;};
 var rb_reserved_word = lexer.rb_reserved_word =
 {
-'__ENCODING__': {id0: keyword__ENCODING__, id1: keyword__ENCODING__, state: EXPR_END},
-'__LINE__': {id0: keyword__LINE__, id1: keyword__LINE__, state: EXPR_END},
-'__FILE__': {id0: keyword__FILE__, id1: keyword__FILE__, state: EXPR_END},
-'BEGIN': {id0: keyword_BEGIN, id1: keyword_BEGIN, state: EXPR_END},
-'END': {id0: keyword_END, id1: keyword_END, state: EXPR_END},
-'alias': {id0: keyword_alias, id1: keyword_alias, state: EXPR_FNAME},
-'and': {id0: keyword_and, id1: keyword_and, state: EXPR_VALUE},
-'begin': {id0: keyword_begin, id1: keyword_begin, state: EXPR_BEG},
-'break': {id0: keyword_break, id1: keyword_break, state: EXPR_MID},
-'case': {id0: keyword_case, id1: keyword_case, state: EXPR_VALUE},
-'class': {id0: keyword_class, id1: keyword_class, state: EXPR_CLASS},
-'def': {id0: keyword_def, id1: keyword_def, state: EXPR_FNAME},
-'defined?': {id0: keyword_defined, id1: keyword_defined, state: EXPR_ARG},
-'do': {id0: keyword_do, id1: keyword_do, state: EXPR_BEG},
-'else': {id0: keyword_else, id1: keyword_else, state: EXPR_BEG},
-'elsif': {id0: keyword_elsif, id1: keyword_elsif, state: EXPR_VALUE},
-'end': {id0: keyword_end, id1: keyword_end, state: EXPR_END},
-'ensure': {id0: keyword_ensure, id1: keyword_ensure, state: EXPR_BEG},
-'false': {id0: keyword_false, id1: keyword_false, state: EXPR_END},
-'for': {id0: keyword_for, id1: keyword_for, state: EXPR_VALUE},
+'__ENCODING__': {id0: keyword__ENCODING__, state: EXPR_END},
+'__LINE__': {id0: keyword__LINE__, state: EXPR_END},
+'__FILE__': {id0: keyword__FILE__, state: EXPR_END},
+'BEGIN': {id0: keyword_BEGIN, state: EXPR_END},
+'END': {id0: keyword_END, state: EXPR_END},
+'alias': {id0: keyword_alias, state: EXPR_FNAME},
+'and': {id0: keyword_and, state: EXPR_VALUE},
+'begin': {id0: keyword_begin, state: EXPR_BEG},
+'break': {id0: keyword_break, state: EXPR_MID},
+'case': {id0: keyword_case, state: EXPR_VALUE},
+'class': {id0: keyword_class, state: EXPR_CLASS},
+'def': {id0: keyword_def, state: EXPR_FNAME},
+'defined?': {id0: keyword_defined, state: EXPR_ARG},
+'do': {id0: keyword_do, state: EXPR_BEG},
+'else': {id0: keyword_else, state: EXPR_BEG},
+'elsif': {id0: keyword_elsif, state: EXPR_VALUE},
+'end': {id0: keyword_end, state: EXPR_END},
+'ensure': {id0: keyword_ensure, state: EXPR_BEG},
+'false': {id0: keyword_false, state: EXPR_END},
+'for': {id0: keyword_for, state: EXPR_VALUE},
 'if': {id0: keyword_if, id1: modifier_if, state: EXPR_VALUE},
-'in': {id0: keyword_in, id1: keyword_in, state: EXPR_VALUE},
-'module': {id0: keyword_module, id1: keyword_module, state: EXPR_VALUE},
-'next': {id0: keyword_next, id1: keyword_next, state: EXPR_MID},
-'nil': {id0: keyword_nil, id1: keyword_nil, state: EXPR_END},
-'not': {id0: keyword_not, id1: keyword_not, state: EXPR_ARG},
-'or': {id0: keyword_or, id1: keyword_or, state: EXPR_VALUE},
-'redo': {id0: keyword_redo, id1: keyword_redo, state: EXPR_END},
+'in': {id0: keyword_in, state: EXPR_VALUE},
+'module': {id0: keyword_module, state: EXPR_VALUE},
+'next': {id0: keyword_next, state: EXPR_MID},
+'nil': {id0: keyword_nil, state: EXPR_END},
+'not': {id0: keyword_not, state: EXPR_ARG},
+'or': {id0: keyword_or, state: EXPR_VALUE},
+'redo': {id0: keyword_redo, state: EXPR_END},
 'rescue': {id0: keyword_rescue, id1: modifier_rescue, state: EXPR_MID},
-'retry': {id0: keyword_retry, id1: keyword_retry, state: EXPR_END},
-'return': {id0: keyword_return, id1: keyword_return, state: EXPR_MID},
-'self': {id0: keyword_self, id1: keyword_self, state: EXPR_END},
-'super': {id0: keyword_super, id1: keyword_super, state: EXPR_ARG},
-'then': {id0: keyword_then, id1: keyword_then, state: EXPR_BEG},
-'true': {id0: keyword_true, id1: keyword_true, state: EXPR_END},
-'undef': {id0: keyword_undef, id1: keyword_undef, state: EXPR_FNAME},
+'retry': {id0: keyword_retry, state: EXPR_END},
+'return': {id0: keyword_return, state: EXPR_MID},
+'self': {id0: keyword_self, state: EXPR_END},
+'super': {id0: keyword_super, state: EXPR_ARG},
+'then': {id0: keyword_then, state: EXPR_BEG},
+'true': {id0: keyword_true, state: EXPR_END},
+'undef': {id0: keyword_undef, state: EXPR_FNAME},
 'unless': {id0: keyword_unless, id1: modifier_unless, state: EXPR_VALUE},
 'until': {id0: keyword_until, id1: modifier_until, state: EXPR_VALUE},
-'when': {id0: keyword_when, id1: keyword_when, state: EXPR_VALUE},
+'when': {id0: keyword_when, state: EXPR_VALUE},
 'while': {id0: keyword_while, id1: modifier_while, state: EXPR_VALUE},
-'yield': {id0: keyword_yield, id1: keyword_yield, state: EXPR_ARG}
+'yield': {id0: keyword_yield, state: EXPR_ARG}
 };
 
 lexer.cursorPosition = function ()
@@ -6715,68 +6780,68 @@ var yyval, yystack, actionsTable;
   var yyrline_ = this.yyrline_ =
   [
     //]
-         0,   161,   161,   161,   191,   199,   204,   209,   214,   221,
-     224,   223,   234,   262,   270,   275,   280,   285,   291,   297,
-     296,   309,   308,   317,   322,   327,   333,   338,   344,   351,
-     363,   375,   381,   395,   397,   404,   410,   428,   435,   438,
-     441,   444,   447,   450,   453,   456,   461,   464,   471,   473,
-     475,   478,   481,   484,   489,   495,   497,   502,   504,   511,
-     510,   521,   527,   530,   533,   536,   539,   542,   545,   548,
-     551,   554,   557,   563,   565,   571,   573,   579,   582,   585,
-     588,   591,   594,   597,   600,   603,   605,   611,   613,   619,
-     622,   628,   631,   637,   640,   643,   646,   649,   652,   655,
-     661,   667,   673,   676,   679,   682,   685,   688,   691,   697,
-     703,   709,   714,   719,   722,   725,   731,   733,   735,   737,
-     742,   750,   752,   757,   760,   765,   769,   768,   777,   778,
-     779,   780,   781,   782,   783,   784,   785,   786,   787,   788,
-     789,   790,   791,   792,   793,   794,   795,   796,   797,   798,
-     799,   800,   801,   802,   803,   804,   805,   806,   810,   810,
-     810,   811,   811,   812,   812,   812,   813,   813,   813,   813,
-     814,   814,   814,   814,   815,   815,   815,   816,   816,   816,
-     816,   817,   817,   817,   817,   818,   818,   818,   818,   819,
-     819,   819,   819,   820,   820,   820,   820,   821,   821,   826,
-     829,   832,   835,   838,   841,   844,   847,   850,   853,   856,
-     859,   862,   865,   868,   871,   874,   877,   880,   883,   888,
-     893,   896,   899,   902,   905,   908,   911,   914,   917,   920,
-     923,   926,   929,   932,   935,   938,   941,   944,   947,   950,
-     953,   956,   956,   961,   964,   970,   974,   975,   977,   979,
-     983,   987,   988,   991,   992,   993,   995,   997,  1001,  1003,
-    1005,  1007,  1009,  1014,  1014,  1025,  1029,  1031,  1035,  1037,
-    1039,  1041,  1045,  1047,  1049,  1053,  1054,  1055,  1056,  1057,
-    1058,  1059,  1060,  1061,  1062,  1063,  1066,  1065,  1078,  1077,
-    1084,  1083,  1089,  1091,  1093,  1095,  1097,  1099,  1101,  1103,
-    1105,  1107,  1107,  1111,  1113,  1115,  1117,  1118,  1120,  1122,
-    1127,  1133,  1137,  1132,  1144,  1148,  1143,  1154,  1158,  1161,
-    1165,  1160,  1172,  1171,  1184,  1189,  1183,  1200,  1199,  1212,
-    1211,  1229,  1233,  1228,  1243,  1245,  1247,  1249,  1253,  1257,
-    1261,  1265,  1269,  1273,  1277,  1281,  1285,  1289,  1293,  1297,
-    1301,  1302,  1303,  1306,  1307,  1310,  1311,  1317,  1318,  1322,
-    1323,  1326,  1328,  1332,  1334,  1338,  1340,  1342,  1344,  1346,
-    1348,  1350,  1352,  1354,  1359,  1361,  1363,  1365,  1369,  1372,
-    1375,  1377,  1379,  1381,  1383,  1385,  1387,  1389,  1391,  1393,
-    1395,  1397,  1399,  1401,  1403,  1407,  1408,  1414,  1416,  1418,
-    1423,  1425,  1429,  1430,  1433,  1435,  1439,  1440,  1439,  1453,
-    1455,  1459,  1461,  1466,  1465,  1477,  1479,  1481,  1483,  1487,
-    1490,  1489,  1497,  1496,  1503,  1506,  1505,  1513,  1512,  1519,
-    1521,  1523,  1528,  1527,  1536,  1535,  1545,  1551,  1552,  1555,
-    1559,  1562,  1564,  1566,  1569,  1571,  1574,  1576,  1579,  1580,
-    1582,  1585,  1589,  1590,  1591,  1595,  1599,  1603,  1607,  1609,
-    1614,  1615,  1619,  1620,  1624,  1626,  1631,  1632,  1636,  1638,
-    1642,  1644,  1649,  1650,  1655,  1656,  1661,  1662,  1667,  1668,
-    1673,  1674,  1678,  1680,  1679,  1691,  1697,  1702,  1690,  1715,
-    1717,  1719,  1721,  1724,  1730,  1731,  1732,  1733,  1736,  1742,
-    1746,  1750,  1754,  1760,  1761,  1762,  1763,  1764,  1767,  1768,
-    1769,  1770,  1771,  1772,  1773,  1776,  1779,  1783,  1785,  1790,
-    1791,  1796,  1799,  1798,  1805,  1811,  1816,  1823,  1825,  1827,
-    1829,  1833,  1836,  1839,  1841,  1843,  1845,  1847,  1849,  1851,
-    1853,  1855,  1857,  1859,  1861,  1863,  1865,  1868,  1871,  1875,
-    1879,  1883,  1889,  1890,  1894,  1896,  1900,  1901,  1905,  1909,
-    1913,  1915,  1920,  1922,  1926,  1927,  1930,  1932,  1936,  1940,
-    1944,  1946,  1950,  1952,  1956,  1957,  1960,  1966,  1970,  1971,
-    1974,  1984,  1986,  1990,  1993,  1992,  2020,  2021,  2025,  2026,
-    2030,  2032,  2034,  2040,  2041,  2042,  2045,  2046,  2047,  2048,
-    2051,  2052,  2053,  2056,  2057,  2060,  2061,  2064,  2065,  2068,
-    2071,  2074,  2075,  2076,  2081,  2084,  2089,  2091,  2096
+         0,   171,   171,   171,   200,   208,   213,   218,   223,   230,
+     233,   232,   243,   271,   279,   284,   289,   294,   300,   306,
+     305,   318,   317,   326,   331,   336,   342,   347,   353,   360,
+     372,   384,   390,   404,   406,   413,   419,   437,   443,   446,
+     449,   452,   455,   458,   461,   464,   469,   472,   479,   481,
+     483,   486,   489,   492,   497,   503,   505,   510,   512,   519,
+     518,   529,   535,   538,   541,   544,   547,   550,   553,   556,
+     559,   562,   565,   571,   573,   579,   581,   587,   590,   593,
+     596,   599,   602,   605,   608,   611,   613,   619,   621,   627,
+     630,   636,   639,   645,   648,   651,   654,   657,   660,   663,
+     669,   675,   681,   684,   687,   690,   693,   696,   699,   705,
+     711,   717,   722,   727,   730,   733,   739,   741,   743,   745,
+     750,   758,   760,   765,   768,   773,   777,   776,   785,   786,
+     787,   788,   789,   790,   791,   792,   793,   794,   795,   796,
+     797,   798,   799,   800,   801,   802,   803,   804,   805,   806,
+     807,   808,   809,   810,   811,   812,   813,   814,   818,   818,
+     818,   819,   819,   820,   820,   820,   821,   821,   821,   821,
+     822,   822,   822,   822,   823,   823,   823,   824,   824,   824,
+     824,   825,   825,   825,   825,   826,   826,   826,   826,   827,
+     827,   827,   827,   828,   828,   828,   828,   829,   829,   834,
+     837,   840,   843,   846,   849,   852,   855,   858,   861,   864,
+     867,   870,   873,   876,   879,   882,   885,   888,   891,   896,
+     901,   904,   907,   910,   913,   916,   919,   922,   925,   928,
+     931,   934,   937,   940,   943,   946,   949,   952,   955,   958,
+     961,   964,   964,   969,   972,   978,   982,   983,   985,   987,
+     991,   995,   996,   999,  1000,  1001,  1003,  1005,  1009,  1011,
+    1013,  1015,  1017,  1022,  1022,  1033,  1037,  1039,  1043,  1045,
+    1047,  1049,  1053,  1055,  1057,  1061,  1062,  1063,  1064,  1065,
+    1066,  1067,  1068,  1069,  1070,  1071,  1074,  1073,  1086,  1085,
+    1092,  1091,  1097,  1099,  1101,  1103,  1105,  1107,  1109,  1111,
+    1113,  1115,  1115,  1119,  1121,  1123,  1125,  1126,  1128,  1130,
+    1135,  1141,  1145,  1140,  1152,  1156,  1151,  1162,  1166,  1169,
+    1173,  1168,  1180,  1179,  1193,  1198,  1192,  1211,  1210,  1224,
+    1223,  1243,  1247,  1242,  1259,  1261,  1263,  1265,  1269,  1273,
+    1277,  1281,  1285,  1289,  1293,  1297,  1301,  1305,  1309,  1313,
+    1317,  1318,  1319,  1322,  1323,  1326,  1327,  1333,  1334,  1338,
+    1339,  1342,  1344,  1348,  1350,  1354,  1356,  1358,  1360,  1362,
+    1364,  1366,  1368,  1370,  1375,  1377,  1379,  1381,  1385,  1388,
+    1391,  1393,  1395,  1397,  1399,  1401,  1403,  1405,  1407,  1409,
+    1411,  1413,  1415,  1417,  1419,  1423,  1424,  1430,  1432,  1434,
+    1439,  1441,  1445,  1446,  1449,  1451,  1455,  1456,  1455,  1469,
+    1471,  1475,  1477,  1482,  1481,  1493,  1495,  1497,  1499,  1503,
+    1506,  1505,  1513,  1512,  1519,  1522,  1521,  1529,  1528,  1535,
+    1537,  1539,  1544,  1543,  1552,  1551,  1561,  1567,  1568,  1571,
+    1575,  1578,  1580,  1582,  1585,  1587,  1590,  1592,  1595,  1596,
+    1598,  1601,  1605,  1606,  1607,  1611,  1615,  1619,  1623,  1625,
+    1630,  1631,  1635,  1636,  1640,  1642,  1647,  1648,  1652,  1654,
+    1658,  1660,  1665,  1666,  1671,  1672,  1677,  1678,  1683,  1684,
+    1689,  1690,  1694,  1696,  1695,  1707,  1713,  1718,  1706,  1731,
+    1733,  1735,  1737,  1740,  1746,  1747,  1748,  1749,  1752,  1758,
+    1762,  1766,  1770,  1776,  1777,  1778,  1779,  1780,  1783,  1784,
+    1785,  1786,  1787,  1788,  1789,  1792,  1795,  1799,  1801,  1806,
+    1807,  1812,  1815,  1814,  1821,  1827,  1832,  1839,  1841,  1843,
+    1845,  1849,  1852,  1855,  1857,  1859,  1861,  1863,  1865,  1867,
+    1869,  1871,  1873,  1875,  1877,  1879,  1881,  1884,  1887,  1891,
+    1895,  1899,  1905,  1906,  1910,  1912,  1916,  1917,  1921,  1925,
+    1929,  1931,  1936,  1938,  1942,  1943,  1946,  1948,  1952,  1956,
+    1960,  1962,  1966,  1968,  1972,  1973,  1976,  1982,  1986,  1987,
+    1990,  2000,  2002,  2006,  2009,  2008,  2036,  2037,  2041,  2042,
+    2046,  2048,  2050,  2056,  2057,  2058,  2061,  2062,  2063,  2064,
+    2067,  2068,  2069,  2072,  2073,  2076,  2077,  2080,  2081,  2084,
+    2087,  2090,  2091,  2092,  2097,  2100,  2105,  2107,  2112
     //[
   ];
   // YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.
@@ -7205,7 +7270,7 @@ function NEW_OP_ASGN_OR (vid, val)
 function NEW_OP_ASGN1 (vid, op, args)
 {
   var n = new N();
-  n.type = NODE_OP_ASGN_OR;
+  n.type = NEW_OP_ASGN1;
   n.flags = 0;
   n.line = 0;
   
@@ -7215,16 +7280,18 @@ function NEW_OP_ASGN1 (vid, op, args)
   return n;
 }
 
-function NEW_OP_ASGN2 (vid, op, args)
+function NEW_OP_ASGN2 (lhs, type, attr, op, rhs)
 {
   var n = new N();
-  n.type = NODE_OP_ASGN_OR;
+  n.type = NODE_OP_ASGN2;
   n.flags = 0;
   n.line = 0;
   
-  n.vid = vid;
+  n.lhs = lhs;
+  n.otype = type;
+  n.attr = attr;
   n.op = op;
-  n.args = args;
+  n.rhs = rhs;
   return n;
 }
 
@@ -7311,7 +7378,6 @@ function NEW_ARGSCAT () // literal
 // everything on IDs is here
 
 var tLAST_OP_ID = tLAST_TOKEN;
-var ID_SCOPE_MASK = 0x07;
 
 var ID_SCOPE_SHIFT  = 3,
     ID_SCOPE_MASK   = 0x07,                
@@ -7386,7 +7452,7 @@ var op_tbl = // TODO: rethink
 };
 
 
-var rb_id2name = [];
+var rb_id2name = {};
 var global_symbols_name2id = {};
 for (var k in lexer.rb_reserved_word)
 {
@@ -7395,12 +7461,13 @@ for (var k in lexer.rb_reserved_word)
   rb_id2name[kw.id1] = k;
 }
 
-rb_id2name.length = tLAST_OP_ID;
+var global_symbols_last_id = tLAST_OP_ID;
 
 function register_symid_str (id, name)
 {
   rb_id2name[id] = name;
   global_symbols_name2id[name] = id;
+  return id;
 }
 
 
@@ -7418,11 +7485,15 @@ for (var k in op_tbl)
 // rb_intern3 rb_intern2 rb_intern_str
 function rb_intern (name)
 {
+  if (name === undefined)
+    throw 'undefined name in rb_id2name()'
+  if (name === '')
+    throw 'empty name in rb_id2name()'
   var id = rb_id2name[name];
   if (id !== undefined)
     return id;
 
-  return intern_str(str);
+  return intern_str(name);
 }
 
 function intern_str (name)
@@ -7448,10 +7519,11 @@ function intern_str (name)
         // was: a seach through `op_tbl`, which is precalced above
         //      so we could never get here through the `rb_intern()`
 
-        if (name[name.length-1] == '=')
+        var last = name.length-1;
+        if (name[last] == '=')
         {
           /* attribute assignment */
-          id = rb_intern(name);
+          id = rb_intern(name.substring(0, last));
           if (id > tLAST_OP_ID && !is_attrset_id(id))
           {
             id = rb_id_attrset(id); // sets type bits to `ID_ATTRSET`
@@ -7470,30 +7542,10 @@ function intern_str (name)
         break;
     }
     // was: new_id:
-    id |= ++global_symbols.last_id << ID_SCOPE_SHIFT;
+    id |= ++global_symbols_last_id << ID_SCOPE_SHIFT;
   } // was: id_register:
-  return register_symid_str(id, str);
+  return register_symid_str(id, name);
 }
-
-
-
-
-
-
-
-
-// function new_bv (name) // ID name
-// {
-//   if (!name)
-//     return;
-//   if (!is_local_id(name))
-//   {
-//     lexer.compile_error("invalid local variable - " + rb_id2name[name]);
-//     return;
-//   }
-//   shadowing_lvar(name);
-//   dyna_var(name);
-// }
 
 
 
@@ -7505,20 +7557,94 @@ var NODE_FL_CREF_OMOD_SHARED = 1<<6;
 
 function dyna_in_block ()
 {
-  // TODO :)
-  return true;
+  return lvtbl.vars && lvtbl.vars.prev != DVARS_TOPSCOPE;
 }
 
-function is_local_id (ident)
+function rb_dvar_defined (id)
 {
-  // TODO :)
-  return true;
+  // search through the local vars in runtime
+  // for `eval()` or maybe `binding`
+  // http://rxr.whitequark.org/mri/source/compile.c?v=2.0.0-p0#5802
+  return false;
 }
+function dvar_defined (id, get)
+{
+  var args = lvtbl.args;
+  var vars = lvtbl.vars;
+  var used = lvtbl.used;
+
+  // search throgh the local variables chain
+  while (vars)
+  {
+    if (args[id])
+    {
+      return true;
+    }
+    if (vars[id])
+    {
+      // var i = vtable_included(vars, id); TODO
+      // if (used)
+      //   used->tbl[ - 1] |= LVAR_USED;
+      return true;
+    }
+    args = args.prev;
+    vars = vars.prev;
+    // if (get) TODO
+    //   used = null;
+    // if (used)
+    //   used = used.prev;
+  }
+
+  // we're very likely in eval,
+  // so we need to check with virtual machine's state
+  if (vars == DVARS_INHERIT)
+  {
+    return rb_dvar_defined(id);
+  }
+
+  return false;
+}
+function dvar_defined_get (id)
+  { return dvar_defined(id, true); }
+
 function lvar_defined (ident)
 {
-  // puts('::::::::::::::::::::::::::::::::::::::::::::::::new lvar', ident)
-  // TODO :)
-  return false;
+  return (dyna_in_block() && dvar_defined_get(id)) || local_id(id);
+}
+function local_id (id)
+{
+  var vars = lvtbl.vars;
+  var args = lvtbl.args;
+  // var used = lvtbl.used; TODO
+
+  // go to the bottom of the vars chain
+  // TODO: reinvent
+  while (vars && vars.prev)
+  {
+    vars = vars.prev;
+    args = args.prev;
+    // if (used)
+    //   used = used.prev;
+  }
+
+  if (vars && vars.prev == DVARS_INHERIT)
+  {
+    return rb_local_defined(id);
+  }
+  else if (args[id])
+  {
+    return true;
+  }
+  else
+  {
+    if (vars[id])
+    {
+      // if (used)
+      //   used[id] |= LVAR_USED;
+      return true;
+    }
+    return false;
+  }
 }
 
 // point of ident knowlage exchange,
@@ -7526,14 +7652,9 @@ function lvar_defined (ident)
 lexer.setGenerator
 ({
   is_local_id: is_local_id,
-  lvar_defined: lvar_defined
+  lvar_defined: lvar_defined,
+  rb_intern: rb_intern
 });
-
-function local_id (ident)
-{
-  // TODO :)
-  return true;
-}
 
 
 
@@ -7546,16 +7667,15 @@ var ruby_verbose = true;
 
 // just a constants to compare to
 var DVARS_INHERIT = {},  // (NODE *) 1
-    DVARS_TOPSCOPE = {}; // NULL
+    DVARS_TOPSCOPE = null; // NULL
 
 var lvtbl = null;
 
 function vtable_alloc (prev)
 {
-  var tbl =
-  {
-    prev: prev
-  };
+  // TODO: check others fro Object.prototype collisions
+  var tbl = Object.create(null);
+  tbl.prev = prev;
   
   return tbl;
 }
@@ -7565,9 +7685,9 @@ function local_push (inherit_dvars)
   var local =
   {
     prev: lvtbl,
-    args: vtable_alloc(0),
+    args: vtable_alloc(null),
     vars: vtable_alloc(inherit_dvars ? DVARS_INHERIT : DVARS_TOPSCOPE),
-    used: vtable_alloc(0)
+    used: vtable_alloc(null)
   };
   lvtbl = local;
 }
@@ -7575,20 +7695,21 @@ function local_push (inherit_dvars)
 function local_pop ()
 {
   var local = lvtbl.prev;
-  if (lvtbl.used)
-  {
-    warn_unused_var(lvtbl);
-  }
+  // if (lvtbl.used) TODO
+  // {
+  //   warn_unused_var(lvtbl);
+  // }
   lvtbl = local;
 }
 
 function warn_unused_var (local)
 {
-  // TODO
+  lexer.warn('TODO: warn_unused_var()');
 }
 
 function rb_bug ()
 {
+  throw 'TODO: rb_bug()';
   // TODO: scream, of even log to the base.
 }
 
@@ -8238,29 +8359,20 @@ function list_concat (head, tail)
   return head;
 }
 
-function new_attr_op_assign (lhs, attr, op, rhs)
+function new_attr_op_assign (lhs, type, attr, op, rhs)
 {
-  if (op == tOROP)
-  {
-    op = 0;
-  }
-  else if (op == tANDOP)
-  {
-    op = 1;
-  }
+  // if (op == tOROP)
+  // {
+  //   op = 0;
+  // }
+  // else if (op == tANDOP)
+  // {
+  //   op = 1;
+  // }
   // var asgn = new NEW_OP_ASGN2(lhs, attr, op, rhs);
   
-  var asgn = NEW_OP_ASGN2
-  (
-    lhs,
-    rhs,
-    NEW_OP_ASGN2
-    (
-      attr,
-      op,
-      rb_id_attrset(attr)
-    )
-  )
+  // TODO: check rb_id_attrset(attr)
+  var asgn = NEW_OP_ASGN2(lhs, type, attr, op, rhs);
   
   fixpos(asgn, lhs);
   return asgn;
@@ -8283,7 +8395,6 @@ actionsTable =
   3: function ()
     
     {
-      // program: {} top_compstmt
             if (yystack.valueStack[yystack.valueStack.length-1-((2-(2)))] && !compile_for_eval)
             {
                 /* last expression should not be void */
@@ -8533,9 +8644,8 @@ actionsTable =
   37: function ()
     
     {
-      puts(':::::::::::::::::::::::::::::::::::::::::')
       value_expr(yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
-      yyval = new_attr_op_assign(yystack.valueStack[yystack.valueStack.length-1-((5-(1)))], ripper_id2sym('.'), yystack.valueStack[yystack.valueStack.length-1-((5-(3)))], yystack.valueStack[yystack.valueStack.length-1-((5-(4)))], yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
+      yyval = new_attr_op_assign(yystack.valueStack[yystack.valueStack.length-1-((5-(1)))], '.', yystack.valueStack[yystack.valueStack.length-1-((5-(3)))], yystack.valueStack[yystack.valueStack.length-1-((5-(4)))], yystack.valueStack[yystack.valueStack.length-1-((5-(5)))]);
     },
   38: function ()
     
@@ -9232,13 +9342,14 @@ actionsTable =
     {
           if (lexer.in_def || lexer.in_single)
             lexer.yyerror("class definition in method body");
-                
+                local_push(false);
             },
   323: function ()
     
     {
               // touching this alters the parse.output
                 yystack.valueStack[yystack.valueStack.length-1-((6-(4)))];
+                local_pop();
             },
   324: function ()
     
@@ -9251,10 +9362,12 @@ actionsTable =
     {
               yyval = lexer.in_single;
               lexer.in_single = 0;
+              local_push(false);
             },
   326: function ()
     
     {
+              local_pop();
           lexer.in_def = yystack.valueStack[yystack.valueStack.length-1-((8-(4)))];
           lexer.in_single = yystack.valueStack[yystack.valueStack.length-1-((8-(6)))];
             },
@@ -9263,13 +9376,14 @@ actionsTable =
     {
           if (lexer.in_def || lexer.in_single)
             lexer.yyerror("module definition in method body");
-                
+                local_push(false);
             },
   328: function ()
     
     {
               // touching this alters the parse.output
                 yystack.valueStack[yystack.valueStack.length-1-((5-(3)))];
+                local_pop();
             },
   329: function ()
     
@@ -9278,12 +9392,14 @@ actionsTable =
                 lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((2-(2)))];
                 
               lexer.in_def++;
+              local_push(false);
             },
   330: function ()
     
     {
               // touching this alters the parse.output
                 yystack.valueStack[yystack.valueStack.length-1-((6-(1)))];
+                local_pop();
                 lexer.in_def--;
                 lexer.cur_mid = yystack.valueStack[yystack.valueStack.length-1-((6-(3)))];
             },
@@ -9297,10 +9413,12 @@ actionsTable =
     {
       lexer.in_single++;
       lexer.lex_state = EXPR_ENDFN; /* force for args */
+      local_push(false);
     },
   333: function ()
     
     {
+      local_pop();
       lexer.in_single--;
     },
   334: function ()
