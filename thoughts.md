@@ -1,3 +1,26 @@
+# Natives again
+
+valueOf and toString
+
+To handle the same hashes/objects with the same ruby objects create a local mapping pool:
+
+    pool = Native.pool # simplified Hash, actually
+    rubyObject = Native.wrap(nativeObject)
+    # or
+    rubyObject = pool[nativeObject] # implies Native.wrap and persistence
+    
+    pool[nativeObject] = rubyObject
+    
+    #...
+    
+    pool = nil
+
+Pools local to module, to scope, to instance.
+
+Useful for stateful hashes (or other read-only objects).
+
+
+
 # Cool abilities
 
 JSRuby: Calling user defined Ruby method from Javascript
