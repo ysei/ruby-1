@@ -1,3 +1,34 @@
+# fast hashes notation
+
+Translator hooks to `H()` fcall, and if meets this
+
+    fast_native_hash = H{{a: 1, b: 2}}
+
+translates it to this:
+
+    var fast_native_hash = {a: 1, b: 2};
+
+Later one can access the native hash with `::` operator:
+
+    use_pragma :native
+    
+    fast_native_hash::a
+    # => 1
+    
+    fast_native_hash::c = 3
+    fast_native_hash::c
+    # => 3
+
+and, of course
+
+    fast_native_hash::constructor
+
+translates to:
+    
+    fast_native_hash.constructor
+    # => function Object() { [native code] }
+
+
 # Natives again
 
 valueOf and toString
